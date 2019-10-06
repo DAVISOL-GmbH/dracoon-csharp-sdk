@@ -1,7 +1,7 @@
-﻿using Dracoon.Sdk.SdkInternal;
+using System;
+using Dracoon.Sdk.SdkInternal;
 using Dracoon.Sdk.SdkInternal.OAuth;
 using Dracoon.Sdk.SdkInternal.Validator;
-using System;
 
 namespace Dracoon.Sdk {
     /// <include file = "SdkPublicDoc.xml" path='docs/members[@name="dracoonClient"]/DracoonClient/*'/>
@@ -71,6 +71,10 @@ namespace Dracoon.Sdk {
             get; private set;
         }
 
+        internal DracoonGroupsImpl GroupsImpl {
+            get; private set;
+        }
+
         internal DracoonServerImpl ServerImpl {
             get; private set;
         }
@@ -103,6 +107,12 @@ namespace Dracoon.Sdk {
             }
         }
 
+        public IGroups Groups {
+            get {
+                return GroupsImpl;
+            }
+        }
+
         #endregion
 
         #endregion
@@ -131,6 +141,7 @@ namespace Dracoon.Sdk {
             ServerImpl = new DracoonServerImpl(this);
             NodesImpl = new DracoonNodesImpl(this);
             SharesImpl = new DracoonSharesImpl(this);
+            GroupsImpl = new DracoonGroupsImpl(this);
 
             #endregion
         }

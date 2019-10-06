@@ -1,18 +1,18 @@
-﻿using Dracoon.Sdk.Model;
-using RestSharp;
-using Dracoon.Sdk.SdkInternal.ApiModel;
-using Dracoon.Sdk.SdkInternal.Mapper;
-using Dracoon.Sdk.SdkInternal.Validator;
-using Dracoon.Sdk.SdkInternal.ApiModel.Requests;
-using System.IO;
-using System.Collections.Generic;
-using Dracoon.Sdk.Error;
-using Dracoon.Crypto.Sdk.Model;
 using System;
+using System.Collections.Generic;
+using System.IO;
 using Dracoon.Crypto.Sdk;
+using Dracoon.Crypto.Sdk.Model;
+using Dracoon.Sdk.Error;
 using Dracoon.Sdk.Filter;
-using Dracoon.Sdk.Sort;
+using Dracoon.Sdk.Model;
+using Dracoon.Sdk.SdkInternal.ApiModel;
+using Dracoon.Sdk.SdkInternal.ApiModel.Requests;
+using Dracoon.Sdk.SdkInternal.Mapper;
 using Dracoon.Sdk.SdkInternal.Util;
+using Dracoon.Sdk.SdkInternal.Validator;
+using Dracoon.Sdk.Sort;
+using RestSharp;
 
 namespace Dracoon.Sdk.SdkInternal {
     internal class DracoonNodesImpl : INodes, IFileDownloadCallback, IFileUploadCallback {

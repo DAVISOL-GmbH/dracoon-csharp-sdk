@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Text;
 
 namespace Dracoon.Sdk.SdkInternal {
@@ -139,6 +139,39 @@ namespace Dracoon.Sdk.SdkInternal {
 
         #endregion
         #region PUT
+
+        #endregion
+
+        #endregion
+
+        #region Groups-Endpoint
+
+        private const string ApiGroupsPrefix = ApiPrefix + "/groups";
+
+        #region GET
+
+        internal const string ApiGetGroups = ApiGroupsPrefix;
+        internal const string ApiGetGroup = ApiGroupsPrefix + "/{groupId}";
+        internal const string ApiGetGroupLastAdminRooms = ApiGroupsPrefix + "/{groupId}/last_admin_rooms";
+        internal const string ApiGetGroupRoles = ApiGroupsPrefix + "/{groupId}/roles";
+        internal const string ApiGetGroupUsers = ApiGroupsPrefix + "/{groupId}/users";
+
+        #endregion
+        #region POST
+
+        internal const string ApiPostGroup = ApiGroupsPrefix;
+        internal const string ApiPostGroupUser = ApiGroupsPrefix + "/{groupId}/users";
+
+        #endregion
+        #region PUT
+
+        internal const string ApiPutGroup = ApiGroupsPrefix + "/{groupId}";
+
+        #endregion
+        #region DELETE
+
+        internal const string ApiDeleteGroup = ApiGroupsPrefix + "/{groupId}";
+        internal const string ApiDeleteGroupUsers = ApiGroupsPrefix + "/{groupId}/users";
 
         #endregion
 

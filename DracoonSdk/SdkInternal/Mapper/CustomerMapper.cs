@@ -1,4 +1,4 @@
-﻿using Dracoon.Sdk.Model;
+using Dracoon.Sdk.Model;
 using Dracoon.Sdk.SdkInternal.ApiModel;
 
 namespace Dracoon.Sdk.SdkInternal.Mapper {
@@ -17,7 +17,8 @@ namespace Dracoon.Sdk.SdkInternal.Mapper {
                 CountRooms = apiCustomerAccount.CountRooms,
                 CountFolders = apiCustomerAccount.CountFolders,
                 CountFiles = apiCustomerAccount.CountFiles,
-                HasEncryptionEnabled = apiCustomerAccount.CustomerEncryptionEnabled
+                HasEncryptionEnabled = apiCustomerAccount.CustomerEncryptionEnabled,
+                IsProviderCustomer = apiCustomerAccount.IsProviderCustomer,
             };
             return customerAccount;
         }

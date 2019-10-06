@@ -1,4 +1,4 @@
-﻿namespace Dracoon.Sdk.Model {
+namespace Dracoon.Sdk.Model {
     /// <include file = "ModelDoc.xml" path='docs/members[@name="customerAccount"]/CustomerAccount/*'/>
     public class CustomerAccount {
 
@@ -49,6 +49,10 @@
 
         /// <include file = "ModelDoc.xml" path='docs/members[@name="customerAccount"]/HasEncryptionEnabled/*'/>
         public bool HasEncryptionEnabled {
+            get; internal set;
+        }
+
+        public bool? IsProviderCustomer {
             get; internal set;
         }
     }

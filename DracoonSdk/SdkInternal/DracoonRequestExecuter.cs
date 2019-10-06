@@ -1,12 +1,12 @@
-﻿using Dracoon.Sdk.Error;
-using Dracoon.Sdk.SdkInternal.ApiModel;
-using Newtonsoft.Json;
-using RestSharp;
 using System;
 using System.Net;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
+using Dracoon.Sdk.Error;
+using Dracoon.Sdk.SdkInternal.ApiModel;
+using Newtonsoft.Json;
+using RestSharp;
 
 namespace Dracoon.Sdk.SdkInternal {
     internal class DracoonRequestExecuter {
@@ -19,7 +19,8 @@ namespace Dracoon.Sdk.SdkInternal {
             GetDownloadChunk, PostCopyNodes, PostMoveNodes, GetSearchNodes, GetMissingFileKeys, PostMissingFileKeys,
             PostCreateDownloadShare, DeleteDownloadShare, GetDownloadShares, PostCreateUploadShare, DeleteUploadShare,
             GetUploadShares, PostFavorite, DeleteFavorite, GetAuthenticatedPing, PostOAuthToken, PostOAuthRefresh, GetGeneralSettings, GetInfrastructureSettings, GetDefaultsSettings,
-            GetRecycleBin, DeleteRecycleBin, GetPreviousVersions, GetPreviousVersion, PostRestoreNodeVersion, DeletePreviousVersions
+            GetRecycleBin, DeleteRecycleBin, GetPreviousVersions, GetPreviousVersion, PostRestoreNodeVersion, DeletePreviousVersions,
+            GetGroups, GetGroup, GetGroupLastAdminRooms, GetGroupRoles, GetGroupUsers, PostGroup, PostGroupUsers, PutGroup, DeleteGroup, DeleteGroupUsers
         }
 
         private static readonly string LOGTAG = typeof(DracoonRequestExecuter).Name;

@@ -1,4 +1,7 @@
-﻿using Dracoon.Sdk.Filter;
+using System;
+using System.Net;
+using System.Text;
+using Dracoon.Sdk.Filter;
 using Dracoon.Sdk.SdkInternal.ApiModel;
 using Dracoon.Sdk.SdkInternal.ApiModel.Requests;
 using Dracoon.Sdk.SdkInternal.OAuth;
@@ -6,9 +9,6 @@ using Dracoon.Sdk.SdkInternal.Util;
 using Dracoon.Sdk.Sort;
 using Newtonsoft.Json;
 using RestSharp;
-using System;
-using System.Net;
-using System.Text;
 
 namespace Dracoon.Sdk.SdkInternal {
     internal class DracoonRequestBuilder {
@@ -466,6 +466,103 @@ namespace Dracoon.Sdk.SdkInternal {
         internal RestRequest GetDefaultsSettings() {
             RestRequest request = new RestRequest(ApiConfig.ApiGetDefaultsConfig, Method.GET);
             SetGeneralRestValues(request, true);
+            return request;
+        }
+
+        #endregion
+
+        #endregion
+
+        #region Groups-Endpoint
+
+        #region GET
+
+        internal RestRequest GetGroups(long? offset = null, long? limit = null, GetGroupsFilter filter = null, GroupsSort sort = null) {
+            RestRequest request = new RestRequest(ApiConfig.ApiGetGroups, Method.GET);
+            SetGeneralRestValues(request, true);
+            AddFilters(filter, request);
+            AddSort(sort, request);
+            if (offset.HasValue)
+                request.AddQueryParameter("offset", offset.ToString());
+            if (limit.HasValue)
+                request.AddQueryParameter("limit", limit.ToString());
+            return request;
+        }
+
+        internal RestRequest GetGroup(long groupId) {
+            RestRequest request = new RestRequest(ApiConfig.ApiGetGroup, Method.GET);
+            SetGeneralRestValues(request, true);
+            request.AddUrlSegment("groupId", groupId.ToString());
+            return request;
+        }
+
+        internal RestRequest GetGroupLastAdminRooms(long groupId) {
+            RestRequest request = new RestRequest(ApiConfig.ApiGetGroup, Method.GET);
+            SetGeneralRestValues(request, true);
+            request.AddUrlSegment("groupId", groupId.ToString());
+            return request;
+        }
+
+        internal RestRequest GetGroupRoles(long groupId) {
+            RestRequest request = new RestRequest(ApiConfig.ApiGetGroup, Method.GET);
+            SetGeneralRestValues(request, true);
+            request.AddUrlSegment("groupId", groupId.ToString());
+            return request;
+        }
+
+        internal RestRequest GetGroupUsers(long groupId, long? offset = null, long? limit = null, GetUsersFilter filter = null) {
+            RestRequest request = new RestRequest(ApiConfig.ApiGetGroup, Method.GET);
+            SetGeneralRestValues(request, true);
+            request.AddUrlSegment("groupId", groupId.ToString());
+            AddFilters(filter, request);
+            if (offset.HasValue)
+                request.AddQueryParameter("offset", offset.ToString());
+            if (limit.HasValue)
+                request.AddQueryParameter("limit", limit.ToString());
+            return request;
+        }
+
+        #endregion
+        #region POST
+
+        internal RestRequest PostGroup(ApiCreateGroupRequest groupParams) {
+            RestRequest request = new RestRequest(ApiConfig.ApiPostGroup, Method.POST);
+            SetGeneralRestValues(request, true, groupParams);
+            return request;
+        }
+
+        internal RestRequest PostGroupUser(long groupId, ApiChangeGroupMembersRequest groupUsersParams) {
+            RestRequest request = new RestRequest(ApiConfig.ApiPostGroup, Method.POST);
+            SetGeneralRestValues(request, true, groupUsersParams);
+            request.AddUrlSegment("groupId", groupId.ToString());
+            return request;
+        }
+
+        #endregion
+        #region PUT
+
+        internal RestRequest PutGroup(long groupId, ApiUpdateGroupRequest groupParams) {
+            RestRequest request = new RestRequest(ApiConfig.ApiPutGroup, Method.PUT);
+            SetGeneralRestValues(request, true, groupParams);
+            request.AddUrlSegment("groupId", groupId.ToString());
+            return request;
+        }
+
+        #endregion
+        #region DELETE
+
+
+        internal RestRequest DeleteGroup(long groupId) {
+            RestRequest request = new RestRequest(ApiConfig.ApiDeleteGroup, Method.DELETE);
+            SetGeneralRestValues(request, true);
+            request.AddUrlSegment("groupId", groupId.ToString());
+            return request;
+        }
+
+        internal RestRequest DeleteGroupUsers(long groupId, ApiChangeGroupMembersRequest deleteUsersParams) {
+            RestRequest request = new RestRequest(ApiConfig.ApiDeleteGroupUsers, Method.DELETE);
+            SetGeneralRestValues(request, true, deleteUsersParams);
+            request.AddUrlSegment("groupId", groupId.ToString());
             return request;
         }
 

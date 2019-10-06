@@ -1,4 +1,4 @@
-﻿namespace Dracoon.Sdk.Sort {
+namespace Dracoon.Sdk.Sort {
     /// <include file = "SpecificSort.xml" path='docs/members[@name="generalSort"]/UpdatedAtSort/*'/>
     public class UpdatedAtSort<T> : DracoonSortOrder<T> where T : DracoonSort {
 
@@ -43,4 +43,12 @@
             parent.sortString += "name";
         }
     }
+
+    public class CountUsersSort<T> : DracoonSortOrder<T> where T : DracoonSort {
+
+        public CountUsersSort(T p) : base(p) {
+            parent.sortString += "cntUsers";
+        }
+    }
+
 }

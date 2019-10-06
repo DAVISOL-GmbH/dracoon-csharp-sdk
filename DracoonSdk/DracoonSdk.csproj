@@ -62,10 +62,24 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="SdkInternal\ApiConfig.cs" />
+    <Compile Include="SdkInternal\ApiModel\Common\ApiIdListBase.cs" />
+    <Compile Include="SdkInternal\ApiModel\Common\ApiListBase.cs" />
+    <Compile Include="SdkInternal\ApiModel\Common\ApiRight.cs" />
+    <Compile Include="SdkInternal\ApiModel\Common\ApiRole.cs" />
+    <Compile Include="SdkInternal\ApiModel\Common\ApiRoleList.cs" />
+    <Compile Include="SdkInternal\ApiModel\Groups\ApiGroupList.cs" />
+    <Compile Include="SdkInternal\ApiModel\Common\ApiNodeReference.cs" />
+    <Compile Include="SdkInternal\ApiModel\Common\ApiNodeReferenceList.cs" />
+    <Compile Include="SdkInternal\ApiModel\Groups\ApiGroupUser.cs" />
+    <Compile Include="SdkInternal\ApiModel\Groups\ApiGroupUserList.cs" />
     <Compile Include="SdkInternal\ApiModel\Nodes\ApiDeletedNodeSummary.cs" />
     <Compile Include="SdkInternal\ApiModel\Nodes\ApiDeletedNodeSummaryList.cs" />
     <Compile Include="SdkInternal\ApiModel\Nodes\ApiDeletedNodeVersion.cs" />
     <Compile Include="SdkInternal\ApiModel\Nodes\ApiDeletedNodeVersionsList.cs" />
+    <Compile Include="SdkInternal\ApiModel\Groups\ApiGroup.cs" />
+    <Compile Include="SdkInternal\ApiModel\Requests\ApiUpdateGroupRequest.cs" />
+    <Compile Include="SdkInternal\ApiModel\Requests\ApiCreateGroupRequest.cs" />
+    <Compile Include="SdkInternal\ApiModel\Requests\ApiChangeGroupMembersRequest.cs" />
     <Compile Include="SdkInternal\ApiModel\Requests\ApiDeletePreviousVersionsRequest.cs" />
     <Compile Include="SdkInternal\ApiModel\Requests\ApiEnableRoomEncryptionRequest.cs" />
     <Compile Include="SdkInternal\ApiModel\Requests\ApiRestorePreviousVersionsRequest.cs" />
@@ -120,6 +134,7 @@
     <Compile Include="SdkInternal\ApiModel\User\ApiUserRoleList.cs" />
     <Compile Include="SdkInternal\ApiModel\VoidResponse.cs" />
     <Compile Include="SdkInternal\DracoonAccountImpl.cs" />
+    <Compile Include="SdkInternal\DracoonGroupsImpl.cs" />
     <Compile Include="SdkInternal\DracoonServerSettingsImpl.cs" />
     <Compile Include="SdkInternal\DracoonErrorParser.cs" />
     <Compile Include="SdkInternal\DracoonNodesImpl.cs" />
@@ -131,6 +146,8 @@
     <Compile Include="SdkInternal\EncFileUpload.cs" />
     <Compile Include="SdkInternal\FileDownload.cs" />
     <Compile Include="SdkInternal\FileUpload.cs" />
+    <Compile Include="SdkInternal\Mapper\CommonMapper.cs" />
+    <Compile Include="SdkInternal\Mapper\GroupMapper.cs" />
     <Compile Include="SdkInternal\Mapper\SettingsMapper.cs" />
     <Compile Include="SdkInternal\Mapper\CryptoErrorMapper.cs" />
     <Compile Include="SdkInternal\Mapper\CustomerMapper.cs" />
@@ -165,16 +182,27 @@
     <Compile Include="SdkPublic\Filter\DracoonFilterType.cs" />
     <Compile Include="SdkPublic\Filter\SpecificFilters\GeneralFilters.cs" />
     <Compile Include="SdkPublic\Filter\SpecificFilters\GetDownloadSharesFilter.cs" />
+    <Compile Include="SdkPublic\Filter\SpecificFilters\GetUsersFilter.cs" />
+    <Compile Include="SdkPublic\Filter\SpecificFilters\GetGroupsFilter.cs" />
     <Compile Include="SdkPublic\Filter\SpecificFilters\GetNodesFilter.cs" />
     <Compile Include="SdkPublic\Filter\FilterParam.cs" />
     <Compile Include="SdkPublic\Filter\SpecificFilters\GetUploadSharesFilter.cs" />
     <Compile Include="SdkPublic\Filter\SpecificFilters\SearchNodesFilter.cs" />
     <Compile Include="SdkPublic\Model\Classification.cs" />
     <Compile Include="SdkPublic\Model\CustomerAccount.cs" />
+    <Compile Include="SdkPublic\Model\Group.cs" />
+    <Compile Include="SdkPublic\Model\GroupUser.cs" />
+    <Compile Include="SdkPublic\Model\GroupUserList.cs" />
+    <Compile Include="SdkPublic\Model\GroupList.cs" />
+    <Compile Include="SdkPublic\Model\NodeReference.cs" />
+    <Compile Include="SdkPublic\Model\NodeReferenceList.cs" />
     <Compile Include="SdkPublic\Model\RecycleBinItem.cs" />
     <Compile Include="SdkPublic\Model\RecycleBinItemList.cs" />
     <Compile Include="SdkPublic\Model\PreviousVersion.cs" />
     <Compile Include="SdkPublic\Model\PreviousVersionList.cs" />
+    <Compile Include="SdkPublic\Model\Right.cs" />
+    <Compile Include="SdkPublic\Model\Role.cs" />
+    <Compile Include="SdkPublic\Model\RoleList.cs" />
     <Compile Include="SdkPublic\Model\ServerDefaultsSettings.cs" />
     <Compile Include="SdkPublic\Model\DownloadShare.cs" />
     <Compile Include="SdkPublic\Model\DownloadShareList.cs" />
@@ -183,7 +211,11 @@
     <Compile Include="SdkPublic\Model\IFileDownloadCallback.cs" />
     <Compile Include="SdkPublic\Model\IFileUploadCallback.cs" />
     <Compile Include="SdkPublic\Model\ServerInfrastructureSettings.cs" />
+    <Compile Include="SdkPublic\Model\UserRequests\AddGroupUsersRequest.cs" />
     <Compile Include="SdkPublic\Model\UserRequests\CopyNode.cs" />
+    <Compile Include="SdkPublic\Model\UserRequests\ChangeGroupMembersRequest.cs" />
+    <Compile Include="SdkPublic\Model\UserRequests\CreateGroupRequest.cs" />
+    <Compile Include="SdkPublic\Model\UserRequests\UpdateGroupRequest.cs" />
     <Compile Include="SdkPublic\Model\UserRequests\DeletePreviousVersionsRequest.cs" />
     <Compile Include="SdkPublic\Model\UserRequests\EnableRoomEncryptionRequest.cs" />
     <Compile Include="SdkPublic\Model\UserRequests\MoveNode.cs" />
@@ -211,6 +243,7 @@
     <Compile Include="SdkPublic\Model\UserRequests\UpdateRoomRequest.cs" />
     <Compile Include="SdkPublic\Model\UserRole.cs" />
     <Compile Include="SdkPublic\OAuthHelper.cs" />
+    <Compile Include="SdkPublic\SdkPublicInterfaces\IGroups.cs" />
     <Compile Include="SdkPublic\SdkPublicInterfaces\IServerSettings.cs" />
     <Compile Include="SdkPublic\SdkPublicInterfaces\IAccount.cs" />
     <Compile Include="SdkPublic\SdkPublicInterfaces\ILog.cs" />
@@ -222,6 +255,7 @@
     <Compile Include="SdkPublic\Sort\DracoonSort.cs" />
     <Compile Include="SdkPublic\Sort\DracoonSortOrder.cs" />
     <Compile Include="SdkPublic\Sort\SpecificSort\GeneralSort.cs" />
+    <Compile Include="SdkPublic\Sort\SpecificSort\GroupsSort.cs" />
     <Compile Include="SdkPublic\Sort\SpecificSort\SearchNodesSort.cs" />
     <Compile Include="SdkPublic\Sort\SpecificSort\SharesSort.cs" />
   </ItemGroup>
