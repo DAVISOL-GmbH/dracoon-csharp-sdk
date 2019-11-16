@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>Davisol.$id$</id>
+    <version>$version$</version>
+    <title>DRACOON SDK</title>
+    <authors>DRACOON developers</authors>
+    <owners>dracoon</owners>
+    <licenseUrl>https://www.apache.org/licenses/LICENSE-2.0.txt</licenseUrl>
+    <projectUrl>https://github.com/dracoon/dracoon-csharp-sdk</projectUrl>
+    <iconUrl>https://raw.githubusercontent.com/dracoon/dracoon-csharp-sdk/master/DracoonSdk/DracoonSdk_NugetImage.png</iconUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>The DRACOON SDK for C#.</description>
+    <copyright>Copyright ©2018 DRACOON GmbH, Copyright ©2018 Sebastian Hübner - DAVISOL</copyright>
+    <tags>DRACOON rest api sdk davisol</tags>
+    <dependencies>
+        <dependency id="Dracoon.Crypto.Sdk" version="1.1.43.1"/>
+        <dependency id="Newtonsoft.Json" version="11.0.2"/>
+        <dependency id="RestSharp" version="106.4.2"/>
+    </dependencies>
+  </metadata>
+</package>
