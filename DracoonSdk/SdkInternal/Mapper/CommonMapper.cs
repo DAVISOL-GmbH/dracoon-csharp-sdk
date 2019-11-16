@@ -14,8 +14,10 @@ namespace Dracoon.Sdk.SdkInternal.Mapper {
             NodeReferenceList nodeReferenceList = new NodeReferenceList() {
                 Items = new List<NodeReference>()
             };
-            foreach (ApiNodeReference apiNodeReference in apiNodeReferenceList.Items) {
-                nodeReferenceList.Items.Add(FromApiNodeReference(apiNodeReference, nodeType));
+            if (apiNodeReferenceList.Items != null) {
+                foreach (ApiNodeReference apiNodeReference in apiNodeReferenceList.Items) {
+                    nodeReferenceList.Items.Add(FromApiNodeReference(apiNodeReference, nodeType));
+                }
             }
             return nodeReferenceList;
         }
@@ -43,8 +45,10 @@ namespace Dracoon.Sdk.SdkInternal.Mapper {
             RoleList roleList = new RoleList() {
                 Items = new List<Role>()
             };
-            foreach (ApiRole apiRole in apiRoleList.Items) {
-                roleList.Items.Add(FromApiRole(apiRole));
+            if (apiRoleList.Items != null) {
+                foreach (ApiRole apiRole in apiRoleList.Items) {
+                    roleList.Items.Add(FromApiRole(apiRole));
+                }
             }
             return roleList;
         }
@@ -60,8 +64,10 @@ namespace Dracoon.Sdk.SdkInternal.Mapper {
                 Description = apiRole.Description,
                 Rights = new List<Right>()
             };
-            foreach (ApiRight apiRight in apiRole.Rights) {
-                role.Rights.Add(FromApiRight(apiRight));
+            if (apiRole.Rights != null) {
+                foreach (ApiRight apiRight in apiRole.Rights) {
+                    role.Rights.Add(FromApiRight(apiRight));
+                }
             }
             return role;
         }
