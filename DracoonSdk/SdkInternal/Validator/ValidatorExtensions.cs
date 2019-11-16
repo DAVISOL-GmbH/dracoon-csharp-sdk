@@ -1,7 +1,7 @@
-﻿using Dracoon.Sdk.Error;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using Dracoon.Sdk.Error;
 
 namespace Dracoon.Sdk.SdkInternal.Validator {
     internal static class ValidatorExtensions {
@@ -10,6 +10,12 @@ namespace Dracoon.Sdk.SdkInternal.Validator {
 
         internal static void MustNotNull<T>(this T param, string paramName) {
             if (param == null) {
+                throw new ArgumentNullException(paramName);
+            }
+        }
+
+        internal static void MustHaveValue<T>(this T? param, string paramName) where T : struct {
+            if (!param.HasValue) {
                 throw new ArgumentNullException(paramName);
             }
         }
@@ -157,6 +163,18 @@ namespace Dracoon.Sdk.SdkInternal.Validator {
         internal static void MustNotNegative(this int? param, string paramName) {
             if (param.HasValue && param.Value < 0) {
                 throw new ArgumentException(paramName + " cannot be negative.");
+            }
+        }
+
+        internal static void MustBetween(this long? param, string paramName, long lowerBound, long upperBound) {
+            if (param.HasValue && (param.Value < lowerBound || param.Value > upperBound)) {
+                throw new ArgumentException($"{paramName} must be in range [{lowerBound} ... {upperBound}].");
+            }
+        }
+
+        internal static void MustBetween(this int? param, string paramName, int lowerBound, int upperBound) {
+            if (param.HasValue && (param.Value < lowerBound || param.Value > upperBound)) {
+                throw new ArgumentException($"{paramName} must be in range [{lowerBound} ... {upperBound}].");
             }
         }
 

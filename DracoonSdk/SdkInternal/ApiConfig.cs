@@ -56,6 +56,10 @@ namespace Dracoon.Sdk.SdkInternal {
         internal const string ApiGetRecycleBin = ApiPrefix + "/nodes/{roomId}/deleted_nodes";
         internal const string ApiGetPreviousVersions = ApiPrefix + "/nodes/{nodeId}/deleted_nodes/versions";
         internal const string ApiGetPreviousVersion = ApiPrefix + "/nodes/deleted_nodes/{previoudNodeId}";
+        internal const string ApiGetRoomEvents = ApiPrefix + "/nodes/rooms/{roomId}/events";
+        internal const string ApiGetRoomGroups = ApiPrefix + "/nodes/rooms/{roomId}/groups";
+        internal const string ApiGetRoomUsers = ApiPrefix + "/nodes/rooms/{roomId}/users";
+        internal const string ApiGetRoomPending = ApiPrefix + "/nodes/rooms/{roomId}/pending";
 
         #endregion
         #region POST
@@ -80,6 +84,9 @@ namespace Dracoon.Sdk.SdkInternal {
         #region PUT
 
         internal const string ApiPutRoom = ApiPrefix + "/nodes/rooms/{roomId}";
+        internal const string ApiPutRoomConfig = ApiPrefix + "/nodes/rooms/{roomId}/config";
+        internal const string ApiPutRoomGroups = ApiPrefix + "/nodes/rooms/{roomId}/groups";
+        internal const string ApiPutRoomUsers = ApiPrefix + "/nodes/rooms/{roomId}/users";
         internal const string ApiPutFolder = ApiPrefix + "/nodes/folders/{folderId}";
         internal const string ApiPutFileUpdate = ApiPrefix + "/nodes/files/{fileId}";
         internal const string ApiPutEnableRoomEncryption = ApiPrefix + "/nodes/rooms/{roomId}/encrypt";
@@ -91,6 +98,8 @@ namespace Dracoon.Sdk.SdkInternal {
         internal const string ApiDeleteFavorite = ApiPrefix + "/nodes/{nodeId}/favorite";
         internal const string ApiDeleteRecycleBin = ApiPrefix + "/nodes/{roomId}/deleted_nodes";
         internal const string ApiDeletePreviousVersions = ApiPrefix + "/nodes/deleted_nodes";
+        internal const string ApiDeleteRoomGroups = ApiPrefix + "/nodes/rooms/{roomId}/groups";
+        internal const string ApiDeleteRoomUsers = ApiPrefix + "/nodes/rooms/{roomId}/users";
 
         #endregion
 
@@ -172,6 +181,56 @@ namespace Dracoon.Sdk.SdkInternal {
 
         internal const string ApiDeleteGroup = ApiGroupsPrefix + "/{groupId}";
         internal const string ApiDeleteGroupUsers = ApiGroupsPrefix + "/{groupId}/users";
+
+        #endregion
+
+        #endregion
+
+        #region Users-Endpoint
+
+        private const string ApiUsersPrefix = ApiPrefix + "/users";
+        private const string ApiUsersUserIdPrefix = ApiPrefix + "/users/{userId}";
+
+        #region GET
+
+        internal const string ApiGetUsers = ApiUsersPrefix;
+        internal const string ApiGetUser = ApiUsersUserIdPrefix;
+        internal const string ApiGetUserGroups = ApiUsersUserIdPrefix + "/users";
+        internal const string ApiGetUserLastAdminRooms = ApiUsersUserIdPrefix + "/last_admin_rooms";
+        internal const string ApiGetUserRoles = ApiUsersUserIdPrefix + "/roles";
+        internal const string ApiGetUserUserAttributes = ApiUsersUserIdPrefix + "/userAttributes";
+
+        #endregion
+        #region POST
+
+        internal const string ApiPostUser = ApiUsersPrefix;
+        internal const string ApiPostUserAttributes = ApiUsersUserIdPrefix + "/userAttributes";
+
+        #endregion
+        #region PUT
+
+        internal const string ApiPutUser = ApiUsersUserIdPrefix;
+        internal const string ApiPutUserUserAttributes = ApiUsersUserIdPrefix + "/userAttributes";
+
+        #endregion
+        #region DELETE
+
+        internal const string ApiDeleteUser = ApiUsersUserIdPrefix;
+        internal const string ApiDeleteUserUserAttribute = ApiUsersUserIdPrefix + "/userAttributes/{key}";
+
+        #endregion
+
+        #endregion
+
+        #region EventLog-Endpoint
+
+        private const string ApiEventLogPrefix = ApiPrefix + "/eventlog";
+
+        #region GET
+
+        internal const string ApiGetAuditNodes = ApiEventLogPrefix + "/audits/nodes";
+        internal const string ApiGetEvents = ApiEventLogPrefix + "/events";
+        internal const string ApiGetOperations = ApiEventLogPrefix + "/operations";
 
         #endregion
 

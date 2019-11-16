@@ -1,7 +1,9 @@
-﻿using Dracoon.Sdk.Filter;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using Dracoon.Sdk.Filter;
 using Dracoon.Sdk.Model;
 using Dracoon.Sdk.Sort;
-using System.IO;
 
 namespace Dracoon.Sdk {
     /// <include file = "SdkPublicInterfacesDoc.xml" path='docs/members[@name="iNodes"]/INodes/*'/>
@@ -30,6 +32,24 @@ namespace Dracoon.Sdk {
 
         /// <include file = "SdkPublicInterfacesDoc.xml" path='docs/members[@name="iNodes"]/UpdateRoom/*'/>
         Node UpdateRoom(UpdateRoomRequest request);
+
+        Node UpdateRoomConfig(long roomId, ConfigRoomRequest request);
+
+        LogEventList GetRoomEvents(long roomId, DateTime? dateStart = null, DateTime? dateEnd = null, EventStatus? status = null, int? operationId = null, long? userId = null, long? offset = null, long? limit = null, EventLogsSort sort = null);
+
+        RoomGroupList GetRoomGroups(long roomId, long? offset = null, long? limit = null, GetRoomGroupsFilter filter = null);
+
+        void OverwriteRoomGroups(long roomId, RoomGroupsAddBatchRequest request);
+
+        void DeleteRoomGroups(long roomId, IEnumerable<long> groupIds);
+
+        RoomUserList GetRoomUsers(long roomId, long? offset = null, long? limit = null, GetRoomUsersFilter filter = null);
+
+        void OverwriteRoomUsers(long roomId, RoomUsersAddBatchRequest request);
+
+        void DeleteRoomUsers(long roomId, IEnumerable<long> userIds);
+
+        PendingAssignmentList GetRoomPending(long roomId, long? offset = null, long? limit = null, GetRoomPendingFilter filter = null, PendingAssignmentsSort sort = null);
 
         /// <include file = "SdkPublicInterfacesDoc.xml" path='docs/members[@name="iNodes"]/EnableRoomEncryption/*'/>
         Node EnableRoomEncryption(EnableRoomEncryptionRequest request);

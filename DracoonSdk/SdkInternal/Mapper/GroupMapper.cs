@@ -41,6 +41,18 @@ namespace Dracoon.Sdk.SdkInternal.Mapper {
             return group;
         }
 
+        internal static GroupInfo FromApiGroupInfo(ApiGroupInfo apiGroupInfo) {
+            if (apiGroupInfo == null) {
+                return null;
+            }
+
+            GroupInfo groupInfo = new GroupInfo() {
+                Id = apiGroupInfo.Id,
+                Name = apiGroupInfo.Name,
+            };
+            return groupInfo;
+        }
+
         internal static GroupUserList FromApiGroupUserList(ApiGroupUserList apiGroupUserList) {
             if (apiGroupUserList == null) {
                 return null;

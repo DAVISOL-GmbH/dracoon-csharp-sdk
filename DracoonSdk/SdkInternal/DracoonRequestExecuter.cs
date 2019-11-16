@@ -14,13 +14,16 @@ namespace Dracoon.Sdk.SdkInternal {
         internal enum RequestType {
             GetServerVersion, GetServerTime,
             SetUserKeyPair, GetCustomerAccount, GetUserAccount, GetUserKeyPair, DeleteUserKeyPair,
-            GetNodes, GetNode, PostRoom, PostFolder, PutFolder, PutRoom, PutEnableRoomEncryption, PutFile, DeleteNodes,
+            GetNodes, GetNode, PostFolder, PutFolder, PutFile, DeleteNodes,
+            GetRoomEvents, GetRoomGroups, GetRoomUsers, GetRoomPending, PostRoom, PutRoom, PutRoomConfig, PutRoomGroups, PutRoomUsers, DeleteRoomGroups, DeleteRoomUsers, PutEnableRoomEncryption,
             PostDownloadToken, GetFileKey, PostUploadToken, PutCompleteUpload, PostUploadChunk,
             GetDownloadChunk, PostCopyNodes, PostMoveNodes, GetSearchNodes, GetMissingFileKeys, PostMissingFileKeys,
             PostCreateDownloadShare, DeleteDownloadShare, GetDownloadShares, PostCreateUploadShare, DeleteUploadShare,
             GetUploadShares, PostFavorite, DeleteFavorite, GetAuthenticatedPing, PostOAuthToken, PostOAuthRefresh, GetGeneralSettings, GetInfrastructureSettings, GetDefaultsSettings,
             GetRecycleBin, DeleteRecycleBin, GetPreviousVersions, GetPreviousVersion, PostRestoreNodeVersion, DeletePreviousVersions,
-            GetGroups, GetGroup, GetGroupLastAdminRooms, GetGroupRoles, GetGroupUsers, PostGroup, PostGroupUsers, PutGroup, DeleteGroup, DeleteGroupUsers
+            GetGroups, GetGroup, GetGroupLastAdminRooms, GetGroupRoles, GetGroupUsers, PostGroup, PostGroupUsers, PutGroup, DeleteGroup, DeleteGroupUsers,
+            GetUsers, GetUser, GetUserLastAdminRooms, GetUserRoles, GetUserGroups, GetUserUserAttributes, PostUser, PostUserUserAttributes, PutUser, PutUserUserAttributes, DeleteUser, DeleteUserUserAttribute,
+            GetAuditNodes, GetEvents, GetOperations
         }
 
         private static readonly string LOGTAG = typeof(DracoonRequestExecuter).Name;

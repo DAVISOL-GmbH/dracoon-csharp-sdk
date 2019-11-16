@@ -64,7 +64,7 @@ namespace Dracoon.Sdk.SdkInternal {
             return CommonMapper.FromApiRoleList(result);
         }
 
-        public GroupUserList GetGroupUsers(long groupId, long? offset = null, long? limit = null, GetUsersFilter filter = null) {
+        public GroupUserList GetGroupUsers(long groupId, long? offset = null, long? limit = null, GetGroupUsersFilter filter = null) {
             client.RequestExecutor.CheckApiServerVersion();
             #region Parameter Validation
             groupId.MustPositive(nameof(groupId));

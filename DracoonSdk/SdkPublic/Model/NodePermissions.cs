@@ -1,4 +1,4 @@
-﻿
+
 namespace Dracoon.Sdk.Model {
     /// <include file = "ModelDoc.xml" path='docs/members[@name="nodePermissions"]/NodePermissions/*'/>
     public class NodePermissions {
@@ -51,6 +51,24 @@ namespace Dracoon.Sdk.Model {
         /// <include file = "ModelDoc.xml" path='docs/members[@name="nodePermissions"]/CanDeleteRecycleBin/*'/>
         public bool CanDeleteRecycleBin {
             get; internal set;
+        }
+
+        internal NodePermissions() {
+        }
+
+        public NodePermissions(bool manage, bool read, bool create, bool change, bool delete,
+            bool manageDownloadShare, bool manageUploadShare,
+            bool readRecycleBin, bool restoreRecycleBin, bool deleteRecycleBin) {
+            Manage = manage;
+            Read = read;
+            Create = create;
+            Change = change;
+            Delete = delete;
+            ManageDownloadShare = manageDownloadShare;
+            ManageUploadShare = manageUploadShare;
+            CanReadRecycleBin = readRecycleBin;
+            CanRestoreRecycleBin = restoreRecycleBin;
+            CanDeleteRecycleBin = deleteRecycleBin;
         }
     }
 }

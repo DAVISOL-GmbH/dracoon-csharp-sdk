@@ -1,4 +1,4 @@
-﻿using Dracoon.Sdk.Model;
+using Dracoon.Sdk.Model;
 
 namespace Dracoon.Sdk.SdkInternal.Util {
     internal static class EnumConverter {
@@ -64,6 +64,16 @@ namespace Dracoon.Sdk.SdkInternal.Util {
             }
         }
 
+        public static GroupMemberAcceptance? ConvertValueToGroupMemberAcceptance(string value) {
+            if (string.IsNullOrEmpty(value))
+                return null;
+            if (value == "autoallow")
+                return GroupMemberAcceptance.AutoAllow;
+            if (value == "pending")
+                return GroupMemberAcceptance.Pending;
+            return null;
+        }
+
         public static string ConvertResolutionStrategyToValue(ResolutionStrategy strategy) {
             switch (strategy) {
                 case ResolutionStrategy.AutoRename:
@@ -75,6 +85,47 @@ namespace Dracoon.Sdk.SdkInternal.Util {
                 default:
                     return null;
             }
+        }
+
+        public static PendingAssignmentState? ConvertValueToPendingAssignmentState(string value) {
+            if (string.IsNullOrEmpty(value))
+                return null;
+            if (value == "ACCEPTED")
+                return PendingAssignmentState.Accepted;
+            if (value == "WAITING")
+                return PendingAssignmentState.Waiting;
+            if (value == "DENIED")
+                return PendingAssignmentState.Denied;
+            return null;
+        }
+
+        public static string ConvertUserTypeToValue(UserType userType) {
+            switch (userType) {
+                case UserType.Internal:
+                    return "internal";
+                case UserType.External:
+                    return "external";
+                case UserType.System:
+                    return "system";
+                case UserType.Deleted:
+                    return "deleted";
+                default:
+                    return null;
+            }
+        }
+
+        public static UserType? ConvertValueToUserType(string value) {
+            if (string.IsNullOrEmpty(value))
+                return null;
+            if (value == "internal")
+                return UserType.Internal;
+            if (value == "external")
+                return UserType.External;
+            if (value == "system")
+                return UserType.System;
+            if (value == "deleted")
+                return UserType.Deleted;
+            return null;
         }
     }
 }

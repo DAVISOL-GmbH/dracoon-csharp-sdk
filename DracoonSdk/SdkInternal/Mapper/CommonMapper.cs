@@ -1,8 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Dracoon.Sdk.Model;
 using Dracoon.Sdk.SdkInternal.ApiModel;
 
@@ -82,5 +79,54 @@ namespace Dracoon.Sdk.SdkInternal.Mapper {
             return right;
         }
 
+
+        internal static ApiExpiration ToApiExpiration(DateTime? expireAt) {
+            ApiExpiration apiExpiration = null;
+            if (expireAt.HasValue) {
+                apiExpiration = new ApiExpiration() {
+                    ExpireAt = expireAt,
+                    EnableExpiration = expireAt.Value.Ticks != 0
+                };
+            }
+            return apiExpiration;
+        }
+
+        internal static RangeListBase<T> FromApiRangeList<TApi, T>(ApiRangeListBase<TApi> apiRangeList, RangeListBase<T> newList, Func<TApi, T> convertFunc) {
+            if (apiRangeList == null) {
+                return null;
+            }
+
+            newList.Offset = apiRangeList.Range.Offset;
+            newList.Limit = apiRangeList.Range.Limit;
+            newList.Total = apiRangeList.Range.Total;
+            FromApiSimpleList(apiRangeList, newList, convertFunc);
+            return newList;
+        }
+
+        internal static SimpleListBase<T> FromApiSimpleList<TApi, T>(ApiSimpleListBase<TApi> apiSimpleList, SimpleListBase<T> newList, Func<TApi, T> convertFunc) {
+            if (apiSimpleList == null) {
+                return newList;
+            }
+
+            List<T> items = new List<T>();
+            foreach (TApi currentItem in apiSimpleList.Items) {
+                items.Add(convertFunc(currentItem));
+            }
+            newList.Items = items.ToArray();
+            return newList;
+        }
+
+        internal static ApiSimpleListBase<TApi> ToApiSimpleList<T, TApi>(SimpleListBase<T> simpleList, ApiSimpleListBase<TApi> newList, Func<T, TApi> convertFunc) {
+            if (simpleList == null) {
+                return newList;
+            }
+
+            List<TApi> items = new List<TApi>();
+            foreach (T currentItem in simpleList.Items) {
+                items.Add(convertFunc(currentItem));
+            }
+            newList.Items = items.ToArray();
+            return newList;
+        }
     }
 }

@@ -1,4 +1,4 @@
 namespace Dracoon.Sdk.SdkInternal.ApiModel {
-    internal class ApiGroupList : ApiListBase<ApiGroup> {
+    internal class ApiGroupList : ApiRangeListBase<ApiGroup> {
     }
 }

@@ -75,6 +75,14 @@ namespace Dracoon.Sdk {
             get; private set;
         }
 
+        internal DracoonUsersImpl UsersImpl {
+            get; private set;
+        }
+
+        internal DracoonEventLogImpl EventLogImpl {
+            get; private set;
+        }
+
         internal DracoonServerImpl ServerImpl {
             get; private set;
         }
@@ -113,6 +121,18 @@ namespace Dracoon.Sdk {
             }
         }
 
+        public IUsers Users {
+            get {
+                return UsersImpl;
+            }
+        }
+
+        public IEventLog EventLog {
+            get {
+                return EventLogImpl;
+            }
+        }
+
         #endregion
 
         #endregion
@@ -142,6 +162,8 @@ namespace Dracoon.Sdk {
             NodesImpl = new DracoonNodesImpl(this);
             SharesImpl = new DracoonSharesImpl(this);
             GroupsImpl = new DracoonGroupsImpl(this);
+            UsersImpl = new DracoonUsersImpl(this);
+            EventLogImpl = new DracoonEventLogImpl(this);
 
             #endregion
         }

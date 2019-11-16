@@ -279,6 +279,20 @@ namespace Dracoon.Sdk.SdkInternal {
             return NodeMapper.FromApiNode(result);
         }
 
+        public Node UpdateRoomConfig(long roomId, ConfigRoomRequest request) {
+            client.RequestExecutor.CheckApiServerVersion();
+            #region Parameter Validation
+            request.MustNotNull(nameof(request));
+            roomId.MustPositive(nameof(roomId));
+            request.RecycleBinRetentionPeriod.MustBetween(nameof(request.RecycleBinRetentionPeriod), 0, 9999);
+            #endregion
+
+            ApiConfigRoomRequest apiConfigRoomRequest = RoomMapper.ToApiConfigRoomRequest(request);
+            RestRequest restRequest = client.RequestBuilder.PutRoomConfig(roomId, apiConfigRoomRequest);
+            ApiNode result = client.RequestExecutor.DoSyncApiCall<ApiNode>(restRequest, DracoonRequestExecuter.RequestType.PutRoomConfig);
+            return NodeMapper.FromApiNode(result);
+        }
+
         public Node EnableRoomEncryption(EnableRoomEncryptionRequest request) {
             client.RequestExecutor.CheckApiServerVersion();
             #region Parameter Validation
@@ -302,6 +316,108 @@ namespace Dracoon.Sdk.SdkInternal {
             RestRequest restRequest = client.RequestBuilder.PutEnableRoomEncryption(request.Id, apiEnableRoomEncryptionRequest);
             ApiNode result = client.RequestExecutor.DoSyncApiCall<ApiNode>(restRequest, DracoonRequestExecuter.RequestType.PutEnableRoomEncryption);
             return NodeMapper.FromApiNode(result);
+        }
+
+        public LogEventList GetRoomEvents(long roomId, DateTime? dateStart = null, DateTime? dateEnd = null, EventStatus? status = null, int? operationId = null, long? userId = null, long? offset = null, long? limit = null, EventLogsSort sort = null) {
+            client.RequestExecutor.CheckApiServerVersion();
+            #region Parameter Validation
+            roomId.MustPositive(nameof(roomId));
+            userId.MustPositive(nameof(userId));
+            operationId.MustPositive(nameof(operationId));
+            offset.MustNotNegative(nameof(offset));
+            limit.MustPositive(nameof(limit));
+            #endregion
+
+            RestRequest restRequest = client.RequestBuilder.GetRoomEvents(roomId, dateStart, dateEnd, status, operationId, userId, offset, limit, sort);
+            ApiLogEventList result = client.RequestExecutor.DoSyncApiCall<ApiLogEventList>(restRequest, DracoonRequestExecuter.RequestType.GetRoomEvents);
+            return EventLogMapper.FromApiLogEventList(result);
+        }
+
+        public PendingAssignmentList GetRoomPending(long roomId, long? offset = null, long? limit = null, GetRoomPendingFilter filter = null, PendingAssignmentsSort sort = null) {
+            client.RequestExecutor.CheckApiServerVersion();
+            #region Parameter Validation
+            roomId.MustPositive(nameof(roomId));
+            offset.MustNotNegative(nameof(offset));
+            limit.MustPositive(nameof(limit));
+            #endregion
+
+            RestRequest restRequest = client.RequestBuilder.GetRoomPending(roomId, offset, limit, filter, sort);
+            ApiPendingAssignmentList result = client.RequestExecutor.DoSyncApiCall<ApiPendingAssignmentList>(restRequest, DracoonRequestExecuter.RequestType.GetRoomPending);
+            return NodeMapper.FromApiPendingAssignmentList(result);
+        }
+
+        public RoomGroupList GetRoomGroups(long roomId, long? offset = null, long? limit = null, GetRoomGroupsFilter filter = null) {
+            client.RequestExecutor.CheckApiServerVersion();
+            #region Parameter Validation
+            roomId.MustPositive(nameof(roomId));
+            offset.MustNotNegative(nameof(offset));
+            limit.MustPositive(nameof(limit));
+            #endregion
+
+            RestRequest restRequest = client.RequestBuilder.GetRoomGroups(roomId, offset, limit, filter);
+            ApiRoomGroupList result = client.RequestExecutor.DoSyncApiCall<ApiRoomGroupList>(restRequest, DracoonRequestExecuter.RequestType.GetRoomGroups);
+            return NodeMapper.FromApiRoomGroupList(result);
+        }
+
+        public void OverwriteRoomGroups(long roomId, RoomGroupsAddBatchRequest request) {
+            client.RequestExecutor.CheckApiServerVersion();
+            #region Parameter Validation
+            roomId.MustPositive(nameof(roomId));
+            request.MustNotNull(nameof(request));
+            #endregion
+
+            ApiRoomGroupsAddBatchRequest apiRoomGroupsAddBatchRequest = NodeMapper.ToApiRoomGroupsAddBatchRequest(request);
+            RestRequest restRequest = client.RequestBuilder.PutRoomGroups(roomId, apiRoomGroupsAddBatchRequest);
+            client.RequestExecutor.DoSyncApiCall<VoidResponse>(restRequest, DracoonRequestExecuter.RequestType.PutRoomGroups);
+        }
+
+        public void DeleteRoomGroups(long roomId, IEnumerable<long> groupIds) {
+            client.RequestExecutor.CheckApiServerVersion();
+            #region Parameter Validation
+            roomId.MustPositive(nameof(roomId));
+            groupIds.MustNotNull(nameof(groupIds));
+            #endregion
+
+            ApiRoomGroupsDeleteBatchRequest apiRoomGroupsDeleteBatchRequest = NodeMapper.ToApiRoomGroupsDeleteBatchRequest(groupIds);
+            RestRequest restRequest = client.RequestBuilder.DeleteRoomGroups(roomId, apiRoomGroupsDeleteBatchRequest);
+            client.RequestExecutor.DoSyncApiCall<VoidResponse>(restRequest, DracoonRequestExecuter.RequestType.DeleteRoomGroups);
+        }
+
+        public RoomUserList GetRoomUsers(long roomId, long? offset = null, long? limit = null, GetRoomUsersFilter filter = null) {
+            client.RequestExecutor.CheckApiServerVersion();
+            #region Parameter Validation
+            roomId.MustPositive(nameof(roomId));
+            offset.MustNotNegative(nameof(offset));
+            limit.MustPositive(nameof(limit));
+            #endregion
+
+            RestRequest restRequest = client.RequestBuilder.GetRoomUsers(roomId, offset, limit, filter);
+            ApiRoomUserList result = client.RequestExecutor.DoSyncApiCall<ApiRoomUserList>(restRequest, DracoonRequestExecuter.RequestType.GetRoomUsers);
+            return NodeMapper.FromApiRoomUserList(result);
+        }
+
+        public void OverwriteRoomUsers(long roomId, RoomUsersAddBatchRequest request) {
+            client.RequestExecutor.CheckApiServerVersion();
+            #region Parameter Validation
+            roomId.MustPositive(nameof(roomId));
+            request.MustNotNull(nameof(request));
+            #endregion
+
+            ApiRoomUsersAddBatchRequest apiRoomUsersAddBatchRequest = NodeMapper.ToApiRoomUsersAddBatchRequest(request);
+            RestRequest restRequest = client.RequestBuilder.PutRoomUsers(roomId, apiRoomUsersAddBatchRequest);
+            client.RequestExecutor.DoSyncApiCall<VoidResponse>(restRequest, DracoonRequestExecuter.RequestType.PutRoomUsers);
+        }
+
+        public void DeleteRoomUsers(long roomId, IEnumerable<long> userIds) {
+            client.RequestExecutor.CheckApiServerVersion();
+            #region Parameter Validation
+            roomId.MustPositive(nameof(roomId));
+            userIds.MustNotNull(nameof(userIds));
+            #endregion
+
+            ApiRoomUsersDeleteBatchRequest apiRoomUsersDeleteBatchRequest = NodeMapper.ToApiRoomUsersDeleteBatchRequest(userIds);
+            RestRequest restRequest = client.RequestBuilder.DeleteRoomUsers(roomId, apiRoomUsersDeleteBatchRequest);
+            client.RequestExecutor.DoSyncApiCall<VoidResponse>(restRequest, DracoonRequestExecuter.RequestType.DeleteRoomUsers);
         }
 
         #endregion

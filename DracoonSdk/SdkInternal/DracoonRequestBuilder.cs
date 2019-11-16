@@ -1,7 +1,9 @@
 using System;
+using System.Globalization;
 using System.Net;
 using System.Text;
 using Dracoon.Sdk.Filter;
+using Dracoon.Sdk.Model;
 using Dracoon.Sdk.SdkInternal.ApiModel;
 using Dracoon.Sdk.SdkInternal.ApiModel.Requests;
 using Dracoon.Sdk.SdkInternal.OAuth;
@@ -51,6 +53,24 @@ namespace Dracoon.Sdk.SdkInternal {
             if (String.IsNullOrWhiteSpace(sortString))
                 return;
             requestForSortAdding.AddQueryParameter("sort", sortString);
+        }
+
+        private void AddFlag(RestRequest restRequest, string flagName, bool? flagValue) {
+            if (!flagValue.HasValue)
+                return;
+            restRequest.AddQueryParameter(flagName, flagValue.Value.ToString(CultureInfo.InvariantCulture).ToLowerInvariant());
+        }
+
+        private void AddDate(RestRequest restRequest, string flagName, DateTime? dateValue) {
+            if (!dateValue.HasValue)
+                return;
+            restRequest.AddQueryParameter(flagName, dateValue.Value.ToString("s", CultureInfo.InvariantCulture));
+        }
+
+        private void AddNumber(RestRequest restRequest, string flagName, long? numericValue) {
+            if (!numericValue.HasValue)
+                return;
+            restRequest.AddQueryParameter(flagName, numericValue.Value.ToString(CultureInfo.InvariantCulture));
         }
 
         #region Public-Endpoint
@@ -209,6 +229,61 @@ namespace Dracoon.Sdk.SdkInternal {
             return request;
         }
 
+        internal RestRequest GetRoomEvents(long roomId, DateTime? dateStart = null, DateTime? dateEnd = null, EventStatus? status = null, int? type = null, long? userId = null, long? offset = null, long? limit = null, EventLogsSort sort = null) {
+            RestRequest request = new RestRequest(ApiConfig.ApiGetRoomEvents, Method.GET);
+            SetGeneralRestValues(request, true);
+            request.AddUrlSegment("roomId", roomId);
+            AddSort(sort, request);
+            AddDate(request, "date_start", dateStart);
+            AddDate(request, "date_end", dateEnd);
+            AddNumber(request, "type", type);
+            AddNumber(request, "user_id", userId);
+            if (status.HasValue)
+                request.AddQueryParameter("status", Convert.ToInt32(status.Value).ToString(CultureInfo.InvariantCulture));
+            if (offset.HasValue)
+                request.AddQueryParameter("offset", offset.ToString());
+            if (limit.HasValue)
+                request.AddQueryParameter("limit", limit.ToString());
+            return request;
+        }
+
+        internal RestRequest GetRoomGroups(long roomId, long? offset = null, long? limit = null, GetRoomGroupsFilter filter = null) {
+            RestRequest request = new RestRequest(ApiConfig.ApiGetRoomGroups, Method.GET);
+            SetGeneralRestValues(request, true);
+            request.AddUrlSegment("roomId", roomId);
+            AddFilters(filter, request);
+            if (offset.HasValue)
+                request.AddQueryParameter("offset", offset.ToString());
+            if (limit.HasValue)
+                request.AddQueryParameter("limit", limit.ToString());
+            return request;
+        }
+
+        internal RestRequest GetRoomUsers(long roomId, long? offset = null, long? limit = null, GetRoomUsersFilter filter = null) {
+            RestRequest request = new RestRequest(ApiConfig.ApiGetRoomUsers, Method.GET);
+            SetGeneralRestValues(request, true);
+            request.AddUrlSegment("roomId", roomId);
+            AddFilters(filter, request);
+            if (offset.HasValue)
+                request.AddQueryParameter("offset", offset.ToString());
+            if (limit.HasValue)
+                request.AddQueryParameter("limit", limit.ToString());
+            return request;
+        }
+
+        internal RestRequest GetRoomPending(long roomId, long? offset = null, long? limit = null, GetRoomPendingFilter filter = null, PendingAssignmentsSort sort = null) {
+            RestRequest request = new RestRequest(ApiConfig.ApiGetRoomPending, Method.GET);
+            SetGeneralRestValues(request, true);
+            request.AddUrlSegment("roomId", roomId);
+            AddSort(sort, request);
+            AddFilters(filter, request);
+            if (offset.HasValue)
+                request.AddQueryParameter("offset", offset.ToString());
+            if (limit.HasValue)
+                request.AddQueryParameter("limit", limit.ToString());
+            return request;
+        }
+
         #endregion
         #region POST
 
@@ -280,6 +355,27 @@ namespace Dracoon.Sdk.SdkInternal {
             return request;
         }
 
+        internal RestRequest PutRoomConfig(long roomId, ApiConfigRoomRequest roomParams) {
+            RestRequest request = new RestRequest(ApiConfig.ApiPutRoomConfig, Method.PUT);
+            SetGeneralRestValues(request, true, roomParams);
+            request.AddUrlSegment("roomId", roomId);
+            return request;
+        }
+
+        internal RestRequest PutRoomGroups(long roomId, ApiRoomGroupsAddBatchRequest roomGroupParams) {
+            RestRequest request = new RestRequest(ApiConfig.ApiPutRoomGroups, Method.PUT);
+            SetGeneralRestValues(request, true, roomGroupParams);
+            request.AddUrlSegment("roomId", roomId);
+            return request;
+        }
+
+        internal RestRequest PutRoomUsers(long roomId, ApiRoomUsersAddBatchRequest roomUserParams) {
+            RestRequest request = new RestRequest(ApiConfig.ApiPutRoomUsers, Method.PUT);
+            SetGeneralRestValues(request, true, roomUserParams);
+            request.AddUrlSegment("roomId", roomId);
+            return request;
+        }
+
         internal RestRequest PutEnableRoomEncryption(long roomId, ApiEnableRoomEncryptionRequest encryptionParams) {
             RestRequest request = new RestRequest(ApiConfig.ApiPutEnableRoomEncryption, Method.PUT);
             SetGeneralRestValues(request, true, encryptionParams);
@@ -333,6 +429,20 @@ namespace Dracoon.Sdk.SdkInternal {
         internal RestRequest DeletePreviousVersion(ApiDeletePreviousVersionsRequest deleteParams) {
             RestRequest request = new RestRequest(ApiConfig.ApiDeletePreviousVersions, Method.DELETE);
             SetGeneralRestValues(request, true, deleteParams);
+            return request;
+        }
+
+        internal RestRequest DeleteRoomGroups(long roomId, ApiRoomGroupsDeleteBatchRequest deleteParams) {
+            RestRequest request = new RestRequest(ApiConfig.ApiDeleteRoomGroups, Method.DELETE);
+            SetGeneralRestValues(request, true, deleteParams);
+            request.AddUrlSegment("roomId", roomId);
+            return request;
+        }
+
+        internal RestRequest DeleteRoomUsers(long roomId, ApiRoomUsersDeleteBatchRequest deleteParams) {
+            RestRequest request = new RestRequest(ApiConfig.ApiDeleteRoomUsers, Method.DELETE);
+            SetGeneralRestValues(request, true, deleteParams);
+            request.AddUrlSegment("roomId", roomId);
             return request;
         }
 
@@ -497,21 +607,21 @@ namespace Dracoon.Sdk.SdkInternal {
         }
 
         internal RestRequest GetGroupLastAdminRooms(long groupId) {
-            RestRequest request = new RestRequest(ApiConfig.ApiGetGroup, Method.GET);
+            RestRequest request = new RestRequest(ApiConfig.ApiGetGroupLastAdminRooms, Method.GET);
             SetGeneralRestValues(request, true);
             request.AddUrlSegment("groupId", groupId.ToString());
             return request;
         }
 
         internal RestRequest GetGroupRoles(long groupId) {
-            RestRequest request = new RestRequest(ApiConfig.ApiGetGroup, Method.GET);
+            RestRequest request = new RestRequest(ApiConfig.ApiGetGroupRoles, Method.GET);
             SetGeneralRestValues(request, true);
             request.AddUrlSegment("groupId", groupId.ToString());
             return request;
         }
 
-        internal RestRequest GetGroupUsers(long groupId, long? offset = null, long? limit = null, GetUsersFilter filter = null) {
-            RestRequest request = new RestRequest(ApiConfig.ApiGetGroup, Method.GET);
+        internal RestRequest GetGroupUsers(long groupId, long? offset = null, long? limit = null, GetGroupUsersFilter filter = null) {
+            RestRequest request = new RestRequest(ApiConfig.ApiGetGroupUsers, Method.GET);
             SetGeneralRestValues(request, true);
             request.AddUrlSegment("groupId", groupId.ToString());
             AddFilters(filter, request);
@@ -532,7 +642,7 @@ namespace Dracoon.Sdk.SdkInternal {
         }
 
         internal RestRequest PostGroupUser(long groupId, ApiChangeGroupMembersRequest groupUsersParams) {
-            RestRequest request = new RestRequest(ApiConfig.ApiPostGroup, Method.POST);
+            RestRequest request = new RestRequest(ApiConfig.ApiPostGroupUser, Method.POST);
             SetGeneralRestValues(request, true, groupUsersParams);
             request.AddUrlSegment("groupId", groupId.ToString());
             return request;
@@ -563,6 +673,169 @@ namespace Dracoon.Sdk.SdkInternal {
             RestRequest request = new RestRequest(ApiConfig.ApiDeleteGroupUsers, Method.DELETE);
             SetGeneralRestValues(request, true, deleteUsersParams);
             request.AddUrlSegment("groupId", groupId.ToString());
+            return request;
+        }
+
+        #endregion
+
+        #endregion
+
+        #region Users-Endpoint
+
+        #region GET
+
+        internal RestRequest GetUsers(bool? includeAttributes = null, long? offset = null, long? limit = null, GetUsersFilter filter = null, UsersSort sort = null) {
+            RestRequest request = new RestRequest(ApiConfig.ApiGetUsers, Method.GET);
+            SetGeneralRestValues(request, true);
+            AddFilters(filter, request);
+            AddSort(sort, request);
+            AddFlag(request, "include_attributes", includeAttributes);
+            if (offset.HasValue)
+                request.AddQueryParameter("offset", offset.ToString());
+            if (limit.HasValue)
+                request.AddQueryParameter("limit", limit.ToString());
+            return request;
+        }
+
+        internal RestRequest GetUser(long userId, bool? effectiveRoles = null) {
+            RestRequest request = new RestRequest(ApiConfig.ApiGetUser, Method.GET);
+            SetGeneralRestValues(request, true);
+            AddFlag(request, "effective_roles", effectiveRoles);
+            request.AddUrlSegment("userId", userId.ToString());
+            return request;
+        }
+
+        internal RestRequest GetUserGroups(long userId, long? offset = null, long? limit = null, GetUserGroupsFilter filter = null) {
+            RestRequest request = new RestRequest(ApiConfig.ApiGetUserGroups, Method.GET);
+            SetGeneralRestValues(request, true);
+            request.AddUrlSegment("userId", userId.ToString());
+            AddFilters(filter, request);
+            if (offset.HasValue)
+                request.AddQueryParameter("offset", offset.ToString());
+            if (limit.HasValue)
+                request.AddQueryParameter("limit", limit.ToString());
+            return request;
+        }
+
+        internal RestRequest GetUserLastAdminRooms(long userId) {
+            RestRequest request = new RestRequest(ApiConfig.ApiGetUserLastAdminRooms, Method.GET);
+            SetGeneralRestValues(request, true);
+            request.AddUrlSegment("userId", userId.ToString());
+            return request;
+        }
+
+        internal RestRequest GetUserRoles(long userId) {
+            RestRequest request = new RestRequest(ApiConfig.ApiGetUserRoles, Method.GET);
+            SetGeneralRestValues(request, true);
+            request.AddUrlSegment("userId", userId.ToString());
+            return request;
+        }
+
+        internal RestRequest GetUserUserAttributes(long userId, long? offset = null, long? limit = null, GetUserAttributesFilter filter = null, UserAttributesSort sort = null) {
+            RestRequest request = new RestRequest(ApiConfig.ApiGetUserUserAttributes, Method.GET);
+            SetGeneralRestValues(request, true);
+            request.AddUrlSegment("userId", userId.ToString());
+            AddFilters(filter, request);
+            if (offset.HasValue)
+                request.AddQueryParameter("offset", offset.ToString());
+            if (limit.HasValue)
+                request.AddQueryParameter("limit", limit.ToString());
+            return request;
+        }
+
+        #endregion
+        #region POST
+
+        internal RestRequest PostUser(ApiCreateUserRequest userParams) {
+            RestRequest request = new RestRequest(ApiConfig.ApiPostUser, Method.POST);
+            SetGeneralRestValues(request, true, userParams);
+            return request;
+        }
+
+        internal RestRequest PostUserUserAttributes(long userId, ApiUserAttributes userAttributeParams) {
+            RestRequest request = new RestRequest(ApiConfig.ApiPostUserAttributes, Method.POST);
+            SetGeneralRestValues(request, true, userAttributeParams);
+            request.AddUrlSegment("userId", userId.ToString());
+            return request;
+        }
+
+        #endregion
+        #region PUT
+
+        internal RestRequest PutUser(long userId, ApiUpdateUserRequest userParams) {
+            RestRequest request = new RestRequest(ApiConfig.ApiPutUser, Method.PUT);
+            SetGeneralRestValues(request, true, userParams);
+            request.AddUrlSegment("userId", userId.ToString());
+            return request;
+        }
+
+        internal RestRequest PutUserUserAttributes(long userId, ApiUserAttributes userAttributeParams) {
+            RestRequest request = new RestRequest(ApiConfig.ApiPutUserUserAttributes, Method.PUT);
+            SetGeneralRestValues(request, true, userAttributeParams);
+            request.AddUrlSegment("userId", userId.ToString());
+            return request;
+        }
+
+        #endregion
+        #region DELETE
+
+        internal RestRequest DeleteUser(long userId) {
+            RestRequest request = new RestRequest(ApiConfig.ApiDeleteUser, Method.DELETE);
+            SetGeneralRestValues(request, true);
+            request.AddUrlSegment("userId", userId.ToString());
+            return request;
+        }
+
+        internal RestRequest DeleteUserUserAttribute(long userId, string userAttributeKey) {
+            RestRequest request = new RestRequest(ApiConfig.ApiDeleteUserUserAttribute, Method.DELETE);
+            request.AddUrlSegment("userId", userId.ToString());
+            request.AddUrlSegment("key", userAttributeKey);
+            return request;
+        }
+
+        #endregion
+
+        #endregion
+
+        #region EventLog-Endpoint
+
+        #region GET
+
+        internal RestRequest GetAuditNodes(long? offset = null, long? limit = null, GetAuditNodesFilter filter = null, AuditNodesSort sort = null) {
+            RestRequest request = new RestRequest(ApiConfig.ApiGetUsers, Method.GET);
+            SetGeneralRestValues(request, true);
+            AddFilters(filter, request);
+            AddSort(sort, request);
+            if (offset.HasValue)
+                request.AddQueryParameter("offset", offset.ToString());
+            if (limit.HasValue)
+                request.AddQueryParameter("limit", limit.ToString());
+            return request;
+        }
+
+        internal RestRequest GetEvents(DateTime? dateStart = null, DateTime? dateEnd = null, EventStatus? status = null, int? type = null, long? userId = null, string userClient = null, long? offset = null, long? limit = null, EventLogsSort sort = null) {
+            RestRequest request = new RestRequest(ApiConfig.ApiGetUser, Method.GET);
+            SetGeneralRestValues(request, true);
+            AddSort(sort, request);
+            AddDate(request, "date_start", dateStart);
+            AddDate(request, "date_end", dateEnd);
+            AddNumber(request, "type", type);
+            AddNumber(request, "user_id", userId);
+            if (status.HasValue)
+                request.AddQueryParameter("status", Convert.ToInt32(status.Value).ToString(CultureInfo.InvariantCulture));
+            if (!string.IsNullOrWhiteSpace(userClient))
+                request.AddQueryParameter("user_client", userClient);
+            if (offset.HasValue)
+                request.AddQueryParameter("offset", offset.ToString());
+            if (limit.HasValue)
+                request.AddQueryParameter("limit", limit.ToString());
+            return request;
+        }
+
+        internal RestRequest GetOperations(bool? isDeprecated = null) {
+            RestRequest request = new RestRequest(ApiConfig.ApiGetOperations, Method.GET);
+            SetGeneralRestValues(request, true);
+            AddFlag(request, "is_deprecated", isDeprecated);
             return request;
         }
 

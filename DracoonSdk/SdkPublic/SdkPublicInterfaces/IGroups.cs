@@ -13,7 +13,7 @@ namespace Dracoon.Sdk {
 
         RoleList GetGroupRoles(long groupId);
 
-        GroupUserList GetGroupUsers(long groupId, long? offset = null, long? limit = null, GetUsersFilter filter = null);
+        GroupUserList GetGroupUsers(long groupId, long? offset = null, long? limit = null, GetGroupUsersFilter filter = null);
 
         Group CreateGroup(CreateGroupRequest groupParams);
 

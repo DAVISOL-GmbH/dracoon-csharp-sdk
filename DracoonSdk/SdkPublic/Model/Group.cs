@@ -1,15 +1,7 @@
 using System;
 
 namespace Dracoon.Sdk.Model {
-    public class Group {
-
-        public long Id {
-            get; internal set;
-        }
-
-        public string Name {
-            get; internal set;
-        }
+    public class Group : GroupInfo {
 
         public int CountUsers {
             get; internal set;

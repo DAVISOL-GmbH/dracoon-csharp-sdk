@@ -1,4 +1,4 @@
-﻿using Dracoon.Sdk.Model;
+using Dracoon.Sdk.Model;
 using Dracoon.Sdk.SdkInternal.ApiModel;
 using Dracoon.Sdk.SdkInternal.ApiModel.Requests;
 using Dracoon.Sdk.SdkInternal.Util;
@@ -28,6 +28,20 @@ namespace Dracoon.Sdk.SdkInternal.Mapper {
                 Notes = updateRoomRequest.Notes
             };
             return apiUpdateRoomRequest;
+        }
+
+        internal static ApiConfigRoomRequest ToApiConfigRoomRequest(ConfigRoomRequest configRoomRequest) {
+            ApiConfigRoomRequest apiConfigRoomRequest = new ApiConfigRoomRequest() {
+                RecycleBinRetentionPeriod = configRoomRequest.RecycleBinRetentionPeriod,
+                InheritPermissions = configRoomRequest.InheritPermissions,
+                TakeOverPermissions = configRoomRequest.TakeOverPermissions,
+                AdminIds = configRoomRequest.AdminIds,
+                AdminGroupIds = configRoomRequest.AdminGroupIds,
+                NewGroupMemberAcceptance = EnumConverter.ConvertGroupMemberAcceptanceToValue(configRoomRequest.NewGroupMemberAcceptance),
+                HasActivitiesLog = configRoomRequest.HasActivitiesLog,
+                Classification = EnumConverter.ConvertClassificationEnumToValue(configRoomRequest.Classification)
+            };
+            return apiConfigRoomRequest;
         }
 
         internal static ApiEnableRoomEncryptionRequest ToApiEnableRoomEncryptionRequest(EnableRoomEncryptionRequest enableRoomEncryptionRequest, ApiUserKeyPair dataRoomRescueKey) {
