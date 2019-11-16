@@ -19,4 +19,9 @@
         <dependency id="RestSharp" version="106.4.2"/>
     </dependencies>
   </metadata>
+  <files>
+    <file src="bin\Release\Dracoon.Sdk.dll" target="lib\net452\Dracoon.Sdk.dll" />
+    <file src="bin\Release\Dracoon.Sdk.xml" target="lib\net452\Dracoon.Sdk.xml" />
+    <file src="bin\Release\Dracoon.Sdk.config" target="lib\net452\Dracoon.Sdk.config" />
+  </files>
 </package>
