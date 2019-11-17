@@ -14,7 +14,7 @@
     <copyright>Copyright ©2018 DRACOON GmbH, Copyright ©2018 Sebastian Hübner - DAVISOL</copyright>
     <tags>DRACOON rest api sdk davisol</tags>
     <dependencies>
-        <dependency id="Dracoon.Crypto.Sdk" version="1.1.43.1"/>
+        <dependency id="Dracoon.Crypto.Sdk" version="1.1.60.1"/>
         <dependency id="Newtonsoft.Json" version="11.0.2"/>
         <dependency id="RestSharp" version="106.4.2"/>
     </dependencies>
