@@ -2,27 +2,27 @@ namespace Dracoon.Sdk.Model {
     public class UserAuthData {
 
         public AuthMethodType Method {
-            get; internal set;
+            get; set;
         }
 
         public string Login {
-            get; internal set;
+            get; set;
         }
 
         public string Password {
-            get; internal set;
+            get; set;
         }
 
         public bool MustChangePassword {
-            get; internal set;
+            get; set;
         }
 
         public int? AdConfigId {
-            get; internal set;
+            get; set;
         }
 
         public int? OidConfigId {
-            get; internal set;
+            get; set;
         }
     }
 }
