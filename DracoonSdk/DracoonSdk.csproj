@@ -232,6 +232,7 @@
     <Compile Include="SdkPublic\Filter\FilterParam.cs" />
     <Compile Include="SdkPublic\Filter\SpecificFilters\GetUploadSharesFilter.cs" />
     <Compile Include="SdkPublic\Filter\SpecificFilters\SearchNodesFilter.cs" />
+    <Compile Include="SdkPublic\Model\Abstract\CollectionListBase.cs" />
     <Compile Include="SdkPublic\Model\Abstract\SimpleListBase.cs" />
     <Compile Include="SdkPublic\Model\Abstract\RangeListBase.cs" />
     <Compile Include="SdkPublic\Model\AttributesResponse.cs" />

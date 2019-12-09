@@ -1,5 +1,3 @@
-using System.Collections.Generic;
-
 namespace Dracoon.Sdk.Model {
     public abstract class RangeListBase<T> : SimpleListBase<T> {
         public long Offset {

@@ -5,7 +5,7 @@ namespace Dracoon.Sdk.Model {
     public class UpdateGroupRequest {
 
         public string Name {
-            get; private set;
+            get; set;
         }
 
         public DateTime? Expiration {

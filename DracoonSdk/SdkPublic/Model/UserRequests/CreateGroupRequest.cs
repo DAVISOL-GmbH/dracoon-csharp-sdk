@@ -11,5 +11,9 @@ namespace Dracoon.Sdk.Model {
         public DateTime? Expiration {
             get; set;
         }
+
+        public CreateGroupRequest(string name) {
+            Name = name;
+        }
     }
 }

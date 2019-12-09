@@ -5,15 +5,15 @@ namespace Dracoon.Sdk.Model {
     public class CreateUserRequest {
 
         public string FirstName {
-            get; set;
+            get; private set;
         }
 
         public string LastName {
-            get; set;
+            get; private set;
         }
 
         public string UserName {
-            get; set;
+            get; private set;
         }
 
         public string Title {
@@ -37,7 +37,7 @@ namespace Dracoon.Sdk.Model {
         }
 
         public string Email {
-            get; set;
+            get; private set;
         }
 
         public bool NotifyUser {
@@ -50,6 +50,13 @@ namespace Dracoon.Sdk.Model {
 
         public bool IsNonmemberViewer {
             get; set;
+        }
+
+        public CreateUserRequest(string userName, string firstName, string lastName, string email) {
+            UserName = userName;
+            FirstName = firstName;
+            LastName = lastName;
+            Email = email;
         }
     }
 }
