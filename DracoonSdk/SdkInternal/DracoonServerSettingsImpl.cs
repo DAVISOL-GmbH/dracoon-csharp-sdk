@@ -1,4 +1,4 @@
-﻿using Dracoon.Sdk.Model;
+using Dracoon.Sdk.Model;
 using Dracoon.Sdk.SdkInternal.ApiModel;
 using Dracoon.Sdk.SdkInternal.Mapper;
 using RestSharp;
@@ -33,6 +33,11 @@ namespace Dracoon.Sdk.SdkInternal {
             return SettingsMapper.FromApiInfrastructureSettings(apiInfrastructureSettings);
         }
 
-
+        public ServerAuthenticationSettings GetAuth() {
+            client.RequestExecutor.CheckApiServerVersion();
+            RestRequest request = client.RequestBuilder.GetAuthenticationSettings();
+            ApiAuthenticationSettings apiAuthenticationSettings = client.RequestExecutor.DoSyncApiCall<ApiAuthenticationSettings>(request, DracoonRequestExecuter.RequestType.GetAuthenticationSettings);
+            return SettingsMapper.FromApiAuthenticationSettings(apiAuthenticationSettings);
+        }
     }
 }

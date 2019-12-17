@@ -105,6 +105,8 @@
     <Compile Include="SdkInternal\ApiModel\Requests\ApiRoomGroupsAddBatchRequestItem.cs" />
     <Compile Include="SdkInternal\ApiModel\Requests\ApiRoomUsersAddBatchRequest.cs" />
     <Compile Include="SdkInternal\ApiModel\Requests\ApiRoomUsersAddBatchRequestItem.cs" />
+    <Compile Include="SdkInternal\ApiModel\Settings\ApiAuthenticationMethod.cs" />
+    <Compile Include="SdkInternal\ApiModel\Settings\ApiAuthenticationSettings.cs" />
     <Compile Include="SdkInternal\ApiModel\Settings\ApiDefaultsSettings.cs" />
     <Compile Include="SdkInternal\ApiModel\Settings\ApiInfrastructureSettings.cs" />
     <Compile Include="SdkInternal\ApiModel\Shares\ApiDownloadShare.cs" />
@@ -256,6 +258,8 @@
     <Compile Include="SdkPublic\Model\RequestInformation.cs" />
     <Compile Include="SdkPublic\Model\RoomGroup.cs" />
     <Compile Include="SdkPublic\Model\RoomGroupList.cs" />
+    <Compile Include="SdkPublic\Model\ServerAuthenticationMethod.cs" />
+    <Compile Include="SdkPublic\Model\ServerAuthenticationSettings.cs" />
     <Compile Include="SdkPublic\Model\UserRequests\ConfigRoomRequest.cs" />
     <Compile Include="SdkPublic\Model\UserRequests\RoomGroupsAddBatchRequest.cs" />
     <Compile Include="SdkPublic\Model\UserRequests\RoomGroupsAddBatchRequestItem.cs" />

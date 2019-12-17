@@ -19,7 +19,7 @@ namespace Dracoon.Sdk.SdkInternal {
             PostDownloadToken, GetFileKey, PostUploadToken, PutCompleteUpload, PostUploadChunk,
             GetDownloadChunk, PostCopyNodes, PostMoveNodes, GetSearchNodes, GetMissingFileKeys, PostMissingFileKeys,
             PostCreateDownloadShare, DeleteDownloadShare, GetDownloadShares, PostCreateUploadShare, DeleteUploadShare,
-            GetUploadShares, PostFavorite, DeleteFavorite, GetAuthenticatedPing, PostOAuthToken, PostOAuthRefresh, GetGeneralSettings, GetInfrastructureSettings, GetDefaultsSettings,
+            GetUploadShares, PostFavorite, DeleteFavorite, GetAuthenticatedPing, PostOAuthToken, PostOAuthRefresh, GetGeneralSettings, GetInfrastructureSettings, GetDefaultsSettings, GetAuthenticationSettings,
             GetRecycleBin, DeleteRecycleBin, GetPreviousVersions, GetPreviousVersion, PostRestoreNodeVersion, DeletePreviousVersions,
             GetGroups, GetGroup, GetGroupLastAdminRooms, GetGroupRoles, GetGroupUsers, PostGroup, PostGroupUsers, PutGroup, DeleteGroup, DeleteGroupUsers,
             GetUsers, GetUser, GetUserLastAdminRooms, GetUserRoles, GetUserGroups, GetUserUserAttributes, PostUser, PostUserUserAttributes, PutUser, PutUserUserAttributes, DeleteUser, DeleteUserUserAttribute,
@@ -67,7 +67,7 @@ namespace Dracoon.Sdk.SdkInternal {
                 client.Proxy = dracoonClient.HttpConfig.WebProxy;
             }
             IRestResponse response = client.Execute(request);
-            dracoonClient.LastRequest = new SdkPublic.Model.RequestInformation(client, request, response);
+            dracoonClient.LastRequest = new Model.RequestInformation(client, request, response);
             if (response.ErrorException != null && response.ErrorException is WebException we) { // It's an HTTP exception
                 dracoonClient.ApiErrorParser.ParseError(we, requestType);
             }

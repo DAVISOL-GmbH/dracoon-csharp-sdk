@@ -1,4 +1,4 @@
-﻿using Dracoon.Sdk.Error;
+using Dracoon.Sdk.Error;
 using Dracoon.Sdk.SdkInternal.ApiModel;
 using Newtonsoft.Json;
 using RestSharp;

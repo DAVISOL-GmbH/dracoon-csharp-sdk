@@ -1,6 +1,6 @@
 using RestSharp;
 
-namespace Dracoon.Sdk.SdkPublic.Model {
+namespace Dracoon.Sdk.Model {
     public sealed class RequestInformation {
 
         internal RequestInformation(RestClient client, RestRequest request, IRestResponse response) {

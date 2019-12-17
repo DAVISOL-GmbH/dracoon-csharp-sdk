@@ -140,6 +140,16 @@ namespace Dracoon.Sdk.SdkInternal {
 
         #endregion
 
+        #region System-Settings-Config-Endpoint
+
+        #region GET
+
+        internal const string ApiGetAuthenticationConfig = ApiPrefix + "/system/config/settings/auth";
+
+        #endregion
+
+        #endregion
+
         #region Uploads-Endpoint
 
         #region POST

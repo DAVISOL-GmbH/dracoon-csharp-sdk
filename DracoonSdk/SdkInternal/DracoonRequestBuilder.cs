@@ -583,6 +583,20 @@ namespace Dracoon.Sdk.SdkInternal {
 
         #endregion
 
+        #region System-Settings-Endpoint
+
+        #region GET
+
+        internal RestRequest GetAuthenticationSettings() {
+            RestRequest request = new RestRequest(ApiConfig.ApiGetAuthenticationConfig, Method.GET);
+            SetGeneralRestValues(request, true);
+            return request;
+        }
+
+        #endregion
+
+        #endregion
+
         #region Groups-Endpoint
 
         #region GET

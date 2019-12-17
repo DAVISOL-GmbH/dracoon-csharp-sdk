@@ -1,8 +1,8 @@
 using System;
+using Dracoon.Sdk.Model;
 using Dracoon.Sdk.SdkInternal;
 using Dracoon.Sdk.SdkInternal.OAuth;
 using Dracoon.Sdk.SdkInternal.Validator;
-using Dracoon.Sdk.SdkPublic.Model;
 
 namespace Dracoon.Sdk {
     /// <include file = "SdkPublicDoc.xml" path='docs/members[@name="dracoonClient"]/DracoonClient/*'/>

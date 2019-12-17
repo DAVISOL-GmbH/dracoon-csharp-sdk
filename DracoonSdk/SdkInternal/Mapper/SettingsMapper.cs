@@ -1,4 +1,6 @@
-﻿using Dracoon.Sdk.Model;
+using System;
+using System.Linq;
+using Dracoon.Sdk.Model;
 using Dracoon.Sdk.SdkInternal.ApiModel;
 
 namespace Dracoon.Sdk.SdkInternal.Mapper {
@@ -43,5 +45,42 @@ namespace Dracoon.Sdk.SdkInternal.Mapper {
             };
             return defaults;
         }
+
+        internal static ServerAuthenticationSettings FromApiAuthenticationSettings(ApiAuthenticationSettings apiAuthenticationConfig) {
+            if (apiAuthenticationConfig == null) {
+                return null;
+            }
+            var authMethods = Enumerable.Empty<ServerAuthenticationMethod>();
+            if (apiAuthenticationConfig.AuthMethods != null) {
+                authMethods = apiAuthenticationConfig.AuthMethods.Select(x => FromApiAuthenticationMethod(x)).Where(x => x != null);
+            }
+            ServerAuthenticationSettings authentication = new ServerAuthenticationSettings() {
+                AuthMethods = authMethods.ToArray()
+            };
+            return authentication;
+        }
+
+        internal static ServerAuthenticationMethod FromApiAuthenticationMethod(ApiAuthenticationMethod apiAuthenticationMethod) {
+            if (apiAuthenticationMethod == null || string.IsNullOrEmpty(apiAuthenticationMethod.Name)) {
+                return null;
+            }
+            var authMethodType = AuthMethodType.BasicOrSql;
+            if (string.Compare(apiAuthenticationMethod.Name, "active_directory", StringComparison.OrdinalIgnoreCase) == 0)
+                authMethodType = AuthMethodType.ActiveDirectory;
+            else if (string.Compare(apiAuthenticationMethod.Name, "radius", StringComparison.OrdinalIgnoreCase) == 0)
+                authMethodType = AuthMethodType.Radius;
+            else if (string.Compare(apiAuthenticationMethod.Name, "openid", StringComparison.OrdinalIgnoreCase) == 0)
+                authMethodType = AuthMethodType.OpenId;
+            else if (string.Compare(apiAuthenticationMethod.Name, "basic", StringComparison.OrdinalIgnoreCase) != 0 && string.Compare(apiAuthenticationMethod.Name, "sql", StringComparison.OrdinalIgnoreCase) != 0)
+                return null;
+
+            ServerAuthenticationMethod authMethod = new ServerAuthenticationMethod() {
+                AuthMethod = authMethodType,
+                IsEnabled = apiAuthenticationMethod.IsEnabled,
+                Priority = apiAuthenticationMethod.Priority
+            };
+            return authMethod;
+        }
+
     }
 }

@@ -1,4 +1,4 @@
-﻿
+
 using Dracoon.Sdk.Model;
 
 namespace Dracoon.Sdk {
@@ -13,5 +13,7 @@ namespace Dracoon.Sdk {
 
         /// <include file = "SdkPublicInterfacesDoc.xml" path='docs/members[@name="iServerSettings"]/GetDefault/*'/>
         ServerDefaultSettings GetDefault();
+
+        ServerAuthenticationSettings GetAuth();
     }
 }
