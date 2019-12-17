@@ -67,6 +67,7 @@ namespace Dracoon.Sdk.SdkInternal {
                 client.Proxy = dracoonClient.HttpConfig.WebProxy;
             }
             IRestResponse response = client.Execute(request);
+            dracoonClient.LastRequest = new SdkPublic.Model.RequestInformation(client, request, response);
             if (response.ErrorException != null && response.ErrorException is WebException we) { // It's an HTTP exception
                 dracoonClient.ApiErrorParser.ParseError(we, requestType);
             }

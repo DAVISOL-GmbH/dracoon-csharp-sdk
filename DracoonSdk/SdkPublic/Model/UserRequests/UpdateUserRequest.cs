@@ -5,47 +5,43 @@ namespace Dracoon.Sdk.Model {
     public class UpdateUserRequest {
 
         public string Title {
-            get; private set;
+            get; set;
         }
 
         public string FirstName {
-            get; private set;
+            get; set;
         }
 
         public string LastName {
-            get; private set;
+            get; set;
         }
 
         public string UserName {
-            get; private set;
+            get; set;
         }
 
         public string Email {
-            get; private set;
-        }
-
-        public string Gender {
-            get; private set;
+            get; set;
         }
 
         public bool IsLocked {
-            get; private set;
+            get; set;
         }
 
         public string Phone {
-            get; private set;
+            get; set;
         }
 
         public CultureInfo ReceiverLanguage {
-            get; private set;
+            get; set;
         }
 
         public DateTime? ExpireAt {
-            get; private set;
+            get; set;
         }
 
         public UserAuthDataUpdateRequest AuthData {
             get; private set;
-        }
+        } = new UserAuthDataUpdateRequest();
     }
 }

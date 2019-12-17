@@ -45,14 +45,6 @@ namespace Dracoon.Sdk.Model {
             get; internal set;
         }
 
-        public Gender Gender {
-            get; internal set;
-        }
-
-        public string GenderText {
-            get; internal set;
-        }
-
         public DateTime? CreatedAt {
             get; internal set;
         }

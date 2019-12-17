@@ -45,10 +45,6 @@ namespace Dracoon.Sdk.SdkInternal.ApiModel {
         public string Title {
             get; internal set;
         }
-        [JsonProperty("gender", NullValueHandling = NullValueHandling.Ignore)]
-        public string Gender {
-            get; internal set;
-        }
         [JsonProperty("createdAt", NullValueHandling = NullValueHandling.Ignore)]
         public DateTime? CreatedAt {
             get; internal set;

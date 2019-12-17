@@ -243,7 +243,6 @@
     <Compile Include="SdkPublic\Model\Classification.cs" />
     <Compile Include="SdkPublic\Model\CustomerAccount.cs" />
     <Compile Include="SdkPublic\Model\EventStatus.cs" />
-    <Compile Include="SdkPublic\Model\Gender.cs" />
     <Compile Include="SdkPublic\Model\GroupInfo.cs" />
     <Compile Include="SdkPublic\Model\LastAdminUserRoom.cs" />
     <Compile Include="SdkPublic\Model\LastAdminUserRoomList.cs" />
@@ -254,6 +253,7 @@
     <Compile Include="SdkPublic\Model\PendingAssignmentData.cs" />
     <Compile Include="SdkPublic\Model\PendingAssignmentList.cs" />
     <Compile Include="SdkPublic\Model\PendingAssignmentState.cs" />
+    <Compile Include="SdkPublic\Model\RequestInformation.cs" />
     <Compile Include="SdkPublic\Model\RoomGroup.cs" />
     <Compile Include="SdkPublic\Model\RoomGroupList.cs" />
     <Compile Include="SdkPublic\Model\UserRequests\ConfigRoomRequest.cs" />

@@ -18,10 +18,6 @@ namespace Dracoon.Sdk.SdkInternal.ApiModel.Requests {
         public string Title {
             get; internal set;
         }
-        [JsonProperty("gender", NullValueHandling = NullValueHandling.Ignore)]
-        public string Gender {
-            get; internal set;
-        }
         [JsonProperty("phone", NullValueHandling = NullValueHandling.Ignore)]
         public string Phone {
             get; internal set;

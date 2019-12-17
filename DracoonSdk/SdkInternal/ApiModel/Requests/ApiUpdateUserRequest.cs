@@ -22,10 +22,6 @@ namespace Dracoon.Sdk.SdkInternal.ApiModel.Requests {
         public string Email {
             get; internal set;
         }
-        [JsonProperty("gender", NullValueHandling = NullValueHandling.Ignore)]
-        public string Gender {
-            get; internal set;
-        }
         [JsonProperty("isLocked", NullValueHandling = NullValueHandling.Ignore)]
         public bool IsLocked {
             get; internal set;
