@@ -71,8 +71,8 @@ namespace Dracoon.Sdk.SdkInternal.Mapper {
                 authMethodType = AuthMethodType.Radius;
             else if (string.Compare(apiAuthenticationMethod.Name, "openid", StringComparison.OrdinalIgnoreCase) == 0)
                 authMethodType = AuthMethodType.OpenId;
-            else if (string.Compare(apiAuthenticationMethod.Name, "basic", StringComparison.OrdinalIgnoreCase) != 0 && string.Compare(apiAuthenticationMethod.Name, "sql", StringComparison.OrdinalIgnoreCase) != 0)
-                return null;
+            //else if (string.Compare(apiAuthenticationMethod.Name, "basic", StringComparison.OrdinalIgnoreCase) != 0 && string.Compare(apiAuthenticationMethod.Name, "sql", StringComparison.OrdinalIgnoreCase) != 0)
+            //    return null;
 
             ServerAuthenticationMethod authMethod = new ServerAuthenticationMethod() {
                 AuthMethod = authMethodType,
