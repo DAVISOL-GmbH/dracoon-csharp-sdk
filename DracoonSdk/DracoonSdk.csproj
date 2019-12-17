@@ -382,6 +382,6 @@
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>xcopy $(TargetDir)Dracoon.Sdk.* $(SolutionDir)Output\Debug\dracoon /Y</PostBuildEvent>
+    <PostBuildEvent>REM xcopy $(TargetDir)Dracoon.Sdk.* $(SolutionDir)Output\Debug\dracoon /Y</PostBuildEvent>
   </PropertyGroup>
 </Project>
