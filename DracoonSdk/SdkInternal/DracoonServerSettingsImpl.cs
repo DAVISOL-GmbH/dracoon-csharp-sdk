@@ -37,7 +37,7 @@ namespace Dracoon.Sdk.SdkInternal {
             client.RequestExecutor.CheckApiServerVersion();
             RestRequest request = client.RequestBuilder.GetAuthenticationSettings();
             ApiAuthenticationSettings apiAuthenticationSettings = client.RequestExecutor.DoSyncApiCall<ApiAuthenticationSettings>(request, DracoonRequestExecuter.RequestType.GetAuthenticationSettings);
-            return SettingsMapper.FromApiAuthenticationSettings(apiAuthenticationSettings, client.Log);
+            return SettingsMapper.FromApiAuthenticationSettings(apiAuthenticationSettings);
         }
     }
 }

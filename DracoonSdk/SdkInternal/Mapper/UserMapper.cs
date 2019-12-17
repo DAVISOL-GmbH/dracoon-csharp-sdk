@@ -61,6 +61,8 @@ namespace Dracoon.Sdk.SdkInternal.Mapper {
         }
 
         internal static ApiUserKeyPair ToApiUserKeyPair(UserKeyPair userKeyPair) {
+            if (userKeyPair == null)
+                return null;
             ApiUserKeyPair apiUserKeyPair = new ApiUserKeyPair() {
                 PublicKeyContainer = ToApiUserPublicKey(userKeyPair.UserPublicKey),
                 PrivateKeyContainer = ToApiUserPrivateKey(userKeyPair.UserPrivateKey)
@@ -69,6 +71,8 @@ namespace Dracoon.Sdk.SdkInternal.Mapper {
         }
 
         private static ApiUserPublicKey ToApiUserPublicKey(UserPublicKey userPublicKey) {
+            if (userPublicKey == null)
+                return null;
             ApiUserPublicKey apiUserPublicKey = new ApiUserPublicKey() {
                 Version = userPublicKey.Version,
                 PublicKey = userPublicKey.PublicKey
@@ -77,6 +81,8 @@ namespace Dracoon.Sdk.SdkInternal.Mapper {
         }
 
         private static ApiUserPrivateKey ToApiUserPrivateKey(UserPrivateKey userPrivateKey) {
+            if (userPrivateKey == null)
+                return null;
             ApiUserPrivateKey apiUserPrivateKey = new ApiUserPrivateKey() {
                 Version = userPrivateKey.Version,
                 PrivateKey = userPrivateKey.PrivateKey
@@ -85,6 +91,8 @@ namespace Dracoon.Sdk.SdkInternal.Mapper {
         }
 
         internal static UserKeyPair FromApiUserKeyPair(ApiUserKeyPair apiUserKeyPair) {
+            if (apiUserKeyPair == null)
+                return null;
             UserKeyPair userKeyPair = new UserKeyPair() {
                 UserPublicKey = FromApiUserPublicKey(apiUserKeyPair.PublicKeyContainer),
                 UserPrivateKey = FromApiUserPrivateKey(apiUserKeyPair.PrivateKeyContainer)
@@ -93,6 +101,8 @@ namespace Dracoon.Sdk.SdkInternal.Mapper {
         }
 
         internal static UserPublicKey FromApiUserPublicKey(ApiUserPublicKey apiUserPublicKey) {
+            if (apiUserPublicKey == null)
+                return null;
             UserPublicKey userPublicKey = new UserPublicKey() {
                 Version = apiUserPublicKey.Version,
                 PublicKey = apiUserPublicKey.PublicKey
@@ -101,6 +111,8 @@ namespace Dracoon.Sdk.SdkInternal.Mapper {
         }
 
         private static UserPrivateKey FromApiUserPrivateKey(ApiUserPrivateKey apiUserPrivateKey) {
+            if (apiUserPrivateKey == null)
+                return null;
             UserPrivateKey userPrivateKey = new UserPrivateKey() {
                 Version = apiUserPrivateKey.Version,
                 PrivateKey = apiUserPrivateKey.PrivateKey
@@ -110,8 +122,10 @@ namespace Dracoon.Sdk.SdkInternal.Mapper {
 
         internal static Dictionary<long, UserPublicKey> ConvertApiUserIdPublicKeys(List<ApiUserIdPublicKey> userIdPublicKeys) {
             Dictionary<long, UserPublicKey> userPublicKeys = new Dictionary<long, UserPublicKey>(userIdPublicKeys.Count);
-            foreach (ApiUserIdPublicKey currentPublicKey in userIdPublicKeys) {
-                userPublicKeys.Add(currentPublicKey.UserId, FromApiUserPublicKey(currentPublicKey.PublicKeyContainer));
+            if (userIdPublicKeys != null) {
+                foreach (ApiUserIdPublicKey currentPublicKey in userIdPublicKeys) {
+                    userPublicKeys.Add(currentPublicKey.UserId, FromApiUserPublicKey(currentPublicKey.PublicKeyContainer));
+                }
             }
             return userPublicKeys;
         }
