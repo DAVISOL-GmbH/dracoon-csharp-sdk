@@ -46,13 +46,18 @@ namespace Dracoon.Sdk.SdkInternal.Mapper {
             return defaults;
         }
 
-        internal static ServerAuthenticationSettings FromApiAuthenticationSettings(ApiAuthenticationSettings apiAuthenticationConfig) {
+        internal static ServerAuthenticationSettings FromApiAuthenticationSettings(ApiAuthenticationSettings apiAuthenticationConfig, ILog log) {
+            var LOGTAG = nameof(SettingsMapper);
             if (apiAuthenticationConfig == null) {
+                log.Warn(LOGTAG, "Api auth config model is null.");
                 return null;
             }
             var authMethods = Enumerable.Empty<ServerAuthenticationMethod>();
             if (apiAuthenticationConfig.AuthMethods != null) {
+                log.Info(LOGTAG, $"Api auth config model item enumeration has {apiAuthenticationConfig.AuthMethods.Count} items.");
                 authMethods = apiAuthenticationConfig.AuthMethods.Select(x => FromApiAuthenticationMethod(x)).Where(x => x != null);
+            } else {
+                log.Warn(LOGTAG, "Api auth config model item enumeration is empty.");
             }
             ServerAuthenticationSettings authentication = new ServerAuthenticationSettings() {
                 AuthMethods = authMethods.ToArray()
