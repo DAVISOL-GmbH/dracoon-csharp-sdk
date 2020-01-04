@@ -21,12 +21,9 @@ namespace Dracoon.Sdk.Filter {
 
         public static FlagFilter NodeHasActivitiesLog => new FlagFilter("nodeHasActivitiesLog");
 
-
-        /// <include file="SpecificFilterDoc.xml" path='docs/members[@name="getDownloadSharesFilter"]/AddUserIdFilter/*'/>
-        public void AddUserIdFilter(DracoonFilterType<UserIdFilter> userIdFilter) {
-            CheckFilter(userIdFilter, nameof(userIdFilter));
-            filtersList.Add(userIdFilter);
+        public void AddAuditNodeIdFilter(DracoonFilterType<GetAuditNodesFilter> auditNodeIdFilter) {
+            CheckFilter(auditNodeIdFilter, nameof(auditNodeIdFilter));
+            filtersList.Add(auditNodeIdFilter);
         }
-
     }
 }
