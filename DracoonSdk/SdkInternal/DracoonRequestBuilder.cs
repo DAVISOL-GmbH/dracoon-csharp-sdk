@@ -816,7 +816,7 @@ namespace Dracoon.Sdk.SdkInternal {
         #region GET
 
         internal RestRequest GetAuditNodes(long? offset = null, long? limit = null, GetAuditNodesFilter filter = null, AuditNodesSort sort = null) {
-            RestRequest request = new RestRequest(ApiConfig.ApiGetUsers, Method.GET);
+            RestRequest request = new RestRequest(ApiConfig.ApiGetAuditNodes, Method.GET);
             SetGeneralRestValues(request, true);
             AddFilters(filter, request);
             AddSort(sort, request);
@@ -828,7 +828,7 @@ namespace Dracoon.Sdk.SdkInternal {
         }
 
         internal RestRequest GetEvents(DateTime? dateStart = null, DateTime? dateEnd = null, EventStatus? status = null, int? type = null, long? userId = null, string userClient = null, long? offset = null, long? limit = null, EventLogsSort sort = null) {
-            RestRequest request = new RestRequest(ApiConfig.ApiGetUser, Method.GET);
+            RestRequest request = new RestRequest(ApiConfig.ApiGetEvents, Method.GET);
             SetGeneralRestValues(request, true);
             AddSort(sort, request);
             AddDate(request, "date_start", dateStart);
