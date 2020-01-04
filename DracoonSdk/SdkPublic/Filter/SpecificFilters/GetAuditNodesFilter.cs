@@ -21,9 +21,54 @@ namespace Dracoon.Sdk.Filter {
 
         public static FlagFilter NodeHasActivitiesLog => new FlagFilter("nodeHasActivitiesLog");
 
-        public void AddAuditNodeIdFilter(DracoonFilterType<GetAuditNodesFilter> auditNodeIdFilter) {
-            CheckFilter(auditNodeIdFilter, nameof(auditNodeIdFilter));
-            filtersList.Add(auditNodeIdFilter);
+        public void AddNodeIdFilter(DracoonFilterType<NodeIdFilter> nodeIdFilter) {
+            CheckFilter(nodeIdFilter, nameof(nodeIdFilter));
+            filtersList.Add(nodeIdFilter);
+        }
+
+        public void AddNodeNameFilter(DracoonFilterType<NameFilter> nodeNameFilter) {
+            CheckFilter(nodeNameFilter, nameof(nodeNameFilter));
+            filtersList.Add(nodeNameFilter);
+        }
+
+        public void AddNodeParentIdFilter(DracoonFilterType<NodeIdFilter> nodeParentIdFilter) {
+            CheckFilter(nodeParentIdFilter, nameof(nodeParentIdFilter));
+            filtersList.Add(nodeParentIdFilter);
+        }
+
+        public void AddUserIdFilter(DracoonFilterType<UserIdFilter> userIdFilter) {
+            CheckFilter(userIdFilter, nameof(userIdFilter));
+            filtersList.Add(userIdFilter);
+        }
+
+        public void AddUserNameFilter(DracoonFilterType<NameFilter> userNameFilter) {
+            CheckFilter(userNameFilter, nameof(userNameFilter));
+            filtersList.Add(userNameFilter);
+        }
+
+        public void AddUserFirstNameFilter(DracoonFilterType<NameFilter> userFirstNameFilter) {
+            CheckFilter(userFirstNameFilter, nameof(userFirstNameFilter));
+            filtersList.Add(userFirstNameFilter);
+        }
+
+        public void AddUserLastNameFilter(DracoonFilterType<NameFilter> userLastNameFilter) {
+            CheckFilter(userLastNameFilter, nameof(userLastNameFilter));
+            filtersList.Add(userLastNameFilter);
+        }
+
+        public void AddPermissionsManageFilter(DracoonFilterType<FlagFilter> permissionsManageFilter) {
+            CheckFilter(permissionsManageFilter, nameof(permissionsManageFilter));
+            filtersList.Add(permissionsManageFilter);
+        }
+
+        public void AddNodeIsEncryptedFilter(DracoonFilterType<FlagFilter> nodeIsEncryptedFilter) {
+            CheckFilter(nodeIsEncryptedFilter, nameof(nodeIsEncryptedFilter));
+            filtersList.Add(nodeIsEncryptedFilter);
+        }
+
+        public void AddNodeHasActivitiesLogFilter(DracoonFilterType<FlagFilter> nodeHasActivitiesLogFilter) {
+            CheckFilter(nodeHasActivitiesLogFilter, nameof(nodeHasActivitiesLogFilter));
+            filtersList.Add(nodeHasActivitiesLogFilter);
         }
     }
 }
