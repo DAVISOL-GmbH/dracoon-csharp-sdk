@@ -384,4 +384,7 @@
   <PropertyGroup>
     <PostBuildEvent>REM xcopy $(TargetDir)Dracoon.Sdk.* $(SolutionDir)Output\Debug\dracoon /Y</PostBuildEvent>
   </PropertyGroup>
+  <PropertyGroup>
+    <IncludeSymbols>true</IncludeSymbols>
+  </PropertyGroup>
 </Project>

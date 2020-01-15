@@ -530,6 +530,13 @@ namespace Dracoon.Sdk.Filter {
             ef.AddOperatorAndValue(value, "cn", nameof(value));
             return new FilterParam<EmailFilter, DracoonFilterType<EmailFilter>>(ef, ef);
         }
+
+        /// <include file="SpecificFilterDoc.xml" path='docs/members[@name="general"]/EqualsTo/*'/>
+        public static FilterParam<EmailFilter, DracoonFilterType<EmailFilter>> EqualsTo(this EmailFilter ef, string value) {
+            value.MustNotNullOrEmptyOrWhitespace(nameof(value));
+            ef.AddOperatorAndValue(value, "eq", nameof(value));
+            return new FilterParam<EmailFilter, DracoonFilterType<EmailFilter>>(ef, ef);
+        }
     }
 
     #endregion
