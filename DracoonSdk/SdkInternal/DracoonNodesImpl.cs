@@ -412,7 +412,7 @@ namespace Dracoon.Sdk.SdkInternal {
             client.RequestExecutor.CheckApiServerVersion();
             #region Parameter Validation
             roomId.MustPositive(nameof(roomId));
-            userIds.MustNotNull(nameof(userIds));
+            userIds.EnumerableMustNotNullOrEmpty(nameof(userIds));
             #endregion
 
             ApiRoomUsersDeleteBatchRequest apiRoomUsersDeleteBatchRequest = NodeMapper.ToApiRoomUsersDeleteBatchRequest(userIds);

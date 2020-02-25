@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using Dracoon.Sdk.Error;
 
 namespace Dracoon.Sdk.SdkInternal.Validator {
@@ -22,7 +23,7 @@ namespace Dracoon.Sdk.SdkInternal.Validator {
 
         internal static void EnumerableMustNotNullOrEmpty<T>(this IEnumerable<T> param, string paramName) {
             param.MustNotNull(paramName);
-            if (param is ICollection<T> colParam && colParam.Count == 0) {
+            if (!param.Any()) {
                 throw new ArgumentException(paramName + " cannot be empty.");
             }
         }
@@ -31,7 +32,7 @@ namespace Dracoon.Sdk.SdkInternal.Validator {
             if (param == null) {
                 return true;
             }
-            if (param is ICollection<T> colParam && colParam.Count == 0) {
+            if (!param.Any()) {
                 return true;
             }
             return false;

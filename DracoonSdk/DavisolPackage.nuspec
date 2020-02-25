@@ -23,5 +23,6 @@
     <file src="bin\Release\Dracoon.Sdk.dll" target="lib\net452\Dracoon.Sdk.dll" />
     <file src="bin\Release\Dracoon.Sdk.xml" target="lib\net452\Dracoon.Sdk.xml" />
     <file src="bin\Release\Dracoon.Sdk.dll.config" target="lib\net452\Dracoon.Sdk.dll.config" />
+    <file src="bin\Release\Dracoon.Sdk.pdb" target="lib\net452\Dracoon.Sdk.pdb" />
   </files>
 </package>

@@ -11,15 +11,16 @@ namespace Dracoon.Sdk.SdkInternal.Mapper {
                 return null;
             }
 
+            var items = new List<Node>();
+            foreach (ApiNode currentNode in apiNodeList.Items) {
+                items.Add(FromApiNode(currentNode));
+            }
             NodeList nodeList = new NodeList() {
                 Offset = apiNodeList.Range.Offset,
                 Limit = apiNodeList.Range.Limit,
                 Total = apiNodeList.Range.Total,
-                Items = new List<Node>()
+                Items = items.ToArray(),
             };
-            foreach (ApiNode currentNode in apiNodeList.Items) {
-                nodeList.Items.Add(FromApiNode(currentNode));
-            }
             return nodeList;
         }
 
