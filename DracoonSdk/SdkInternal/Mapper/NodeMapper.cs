@@ -133,15 +133,16 @@ namespace Dracoon.Sdk.SdkInternal.Mapper {
                 return null;
             }
 
+            var items = new List<RecycleBinItem>();
+            foreach (ApiDeletedNodeSummary currentNode in apiNodeList.Items) {
+                items.Add(FromApiDeletedNodeSummary(currentNode));
+            }
             RecycleBinItemList nodeList = new RecycleBinItemList() {
                 Offset = apiNodeList.Range.Offset,
                 Limit = apiNodeList.Range.Limit,
                 Total = apiNodeList.Range.Total,
-                Items = new List<RecycleBinItem>()
+                Items = items.ToArray()
             };
-            foreach (ApiDeletedNodeSummary currentNode in apiNodeList.Items) {
-                nodeList.Items.Add(FromApiDeletedNodeSummary(currentNode));
-            }
             return nodeList;
         }
 
@@ -168,15 +169,16 @@ namespace Dracoon.Sdk.SdkInternal.Mapper {
                 return null;
             }
 
+            var items = new List<PreviousVersion>();
+            foreach (ApiDeletedNodeVersion currentNode in apiNodeList.Items) {
+                items.Add(FromApiDeletedNodeVersion(currentNode));
+            }
             PreviousVersionList nodeList = new PreviousVersionList() {
                 Offset = apiNodeList.Range.Offset,
                 Limit = apiNodeList.Range.Limit,
                 Total = apiNodeList.Range.Total,
-                Items = new List<PreviousVersion>()
+                Items = items.ToArray()
             };
-            foreach (ApiDeletedNodeVersion currentNode in apiNodeList.Items) {
-                nodeList.Items.Add(FromApiDeletedNodeVersion(currentNode));
-            }
             return nodeList;
         }
 
