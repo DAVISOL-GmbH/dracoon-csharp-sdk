@@ -111,6 +111,7 @@ namespace Dracoon.Sdk.SdkInternal.Mapper {
 
         private static LogOperation FromApiLogOperation(ApiLogOperation apiLogOperation) {
             LogOperation logOperation = new LogOperation() {
+                Id = apiLogOperation.Id,
                 Name = apiLogOperation.Name,
                 IsDeprecated = apiLogOperation.IsDeprecated
             };
