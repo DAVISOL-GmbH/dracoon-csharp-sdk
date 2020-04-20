@@ -1,64 +1,16 @@
 using System;
-using Dracoon.Sdk.Model;
 using Dracoon.Sdk.SdkInternal;
-using Dracoon.Sdk.SdkInternal.OAuth;
-using Dracoon.Sdk.SdkInternal.Validator;
 
 namespace Dracoon.Sdk {
     /// <include file = "SdkPublicDoc.xml" path='docs/members[@name="dracoonClient"]/DracoonClient/*'/>
-    public class DracoonClient {
+    public class DracoonClient : DracoonClientBase {
 
         #region Class-Members
-
-        /// <include file = "SdkPublicDoc.xml" path='docs/members[@name="dracoonClient"]/ServerUri/*'/>
-        public Uri ServerUri {
-            get; private set;
-        }
-
-        /// <include file = "SdkPublicDoc.xml" path='docs/members[@name="dracoonClient"]/Auth/*'/>
-        public DracoonAuth Auth {
-            get {
-                return OAuthClient.dracoonAuth;
-            }
-            set {
-                OAuthClient.dracoonAuth = value;
-            }
-        }
 
         /// <include file = "SdkPublicDoc.xml" path='docs/members[@name="dracoonClient"]/EncryptionPassword/*'/>
         public string EncryptionPassword {
             get; set;
         }
-
-        public RequestInformation LastRequest { get; internal set; }
-
-        #region Internal
-
-        internal DracoonHttpConfig HttpConfig {
-            get; private set;
-        }
-
-        internal ILog Log {
-            get; private set;
-        }
-
-        internal DracoonRequestBuilder RequestBuilder {
-            get; private set;
-        }
-
-        internal DracoonRequestExecuter RequestExecutor {
-            get; private set;
-        }
-
-        internal DracoonErrorParser ApiErrorParser {
-            get; private set;
-        }
-
-        internal OAuthClient OAuthClient {
-            get; private set;
-        }
-
-        #endregion
 
         #region Public interfaces
 
@@ -142,21 +94,8 @@ namespace Dracoon.Sdk {
 
         /// <include file = "SdkPublicDoc.xml" path='docs/members[@name="dracoonClient"]/DracoonClientConstructor/*'/>
         public DracoonClient(Uri serverUri, DracoonAuth auth = null, string encryptionPassword = null, ILog logger = null, DracoonHttpConfig httpConfig = null) {
-            serverUri.MustBeValid(nameof(serverUri));
-
-            ServerUri = serverUri;
             EncryptionPassword = encryptionPassword;
-            Log = logger ?? new EmptyLog();
-            HttpConfig = httpConfig ?? new DracoonHttpConfig();
-
-            #region init internal
-
-            OAuthClient = new OAuthClient(this, auth);
-            RequestBuilder = new DracoonRequestBuilder(this);
-            RequestExecutor = new DracoonRequestExecuter(this);
-            ApiErrorParser = new DracoonErrorParser(this);
-
-            #endregion
+            InitInternal(serverUri, auth, logger, httpConfig);
 
             #region init public interfaces
 

@@ -59,6 +59,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="SdkInternal\ApiConfig.cs" />
+    <Compile Include="SdkInternal\ApiModel\Branding\ApiSoftwareVersionData.cs" />
+    <Compile Include="SdkInternal\ApiModel\Branding\ApiColorDetails.cs" />
+    <Compile Include="SdkInternal\ApiModel\Branding\ApiLanguage.cs" />
+    <Compile Include="SdkInternal\ApiModel\Branding\ApiColor.cs" />
+    <Compile Include="SdkInternal\ApiModel\Branding\ApiText.cs" />
+    <Compile Include="SdkInternal\ApiModel\Branding\ApiSimpleImageResponse.cs" />
+    <Compile Include="SdkInternal\ApiModel\Branding\ApiCacheableBrandingResponse.cs" />
+    <Compile Include="SdkInternal\ApiModel\Branding\ApiUpdateBrandingResponse.cs" />
     <Compile Include="SdkInternal\ApiModel\Common\ApiIdListBase.cs" />
     <Compile Include="SdkInternal\ApiModel\Common\ApiSimpleListBase.cs" />
     <Compile Include="SdkInternal\ApiModel\Common\ApiRangeListBase.cs" />
@@ -170,6 +178,7 @@
     <Compile Include="SdkInternal\ApiModel\User\ApiUserRoleList.cs" />
     <Compile Include="SdkInternal\ApiModel\VoidResponse.cs" />
     <Compile Include="SdkInternal\DracoonAccountImpl.cs" />
+    <Compile Include="SdkInternal\DracoonBrandingImpl.cs" />
     <Compile Include="SdkInternal\DracoonEventLogImpl.cs" />
     <Compile Include="SdkInternal\DracoonUsersImpl.cs" />
     <Compile Include="SdkInternal\DracoonGroupsImpl.cs" />
@@ -185,6 +194,7 @@
     <Compile Include="SdkInternal\FileDownload.cs" />
     <Compile Include="SdkInternal\FileUpload.cs" />
     <Compile Include="SdkInternal\Mapper\CommonMapper.cs" />
+    <Compile Include="SdkInternal\Mapper\BrandingMapper.cs" />
     <Compile Include="SdkInternal\Mapper\GroupMapper.cs" />
     <Compile Include="SdkInternal\Mapper\SettingsMapper.cs" />
     <Compile Include="SdkInternal\Mapper\CryptoErrorMapper.cs" />
@@ -208,6 +218,7 @@
     </Compile>
     <Compile Include="SdkInternal\Validator\ValidatorExtensions.cs" />
     <Compile Include="SdkPublic\DracoonAuth.cs" />
+    <Compile Include="SdkPublic\DracoonBrandingClient.cs" />
     <Compile Include="SdkPublic\DracoonClient.cs" />
     <Compile Include="SdkPublic\Error\DracoonApiCode.cs" />
     <Compile Include="SdkPublic\Error\DracoonApiException.cs" />
@@ -234,11 +245,20 @@
     <Compile Include="SdkPublic\Filter\FilterParam.cs" />
     <Compile Include="SdkPublic\Filter\SpecificFilters\GetUploadSharesFilter.cs" />
     <Compile Include="SdkPublic\Filter\SpecificFilters\SearchNodesFilter.cs" />
+    <Compile Include="SdkPublic\DracoonClientBase.cs" />
     <Compile Include="SdkPublic\Model\Abstract\CollectionListBase.cs" />
     <Compile Include="SdkPublic\Model\Abstract\IdListBase.cs" />
     <Compile Include="SdkPublic\Model\Abstract\SimpleListBase.cs" />
     <Compile Include="SdkPublic\Model\Abstract\RangeListBase.cs" />
     <Compile Include="SdkPublic\Model\AttributesResponse.cs" />
+    <Compile Include="SdkPublic\Model\ColorDetails.cs" />
+    <Compile Include="SdkPublic\Model\Color.cs" />
+    <Compile Include="SdkPublic\Model\Text.cs" />
+    <Compile Include="SdkPublic\Model\Language.cs" />
+    <Compile Include="SdkPublic\Model\SimpleImageResponse.cs" />
+    <Compile Include="SdkPublic\Model\SoftwareVersionData.cs" />
+    <Compile Include="SdkPublic\Model\CacheableBrandingResponse.cs" />
+    <Compile Include="SdkPublic\Model\UpdateBrandingResponse.cs" />
     <Compile Include="SdkPublic\Model\AuditNodeResponse.cs" />
     <Compile Include="SdkPublic\Model\AuditNodeList.cs" />
     <Compile Include="SdkPublic\Model\AuditUserPermission.cs" />
@@ -334,6 +354,7 @@
     <Compile Include="SdkPublic\Model\UserRole.cs" />
     <Compile Include="SdkPublic\Model\UserType.cs" />
     <Compile Include="SdkPublic\OAuthHelper.cs" />
+    <Compile Include="SdkPublic\SdkPublicInterfaces\IBranding.cs" />
     <Compile Include="SdkPublic\SdkPublicInterfaces\IEventLog.cs" />
     <Compile Include="SdkPublic\SdkPublicInterfaces\IUsers.cs" />
     <Compile Include="SdkPublic\SdkPublicInterfaces\IGroups.cs" />

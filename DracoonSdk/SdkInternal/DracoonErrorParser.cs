@@ -11,9 +11,9 @@ namespace Dracoon.Sdk.SdkInternal {
     internal class DracoonErrorParser {
 
         private readonly string LOGTAG = typeof(DracoonErrorParser).Name;
-        private DracoonClient dracoonClient;
+        private DracoonClientBase dracoonClient;
 
-        internal DracoonErrorParser(DracoonClient client) {
+        internal DracoonErrorParser(DracoonClientBase client) {
             dracoonClient = client;
         }
 

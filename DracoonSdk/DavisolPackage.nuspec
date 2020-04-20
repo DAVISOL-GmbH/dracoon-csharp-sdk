@@ -11,7 +11,7 @@
     <iconUrl>https://raw.githubusercontent.com/dracoon/dracoon-csharp-sdk/master/DracoonSdk/DracoonSdk_NugetImage.png</iconUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>The DRACOON SDK for C#.</description>
-    <copyright>Copyright ©2018 DRACOON GmbH, Copyright ©2018 Sebastian Hübner - DAVISOL</copyright>
+    <copyright>Copyright ©2018 DRACOON GmbH, Copyright ©2020 Sebastian Hübner - DAVISOL</copyright>
     <tags>DRACOON rest api sdk davisol</tags>
     <dependencies>
         <dependency id="Dracoon.Crypto.Sdk" version="1.1.60.1"/>

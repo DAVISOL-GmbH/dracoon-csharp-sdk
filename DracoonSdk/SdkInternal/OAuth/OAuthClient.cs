@@ -1,8 +1,8 @@
-﻿using Dracoon.Sdk.SdkInternal.ApiModel;
-using Newtonsoft.Json;
-using RestSharp;
 using System;
 using System.Net;
+using Dracoon.Sdk.SdkInternal.ApiModel;
+using Newtonsoft.Json;
+using RestSharp;
 using static Dracoon.Sdk.SdkInternal.DracoonRequestExecuter;
 
 namespace Dracoon.Sdk.SdkInternal.OAuth {
@@ -10,11 +10,11 @@ namespace Dracoon.Sdk.SdkInternal.OAuth {
 
         private static readonly string LOGTAG = typeof(OAuthClient).Name;
 
-        private DracoonClient dracoonClient;
+        private DracoonClientBase dracoonClient;
         private OAuthErrorParser oauthErrorParser;
         internal DracoonAuth dracoonAuth;
 
-        internal OAuthClient(DracoonClient dracoonClient, DracoonAuth auth) {
+        internal OAuthClient(DracoonClientBase dracoonClient, DracoonAuth auth) {
             this.dracoonClient = dracoonClient;
             dracoonAuth = auth;
             oauthErrorParser = new OAuthErrorParser(dracoonClient);
@@ -43,7 +43,7 @@ namespace Dracoon.Sdk.SdkInternal.OAuth {
         }
 
         internal void RefreshAccessToken() {
-            if (!String.IsNullOrWhiteSpace(dracoonAuth.RefreshToken)) {
+            if (!String.IsNullOrWhiteSpace(dracoonAuth?.RefreshToken)) {
                 RestRequest request = dracoonClient.RequestBuilder.PostOAuthRefresh(dracoonAuth.ClientId, dracoonAuth.ClientSecret,
                     OAuthConfig.OAuthGrantTypes.REFRESH_TOKEN.Text, dracoonAuth.RefreshToken);
                 ApiOAuthToken token = DoSyncApiCall<ApiOAuthToken>(request, RequestType.PostOAuthRefresh);

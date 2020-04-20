@@ -6,6 +6,7 @@ namespace Dracoon.Sdk.SdkInternal {
 
         internal const string MinimumApiVersion = "4.6.0";
         internal const string ApiPrefix = "api/v4";
+        internal const string BrandingApiPrefix = "branding/api/v1";
         internal const string AuthorizationHeader = "Authorization";
         internal static readonly Encoding encoding = Encoding.UTF8;
 
@@ -241,6 +242,18 @@ namespace Dracoon.Sdk.SdkInternal {
         internal const string ApiGetAuditNodes = ApiEventLogPrefix + "/audits/nodes";
         internal const string ApiGetEvents = ApiEventLogPrefix + "/events";
         internal const string ApiGetOperations = ApiEventLogPrefix + "/operations";
+
+        #endregion
+
+        #endregion
+
+        #region Branding-Endpoint (Branding API)
+
+        #region GET
+
+        internal const string BrandingApiGetBranding = BrandingApiPrefix + "/public/branding";
+
+        internal const string BrandingApiGetBrandingServerVersion = BrandingApiPrefix + "/public/software/version";
 
         #endregion
 

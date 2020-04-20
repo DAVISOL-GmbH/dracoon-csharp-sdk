@@ -23,15 +23,16 @@ namespace Dracoon.Sdk.SdkInternal {
             GetRecycleBin, DeleteRecycleBin, GetPreviousVersions, GetPreviousVersion, PostRestoreNodeVersion, DeletePreviousVersions,
             GetGroups, GetGroup, GetGroupLastAdminRooms, GetGroupRoles, GetGroupUsers, PostGroup, PostGroupUsers, PutGroup, DeleteGroup, DeleteGroupUsers,
             GetUsers, GetUser, GetUserLastAdminRooms, GetUserRoles, GetUserGroups, GetUserUserAttributes, PostUser, PostUserUserAttributes, PutUser, PutUserUserAttributes, DeleteUser, DeleteUserUserAttribute,
-            GetAuditNodes, GetEvents, GetOperations
+            GetAuditNodes, GetEvents, GetOperations,
+            GetBranding, GetBrandingServerVersion
         }
 
         private static readonly string LOGTAG = typeof(DracoonRequestExecuter).Name;
-        private DracoonClient dracoonClient;
+        private DracoonClientBase dracoonClient;
         private bool isServerVersionCompatible = false;
         private string[] remoteRestApiVersion;
 
-        internal DracoonRequestExecuter(DracoonClient client) {
+        internal DracoonRequestExecuter(DracoonClientBase client) {
             dracoonClient = client;
         }
 

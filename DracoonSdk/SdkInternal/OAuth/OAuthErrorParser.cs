@@ -1,8 +1,8 @@
-﻿using Dracoon.Sdk.Error;
-using Newtonsoft.Json;
-using RestSharp;
 using System;
 using System.Net;
+using Dracoon.Sdk.Error;
+using Newtonsoft.Json;
+using RestSharp;
 using static Dracoon.Sdk.SdkInternal.DracoonRequestExecuter;
 
 namespace Dracoon.Sdk.SdkInternal.OAuth {
@@ -18,9 +18,9 @@ namespace Dracoon.Sdk.SdkInternal.OAuth {
         private const string ERR_INVALID_SCOPE = "invalid_scope";
         private const string ERR_ACCESS_DENIED = "access_denied";
 
-        private DracoonClient dracoonClient;
+        private DracoonClientBase dracoonClient;
 
-        internal OAuthErrorParser(DracoonClient client) {
+        internal OAuthErrorParser(DracoonClientBase client) {
             dracoonClient = client;
         }
 
@@ -62,10 +62,10 @@ namespace Dracoon.Sdk.SdkInternal.OAuth {
         }
 
         private DracoonApiCode Parse(HttpStatusCode statusCode, OAuthError oAuthError, RequestType requestType) {
-            switch ((int) statusCode) {
-                case (int) HttpStatusCode.BadRequest:
+            switch ((int)statusCode) {
+                case (int)HttpStatusCode.BadRequest:
                     return ParseBadRequest(oAuthError, requestType);
-                case (int) HttpStatusCode.Unauthorized:
+                case (int)HttpStatusCode.Unauthorized:
                     return ParseUnauthorized(oAuthError, requestType);
                 default:
                     return DracoonApiCode.AUTH_UNKNOWN_ERROR;

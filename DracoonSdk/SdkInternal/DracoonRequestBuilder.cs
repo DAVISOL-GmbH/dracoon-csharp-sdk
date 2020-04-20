@@ -15,9 +15,9 @@ using RestSharp;
 namespace Dracoon.Sdk.SdkInternal {
     internal class DracoonRequestBuilder {
 
-        private DracoonClient client;
+        private DracoonClientBase client;
 
-        internal DracoonRequestBuilder(DracoonClient client) {
+        internal DracoonRequestBuilder(DracoonClientBase client) {
             this.client = client;
         }
 
@@ -854,6 +854,22 @@ namespace Dracoon.Sdk.SdkInternal {
         }
 
         #endregion
+
+        #endregion
+
+        #region Branding-Endpoint (Branding API)
+
+        internal RestRequest GetBranding() {
+            RestRequest request = new RestRequest(ApiConfig.BrandingApiGetBranding, Method.GET);
+            SetGeneralRestValues(request, true);
+            return request;
+        }
+
+        internal RestRequest GetBrandingServerVersion() {
+            RestRequest request = new RestRequest(ApiConfig.BrandingApiGetBrandingServerVersion, Method.GET);
+            SetGeneralRestValues(request, true);
+            return request;
+        }
 
         #endregion
     }
