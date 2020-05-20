@@ -1,4 +1,4 @@
-﻿using Dracoon.Sdk.Error;
+using Dracoon.Sdk.Error;
 using Dracoon.Sdk.Filter;
 using Dracoon.Sdk.Model;
 using Dracoon.Sdk.Sort;
@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Net;
 
 namespace Dracoon.Sdk.Example {
@@ -239,7 +240,7 @@ namespace Dracoon.Sdk.Example {
             }
 
             // Restore the last version of the node "test.txt"
-            RestorePreviousVersionsRequest request = new RestorePreviousVersionsRequest(new List<long>() { versionList.Items[0].Id.Value });
+            RestorePreviousVersionsRequest request = new RestorePreviousVersionsRequest(new List<long>() { versionList.Items.First().Id.Value });
             dc.Nodes.RestorePreviousVersion(request);
         }
 
