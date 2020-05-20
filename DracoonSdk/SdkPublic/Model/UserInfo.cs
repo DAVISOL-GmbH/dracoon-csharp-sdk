@@ -16,10 +16,6 @@ namespace Dracoon.Sdk.Model {
             get; internal set;
         }
 
-        public UserType? UserType {
-            get; set;
-        }
-
         public string AvatarUuid {
             get; set;
         }

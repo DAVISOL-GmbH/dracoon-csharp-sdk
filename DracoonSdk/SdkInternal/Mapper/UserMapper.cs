@@ -17,7 +17,6 @@ namespace Dracoon.Sdk.SdkInternal.Mapper {
             UserInfo userInfo = new UserInfo() {
                 Id = apiUserInfo.Id,
                 DisplayName = apiUserInfo.DisplayName,
-                UserType = EnumConverter.ConvertValueToUserType(apiUserInfo.UserType),
                 AvatarUuid = apiUserInfo.AvatarUuid,
                 UserName = apiUserInfo.UserName,
                 FirstName = apiUserInfo.FirstName,

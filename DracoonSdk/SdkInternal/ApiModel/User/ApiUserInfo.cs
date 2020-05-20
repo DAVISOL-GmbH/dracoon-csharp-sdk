@@ -12,10 +12,6 @@ namespace Dracoon.Sdk.SdkInternal.ApiModel {
         public string DisplayName {
             get; set;
         }
-        [JsonProperty("userType", NullValueHandling = NullValueHandling.Ignore)]
-        public string UserType {
-            get; set;
-        }
         [JsonProperty("avatarUuid", NullValueHandling = NullValueHandling.Ignore)]
         public string AvatarUuid {
             get; set;
