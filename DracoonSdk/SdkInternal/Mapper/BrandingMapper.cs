@@ -79,11 +79,23 @@ namespace Dracoon.Sdk.SdkInternal.Mapper {
 
             foreach (ApiSimpleImageResponse apiSimpleImageResponse in apiSimpleImageResponses) {
                 SimpleImageResponse simpleImageResponse = new SimpleImageResponse() {
-                    Id = apiSimpleImageResponse.Id,
                     Type = apiSimpleImageResponse.Type,
-                    Url = apiSimpleImageResponse.Url
+                    Files = FromApiImageFileReponse(apiSimpleImageResponse.Files).ToArray()
                 };
                 yield return simpleImageResponse;
+            }
+        }
+
+        private static IEnumerable<ImageFileResponse> FromApiImageFileReponse(IEnumerable<ApiImageFileResponse> apiImageFileResponses) {
+            if (apiImageFileResponses == null)
+                yield break;
+
+            foreach (ApiImageFileResponse apiImageFileResponse in apiImageFileResponses) {
+                ImageFileResponse imageFileResponse = new ImageFileResponse() {
+                    Size = apiImageFileResponse.Size,
+                    Url = apiImageFileResponse.Url
+                };
+                yield return imageFileResponse;
             }
         }
 
