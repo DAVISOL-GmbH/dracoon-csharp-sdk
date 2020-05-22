@@ -16,7 +16,7 @@ namespace Dracoon.Sdk.SdkInternal.Mapper {
                 CreatedAt = apiCacheableBrandingResponse.CreatedAt,
                 EmailContact = apiCacheableBrandingResponse.EmailContact,
                 EmailSender = apiCacheableBrandingResponse.EmailSender,
-                Images = FromApiSimpleImageResponses(apiCacheableBrandingResponse.Images).ToArray(),
+                Images = FromApiCacheableBrandingImageResponses(apiCacheableBrandingResponse.Images).ToArray(),
                 ImprintUrl = apiCacheableBrandingResponse.ImprintUrl,
                 PositionLoginBox = apiCacheableBrandingResponse.PositionLoginBox,
                 PrivacyUrl = apiCacheableBrandingResponse.PrivacyUrl,
@@ -73,29 +73,44 @@ namespace Dracoon.Sdk.SdkInternal.Mapper {
             }
         }
 
+        private static IEnumerable<CacheableBrandingImageResponse> FromApiCacheableBrandingImageResponses(IEnumerable<ApiCacheableBrandingImageResponse> apiCacheableBrandingImageResponses) {
+            if (apiCacheableBrandingImageResponses == null)
+                yield break;
+
+            foreach (ApiCacheableBrandingImageResponse apiCacheableBrandingImageResponse in apiCacheableBrandingImageResponses) {
+                CacheableBrandingImageResponse cacheableBrandingImageResponse = new CacheableBrandingImageResponse() {
+                    Type = apiCacheableBrandingImageResponse.Type,
+                    Files = FromApiCacheableBrandingFileReponse(apiCacheableBrandingImageResponse.Files).ToArray()
+                };
+                yield return cacheableBrandingImageResponse;
+            }
+        }
+
+        private static IEnumerable<CacheableBrandingFileResponse> FromApiCacheableBrandingFileReponse(IEnumerable<ApiCacheableBrandingFileResponse> apiCacheableBrandingFileResponses) {
+            if (apiCacheableBrandingFileResponses == null)
+                yield break;
+
+            foreach (ApiCacheableBrandingFileResponse apiCacheableBrandingFileResponse in apiCacheableBrandingFileResponses) {
+                CacheableBrandingFileResponse cacheableBrandingFileResponse = new CacheableBrandingFileResponse() {
+                    Size = apiCacheableBrandingFileResponse.Size,
+                    Url = apiCacheableBrandingFileResponse.Url
+                };
+                yield return cacheableBrandingFileResponse;
+            }
+        }
+
+
         private static IEnumerable<SimpleImageResponse> FromApiSimpleImageResponses(IEnumerable<ApiSimpleImageResponse> apiSimpleImageResponses) {
             if (apiSimpleImageResponses == null)
                 yield break;
 
             foreach (ApiSimpleImageResponse apiSimpleImageResponse in apiSimpleImageResponses) {
                 SimpleImageResponse simpleImageResponse = new SimpleImageResponse() {
+                    Id = apiSimpleImageResponse.Id,
                     Type = apiSimpleImageResponse.Type,
-                    Files = FromApiImageFileReponse(apiSimpleImageResponse.Files).ToArray()
+                    Url = apiSimpleImageResponse.Url
                 };
                 yield return simpleImageResponse;
-            }
-        }
-
-        private static IEnumerable<ImageFileResponse> FromApiImageFileReponse(IEnumerable<ApiImageFileResponse> apiImageFileResponses) {
-            if (apiImageFileResponses == null)
-                yield break;
-
-            foreach (ApiImageFileResponse apiImageFileResponse in apiImageFileResponses) {
-                ImageFileResponse imageFileResponse = new ImageFileResponse() {
-                    Size = apiImageFileResponse.Size,
-                    Url = apiImageFileResponse.Url
-                };
-                yield return imageFileResponse;
             }
         }
 

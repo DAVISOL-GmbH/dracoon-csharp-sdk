@@ -33,7 +33,7 @@ namespace Dracoon.Sdk.SdkInternal.ApiModel {
             get; internal set;
         }
         [JsonProperty("images", NullValueHandling = NullValueHandling.Ignore)]
-        public List<ApiSimpleImageResponse> Images {
+        public List<ApiCacheableBrandingImageResponse> Images {
             get; internal set;
         }
         [JsonProperty("imprintUrl", NullValueHandling = NullValueHandling.Ignore)]

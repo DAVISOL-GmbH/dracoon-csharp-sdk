@@ -59,7 +59,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="SdkInternal\ApiConfig.cs" />
-    <Compile Include="SdkInternal\ApiModel\Branding\ApiImageFileResponse.cs" />
+    <Compile Include="SdkInternal\ApiModel\Branding\ApiCacheableBrandingFileResponse.cs" />
+    <Compile Include="SdkInternal\ApiModel\Branding\ApiCacheableBrandingImageResponse.cs" />
     <Compile Include="SdkInternal\ApiModel\Branding\ApiSoftwareVersionData.cs" />
     <Compile Include="SdkInternal\ApiModel\Branding\ApiColorDetails.cs" />
     <Compile Include="SdkInternal\ApiModel\Branding\ApiLanguage.cs" />
@@ -254,7 +255,8 @@
     <Compile Include="SdkPublic\Model\AttributesResponse.cs" />
     <Compile Include="SdkPublic\Model\ColorDetails.cs" />
     <Compile Include="SdkPublic\Model\Color.cs" />
-    <Compile Include="SdkPublic\Model\ImageFileResponse.cs" />
+    <Compile Include="SdkPublic\Model\CacheableBrandingFileResponse.cs" />
+    <Compile Include="SdkPublic\Model\CacheableBrandingImageResponse.cs" />
     <Compile Include="SdkPublic\Model\Text.cs" />
     <Compile Include="SdkPublic\Model\Language.cs" />
     <Compile Include="SdkPublic\Model\SimpleImageResponse.cs" />

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 
 namespace Dracoon.Sdk.SdkInternal.ApiModel {
-    internal class ApiImageFileResponse {
+    internal class ApiCacheableBrandingFileResponse {
         [JsonProperty("size", NullValueHandling = NullValueHandling.Ignore)]
         public string Size {
             get; internal set;

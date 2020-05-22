@@ -18,7 +18,7 @@ namespace Dracoon.Sdk.Model {
 
         public string EmailSender { get; internal set; }
 
-        public IEnumerable<SimpleImageResponse> Images { get; internal set; }
+        public IEnumerable<CacheableBrandingImageResponse> Images { get; internal set; }
 
         public string ImprintUrl { get; internal set; }
 
