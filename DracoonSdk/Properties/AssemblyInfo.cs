@@ -35,5 +35,5 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyVersion("1.0.0.0")]
 [assembly: AssemblyFileVersion("1.0.0.0")]
 [assembly: AssemblyInformationalVersion("1.0.0-beta5")]
-[assembly: InternalsVisibleTo("Dracoon.Sdk.Test")]
-[assembly: InternalsVisibleTo(assemblyName: "Dracoon.Sdk.UnitTest")]
+//[assembly: InternalsVisibleTo("Dracoon.Sdk.Test")]
+//[assembly: InternalsVisibleTo(assemblyName: "Dracoon.Sdk.UnitTest")]
