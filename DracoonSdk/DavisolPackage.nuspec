@@ -20,9 +20,9 @@
     </dependencies>
   </metadata>
   <files>
-    <file src="bin\Release\Dracoon.Sdk.dll" target="lib\net452\Dracoon.Sdk.dll" />
-    <file src="bin\Release\Dracoon.Sdk.xml" target="lib\net452\Dracoon.Sdk.xml" />
-    <file src="bin\Release\Dracoon.Sdk.dll.config" target="lib\net452\Dracoon.Sdk.dll.config" />
-    <file src="bin\Release\Dracoon.Sdk.pdb" target="lib\net452\Dracoon.Sdk.pdb" />
+    <file src="bin\Release\netstandard2.0\Dracoon.Sdk.dll" target="lib\netstandard2.0\Dracoon.Sdk.dll" />
+    <file src="bin\Release\Dracoon.Sdk.xml" target="lib\netstandard2.0\Dracoon.Sdk.xml" />
+    <file src="bin\Release\netstandard2.0\Dracoon.Sdk.dll.config" target="lib\netstandard2.0\Dracoon.Sdk.dll.config" />
+    <file src="bin\Release\netstandard2.0\Dracoon.Sdk.pdb" target="lib\netstandard2.0\Dracoon.Sdk.pdb" />
   </files>
 </package>
