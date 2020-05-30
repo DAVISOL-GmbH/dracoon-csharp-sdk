@@ -1,11 +1,11 @@
-
-using System;
-using System.Collections.Generic;
 using Dracoon.Crypto.Sdk.Model;
 using Dracoon.Sdk.Model;
 using Dracoon.Sdk.SdkInternal.ApiModel;
+using System;
+using System.Collections.Generic;
 using Dracoon.Sdk.SdkInternal.ApiModel.Requests;
 using Dracoon.Sdk.SdkInternal.Util;
+using Attribute = Dracoon.Sdk.Model.Attribute;
 
 namespace Dracoon.Sdk.SdkInternal.Mapper {
     internal static class UserMapper {
@@ -14,26 +14,29 @@ namespace Dracoon.Sdk.SdkInternal.Mapper {
                 return null;
             }
 
-            UserInfo userInfo = new UserInfo() {
+            UserInfo userInfo = new UserInfo {
                 Id = apiUserInfo.Id,
                 DisplayName = apiUserInfo.DisplayName,
-                AvatarUuid = apiUserInfo.AvatarUuid,
+                AvatarUUID = apiUserInfo.AvatarUuid,
                 UserName = apiUserInfo.UserName,
+                Email = apiUserInfo.Email,
                 FirstName = apiUserInfo.FirstName,
                 LastName = apiUserInfo.LastName,
-                Email = apiUserInfo.Email,
-                Title = apiUserInfo.Title
+                Title = apiUserInfo.Title,
+                UserType = EnumConverter.ConvertValueToUserTypeEnum(apiUserInfo.UserType)
             };
             return userInfo;
         }
+
         internal static UserAccount FromApiUserAccount(ApiUserAccount apiUserAccount) {
             if (apiUserAccount == null) {
                 return null;
             }
 
-            UserAccount userAccount = new UserAccount() {
+            UserAccount userAccount = new UserAccount {
                 Id = apiUserAccount.Id,
                 LoginName = apiUserAccount.LoginName,
+                UserName = apiUserAccount.UserName ?? apiUserAccount.LoginName,
                 Title = apiUserAccount.Title,
                 FirstName = apiUserAccount.FirstName,
                 LastName = apiUserAccount.LastName,
@@ -51,18 +54,21 @@ namespace Dracoon.Sdk.SdkInternal.Mapper {
 
         private static List<UserRole> ConvertApiUserRoles(ApiUserRoleList apiUserRoles) {
             List<UserRole> returnValue = new List<UserRole>();
-            if (apiUserRoles != null) {
-                foreach (ApiUserRole currentRole in apiUserRoles.Items) {
-                    returnValue.Add((UserRole)Enum.ToObject(typeof(UserRole), currentRole.Id));
-                }
+            if (apiUserRoles == null) {
+                return returnValue;
             }
+
+            foreach (ApiUserRole currentRole in apiUserRoles.Items) {
+                returnValue.Add((UserRole) Enum.ToObject(typeof(UserRole), currentRole.Id));
+            }
+
             return returnValue;
         }
 
         internal static ApiUserKeyPair ToApiUserKeyPair(UserKeyPair userKeyPair) {
             if (userKeyPair == null)
                 return null;
-            ApiUserKeyPair apiUserKeyPair = new ApiUserKeyPair() {
+            ApiUserKeyPair apiUserKeyPair = new ApiUserKeyPair {
                 PublicKeyContainer = ToApiUserPublicKey(userKeyPair.UserPublicKey),
                 PrivateKeyContainer = ToApiUserPrivateKey(userKeyPair.UserPrivateKey)
             };
@@ -72,7 +78,7 @@ namespace Dracoon.Sdk.SdkInternal.Mapper {
         private static ApiUserPublicKey ToApiUserPublicKey(UserPublicKey userPublicKey) {
             if (userPublicKey == null)
                 return null;
-            ApiUserPublicKey apiUserPublicKey = new ApiUserPublicKey() {
+            ApiUserPublicKey apiUserPublicKey = new ApiUserPublicKey {
                 Version = userPublicKey.Version,
                 PublicKey = userPublicKey.PublicKey
             };
@@ -82,7 +88,7 @@ namespace Dracoon.Sdk.SdkInternal.Mapper {
         private static ApiUserPrivateKey ToApiUserPrivateKey(UserPrivateKey userPrivateKey) {
             if (userPrivateKey == null)
                 return null;
-            ApiUserPrivateKey apiUserPrivateKey = new ApiUserPrivateKey() {
+            ApiUserPrivateKey apiUserPrivateKey = new ApiUserPrivateKey {
                 Version = userPrivateKey.Version,
                 PrivateKey = userPrivateKey.PrivateKey
             };
@@ -379,5 +385,12 @@ namespace Dracoon.Sdk.SdkInternal.Mapper {
             }
         }
 
+        internal static AvatarInfo FromApiAvatarInfo(ApiAvatarInfo apiInfo) {
+            AvatarInfo info = new AvatarInfo {
+                AvatarUUID = apiInfo.AvatarUuid,
+                IsCustomAvatar = apiInfo.IsCustomAvatar
+            };
+            return info;
+        }
     }
 }

@@ -1,4 +1,5 @@
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
 // Allgemeine Informationen über eine Assembly werden über die folgenden
@@ -33,5 +34,6 @@ using System.Runtime.InteropServices;
 // [assembly: AssemblyVersion("1.0.*")]
 [assembly: AssemblyVersion("1.0.0.0")]
 [assembly: AssemblyFileVersion("1.0.0.0")]
-[assembly: AssemblyInformationalVersion("1.0.0-beta3")]
-//[assembly: InternalsVisibleTo("Dracoon.Sdk.Test")]
+[assembly: AssemblyInformationalVersion("1.0.0-beta5")]
+[assembly: InternalsVisibleTo("Dracoon.Sdk.Test")]
+[assembly: InternalsVisibleTo(assemblyName: "Dracoon.Sdk.UnitTest")]

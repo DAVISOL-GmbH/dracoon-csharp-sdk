@@ -1,30 +1,32 @@
 using Dracoon.Sdk.Model;
+using System;
 
 namespace Dracoon.Sdk.SdkInternal.Util {
     internal static class EnumConverter {
-
-        public static NodeType ConvertValueToNodeTypeEnum(string value) {
-            if (value == "room") {
-                return NodeType.Room;
-            } else if (value == "folder") {
-                return NodeType.Folder;
-            } else {
-                return NodeType.File;
-            }
-        }
-
-        public static string ConvertNodeTypeEnumToValue(NodeType typeEnum) {
-            if (typeEnum == NodeType.Room) {
-                return "room";
-            } else if (typeEnum == NodeType.Folder) {
-                return "folder";
-            } else {
-                return "file";
-            }
-        }
-
-        public static Classification? ConvertValueToClassificationEnum(int? value) {
+        public static Func<string, NodeType> ConvertValueToNodeTypeEnum = value => {
             switch (value) {
+                case "room":
+                    return NodeType.Room;
+                case "folder":
+                    return NodeType.Folder;
+                default:
+                    return NodeType.File;
+            }
+        };
+
+        public static Func<NodeType, string> ConvertNodeTypeEnumToValue = typeEnum => {
+            switch (typeEnum) {
+                case NodeType.Room:
+                    return "room";
+                case NodeType.Folder:
+                    return "folder";
+                default:
+                    return "file";
+            }
+        };
+
+        public static Classification? ConvertValueToClassificationEnum(int? classificationValue) {
+            switch (classificationValue) {
                 case 1:
                     return Classification.Public;
                 case 2:
@@ -38,8 +40,8 @@ namespace Dracoon.Sdk.SdkInternal.Util {
             }
         }
 
-        public static int? ConvertClassificationEnumToValue(Classification? classificationEnum) {
-            switch (classificationEnum) {
+        public static int? ConvertClassificationEnumToValue(Classification? classification) {
+            switch (classification) {
                 case Classification.Public:
                     return 1;
                 case Classification.Internal:
@@ -114,18 +116,34 @@ namespace Dracoon.Sdk.SdkInternal.Util {
             }
         }
 
-        public static UserType? ConvertValueToUserType(string value) {
-            if (string.IsNullOrEmpty(value))
-                return null;
-            if (value == "internal")
-                return UserType.Internal;
-            if (value == "external")
-                return UserType.External;
-            if (value == "system")
-                return UserType.System;
-            if (value == "deleted")
-                return UserType.Deleted;
-            return null;
+        public static PasswordCharacterSetType ConvertValueToCharacterSetTypeEnum(string value) {
+            switch (value) {
+                case "none":
+                    return PasswordCharacterSetType.None;
+                case "uppercase":
+                    return PasswordCharacterSetType.Uppercase;
+                case "lowercase":
+                    return PasswordCharacterSetType.Lowercase;
+                case "numeric":
+                    return PasswordCharacterSetType.Numeric;
+                case "special":
+                    return PasswordCharacterSetType.Special;
+                default:
+                    return PasswordCharacterSetType.None;
+            }
         }
+
+        public static Func<string, UserType> ConvertValueToUserTypeEnum = value => {
+            switch (value) {
+                case "internal":
+                    return UserType.Internal;
+                case "external":
+                    return UserType.External;
+                case "deleted":
+                    return UserType.Deleted;
+                default:
+                    return UserType.System;
+            }
+        };
     }
 }

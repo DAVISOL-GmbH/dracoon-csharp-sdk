@@ -3,12 +3,31 @@ using System.Text;
 
 namespace Dracoon.Sdk.SdkInternal {
     internal class ApiConfig {
-
-        internal const string MinimumApiVersion = "4.6.0";
+        internal const string MinimumApiVersion = "4.11.0";
         internal const string ApiPrefix = "api/v4";
         internal const string BrandingApiPrefix = "branding/api/v1";
         internal const string AuthorizationHeader = "Authorization";
-        internal static readonly Encoding encoding = Encoding.UTF8;
+        // mediaserver/image/{mediaToken}/{width}x{height}
+        internal const string MediaTokenTemplate = "mediaserver/image/{0}/{1}x{2}";
+
+        internal static readonly char[] UPPERCASE_SET = {
+            'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'
+        };
+
+        internal static readonly char[] LOWERCASE_SET = {
+            'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'
+        };
+
+        internal static readonly char[] NUMERIC_SET = {
+            '0', '1', '2', '3', '4', '5', '6', '7', '8', '9'
+        };
+
+        internal static readonly char[] SPECIAL_SET = {
+            '!', '"', '#', '$', '%', '&', '\'', '(', ')', '*', '+', ',', '-', '.', '/', ':', ';', '=', '?', '@', '[', '\\', ']', '^', '_', '{', '|',
+            '}', '~'
+        };
+
+        internal static readonly Encoding ENCODING = Encoding.UTF8;
 
         #region Public-Endpoint
 
@@ -29,16 +48,29 @@ namespace Dracoon.Sdk.SdkInternal {
         internal const string ApiGetCustomerAccount = ApiPrefix + "/user/account/customer";
         internal const string ApiGetUserKeyPair = ApiPrefix + "/user/account/keypair";
         internal const string ApiGetAuthenticatedPing = ApiPrefix + "/user/ping";
+        internal const string ApiGetAvatar = ApiPrefix + "/user/account/avatar";
+        internal const string ApiDeleteAvatar = ApiPrefix + "/user/account/avatar";
+        internal const string ApiGetUserProfileAttributes = ApiPrefix + "/user/profileAttributes";
 
         #endregion
+
         #region POST
 
         internal const string ApiPostUserKeyPair = ApiPrefix + "/user/account/keypair";
+        internal const string ApiPostAvatar = ApiPrefix + "/user/account/avatar";
 
         #endregion
+
+        #region PUT
+
+        internal const string ApiPutUserProfileAttributes = ApiPrefix + "/user/profileAttributes";
+
+        #endregion
+
         #region DELETE
 
         internal const string ApiDeleteUserKeyPair = ApiPrefix + "/user/account/keypair";
+        internal const string ApiDeleteUserProfileAttributes = ApiPrefix + "/user/profileAttributes/{key}";
 
         #endregion
 
@@ -61,14 +93,17 @@ namespace Dracoon.Sdk.SdkInternal {
         internal const string ApiGetRoomGroups = ApiPrefix + "/nodes/rooms/{roomId}/groups";
         internal const string ApiGetRoomUsers = ApiPrefix + "/nodes/rooms/{roomId}/users";
         internal const string ApiGetRoomPending = ApiPrefix + "/nodes/rooms/{roomId}/pending";
+        internal const string ApiGetS3Status = ApiPrefix + "/nodes/files/uploads/{uploadId}";
 
         #endregion
+
         #region POST
 
         internal const string ApiPostRoom = ApiPrefix + "/nodes/rooms";
         internal const string ApiPostFolder = ApiPrefix + "/nodes/folders";
         internal const string ApiPostCreateFileDownload = ApiPrefix + "/nodes/files/{fileId}/downloads";
         internal const string ApiPostCreateFileUpload = ApiPrefix + "/nodes/files/uploads";
+        internal const string ApiPostGetS3Urls = ApiPrefix + "/nodes/files/uploads/{uploadId}/s3_urls";
         internal const string ApiPostCopyNodes = ApiPrefix + "/nodes/{nodeId}/copy_to";
         internal const string ApiPostMoveNodes = ApiPrefix + "/nodes/{nodeId}/move_to";
         internal const string ApiPostMissingFileKeys = ApiPrefix + "/nodes/files/keys";
@@ -77,11 +112,12 @@ namespace Dracoon.Sdk.SdkInternal {
 
         #region Minimum version requirements
 
-        internal const string ApiUseHomeDefaultClassificationMinApiVersion = "4.9.0";
+        internal const string ApiS3DirectUploadPossible = "4.15.0";
 
         #endregion
 
         #endregion
+
         #region PUT
 
         internal const string ApiPutRoom = ApiPrefix + "/nodes/rooms/{roomId}";
@@ -91,8 +127,10 @@ namespace Dracoon.Sdk.SdkInternal {
         internal const string ApiPutFolder = ApiPrefix + "/nodes/folders/{folderId}";
         internal const string ApiPutFileUpdate = ApiPrefix + "/nodes/files/{fileId}";
         internal const string ApiPutEnableRoomEncryption = ApiPrefix + "/nodes/rooms/{roomId}/encrypt";
+        internal const string ApiPutCompleteS3Upload = ApiPrefix + "/nodes/files/uploads/{uploadId}/s3";
 
         #endregion
+
         #region DELETE
 
         internal const string ApiDeleteNodes = ApiPrefix + "/nodes";
@@ -114,12 +152,14 @@ namespace Dracoon.Sdk.SdkInternal {
         internal const string ApiGetUploadShares = ApiPrefix + "/shares/uploads";
 
         #endregion
+
         #region POST
 
         internal const string ApiPostCreateDownloadShare = ApiPrefix + "/shares/downloads";
         internal const string ApiPostCreateUploadShare = ApiPrefix + "/shares/uploads";
 
         #endregion
+
         #region DELETE
 
         internal const string ApiDeleteDownloadShare = ApiPrefix + "/shares/downloads/{shareId}";
@@ -136,6 +176,23 @@ namespace Dracoon.Sdk.SdkInternal {
         internal const string ApiGetGeneralConfig = ApiPrefix + "/config/info/general";
         internal const string ApiGetInfrastructureConfig = ApiPrefix + "/config/info/infrastructure";
         internal const string ApiGetDefaultsConfig = ApiPrefix + "/config/info/defaults";
+        internal const string ApiGetPasswordPolicies = ApiPrefix + "/config/info/policies/passwords";
+
+        #endregion
+
+        #region Minimum version requirements
+
+        internal const string ApiGetPasswordPoliciesMinimumVersion = "4.14.0";
+
+        #endregion
+
+        #endregion
+
+        #region Resources-Endpoint
+
+        #region GET
+
+        internal const string ApiResourcesGetAvatar = ApiPrefix + "/resources/users/{userId}/avatar/{uuid}";
 
         #endregion
 
@@ -183,6 +240,7 @@ namespace Dracoon.Sdk.SdkInternal {
         internal const string ApiPostGroupUser = ApiGroupsPrefix + "/{groupId}/users";
 
         #endregion
+
         #region PUT
 
         internal const string ApiPutGroup = ApiGroupsPrefix + "/{groupId}";
@@ -264,6 +322,7 @@ namespace Dracoon.Sdk.SdkInternal {
             for (int i = 0; i < pathSegments.Length; i++) {
                 uriBuilder.Path += i != 0 ? "/" + pathSegments[i] : pathSegments[i];
             }
+
             return uriBuilder.Uri;
         }
     }

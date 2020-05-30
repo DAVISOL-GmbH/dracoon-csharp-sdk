@@ -8,12 +8,12 @@ namespace Dracoon.Sdk.Filter {
 
         public void AddNameFilter(DracoonFilterType<NameFilter> nameFilter) {
             CheckFilter(nameFilter, nameof(nameFilter));
-            filtersList.Add(nameFilter);
+            FiltersList.Add(nameFilter);
         }
 
         public void AddIsMemberFilter(DracoonFilterType<IsMemberFilter> isMemberFilter) {
             CheckFilter(isMemberFilter, nameof(isMemberFilter));
-            filtersList.Add(isMemberFilter);
+            FiltersList.Add(isMemberFilter);
         }
 
     }

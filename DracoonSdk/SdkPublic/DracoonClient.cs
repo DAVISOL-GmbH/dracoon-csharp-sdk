@@ -3,91 +3,56 @@ using Dracoon.Sdk.SdkInternal;
 
 namespace Dracoon.Sdk {
     /// <include file = "SdkPublicDoc.xml" path='docs/members[@name="dracoonClient"]/DracoonClient/*'/>
-    public class DracoonClient : DracoonClientBase {
+    public class DracoonClient : DracoonClientBase, IInternalDracoonClient, IInternalDracoonClientBase {
 
         #region Class-Members
 
         /// <include file = "SdkPublicDoc.xml" path='docs/members[@name="dracoonClient"]/EncryptionPassword/*'/>
-        public string EncryptionPassword {
-            get; set;
-        }
+        public string EncryptionPassword { get; set; }
 
         #region Public interfaces
 
-        internal DracoonAccountImpl AccountImpl {
-            get; private set;
-        }
+        private readonly DracoonAccountImpl _account;
+        private readonly DracoonNodesImpl _nodes;
+        private readonly DracoonSharesImpl _shares;
+        private readonly DracoonServerImpl _server;
+        private readonly DracoonUsersImpl _users;
+        private readonly DracoonGroupsImpl _groups;
+        private readonly DracoonEventLogImpl _eventLog;
 
-        internal DracoonNodesImpl NodesImpl {
-            get; private set;
-        }
+        DracoonAccountImpl IInternalDracoonClient.AccountImpl => _account;
 
-        internal DracoonSharesImpl SharesImpl {
-            get; private set;
-        }
+        DracoonNodesImpl IInternalDracoonClient.NodesImpl => _nodes;
 
-        internal DracoonGroupsImpl GroupsImpl {
-            get; private set;
-        }
+        DracoonSharesImpl IInternalDracoonClient.SharesImpl => _shares;
 
-        internal DracoonUsersImpl UsersImpl {
-            get; private set;
-        }
+        DracoonServerImpl IInternalDracoonClient.ServerImpl => _server;
 
-        internal DracoonEventLogImpl EventLogImpl {
-            get; private set;
-        }
+        DracoonUsersImpl IInternalDracoonClient.UsersImpl => _users;
 
-        internal DracoonServerImpl ServerImpl {
-            get; private set;
-        }
+        DracoonGroupsImpl IInternalDracoonClient.GroupsImpl => _groups;
+
+        DracoonEventLogImpl IInternalDracoonClient.EventLogImpl => _eventLog;
 
         /// <include file = "SdkPublicDoc.xml" path='docs/members[@name="dracoonClient"]/Account/*'/>
-        public IAccount Account {
-            get {
-                return AccountImpl;
-            }
-        }
+        public IAccount Account => _account;
 
         /// <include file = "SdkPublicDoc.xml" path='docs/members[@name="dracoonClient"]/Server/*'/>
-        public IServer Server {
-            get {
-                return ServerImpl;
-            }
-        }
+        public IServer Server => _server;
 
         /// <include file = "SdkPublicDoc.xml" path='docs/members[@name="dracoonClient"]/Nodes/*'/>
-        public INodes Nodes {
-            get {
-                return NodesImpl;
-            }
-        }
+        public INodes Nodes => _nodes;
 
         /// <include file = "SdkPublicDoc.xml" path='docs/members[@name="dracoonClient"]/Shares/*'/>
-        public IShares Shares {
-            get {
-                return SharesImpl;
-            }
-        }
+        public IShares Shares => _shares;
 
-        public IGroups Groups {
-            get {
-                return GroupsImpl;
-            }
-        }
+        /// <include file = "SdkPublicDoc.xml" path='docs/members[@name="dracoonClient"]/Users/*'/>
+        public IUsers Users => _users;
 
-        public IUsers Users {
-            get {
-                return UsersImpl;
-            }
-        }
+        public IGroups Groups => _groups;
 
-        public IEventLog EventLog {
-            get {
-                return EventLogImpl;
-            }
-        }
-
+        public IEventLog EventLog => _eventLog;
+        
         #endregion
 
         #endregion
@@ -99,17 +64,15 @@ namespace Dracoon.Sdk {
 
             #region init public interfaces
 
-            AccountImpl = new DracoonAccountImpl(this);
-            ServerImpl = new DracoonServerImpl(this);
-            NodesImpl = new DracoonNodesImpl(this);
-            SharesImpl = new DracoonSharesImpl(this);
-            GroupsImpl = new DracoonGroupsImpl(this);
-            UsersImpl = new DracoonUsersImpl(this);
-            EventLogImpl = new DracoonEventLogImpl(this);
+            _account = new DracoonAccountImpl(this);
+            _server = new DracoonServerImpl(this);
+            _nodes = new DracoonNodesImpl(this);
+            _shares = new DracoonSharesImpl(this);
+            _users = new DracoonUsersImpl(this);
+            _groups = new DracoonGroupsImpl(this);
+            _eventLog = new DracoonEventLogImpl(this);
 
             #endregion
         }
-
-
     }
 }

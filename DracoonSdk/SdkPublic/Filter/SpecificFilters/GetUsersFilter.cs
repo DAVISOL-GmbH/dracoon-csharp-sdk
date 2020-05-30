@@ -18,37 +18,37 @@ namespace Dracoon.Sdk.Filter {
 
         public void AddEmailFilter(DracoonFilterType<EmailFilter> emailFilter) {
             CheckFilter(emailFilter, nameof(emailFilter));
-            filtersList.Add(emailFilter);
+            FiltersList.Add(emailFilter);
         }
 
         public void AddUserNameFilter(DracoonFilterType<UserNameFilter> userNameFilter) {
             CheckFilter(userNameFilter, nameof(userNameFilter));
-            filtersList.Add(userNameFilter);
+            FiltersList.Add(userNameFilter);
         }
 
         public void AddLoginFilter(DracoonFilterType<LoginFilter> loginFilter) {
             CheckFilter(loginFilter, nameof(loginFilter));
-            filtersList.Add(loginFilter);
+            FiltersList.Add(loginFilter);
         }
 
         public void AddFirstNameFilter(DracoonFilterType<FirstNameFilter> firstNameFilter) {
             CheckFilter(firstNameFilter, nameof(firstNameFilter));
-            filtersList.Add(firstNameFilter);
+            FiltersList.Add(firstNameFilter);
         }
 
         public void AddLastNameFilter(DracoonFilterType<LastNameFilter> lastNameFilter) {
             CheckFilter(lastNameFilter, nameof(lastNameFilter));
-            filtersList.Add(lastNameFilter);
+            FiltersList.Add(lastNameFilter);
         }
 
         public void AddIsLockedFilter(DracoonFilterType<IsLockedFilter> isLockedFilter) {
             CheckFilter(isLockedFilter, nameof(isLockedFilter));
-            filtersList.Add(isLockedFilter);
+            FiltersList.Add(isLockedFilter);
         }
 
         public void AddEffectiveRolesFilter(DracoonFilterType<EffectiveRolesFilter> effectiveRolesFilter) {
             CheckFilter(effectiveRolesFilter, nameof(effectiveRolesFilter));
-            filtersList.Add(effectiveRolesFilter);
+            FiltersList.Add(effectiveRolesFilter);
         }
     }
 }

@@ -1,7 +1,10 @@
 ﻿
+using System;
+using System.Collections.Generic;
+
 namespace Dracoon.Sdk.Error {
     /// <include file = "ErrorDoc.xml" path='docs/members[@name="dracoonApiCode"]/DracoonApiCode/*'/>
-    public class DracoonApiCode {
+    public class DracoonApiCode : IEquatable<DracoonApiCode> {
         public static readonly DracoonApiCode API_VERSION_NOT_SUPPORTED = new DracoonApiCode(0, "Server API versions < " + SdkInternal.ApiConfig.MinimumApiVersion + " are not supported.");
 
         #region Error codes '1000' --> AUTH
@@ -49,6 +52,8 @@ namespace Dracoon.Sdk.Error {
         public static readonly DracoonApiCode PRECONDITION_MUST_CHANGE_USER_NAME = new DracoonApiCode(2102, "User must change his user name.");
         // CODES: -10104
         public static readonly DracoonApiCode PRECONDITION_MUST_CHANGE_PASSWORD = new DracoonApiCode(2103, "User must change his password.");
+        // CODES: -90030
+        public static readonly DracoonApiCode PRECONDITION_S3_DISABLED = new DracoonApiCode(2104, "S3 storage is disabled.");
 
         #endregion
 
@@ -58,7 +63,7 @@ namespace Dracoon.Sdk.Error {
 
         public static readonly DracoonApiCode VALIDATION_UNKNOWN_ERROR = new DracoonApiCode(3000, "The server request was invalid.");
         // CODES: -80000
-        public static readonly DracoonApiCode VALIDATION_FIELD_CANNOT_BE_EMPTY = new DracoonApiCode(3001, "Mandatory fields cannnot be empty.");
+        public static readonly DracoonApiCode VALIDATION_FIELD_CANNOT_BE_EMPTY = new DracoonApiCode(3001, "Mandatory fields cannot be empty.");
         // CODES: -80003
         public static readonly DracoonApiCode VALIDATION_FIELD_NOT_ZERO_POSITIVE = new DracoonApiCode(3002, "Field value must be zero or positive.");
         // CODES: -80001
@@ -73,6 +78,8 @@ namespace Dracoon.Sdk.Error {
         public static readonly DracoonApiCode VALIDATION_FIELD_NOT_BETWEEN_1_9999 = new DracoonApiCode(3007, "Field value must be between 1 and 9999.");
         // CODES: -80024
         public static readonly DracoonApiCode VALIDATION_INVALID_OFFSET_OR_LIMIT = new DracoonApiCode(3008, "Invalid offset or limit.");
+        // CODES: -80023
+        public static readonly DracoonApiCode VALIDATION_INVALID_CHARACTERS_CONTAINED = new DracoonApiCode(3009, "Invalid characters contained.");
 
         #endregion
         #region NODES
@@ -132,9 +139,11 @@ namespace Dracoon.Sdk.Error {
         // CODES: -40018
         public static readonly DracoonApiCode VALIDATION_ROOM_CANNOT_DECRYPTED_WITH_RECYCLEBIN = new DracoonApiCode(3126, "Room with not empty recycle bin cannot be decrypted.");
         // CODES: -40013
-        public static readonly DracoonApiCode VALIDATION_ENCRYPTED_FILE_CAN_ONLY_RESTOREED_IN_ORIGINAL_ROOM = new DracoonApiCode(3127, "Encrypted files cannot be restored inside antoher than its original room.");
+        public static readonly DracoonApiCode VALIDATION_ENCRYPTED_FILE_CAN_ONLY_RESTOREED_IN_ORIGINAL_ROOM = new DracoonApiCode(3127, "Encrypted files cannot be restored inside another than its original room.");
         // CODES: -80034
         public static readonly DracoonApiCode VALIDATION_KEEPSHARELINKS_ONLY_WITH_OVERWRITE = new DracoonApiCode(3128, "Keep share links is only allowed with resolution strategy 'overwrite'.");
+        // CODES: -80045
+        public static readonly DracoonApiCode VALIDATION_INVALID_ETAG = new DracoonApiCode(3129, "Invalid Etag(s).");
 
         #endregion
         #region SHARES
@@ -232,7 +241,13 @@ namespace Dracoon.Sdk.Error {
         public static readonly DracoonApiCode SERVER_INSUFFICIENT_UL_SHARE_QUOTA = new DracoonApiCode(5110, "Not enough quota for the upload share.");
         // CODES: -41100
         public static readonly DracoonApiCode SERVER_RESTOREVERSION_NOT_FOUND = new DracoonApiCode(5111, "The restore version id was not found.");
-
+        // CODES: -20501
+        public static readonly DracoonApiCode SERVER_UPLOAD_NOT_FOUND = new DracoonApiCode(5112, "The upload with the given id was not found.");
+        // CODES: -90034
+        public static readonly DracoonApiCode SERVER_S3_UPLOAD_ID_NOT_FOUND = new DracoonApiCode(5113, "Corresponding S3 upload ID not found.");
+        public static readonly DracoonApiCode SERVER_S3_UPLOAD_COMPLETION_FAILED = new DracoonApiCode(5114, "Server failed to complete S3 upload.");
+        // CODES: -90027
+        public static readonly DracoonApiCode SERVER_S3_CONNECTION_FAILED = new DracoonApiCode(5115, "S3 connection failed.");
         #endregion
 
         #region SHARES
@@ -260,6 +275,11 @@ namespace Dracoon.Sdk.Error {
         public static readonly DracoonApiCode SERVER_USER_KEY_PAIR_ALREADY_SET = new DracoonApiCode(5551, "Encryption key pair was already set.");
         // CODES: -40761
         public static readonly DracoonApiCode SERVER_FILE_KEY_NOT_FOUND = new DracoonApiCode(5552, "Encryption file key could not be found.");
+        // CODES: -70028
+        public static readonly DracoonApiCode SERVER_USER_AVATAR_NOT_FOUND = new DracoonApiCode(5553, "Avatar for this user could not be found.");
+        // CODES: -70550
+        public static readonly DracoonApiCode SERVER_ATTRIBUTE_NOT_FOUND = new DracoonApiCode(5554, "Attribute not found.");
+
         #endregion
 
         #region GROUPS
@@ -274,6 +294,8 @@ namespace Dracoon.Sdk.Error {
         public static readonly DracoonApiCode SERVER_SMS_IS_DISABLED = new DracoonApiCode(5800, "SMS sending is disabled.");
         // CODES: -90090
         public static readonly DracoonApiCode SERVER_SMS_COULD_NOT_BE_SENT = new DracoonApiCode(5801, "SMS could not be sent.");
+        // CODES: -90033
+        public static readonly DracoonApiCode SERVER_S3_IS_ENFORCED = new DracoonApiCode(5802, "S3 direct upload is enforced.");
 
         #endregion
 
@@ -283,17 +305,17 @@ namespace Dracoon.Sdk.Error {
         /// The error message.
         /// </summary>
         public string Text {
-            get; private set;
+            get;
         }
 
         /// <summary>
         /// The error code.
         /// </summary>
         public int Code {
-            get; private set;
+            get;
         }
 
-        private DracoonApiCode(int code, string text) {
+        internal DracoonApiCode(int code, string text) {
             Code = code;
             Text = text;
         }
@@ -341,6 +363,26 @@ namespace Dracoon.Sdk.Error {
         /// <returns><c>true</c> if error is a server error; <c>false</c> otherwise</returns>
         public bool IsServerError() {
             return Code >= 5000 && Code < 6000;
+        }
+
+        public bool Equals(DracoonApiCode other) {
+            return string.Equals(Text, other.Text) && Code == other.Code;
+        }
+
+        public override bool Equals(object obj) {
+            if (obj is null) {
+                return false;
+            }
+
+            if (ReferenceEquals(this, obj)) {
+                return true;
+            }
+
+            if (obj.GetType() != GetType()) {
+                return false;
+            }
+
+            return Equals((DracoonApiCode) obj);
         }
     }
 }

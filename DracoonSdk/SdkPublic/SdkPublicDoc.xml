@@ -204,6 +204,14 @@
               <include file = "SdkPublicInterfaces/SdkPublicInterfacesDoc.xml" path='docs/members[@name="iShares"]/IShares/*'/>
             </description>
           </item>
+          <item>
+            <term>
+              <see cref="Dracoon.Sdk.DracoonClient.Users"/>:
+            </term>
+            <description>
+              <include file = "SdkPublicInterfaces/SdkPublicInterfacesDoc.xml" path='docs/members[@name="iUsers"]/IUsers/*'/>
+            </description>
+          </item>
         </list>
       </summary>
     </DracoonClient>
@@ -249,6 +257,12 @@
         Get Shares handler. See also <seealso cref="Dracoon.Sdk.IShares"/>
       </summary>
     </Shares>
+
+    <Users>
+      <summary>
+        Get Users handler. See also <seealso cref="Dracoon.Sdk.IUsers"/>
+      </summary>
+    </Users>
 
     <DracoonClientConstructor>
       <summary>
@@ -411,7 +425,7 @@
           </listheader>
           <item>
             <term>
-              <see cref="CreateAuthorizationUrl(Uri, string, string)"/>:
+              <see cref="CreateAuthorizationUrl(Uri, string, string, string)"/>:
             </term>
             <description>
               Creates the authorization URI which must be opened in the user's browser.
@@ -449,6 +463,9 @@
       </param>
       <param name="state">
         The state identifier which is used to track running authorizations.
+      </param>
+      <param name="userAgentInfo">
+        The userAgentInfo can be used to provide information about the application or device.
       </param>
       <returns>
         The authorization URI

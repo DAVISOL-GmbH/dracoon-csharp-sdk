@@ -5,13 +5,15 @@ using Dracoon.Sdk.Sort;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Drawing;
+using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
 using System.Net;
+using Attribute = Dracoon.Sdk.Model.Attribute;
 
 namespace Dracoon.Sdk.Example {
     public static class DracoonExamples {
-
         private static readonly Uri SERVER_URI = new Uri("https://dracoon.team");
         private static readonly string ACCESS_TOKEN = "access-token";
         private static readonly string ENCRYPTION_PASSWORD = "encryption-password";
@@ -26,7 +28,7 @@ namespace Dracoon.Sdk.Example {
             IWebProxy wp = WebRequest.GetSystemWebProxy();
             wp.Credentials = CredentialCache.DefaultNetworkCredentials;
             DracoonHttpConfig config = new DracoonHttpConfig(retryEnabled: true, webProxy: wp);
-            dc = new DracoonClient(SERVER_URI, dracoonAuth, logger: new Logger(), httpConfig: config);
+            dc = new DracoonClient(SERVER_URI, dracoonAuth, ENCRYPTION_PASSWORD, new Logger(), config);
         }
 
         #region DracoonClient.Server
@@ -52,6 +54,13 @@ namespace Dracoon.Sdk.Example {
             //...
         }
 
+        private static void GetPasswordPolicies() {
+            PasswordPolicies policies = dc.Server.ServerSettings.GetPasswordPolicies();
+            Console.WriteLine("Minimum login password length is: " + policies.LoginPolicies.MinimumPasswordLength);
+            Console.WriteLine("Minimum share password length is: " + policies.SharePolicies.MinimumPasswordLength);
+            Console.WriteLine("Minimum encryption password length is: " + policies.EncryptionPolicies.MinimumPasswordLength);
+        }
+
         #endregion
 
         #region DracoonClient.Account
@@ -69,18 +78,15 @@ namespace Dracoon.Sdk.Example {
 
         private static void GetUserAccount() {
             UserAccount userAccount = dc.Account.GetUserAccount();
-            Console.WriteLine("UserId: " + userAccount.Id
-                + "; FirstName: " + userAccount.FirstName
-                + "; LastName: " + userAccount.LastName
-                + "; E-mail: " + userAccount.Email);
+            Console.WriteLine("UserId: " + userAccount.Id + "; FirstName: " + userAccount.FirstName + "; LastName: " + userAccount.LastName +
+                              "; E-mail: " + userAccount.Email);
         }
 
         private static void GetCustomerAccount() {
             CustomerAccount customerAccount = dc.Account.GetCustomerAccount();
-            Console.WriteLine("CustomerId: " + customerAccount.Id
-                + "; Name: " + customerAccount.Name
-                + "; Accounts: " + customerAccount.AccountsUsed + "/" + customerAccount.AccountsLimit
-                + "; Space: " + customerAccount.SpaceUsed + "/" + customerAccount.SpaceLimit);
+            Console.WriteLine("CustomerId: " + customerAccount.Id + "; Name: " + customerAccount.Name + "; Accounts: " +
+                              customerAccount.AccountsUsed + "/" + customerAccount.AccountsLimit + "; Space: " + customerAccount.SpaceUsed + "/" +
+                              customerAccount.SpaceLimit);
         }
 
         private static void SetUserKeyPair() {
@@ -96,6 +102,43 @@ namespace Dracoon.Sdk.Example {
             dc.Account.DeleteUserKeyPair();
         }
 
+        private static void GetUserAvatar() {
+            Image avatar = dc.Account.GetAvatar();
+            ImageCodecInfo info = ImageCodecInfo.GetImageDecoders().First(c => c.FormatID == avatar.RawFormat.Guid);
+            avatar.Save("C:\\temp\\avatar." + info.FormatDescription);
+        }
+
+        private static void UpdateUserAvatar() {
+            Image newAvatar = Image.FromFile("C:\\temp\\avatar.jpg");
+            dc.Account.UpdateAvatar(newAvatar);
+        }
+
+        private static void GetUserProfileAttributes() {
+            AttributeList attributes = dc.Account.GetUserProfileAttributeList();
+            foreach (Attribute current in attributes.Items) {
+                Console.WriteLine("Attribute key: " + current.Key + "; Attribute value: " + current.Value);
+            }
+        }
+
+        private static void GetUserProfileAttribute() {
+            Attribute attribute = dc.Account.GetUserProfileAttribute("anyKey");
+            Console.WriteLine("Single attribute key: " + attribute.Key + "; Single attribute value: " + attribute.Value);
+        }
+
+        private static void AddUserProfileAttribute() {
+            List<Attribute> attributes = new List<Attribute>() {
+                new Attribute() {
+                    Key = "anyKey",
+                    Value = "anyValue"
+                }
+            };
+            dc.Account.AddOrUpdateUserProfileAttributes(attributes);
+        }
+
+        private static void DeleteUserProfileAttribute() {
+            dc.Account.DeleteProfileAttribute("anyKey");
+        }
+
         #endregion
 
         #region DracoonClient.Nodes
@@ -105,6 +148,14 @@ namespace Dracoon.Sdk.Example {
             foreach (Node current in rootNodes.Items) {
                 Console.WriteLine("NodeId: " + current.Id + "; NodeName: " + current.Name);
             }
+        }
+
+        private static void GetAvatarImageOfNodeCreator() {
+            long nodeId = 1;
+            Node node = dc.Nodes.GetNode(nodeId);
+            Image avatar = dc.Users.GetUserAvatar(node.CreatedBy.Id.Value, node.CreatedBy.AvatarUUID);
+            ImageCodecInfo info = ImageCodecInfo.GetImageDecoders().First(c => c.FormatID == avatar.RawFormat.Guid);
+            avatar.Save("C:\\temp\\avatar." + info.FormatDescription);
         }
 
         private static void ListFilteredRootNodes() {
@@ -119,7 +170,9 @@ namespace Dracoon.Sdk.Example {
         }
 
         private static void CreateRoom() {
-            List<long> roomAdminIds = new List<long> { 1 };
+            List<long> roomAdminIds = new List<long> {
+                1
+            };
 
             CreateRoomRequest request = new CreateRoomRequest("TestRoom", adminUserIds: roomAdminIds, notes: "It's a test room creation.");
             Node createdRoomNode = dc.Nodes.CreateRoom(request);
@@ -139,7 +192,10 @@ namespace Dracoon.Sdk.Example {
         }
 
         private static void DeleteNodes() {
-            List<long> nodeIdsForDeletion = new List<long> { 1, 2 };
+            List<long> nodeIdsForDeletion = new List<long> {
+                1,
+                2
+            };
 
             DeleteNodesRequest request = new DeleteNodesRequest(nodeIdsForDeletion);
             dc.Nodes.DeleteNodes(request);
@@ -200,16 +256,16 @@ namespace Dracoon.Sdk.Example {
         }
 
         private static void UploadFile() {
-            FileUploadRequest reqeust = new FileUploadRequest(1, "testFile.txt");
-            FileStream stream = File.Open("C:\\temp\\testFile.txt", FileMode.Open);
-            Node uploadedNode = dc.Nodes.UploadFile(Guid.NewGuid().ToString(), reqeust, stream, callback: new ULCallback());
+            FileUploadRequest request = new FileUploadRequest(1, "test.txt");
+            FileStream stream = File.Open("C:\\temp\\test.txt", FileMode.Open);
+            Node uploadedNode = dc.Nodes.UploadFile(Guid.NewGuid().ToString(), request, stream, callback: new ULCallback());
         }
 
         private static void DownloadEncryptedFile() {
             dc.EncryptionPassword = ENCRYPTION_PASSWORD;
             Node node = dc.Nodes.GetNode(1);
             FileStream stream = File.Create("C:\\temp\\" + node.Name);
-            dc.Nodes.DownloadFile(Guid.NewGuid().ToString(), node.Id, stream);
+            dc.Nodes.DownloadFile(Guid.NewGuid().ToString(), node.Id, stream, new DLCallback());
         }
 
         private static void DownloadFileAsync() {
@@ -219,7 +275,7 @@ namespace Dracoon.Sdk.Example {
         }
 
         private static void DownloadFile() {
-            Node node = dc.Nodes.GetNode(1);
+            Node node = dc.Nodes.GetNode(10);
             FileStream stream = File.Create("C:\\temp\\" + node.Name);
             dc.Nodes.DownloadFile(Guid.NewGuid().ToString(), node.Id, stream, new DLCallback());
         }
@@ -231,16 +287,20 @@ namespace Dracoon.Sdk.Example {
         private static void GetFileVersions() {
             RecycleBinItemList binItems = dc.Nodes.GetRecycleBinItems(1);
             foreach (RecycleBinItem current in binItems.Items) {
-                Console.WriteLine("NodeName: " + current.Name + "; Versions: " + current.VersionsCount + "; LastDeletedNodeId: " + current.LastDeletedNodeId + "; ParentPath: " + current.ParentPath);
+                Console.WriteLine("NodeName: " + current.Name + "; Versions: " + current.VersionsCount + "; LastDeletedNodeId: " +
+                                  current.LastDeletedNodeId + "; ParentPath: " + current.ParentPath);
             }
 
             PreviousVersionList versionList = dc.Nodes.GetPreviousVersions(1, NodeType.File, "test.txt");
             foreach (PreviousVersion current in versionList.Items) {
-                Console.WriteLine("NodeName: " + current.Name + "; Id: " + current.Id + "; ParentPath: " + current.ParentPath + "; DeletedAt: " + current.DeletedAt.ToString());
+                Console.WriteLine("NodeName: " + current.Name + "; Id: " + current.Id + "; ParentPath: " + current.ParentPath + "; DeletedAt: " +
+                                  current.DeletedAt.ToString());
             }
 
             // Restore the last version of the node "test.txt"
-            RestorePreviousVersionsRequest request = new RestorePreviousVersionsRequest(new List<long>() { versionList.Items.First().Id.Value });
+            RestorePreviousVersionsRequest request = new RestorePreviousVersionsRequest(new List<long>() {
+                versionList.Items.First().Id.Value
+            });
             dc.Nodes.RestorePreviousVersion(request);
         }
 
@@ -250,6 +310,7 @@ namespace Dracoon.Sdk.Example {
 
         private class DLCallback : IFileDownloadCallback {
             private Dictionary<string, Stopwatch> requestTimings = new Dictionary<string, Stopwatch>();
+
             public void OnCanceled(string actionId) {
                 requestTimings.Remove(actionId);
                 Console.WriteLine("DLCallback -> " + "Download canceled: " + actionId);
@@ -285,6 +346,7 @@ namespace Dracoon.Sdk.Example {
 
         private class ULCallback : IFileUploadCallback {
             private Dictionary<string, Stopwatch> requestTimings = new Dictionary<string, Stopwatch>();
+
             public void OnCanceled(string actionId) {
                 requestTimings.Remove(actionId);
                 Console.WriteLine("ULCallback -> " + "Upload canceled: " + actionId);
@@ -298,7 +360,8 @@ namespace Dracoon.Sdk.Example {
             public void OnFinished(string actionId, Node resultNode) {
                 if (requestTimings.TryGetValue(actionId, out Stopwatch watch)) {
                     watch.Stop();
-                    Console.WriteLine("ULCallback -> " + "Upload finished: " + actionId + " | New node id is " + resultNode.Id + " and name " + resultNode.Name + " (" + watch.Elapsed.ToString() + ")");
+                    Console.WriteLine("ULCallback -> " + "Upload finished: " + actionId + " | New node id is " + resultNode.Id + " and name " +
+                                      resultNode.Name + " (" + watch.Elapsed.ToString() + ")");
                     requestTimings.Remove(actionId);
                 } else {
                     Console.WriteLine("ULCallback -> " + "Upload finished: " + actionId);

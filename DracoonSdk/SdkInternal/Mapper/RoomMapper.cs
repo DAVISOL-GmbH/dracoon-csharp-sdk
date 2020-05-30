@@ -5,9 +5,8 @@ using Dracoon.Sdk.SdkInternal.Util;
 
 namespace Dracoon.Sdk.SdkInternal.Mapper {
     internal static class RoomMapper {
-
         internal static ApiCreateRoomRequest ToApiCreateRoomRequest(CreateRoomRequest createRoomRequest) {
-            ApiCreateRoomRequest apiCreateRoomRequest = new ApiCreateRoomRequest() {
+            ApiCreateRoomRequest apiCreateRoomRequest = new ApiCreateRoomRequest {
                 ParentId = createRoomRequest.ParentId,
                 Name = createRoomRequest.Name,
                 Quota = createRoomRequest.Quota,
@@ -22,7 +21,7 @@ namespace Dracoon.Sdk.SdkInternal.Mapper {
         }
 
         internal static ApiUpdateRoomRequest ToApiUpdateRoomRequest(UpdateRoomRequest updateRoomRequest) {
-            ApiUpdateRoomRequest apiUpdateRoomRequest = new ApiUpdateRoomRequest() {
+            ApiUpdateRoomRequest apiUpdateRoomRequest = new ApiUpdateRoomRequest {
                 Name = updateRoomRequest.Name,
                 Quota = updateRoomRequest.Quota,
                 Notes = updateRoomRequest.Notes

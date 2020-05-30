@@ -5,7 +5,7 @@ using Dracoon.Sdk.SdkInternal.OAuth;
 using Dracoon.Sdk.SdkInternal.Validator;
 
 namespace Dracoon.Sdk {
-    public abstract class DracoonClientBase {
+    public abstract class DracoonClientBase : IInternalDracoonClientBase {
 
         /// <include file = "SdkPublicDoc.xml" path='docs/members[@name="dracoonClient"]/ServerUri/*'/>
         public Uri ServerUri {
@@ -15,40 +15,40 @@ namespace Dracoon.Sdk {
         /// <include file = "SdkPublicDoc.xml" path='docs/members[@name="dracoonClient"]/Auth/*'/>
         public DracoonAuth Auth {
             get {
-                return OAuthClient.dracoonAuth;
+                return _oauth.Auth;
             }
             set {
-                OAuthClient.dracoonAuth = value;
+                _oauth.Auth = value;
             }
         }
 
         public RequestInformation LastRequest { get; internal set; }
 
+        #region Private Fields
+
+        private IDracoonHttpConfig _httpConfig;
+        private IRequestBuilder _requestBuilder;
+        private IRequestExecutor _requestExecutor;
+        private IOAuth _oauth;
+        private ILog _logger;
+
+        #endregion
+
         #region Internal
 
-        internal DracoonHttpConfig HttpConfig {
-            get; private set;
-        }
+        ILog IInternalDracoonClientBase.Log => _logger;
 
-        internal ILog Log {
-            get; private set;
-        }
+        IRequestBuilder IInternalDracoonClientBase.Builder => _requestBuilder;
 
-        internal DracoonRequestBuilder RequestBuilder {
-            get; private set;
-        }
-
-        internal DracoonRequestExecuter RequestExecutor {
-            get; private set;
-        }
+        IRequestExecutor IInternalDracoonClientBase.Executor => _requestExecutor;
 
         internal DracoonErrorParser ApiErrorParser {
             get; private set;
         }
 
-        internal OAuthClient OAuthClient {
-            get; private set;
-        }
+        IOAuth IInternalDracoonClientBase.OAuth => _oauth;
+
+        IDracoonHttpConfig IInternalDracoonClientBase.HttpConfig => _httpConfig;
 
         #endregion
 
@@ -58,15 +58,15 @@ namespace Dracoon.Sdk {
         protected void InitInternal(Uri serverUri, DracoonAuth auth, ILog logger, DracoonHttpConfig httpConfig) {
             serverUri.MustBeValid(nameof(serverUri));
 
+            _logger = logger ?? new EmptyLog();
             ServerUri = serverUri;
-            Log = logger ?? new EmptyLog();
-            HttpConfig = httpConfig ?? new DracoonHttpConfig();
+            _httpConfig = httpConfig ?? new DracoonHttpConfig();
 
             #region init internal
 
-            OAuthClient = new OAuthClient(this, auth);
-            RequestBuilder = new DracoonRequestBuilder(this);
-            RequestExecutor = new DracoonRequestExecuter(this);
+            _oauth = new OAuthClient(this, auth);
+            _requestBuilder = new DracoonRequestBuilder(this, _oauth);
+            _requestExecutor = new DracoonRequestExecutor(this, _oauth);
             ApiErrorParser = new DracoonErrorParser(this);
 
             #endregion

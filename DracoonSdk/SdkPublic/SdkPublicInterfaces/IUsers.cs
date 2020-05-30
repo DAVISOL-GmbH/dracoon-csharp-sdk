@@ -1,9 +1,14 @@
+using System.Drawing;
 using Dracoon.Sdk.Filter;
 using Dracoon.Sdk.Model;
 using Dracoon.Sdk.Sort;
 
 namespace Dracoon.Sdk {
+    /// <include file = "SdkPublicInterfacesDoc.xml" path='docs/members[@name="iUsers"]/IUsers/*'/>
     public interface IUsers {
+
+        /// <include file = "SdkPublicInterfacesDoc.xml" path='docs/members[@name="iUsers"]/GetUserAvatar/*'/>
+        Image GetUserAvatar(long userId, string avatarUUID);
 
         UserList GetUsers(bool? includeAttributes = null, long? offset = null, long? limit = null, GetUsersFilter filter = null, UsersSort sort = null);
 
