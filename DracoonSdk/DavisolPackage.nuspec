@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <package >
   <metadata>
-    <id>Davisol.Dracoon.Sdk.NetStandard</id>
+    <id>Dracoon.Sdk.NetStandard</id>
     <version>$version$</version>
     <title>DRACOON SDK (.NET Standard 2.0)</title>
     <authors>DRACOON developers</authors>
