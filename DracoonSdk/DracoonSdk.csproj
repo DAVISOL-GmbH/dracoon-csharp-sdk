@@ -4,22 +4,24 @@
     <TargetFramework>netstandard2.0</TargetFramework>
     <AssemblyName>Dracoon.Sdk</AssemblyName>
     <RootNamespace>Dracoon.Sdk</RootNamespace>
-    <Product>DRACOON Sdk</Product>
-    <Company>DRACOON GmbH</Company>
+    <Company>Dracoon GmbH</Company>
+    <Product>Dracoon Sdk for .NET Standard</Product>
     <Description>The DRACOON SDK for C#.</Description>
     <Copyright>Copyright © 2017</Copyright>
-    <Authors>DRACOON developers</Authors>
-    <Version>1.3.0</Version>
+    <Version>2.0.1</Version>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <DocumentationFile>bin\Debug\Dracoon.Sdk.xml</DocumentationFile>
     <OutputPath>bin\Debug\</OutputPath>
+    <DocumentationFile>bin\Debug\Dracoon.Sdk.xml</DocumentationFile>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
     <OutputPath>bin\Release\</OutputPath>
     <DocumentationFile>bin\Release\Dracoon.Sdk.xml</DocumentationFile>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
   </PropertyGroup>
 
   <ItemGroup>
@@ -29,7 +31,6 @@
     <PackageReference Include="Portable.BouncyCastle" Version="1.8.6.7" />
     <PackageReference Include="RestSharp" Version="106.11.4" />
     <PackageReference Include="System.Drawing.Common" Version="4.7.0" />
-    <PackageReference Include="System.Dynamic.Runtime" Version="4.3.0" />
   </ItemGroup>
 
 </Project>

@@ -1,22 +1,25 @@
 <?xml version="1.0"?>
 <package >
   <metadata>
-    <id>Davisol.Dracoon.Sdk</id>
-    <version>1.1.1</version>
-    <title>DRACOON SDK</title>
+    <id>Davisol.Dracoon.Sdk.NetStandard</id>
+    <version>$version$</version>
+    <title>DRACOON SDK (.NET Standard 2.0)</title>
     <authors>DRACOON developers</authors>
     <owners>dracoon</owners>
     <licenseUrl>https://www.apache.org/licenses/LICENSE-2.0.txt</licenseUrl>
     <projectUrl>https://github.com/dracoon/dracoon-csharp-sdk</projectUrl>
     <iconUrl>https://raw.githubusercontent.com/dracoon/dracoon-csharp-sdk/master/DracoonSdk/DracoonSdk_NugetImage.png</iconUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <description>The DRACOON SDK for C#.</description>
+    <description>The DRACOON SDK for C# / Development version of DAVISOL. This package references .NET Standard and can therefore by used with classic .NET (4.6.1 or newer) as well as with .NET Core (2.0 or newer).</description>
     <copyright>Copyright ©2018 DRACOON GmbH, Copyright ©2020 Sebastian Hübner - DAVISOL</copyright>
-    <tags>DRACOON rest api sdk davisol</tags>
+    <tags>DRACOON rest api sdk netstandard netcore netframework davisol</tags>
+    <releaseNotes>*Development* fork of offical Dracoon C# Crypto SDK: https://github.com/dracoon/dracoon-csharp-sdk</releaseNotes>
     <dependencies>
-        <dependency id="Dracoon.Crypto.Sdk" version="1.1.60.1"/>
+        <dependency id="Dracoon.Crypto.Sdk.NetStandard" version="2.0.251.1"/>
         <dependency id="Newtonsoft.Json" version="11.0.2"/>
         <dependency id="RestSharp" version="106.4.2"/>
+        <dependency id="System.Drawing.Common" version="4.7.0"/>
+        <dependency id="NETStandard.Library" version="2.0.3"/>
     </dependencies>
   </metadata>
   <files>

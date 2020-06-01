@@ -13,7 +13,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		README.md = README.md
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DracoonSdk", "DracoonSdk\DracoonSdk.csproj", "{2E42CA3A-2824-484E-A5A1-9D62BE97E329}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DracoonSdk", "DracoonSdk\DracoonSdk.csproj", "{3BF5C6AE-EB5A-42D0-830C-12D2E8369C27}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -24,10 +24,10 @@ Global
 		{E59D14F8-7186-40A5-BD4E-5E7CC41329F6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{E59D14F8-7186-40A5-BD4E-5E7CC41329F6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E59D14F8-7186-40A5-BD4E-5E7CC41329F6}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{2E42CA3A-2824-484E-A5A1-9D62BE97E329}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{2E42CA3A-2824-484E-A5A1-9D62BE97E329}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{2E42CA3A-2824-484E-A5A1-9D62BE97E329}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{2E42CA3A-2824-484E-A5A1-9D62BE97E329}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3BF5C6AE-EB5A-42D0-830C-12D2E8369C27}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3BF5C6AE-EB5A-42D0-830C-12D2E8369C27}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3BF5C6AE-EB5A-42D0-830C-12D2E8369C27}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3BF5C6AE-EB5A-42D0-830C-12D2E8369C27}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

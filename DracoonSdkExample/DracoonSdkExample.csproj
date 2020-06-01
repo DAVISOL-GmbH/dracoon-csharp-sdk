@@ -109,7 +109,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\DracoonSdk\DracoonSdk.csproj">
-      <Project>{2e42ca3a-2824-484e-a5a1-9d62be97e329}</Project>
+      <Project>{3bf5c6ae-eb5a-42d0-830c-12d2e8369c27}</Project>
       <Name>DracoonSdk</Name>
     </ProjectReference>
   </ItemGroup>
