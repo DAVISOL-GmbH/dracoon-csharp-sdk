@@ -1,4 +1,5 @@
-﻿using System;
+using System;
+using Dracoon.Sdk.Model;
 
 namespace Dracoon.Sdk {
     /// <include file = "SdkPublicInterfacesDoc.xml" path='docs/members[@name="iServer"]/IServer/*'/>
@@ -11,5 +12,9 @@ namespace Dracoon.Sdk {
 
         /// <include file = "SdkPublicInterfacesDoc.xml" path='docs/members[@name="iServer"]/ServerSettings/*'/>
         IServerSettings ServerSettings { get; set; }
+
+        PublicDownloadShare GetPublicDownloadShare(string accessKey);
+
+        PublicUploadShare GetPublicUploadShare(string accessKey);
     }
 }

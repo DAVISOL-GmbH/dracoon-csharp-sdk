@@ -36,6 +36,9 @@ namespace Dracoon.Sdk.SdkInternal {
         internal const string ApiGetServerVersion = ApiPrefix + "/public/software/version";
         internal const string ApiGetServerTime = ApiPrefix + "/public/time";
 
+        internal const string ApiGetPublicDownloadShare = ApiPrefix + "/public/shares/downloads/{accessKey}";
+        internal const string ApiGetPublicUploadShare = ApiPrefix + "/public/shares/uploads/{accessKey}";
+
         #endregion
 
         #endregion

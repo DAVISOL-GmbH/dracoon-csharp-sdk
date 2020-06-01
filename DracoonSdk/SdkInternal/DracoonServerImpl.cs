@@ -1,4 +1,7 @@
-﻿using Dracoon.Sdk.SdkInternal.ApiModel;
+using Dracoon.Sdk.Model;
+using Dracoon.Sdk.SdkInternal.ApiModel;
+using Dracoon.Sdk.SdkInternal.Mapper;
+using Dracoon.Sdk.SdkInternal.Validator;
 using RestSharp;
 using System;
 using static Dracoon.Sdk.SdkInternal.DracoonRequestExecutor;
@@ -27,6 +30,28 @@ namespace Dracoon.Sdk.SdkInternal {
             IRestRequest request = _client.Builder.GetServerTime();
             ApiServerTime result = _client.Executor.DoSyncApiCall<ApiServerTime>(request, RequestType.GetServerTime);
             return result.Time;
+        }
+
+        public PublicDownloadShare GetPublicDownloadShare(string accessKey) {
+            _client.Executor.CheckApiServerVersion();
+            #region Parameter Validation
+            accessKey.MustNotNullOrEmptyOrWhitespace(nameof(accessKey));
+            #endregion
+
+            IRestRequest restRequest = _client.Builder.GetPublicDownloadShare(accessKey);
+            ApiPublicDownloadShare result = _client.Executor.DoSyncApiCall<ApiPublicDownloadShare>(restRequest, RequestType.GetPublicDownloadShare);
+            return ServerMapper.FromApiPublicDownloadShare(result);
+        }
+
+        public PublicUploadShare GetPublicUploadShare(string accessKey) {
+            _client.Executor.CheckApiServerVersion();
+            #region Parameter Validation
+            accessKey.MustNotNullOrEmptyOrWhitespace(nameof(accessKey));
+            #endregion
+
+            IRestRequest restRequest = _client.Builder.GetPublicUploadShare(accessKey);
+            ApiPublicUploadShare result = _client.Executor.DoSyncApiCall<ApiPublicUploadShare>(restRequest, RequestType.GetPublicUploadShare);
+            return ServerMapper.FromApiPublicUploadShare(result);
         }
     }
 }

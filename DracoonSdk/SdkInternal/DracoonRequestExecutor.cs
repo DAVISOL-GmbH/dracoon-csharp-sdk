@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 namespace Dracoon.Sdk.SdkInternal {
     internal class DracoonRequestExecutor : IRequestExecutor {
         internal enum RequestType {
-            GetServerVersion, GetServerTime,
+            GetServerVersion, GetServerTime, GetPublicDownloadShare, GetPublicUploadShare,
             SetUserKeyPair, GetCustomerAccount, GetUserAccount, GetUserKeyPair, DeleteUserKeyPair,
             GetUserAvatar, DeleteUserAvatar, PostUserAvatar,
             GetUserProfileAttributes, PutUserProfileAttributes, DeleteUserProfileAttributes,

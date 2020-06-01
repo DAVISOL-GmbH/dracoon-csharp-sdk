@@ -15,6 +15,10 @@ namespace Dracoon.Sdk.SdkInternal {
 
         IRestRequest GetServerTime();
 
+        IRestRequest GetPublicDownloadShare(string accessKey);
+
+        IRestRequest GetPublicUploadShare(string accessKey);
+
         #endregion
 
         #region User

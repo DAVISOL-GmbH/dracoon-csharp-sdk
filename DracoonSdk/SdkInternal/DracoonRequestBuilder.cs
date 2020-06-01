@@ -93,6 +93,20 @@ namespace Dracoon.Sdk.SdkInternal {
             return request;
         }
 
+        IRestRequest IRequestBuilder.GetPublicDownloadShare(string accessKey) {
+            RestRequest request = new RestRequest(ApiConfig.ApiGetPublicDownloadShare, Method.GET);
+            SetGeneralRestValues(request, false);
+            request.AddUrlSegment("accessKey", accessKey);
+            return request;
+        }
+
+        IRestRequest IRequestBuilder.GetPublicUploadShare(string accessKey) {
+            RestRequest request = new RestRequest(ApiConfig.ApiGetPublicUploadShare, Method.GET);
+            SetGeneralRestValues(request, false);
+            request.AddUrlSegment("accessKey", accessKey);
+            return request;
+        }
+
         #endregion
 
         #endregion
