@@ -8,6 +8,7 @@ namespace Dracoon.Sdk.SdkInternal {
         DracoonServerImpl ServerImpl { get; }
         DracoonUsersImpl UsersImpl { get; }
         DracoonGroupsImpl GroupsImpl { get; }
+        DracoonRolesImpl RolesImpl { get; }
         DracoonEventLogImpl EventLogImpl { get; }
     }
 }

@@ -89,14 +89,14 @@ namespace Dracoon.Sdk.SdkInternal {
             return GroupMapper.FromApiGroup(result);
         }
 
-        public Group AddGroupUsers(long groupId, ChangeGroupMembersRequest groupUserParams) {
+        public Group AddGroupUsers(long groupId, ChangeMembersRequest groupUserParams) {
             _client.Executor.CheckApiServerVersion();
             #region Parameter Validation
             groupId.MustPositive(nameof(groupId));
             groupUserParams.MustNotNull(nameof(groupUserParams));
             #endregion
 
-            ApiChangeGroupMembersRequest apiChangeGroupMembersRequest = GroupMapper.ToApiChangeGroupMembersRequest(groupUserParams);
+            ApiChangeMembersRequest apiChangeGroupMembersRequest = CommonMapper.ToApiChangeMembersRequest(groupUserParams);
             IRestRequest restRequest = _client.Builder.PostGroupUser(groupId, apiChangeGroupMembersRequest);
             ApiGroup result = _client.Executor.DoSyncApiCall<ApiGroup>(restRequest, RequestType.PostGroupUsers);
             return GroupMapper.FromApiGroup(result);
@@ -126,14 +126,14 @@ namespace Dracoon.Sdk.SdkInternal {
             _client.Executor.DoSyncApiCall<VoidResponse>(restRequest, RequestType.DeleteGroup);
         }
 
-        public void DeleteGroupUsers(long groupId, ChangeGroupMembersRequest deleteUsersParams) {
+        public void DeleteGroupUsers(long groupId, ChangeMembersRequest deleteUsersParams) {
             _client.Executor.CheckApiServerVersion();
             #region Parameter Validation
             groupId.MustPositive(nameof(groupId));
             deleteUsersParams.MustNotNull(nameof(deleteUsersParams));
             #endregion
 
-            ApiChangeGroupMembersRequest apiChangeGroupMembersRequest = GroupMapper.ToApiChangeGroupMembersRequest(deleteUsersParams);
+            ApiChangeMembersRequest apiChangeGroupMembersRequest = CommonMapper.ToApiChangeMembersRequest(deleteUsersParams);
             IRestRequest restRequest = _client.Builder.DeleteGroupUsers(groupId, apiChangeGroupMembersRequest);
             _client.Executor.DoSyncApiCall<VoidResponse>(restRequest, RequestType.DeleteGroupUsers);
         }

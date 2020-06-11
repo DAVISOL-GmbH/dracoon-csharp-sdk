@@ -1,7 +1,6 @@
 using System;
 using System.Globalization;
 using System.Net;
-using System.Text;
 using Dracoon.Sdk.Filter;
 using Dracoon.Sdk.Model;
 using Dracoon.Sdk.SdkInternal.ApiModel;
@@ -792,7 +791,7 @@ namespace Dracoon.Sdk.SdkInternal {
             return request;
         }
 
-        IRestRequest IRequestBuilder.PostGroupUser(long groupId, ApiChangeGroupMembersRequest groupUsersParams) {
+        IRestRequest IRequestBuilder.PostGroupUser(long groupId, ApiChangeMembersRequest groupUsersParams) {
             RestRequest request = new RestRequest(ApiConfig.ApiPostGroupUser, Method.POST);
             SetGeneralRestValues(request, true, groupUsersParams);
             request.AddUrlSegment("groupId", groupId.ToString());
@@ -820,7 +819,7 @@ namespace Dracoon.Sdk.SdkInternal {
             return request;
         }
 
-        IRestRequest IRequestBuilder.DeleteGroupUsers(long groupId, ApiChangeGroupMembersRequest deleteUsersParams) {
+        IRestRequest IRequestBuilder.DeleteGroupUsers(long groupId, ApiChangeMembersRequest deleteUsersParams) {
             RestRequest request = new RestRequest(ApiConfig.ApiDeleteGroupUsers, Method.DELETE);
             SetGeneralRestValues(request, true, deleteUsersParams);
             request.AddUrlSegment("groupId", groupId.ToString());
@@ -941,6 +940,78 @@ namespace Dracoon.Sdk.SdkInternal {
             RestRequest request = new RestRequest(ApiConfig.ApiDeleteUserUserAttribute, Method.DELETE);
             request.AddUrlSegment("userId", userId.ToString());
             request.AddUrlSegment("key", userAttributeKey);
+            return request;
+        }
+
+        #endregion
+
+        #endregion
+
+        #region Roles-Endpoint
+
+        #region GET
+
+        IRestRequest IRequestBuilder.GetRoles() {
+            RestRequest request = new RestRequest(ApiConfig.ApiGetRoles, Method.GET);
+            SetGeneralRestValues(request, true);
+            return request;
+        }
+
+        IRestRequest IRequestBuilder.GetRoleGroups(long roleId, long? offset, long? limit, GetUserGroupsFilter filter) {
+            RestRequest request = new RestRequest(ApiConfig.ApiGetRoleGroups, Method.GET);
+            SetGeneralRestValues(request, true);
+            request.AddUrlSegment("roleId", roleId.ToString());
+            AddFilters(filter, request);
+            if (offset.HasValue)
+                request.AddQueryParameter("offset", offset.ToString());
+            if (limit.HasValue)
+                request.AddQueryParameter("limit", limit.ToString());
+            return request;
+        }
+
+        IRestRequest IRequestBuilder.GetRoleUsers(long roleId, long? offset, long? limit, GetGroupUsersFilter filter) {
+            RestRequest request = new RestRequest(ApiConfig.ApiGetRoleUsers, Method.GET);
+            SetGeneralRestValues(request, true);
+            request.AddUrlSegment("roleId", roleId.ToString());
+            AddFilters(filter, request);
+            if (offset.HasValue)
+                request.AddQueryParameter("offset", offset.ToString());
+            if (limit.HasValue)
+                request.AddQueryParameter("limit", limit.ToString());
+            return request;
+        }
+
+        #endregion
+        #region POST
+
+        IRestRequest IRequestBuilder.PostRoleGroups(long roleId, ApiChangeMembersRequest addGroupsParams) {
+            RestRequest request = new RestRequest(ApiConfig.ApiPostRoleGroups, Method.POST);
+            SetGeneralRestValues(request, true, addGroupsParams);
+            request.AddUrlSegment("roleId", roleId.ToString());
+            return request;
+        }
+
+        IRestRequest IRequestBuilder.PostRoleUsers(long roleId, ApiChangeMembersRequest addUsersParams) {
+            RestRequest request = new RestRequest(ApiConfig.ApiPostRoleUsers, Method.POST);
+            SetGeneralRestValues(request, true, addUsersParams);
+            request.AddUrlSegment("roleId", roleId.ToString());
+            return request;
+        }
+
+        #endregion
+        #region DELETE
+
+        IRestRequest IRequestBuilder.DeleteRoleGroups(long roleId, ApiChangeMembersRequest deleteGroupsParams) {
+            RestRequest request = new RestRequest(ApiConfig.ApiDeleteRoleGroups, Method.DELETE);
+            SetGeneralRestValues(request, true, deleteGroupsParams);
+            request.AddUrlSegment("roleId", roleId.ToString());
+            return request;
+        }
+
+        IRestRequest IRequestBuilder.DeleteRoleUsers(long roleId, ApiChangeMembersRequest deleteUsersParams) {
+            RestRequest request = new RestRequest(ApiConfig.ApiDeleteRoleUsers, Method.DELETE);
+            SetGeneralRestValues(request, true, deleteUsersParams);
+            request.AddUrlSegment("roleId", roleId.ToString());
             return request;
         }
 

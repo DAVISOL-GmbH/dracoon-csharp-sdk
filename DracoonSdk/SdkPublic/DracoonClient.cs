@@ -18,6 +18,7 @@ namespace Dracoon.Sdk {
         private readonly DracoonServerImpl _server;
         private readonly DracoonUsersImpl _users;
         private readonly DracoonGroupsImpl _groups;
+        private readonly DracoonRolesImpl _roles;
         private readonly DracoonEventLogImpl _eventLog;
 
         DracoonAccountImpl IInternalDracoonClient.AccountImpl => _account;
@@ -31,6 +32,8 @@ namespace Dracoon.Sdk {
         DracoonUsersImpl IInternalDracoonClient.UsersImpl => _users;
 
         DracoonGroupsImpl IInternalDracoonClient.GroupsImpl => _groups;
+
+        DracoonRolesImpl IInternalDracoonClient.RolesImpl => _roles;
 
         DracoonEventLogImpl IInternalDracoonClient.EventLogImpl => _eventLog;
 
@@ -51,8 +54,10 @@ namespace Dracoon.Sdk {
 
         public IGroups Groups => _groups;
 
+        public IRoles Roles => _roles;
+
         public IEventLog EventLog => _eventLog;
-        
+
         #endregion
 
         #endregion
@@ -70,6 +75,7 @@ namespace Dracoon.Sdk {
             _shares = new DracoonSharesImpl(this);
             _users = new DracoonUsersImpl(this);
             _groups = new DracoonGroupsImpl(this);
+            _roles = new DracoonRolesImpl(this);
             _eventLog = new DracoonEventLogImpl(this);
 
             #endregion

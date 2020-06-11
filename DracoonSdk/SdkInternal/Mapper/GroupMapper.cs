@@ -120,12 +120,5 @@ namespace Dracoon.Sdk.SdkInternal.Mapper {
             };
             return apiUpdateGroupRequest;
         }
-
-        internal static ApiChangeGroupMembersRequest ToApiChangeGroupMembersRequest(ChangeGroupMembersRequest changeGroupMembersRequest) {
-            ApiChangeGroupMembersRequest apiChangeGroupMembersRequest = new ApiChangeGroupMembersRequest() {
-                Ids = changeGroupMembersRequest.Ids
-            };
-            return apiChangeGroupMembersRequest;
-        }
     }
 }

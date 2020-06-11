@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Dracoon.Sdk.Model;
 using Dracoon.Sdk.SdkInternal.ApiModel;
+using Dracoon.Sdk.SdkInternal.ApiModel.Requests;
 
 namespace Dracoon.Sdk.SdkInternal.Mapper {
     internal static class CommonMapper {
@@ -133,6 +134,13 @@ namespace Dracoon.Sdk.SdkInternal.Mapper {
             }
             newList.Items = items.ToArray();
             return newList;
+        }
+
+        internal static ApiChangeMembersRequest ToApiChangeMembersRequest(ChangeMembersRequest changeGroupMembersRequest) {
+            ApiChangeMembersRequest apiChangeGroupMembersRequest = new ApiChangeMembersRequest() {
+                Ids = changeGroupMembersRequest.Ids
+            };
+            return apiChangeGroupMembersRequest;
         }
     }
 }

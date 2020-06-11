@@ -1,13 +1,13 @@
 using System.Collections.Generic;
 
 namespace Dracoon.Sdk.Model {
-    public class ChangeGroupMembersRequest {
+    public class ChangeMembersRequest {
 
         public List<long> Ids {
             get; private set;
         }
 
-        public ChangeGroupMembersRequest(List<long> ids) {
+        public ChangeMembersRequest(List<long> ids) {
             Ids = ids;
         }
     }

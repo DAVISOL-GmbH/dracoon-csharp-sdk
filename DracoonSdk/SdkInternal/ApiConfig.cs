@@ -308,6 +308,32 @@ namespace Dracoon.Sdk.SdkInternal {
 
         #endregion
 
+        #region Roles-Endpoint
+
+        private const string ApiRolesPrefix = ApiPrefix + "/roles";
+
+        #region GET
+
+        internal const string ApiGetRoles = ApiRolesPrefix;
+        internal const string ApiGetRoleGroups = ApiRolesPrefix + "/{roleId}/groups";
+        internal const string ApiGetRoleUsers = ApiRolesPrefix + "/{roleId}/users";
+
+        #endregion
+        #region POST
+
+        internal const string ApiPostRoleGroups = ApiRolesPrefix + "/{roleId}/groups";
+        internal const string ApiPostRoleUsers = ApiRolesPrefix + "/{roleId}/users";
+
+        #endregion
+        #region DELETE
+
+        internal const string ApiDeleteRoleGroups = ApiGroupsPrefix + "/{roleId}/groups";
+        internal const string ApiDeleteRoleUsers = ApiGroupsPrefix + "/{roleId}/users";
+
+        #endregion
+
+        #endregion
+
         #region Branding-Endpoint (Branding API)
 
         #region GET

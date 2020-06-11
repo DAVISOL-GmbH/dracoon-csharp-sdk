@@ -1,13 +1,13 @@
-using Dracoon.Sdk.Error;
-using Dracoon.Sdk.SdkInternal.ApiModel;
-using Dracoon.Sdk.SdkInternal.OAuth;
-using Newtonsoft.Json;
-using RestSharp;
 using System;
 using System.Net;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
+using Dracoon.Sdk.Error;
+using Dracoon.Sdk.SdkInternal.ApiModel;
+using Dracoon.Sdk.SdkInternal.OAuth;
+using Newtonsoft.Json;
+using RestSharp;
 
 namespace Dracoon.Sdk.SdkInternal {
     internal class DracoonRequestExecutor : IRequestExecutor {
@@ -26,6 +26,7 @@ namespace Dracoon.Sdk.SdkInternal {
             GetRecycleBin, DeleteRecycleBin, GetPreviousVersions, GetPreviousVersion, PostRestoreNodeVersion, DeletePreviousVersions,
             GetGroups, GetGroup, GetGroupLastAdminRooms, GetGroupRoles, GetGroupUsers, PostGroup, PostGroupUsers, PutGroup, DeleteGroup, DeleteGroupUsers,
             GetUsers, GetUser, GetUserLastAdminRooms, GetUserRoles, GetUserGroups, GetUserUserAttributes, PostUser, PostUserUserAttributes, PutUser, PutUserUserAttributes, DeleteUser, DeleteUserUserAttribute,
+            GetRoles, GetRoleGroups, GetRoleUsers, PostRoleGroups, PostRoleUsers, DeleteRoleGroups, DeleteRoleUsers,
             GetAuditNodes, GetEvents, GetOperations,
             PutCompleteS3Upload, PutUploadS3Chunk, PostGetS3Urls, GetS3Status, GetPasswordPolicies,
             GetBranding, GetBrandingServerVersion,
@@ -58,7 +59,7 @@ namespace Dracoon.Sdk.SdkInternal {
 
             if (_apiVersion == null) {
                 ApiServerVersion serverVersion =
-                    ((IRequestExecutor) this).DoSyncApiCall<ApiServerVersion>(_client.Builder.GetServerVersion(), RequestType.GetServerVersion);
+                    ((IRequestExecutor)this).DoSyncApiCall<ApiServerVersion>(_client.Builder.GetServerVersion(), RequestType.GetServerVersion);
                 string version = serverVersion.RestApiVersion;
                 if (version.Contains("-")) {
                     version = version.Remove(version.IndexOf("-"));
@@ -122,7 +123,7 @@ namespace Dracoon.Sdk.SdkInternal {
                             }
                         }
 
-                        return ((IRequestExecutor) this).DoSyncApiCall<T>(request, requestType, authTry + 1);
+                        return ((IRequestExecutor)this).DoSyncApiCall<T>(request, requestType, authTry + 1);
                     }
 
                     throw apiError;
@@ -162,7 +163,7 @@ namespace Dracoon.Sdk.SdkInternal {
                         if (_client.HttpConfig.RetryEnabled && sendTry < 3) {
                             _client.Log.Debug(Logtag, "Retry the request in " + sendTry * 1000 + " millis again.");
                             Thread.Sleep(1000 * sendTry);
-                            return ((IRequestExecutor) this).ExecuteWebClientDownload(requestClient, target, type, asyncThread, sendTry + 1);
+                            return ((IRequestExecutor)this).ExecuteWebClientDownload(requestClient, target, type, asyncThread, sendTry + 1);
                         } else {
                             if (asyncThread != null && asyncThread.ThreadState == ThreadState.Aborted) {
                                 throw new ThreadInterruptedException();
@@ -219,7 +220,7 @@ namespace Dracoon.Sdk.SdkInternal {
                         if (_client.HttpConfig.RetryEnabled && sendTry < 3) {
                             _client.Log.Debug(Logtag, "Retry the request in " + sendTry * 1000 + " millis again.");
                             Thread.Sleep(1000 * sendTry);
-                            return ((IRequestExecutor) this).ExecuteWebClientChunkUpload(requestClient, target, data, type, asyncThread, sendTry + 1);
+                            return ((IRequestExecutor)this).ExecuteWebClientChunkUpload(requestClient, target, data, type, asyncThread, sendTry + 1);
                         } else {
                             if (asyncThread != null && asyncThread.ThreadState == ThreadState.Aborted) {
                                 throw new ThreadInterruptedException();

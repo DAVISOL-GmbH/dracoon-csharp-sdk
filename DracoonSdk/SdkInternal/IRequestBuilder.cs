@@ -202,13 +202,13 @@ namespace Dracoon.Sdk.SdkInternal {
 
         IRestRequest PostGroup(ApiCreateGroupRequest groupParams);
 
-        IRestRequest PostGroupUser(long groupId, ApiChangeGroupMembersRequest groupUsersParams);
+        IRestRequest PostGroupUser(long groupId, ApiChangeMembersRequest groupUsersParams);
 
         IRestRequest PutGroup(long groupId, ApiUpdateGroupRequest groupParams);
 
         IRestRequest DeleteGroup(long groupId);
 
-        IRestRequest DeleteGroupUsers(long groupId, ApiChangeGroupMembersRequest deleteUsersParams);
+        IRestRequest DeleteGroupUsers(long groupId, ApiChangeMembersRequest deleteUsersParams);
 
         #endregion
 
@@ -237,6 +237,24 @@ namespace Dracoon.Sdk.SdkInternal {
         IRestRequest DeleteUser(long userId);
 
         IRestRequest DeleteUserUserAttribute(long userId, string userAttributeKey);
+
+        #endregion
+
+        #region Roles
+
+        IRestRequest GetRoles();
+
+        IRestRequest GetRoleGroups(long roleId, long? offset = null, long? limit = null, GetUserGroupsFilter filter = null);
+
+        IRestRequest GetRoleUsers(long roleId, long? offset = null, long? limit = null, GetGroupUsersFilter filter = null);
+
+        IRestRequest PostRoleGroups(long roleId, ApiChangeMembersRequest addGroupsParams);
+
+        IRestRequest PostRoleUsers(long roleId, ApiChangeMembersRequest addUsersParams);
+
+        IRestRequest DeleteRoleGroups(long roleId, ApiChangeMembersRequest deleteGroupsParams);
+
+        IRestRequest DeleteRoleUsers(long roleId, ApiChangeMembersRequest deleteUsersParams);
 
         #endregion
 

@@ -17,12 +17,12 @@ namespace Dracoon.Sdk {
 
         Group CreateGroup(CreateGroupRequest groupParams);
 
-        Group AddGroupUsers(long groupId, ChangeGroupMembersRequest groupUserParams);
+        Group AddGroupUsers(long groupId, ChangeMembersRequest groupUserParams);
 
         Group UpdateGroup(long groupId, UpdateGroupRequest groupParams);
 
         void DeleteGroup(long groupId);
 
-        void DeleteGroupUsers(long groupId, ChangeGroupMembersRequest deleteUsersParams);
+        void DeleteGroupUsers(long groupId, ChangeMembersRequest deleteUsersParams);
     }
 }
