@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using Dracoon.Sdk.Model;
 using Dracoon.Sdk.SdkInternal.ApiModel;
 using Dracoon.Sdk.SdkInternal.ApiModel.Requests;
@@ -7,19 +6,8 @@ namespace Dracoon.Sdk.SdkInternal.Mapper {
     internal static class GroupMapper {
 
         internal static GroupList FromApiGroupList(ApiGroupList apiGroupList) {
-            if (apiGroupList == null) {
-                return null;
-            }
-
-            GroupList groupList = new GroupList() {
-                Offset = apiGroupList.Range.Offset,
-                Limit = apiGroupList.Range.Limit,
-                Total = apiGroupList.Range.Total,
-                Items = new List<Group>()
-            };
-            foreach (ApiGroup currentGroup in apiGroupList.Items) {
-                groupList.Items.Add(FromApiGroup(currentGroup));
-            }
+            GroupList groupList = new GroupList();
+            CommonMapper.FromApiRangeList(apiGroupList, groupList, FromApiGroup);
             return groupList;
         }
 
@@ -54,19 +42,8 @@ namespace Dracoon.Sdk.SdkInternal.Mapper {
         }
 
         internal static GroupUserList FromApiGroupUserList(ApiGroupUserList apiGroupUserList) {
-            if (apiGroupUserList == null) {
-                return null;
-            }
-
-            GroupUserList groupUserList = new GroupUserList() {
-                Offset = apiGroupUserList.Range.Offset,
-                Limit = apiGroupUserList.Range.Limit,
-                Total = apiGroupUserList.Range.Total,
-                Items = new List<GroupUser>()
-            };
-            foreach (ApiGroupUser apiGroupUser in apiGroupUserList.Items) {
-                groupUserList.Items.Add(FromApiGroupUser(apiGroupUser));
-            }
+            GroupUserList groupUserList = new GroupUserList();
+            CommonMapper.FromApiRangeList(apiGroupUserList, groupUserList, FromApiGroupUser);
             return groupUserList;
         }
 

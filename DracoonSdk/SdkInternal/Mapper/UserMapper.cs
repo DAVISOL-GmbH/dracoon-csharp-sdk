@@ -1,11 +1,10 @@
+using System;
+using System.Collections.Generic;
 using Dracoon.Crypto.Sdk.Model;
 using Dracoon.Sdk.Model;
 using Dracoon.Sdk.SdkInternal.ApiModel;
-using System;
-using System.Collections.Generic;
 using Dracoon.Sdk.SdkInternal.ApiModel.Requests;
 using Dracoon.Sdk.SdkInternal.Util;
-using Attribute = Dracoon.Sdk.Model.Attribute;
 
 namespace Dracoon.Sdk.SdkInternal.Mapper {
     internal static class UserMapper {
@@ -59,7 +58,7 @@ namespace Dracoon.Sdk.SdkInternal.Mapper {
             }
 
             foreach (ApiUserRole currentRole in apiUserRoles.Items) {
-                returnValue.Add((UserRole) Enum.ToObject(typeof(UserRole), currentRole.Id));
+                returnValue.Add((UserRole)Enum.ToObject(typeof(UserRole), currentRole.Id));
             }
 
             return returnValue;
@@ -139,7 +138,7 @@ namespace Dracoon.Sdk.SdkInternal.Mapper {
 
         internal static UserList FromApiUserList(ApiUserList apiUserList) {
             UserList userList = new UserList();
-            CommonMapper.FromApiRangeList<ApiUserItem, UserItem>(apiUserList, userList, FromApiUserItem);
+            CommonMapper.FromApiRangeList(apiUserList, userList, FromApiUserItem);
             return userList;
         }
 
