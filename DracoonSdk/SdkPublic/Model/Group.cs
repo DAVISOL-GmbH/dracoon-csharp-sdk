@@ -1,4 +1,6 @@
 using System;
+using System.Collections;
+using System.Collections.Generic;
 
 namespace Dracoon.Sdk.Model {
     public class Group : GroupInfo {
@@ -11,7 +13,7 @@ namespace Dracoon.Sdk.Model {
             get; internal set;
         }
 
-        public DateTime? CreatedAt {
+        public DateTime CreatedAt {
             get; internal set;
         }
 
@@ -24,6 +26,10 @@ namespace Dracoon.Sdk.Model {
         }
 
         public UserInfo UpdatedBy {
+            get; internal set;
+        }
+
+        public IEnumerable<Role> GroupRoles {
             get; internal set;
         }
     }

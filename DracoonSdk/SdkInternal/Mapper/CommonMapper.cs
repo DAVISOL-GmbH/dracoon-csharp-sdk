@@ -54,7 +54,7 @@ namespace Dracoon.Sdk.SdkInternal.Mapper {
             return roleList;
         }
 
-        private static Role FromApiRole(ApiRole apiRole) {
+        internal static Role FromApiRole(ApiRole apiRole) {
             if (apiRole == null) {
                 return null;
             }

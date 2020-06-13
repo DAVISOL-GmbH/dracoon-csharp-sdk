@@ -1,3 +1,5 @@
+using System;
+using System.Linq;
 using Dracoon.Sdk.Model;
 using Dracoon.Sdk.SdkInternal.ApiModel;
 using Dracoon.Sdk.SdkInternal.ApiModel.Requests;
@@ -25,6 +27,7 @@ namespace Dracoon.Sdk.SdkInternal.Mapper {
                 CreatedBy = UserMapper.FromApiUserInfo(apiGroup.CreatedBy),
                 UpdatedAt = apiGroup.UpdatedAt,
                 UpdatedBy = UserMapper.FromApiUserInfo(apiGroup.UpdatedBy),
+                GroupRoles = apiGroup.GroupRoles?.Items?.Select(x => CommonMapper.FromApiRole(x))?.ToArray()
             };
             return group;
         }

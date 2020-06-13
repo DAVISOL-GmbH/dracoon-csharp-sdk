@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using Newtonsoft.Json;
 
 namespace Dracoon.Sdk.SdkInternal.ApiModel {
@@ -13,7 +14,7 @@ namespace Dracoon.Sdk.SdkInternal.ApiModel {
             get; set;
         }
         [JsonProperty("createdAt", NullValueHandling = NullValueHandling.Ignore)]
-        public DateTime? CreatedAt {
+        public DateTime CreatedAt {
             get; set;
         }
         [JsonProperty("createdBy", NullValueHandling = NullValueHandling.Ignore)]
@@ -26,6 +27,10 @@ namespace Dracoon.Sdk.SdkInternal.ApiModel {
         }
         [JsonProperty("updatedBy", NullValueHandling = NullValueHandling.Ignore)]
         public ApiUserInfo UpdatedBy {
+            get; set;
+        }
+        [JsonProperty("groupRoles", NullValueHandling = NullValueHandling.Ignore)]
+        public ApiGroupRoleList GroupRoles {
             get; set;
         }
     }
