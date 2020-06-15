@@ -26,6 +26,7 @@ namespace Dracoon.Sdk.Model {
         public string Email { get; internal set; }
 
         /// <include file = "ModelDoc.xml" path='docs/members[@name="userInfo"]/Title/*'/>
+        [Obsolete("Deprecated since version 4.18.0")]
         public string Title { get; internal set; }
 
         /// <include file = "ModelDoc.xml" path='docs/members[@name="userInfo"]/UserType/*'/>

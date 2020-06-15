@@ -41,6 +41,7 @@ namespace Dracoon.Sdk.Model {
             get; internal set;
         }
 
+        [Obsolete("Deprecated since version 4.18.0")]
         public string Title {
             get; internal set;
         }
