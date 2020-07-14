@@ -10,5 +10,31 @@ namespace Dracoon.Sdk.Filter {
         public static FlagFilter PermissionsManage => new FlagFilter("permissionsManage");
 
         public static FlagFilter EffectivePerm => new FlagFilter("effectivePerm", true);
+
+
+        public void AddUserFilter(DracoonFilterType<NameFilter> userFilter) {
+            CheckFilter(userFilter, nameof(userFilter));
+            FiltersList.Add(userFilter);
+        }
+
+        public void AddUserIdFilter(DracoonFilterType<UserIdFilter> userIdFilter) {
+            CheckFilter(userIdFilter, nameof(userIdFilter));
+            FiltersList.Add(userIdFilter);
+        }
+
+        public void AddIsGrantedFilter(DracoonFilterType<FlagFilter> isGrantedFilter) {
+            CheckFilter(isGrantedFilter, nameof(isGrantedFilter));
+            FiltersList.Add(isGrantedFilter);
+        }
+
+        public void AddPermissionsManageFilter(DracoonFilterType<FlagFilter> permissionsManageFilter) {
+            CheckFilter(permissionsManageFilter, nameof(permissionsManageFilter));
+            FiltersList.Add(permissionsManageFilter);
+        }
+
+        public void AddEffectivePermFilter(DracoonFilterType<FlagFilter> effectivePermFilter) {
+            CheckFilter(effectivePermFilter, nameof(effectivePermFilter));
+            FiltersList.Add(effectivePermFilter);
+        }
     }
 }
