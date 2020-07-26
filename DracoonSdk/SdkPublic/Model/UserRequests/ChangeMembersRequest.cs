@@ -1,14 +1,15 @@
+using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Dracoon.Sdk.Model {
     public class ChangeMembersRequest {
-
-        public List<long> Ids {
-            get; private set;
+        public ChangeMembersRequest(IEnumerable<long> ids) {
+            Ids = ids?.ToArray() ?? Array.Empty<long>();
         }
 
-        public ChangeMembersRequest(List<long> ids) {
-            Ids = ids;
+        public IEnumerable<long> Ids {
+            get; private set;
         }
     }
 }
