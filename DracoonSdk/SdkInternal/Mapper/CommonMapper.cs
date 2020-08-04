@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Dracoon.Sdk.Model;
 using Dracoon.Sdk.SdkInternal.ApiModel;
+using Dracoon.Sdk.SdkInternal.ApiModel.Common;
 using Dracoon.Sdk.SdkInternal.ApiModel.Requests;
 
 namespace Dracoon.Sdk.SdkInternal.Mapper {
@@ -141,6 +142,14 @@ namespace Dracoon.Sdk.SdkInternal.Mapper {
                 Ids = changeGroupMembersRequest.Ids
             };
             return apiChangeGroupMembersRequest;
+        }
+
+        internal static ApiKeyValuePair ToApiKeyValuePair(KeyValuePair<string, string> keyValuePair) {
+            return new ApiKeyValuePair(keyValuePair);
+        }
+
+        internal static KeyValuePair<string, string> FromApiKeyValuePair(ApiKeyValuePair keyValuePair) {
+            return new KeyValuePair<string, string>(keyValuePair.Key, keyValuePair.Value);
         }
     }
 }

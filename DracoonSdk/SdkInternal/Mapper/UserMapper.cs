@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Dracoon.Crypto.Sdk.Model;
 using Dracoon.Sdk.Model;
 using Dracoon.Sdk.SdkInternal.ApiModel;
+using Dracoon.Sdk.SdkInternal.ApiModel.Common;
 using Dracoon.Sdk.SdkInternal.ApiModel.Requests;
 using Dracoon.Sdk.SdkInternal.Util;
 
@@ -234,7 +235,7 @@ namespace Dracoon.Sdk.SdkInternal.Mapper {
 
         internal static UserAttributes FromApiUserAttributes(ApiUserAttributes apiUserAttributes) {
             UserAttributes userAttributes = new UserAttributes();
-            CommonMapper.FromApiSimpleList(apiUserAttributes, userAttributes, x => x);
+            CommonMapper.FromApiSimpleList(apiUserAttributes, userAttributes, x => CommonMapper.FromApiKeyValuePair(x));
             return userAttributes;
         }
 
@@ -259,15 +260,15 @@ namespace Dracoon.Sdk.SdkInternal.Mapper {
                 IsEnabled = apiUserAuthMethod.IsEnabled,
                 Options = new List<KeyValuePair<string, string>>()
             };
-            foreach (KeyValuePair<string, string> option in apiUserAuthMethod.Options) {
-                userAuthMethod.Options.Add(option);
+            foreach (ApiKeyValuePair option in apiUserAuthMethod.Options) {
+                userAuthMethod.Options.Add(CommonMapper.FromApiKeyValuePair(option));
             }
             return userAuthMethod;
         }
 
         internal static AttributesResponse FromApiAttributesResponse(ApiAttributesResponse apiAttributesResponse) {
             AttributesResponse attributesResponse = new AttributesResponse();
-            CommonMapper.FromApiRangeList(apiAttributesResponse, attributesResponse, x => x);
+            CommonMapper.FromApiRangeList(apiAttributesResponse, attributesResponse, x => CommonMapper.FromApiKeyValuePair(x));
             return attributesResponse;
         }
 
@@ -306,13 +307,8 @@ namespace Dracoon.Sdk.SdkInternal.Mapper {
         }
 
         internal static ApiUserAttributes ToApiUserAttributes(UserAttributes userAttributes) {
-            List<KeyValuePair<string, string>> items = new List<KeyValuePair<string, string>>();
-            foreach (var userAttribute in userAttributes.Items) {
-                items.Add(userAttribute);
-            }
-            ApiUserAttributes apiUserAttributes = new ApiUserAttributes() {
-                Items = items
-            };
+            ApiUserAttributes apiUserAttributes = new ApiUserAttributes();
+            CommonMapper.ToApiSimpleList(userAttributes, apiUserAttributes, x => CommonMapper.ToApiKeyValuePair(x));
             return apiUserAttributes;
         }
 

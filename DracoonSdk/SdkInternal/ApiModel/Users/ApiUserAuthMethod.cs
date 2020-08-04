@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Dracoon.Sdk.SdkInternal.ApiModel.Common;
 using Newtonsoft.Json;
 
 namespace Dracoon.Sdk.SdkInternal.ApiModel {
@@ -12,7 +13,7 @@ namespace Dracoon.Sdk.SdkInternal.ApiModel {
             get; internal set;
         }
         [JsonProperty("options", NullValueHandling = NullValueHandling.Ignore)]
-        public List<KeyValuePair<string, string>> Options {
+        public List<ApiKeyValuePair> Options {
             get; internal set;
         }
     }
