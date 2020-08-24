@@ -1,10 +1,9 @@
-﻿using Newtonsoft.Json;
+using System;
 using System.ComponentModel;
+using Newtonsoft.Json;
 
-namespace Dracoon.Sdk.SdkInternal.ApiModel
-{
-    internal class ApiInfrastructureSettings
-    {
+namespace Dracoon.Sdk.SdkInternal.ApiModel {
+    internal class ApiInfrastructureSettings {
         [JsonProperty("smsConfigEnabled", NullValueHandling = NullValueHandling.Ignore)]
         public bool SmsConfigEnabled {
             get; set;
@@ -20,6 +19,16 @@ namespace Dracoon.Sdk.SdkInternal.ApiModel
         [DefaultValue(false)]
         [JsonProperty("s3EnforceDirectUpload", DefaultValueHandling = DefaultValueHandling.Populate)]
         public bool S3EnforceDirectUpload {
+            get; set;
+        }
+
+        [JsonProperty("dracoonCloud", DefaultValueHandling = DefaultValueHandling.Populate)]
+        public bool DracoonCloud {
+            get; set;
+        }
+
+        [JsonProperty("tenantUuid", DefaultValueHandling = DefaultValueHandling.Populate)]
+        public Guid TenantUuid {
             get; set;
         }
     }

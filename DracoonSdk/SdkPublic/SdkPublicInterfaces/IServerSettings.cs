@@ -16,5 +16,11 @@ namespace Dracoon.Sdk {
         PasswordPolicies GetPasswordPolicies();
 
         ServerAuthenticationSettings GetAuth();
+
+        ActiveDirectoryConfigList GetAuthActiveDirectorySettings();
+
+        OpenIdIdpConfigList GetAuthOpenIdIdpSettings();
+
+        RadiusConfig GetAuthRadiusSettings();
     }
 }

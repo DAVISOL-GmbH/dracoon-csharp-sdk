@@ -1,4 +1,4 @@
-﻿using Newtonsoft.Json;
+using Newtonsoft.Json;
 
 namespace Dracoon.Sdk.SdkInternal.ApiModel {
     internal class ApiDefaultsSettings {
@@ -13,5 +13,11 @@ namespace Dracoon.Sdk.SdkInternal.ApiModel {
 
         [JsonProperty("fileDefaultExpirationPeriod", NullValueHandling = NullValueHandling.Ignore)]
         public int FileUploadDefaultExpirationPeriodInDays { get; set; }
+
+        [JsonProperty("nonmemberViewerDefault", NullValueHandling = NullValueHandling.Ignore)]
+        public bool NonmemberViewerDefault { get; set; }
+
+        [JsonProperty("hideLoginInputFields", NullValueHandling = NullValueHandling.Ignore)]
+        public bool HideLoginInputFields { get; set; }
     }
 }

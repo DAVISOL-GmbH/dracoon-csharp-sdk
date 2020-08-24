@@ -1444,6 +1444,18 @@
       </summary>
     </FileUploadDefaultExpirationPeriodInDays>
 
+      <NonmemberViewerDefault>
+          <summary>
+              Is <c>true</c> if new users get the role Non Member Viewer by default. Otherwise <c>false</c>.
+          </summary>
+      </NonmemberViewerDefault>
+
+      <HideLoginInputFields>
+          <summary>
+              Is <c>true</c> if the input fields should be hidden. Otherwise <c>false</c>.
+          </summary>
+      </HideLoginInputFields>
+
   </members>
 
   <members name="serverGeneralSettings">
@@ -1480,13 +1492,14 @@
 
     <MediaServerEnabled>
       <summary>
-        Is <c>true</c> if the media server is available. Otherwise <c>false</c>.
+        DEPRECATED. Is <c>true</c> if the media server is available. Otherwise <c>false</c>.
       </summary>
+        <remarks>Deprecated since 4.12.0</remarks>
     </MediaServerEnabled>
 
     <WeakPasswordEnabled>
       <summary>
-        Is <c>true</c> if weak passwords can be used. Otherwise <c>false</c> if strong passwords are required.
+        DEPRECATED. Is <c>true</c> if weak passwords can be used. Otherwise <c>false</c> if strong passwords are required.
         <para>
           <list type="bullet">
             <listheader>
@@ -1507,6 +1520,7 @@
           </list>
         </para>
       </summary>
+        <remarks>Deprecated since 4.14.0</remarks>
     </WeakPasswordEnabled>
 
     <UseS3Storage>
@@ -1515,15 +1529,55 @@
       </summary>
     </UseS3Storage>
 
+      <S3TagsEnabled>
+          <summary>
+              Is <c>true</c> if S3 tags are enabled. Otherwise <c>false</c>.
+          </summary>
+      </S3TagsEnabled>
+
+      <HideLoginInputFields>
+          <summary>
+              Is <c>true</c> if the input fields should be hidden. Otherwise <c>false</c>.
+          </summary>
+      </HideLoginInputFields>
+
+      <AuthTokenRestrictions>
+          <summary>
+              This model stores the restrictions for OAuth tokens.
+          </summary>
+      </AuthTokenRestrictions>
+
+  </members>
+
+  <members name="authTokenRestrictions">
+
+      <AuthTokenRestrictions>
+      <summary>
+          This model stores the restrictions for OAuth tokens.
+      </summary>
+    </AuthTokenRestrictions>
+
+      <RestrictionEnabled>
+          <summary>
+              Is <c>true</c> if OAuth token restrictions are enabled. Otherwise <c>false</c>.
+          </summary>
+      </RestrictionEnabled>
+
+      <AccessTokenValidity>
+          <summary>
+              The restricted OAuth access token validity (in seconds).
+          </summary>
+      </AccessTokenValidity>
+
+      <RefreshTokenValidity>
+          <summary>
+              The restricted OAuth refresh token validity (in seconds).
+          </summary>
+      </RefreshTokenValidity>
+
   </members>
 
   <members name="serverInfrastructureSettings">
-
-    <ServerInfrastructureSettings>
-      <summary>
-        This model stores informations about the infrastructure configuration of the server.
-      </summary>
-    </ServerInfrastructureSettings>
 
     <SmsConfigEnabled>
       <summary>
@@ -1548,6 +1602,18 @@
         Is <c>true</c> if s3 direct upload must be used and a normal proxied upload isn possible. Otherwise <c>false</c>.
       </summary>
     </S3EnforceDirectUpload>
+
+      <DracoonCloud>
+          <summary>
+              Is <c>true</c> if DRACOON is used in the cloud environment, and <c>false</c> for OnPremises deployments.
+          </summary>
+      </DracoonCloud>
+
+      <TenantUuid>
+          <summary>
+              The unique identifier of the DRACOON customer tenant.
+          </summary>
+      </TenantUuid>
 
   </members>
 

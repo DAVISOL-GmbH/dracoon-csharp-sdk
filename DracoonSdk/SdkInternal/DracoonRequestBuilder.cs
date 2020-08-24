@@ -719,12 +719,38 @@ namespace Dracoon.Sdk.SdkInternal {
 
         #endregion
 
-        #region System-Settings-Endpoint
+        #region System-Settings-Config-Endpoint
 
         #region GET
 
         IRestRequest IRequestBuilder.GetAuthenticationSettings() {
             RestRequest request = new RestRequest(ApiConfig.ApiGetAuthenticationConfig, Method.GET);
+            SetGeneralRestValues(request, true);
+            return request;
+        }
+
+        #endregion
+
+        #endregion
+
+        #region System-Auth-Config-Endpoint
+
+        #region GET
+
+        IRestRequest IRequestBuilder.GetAuthActiveDirectorySettings() {
+            RestRequest request = new RestRequest(ApiConfig.ApiGetAuthActiveDirectorySettings, Method.GET);
+            SetGeneralRestValues(request, true);
+            return request;
+        }
+
+        IRestRequest IRequestBuilder.GetAuthOpenIdIdpSettings() {
+            RestRequest request = new RestRequest(ApiConfig.ApiGetAuthOpenIdIdpSettings, Method.GET);
+            SetGeneralRestValues(request, true);
+            return request;
+        }
+
+        IRestRequest IRequestBuilder.GetAuthRadiusSettings() {
+            RestRequest request = new RestRequest(ApiConfig.ApiGetAuthRadiusSettings, Method.GET);
             SetGeneralRestValues(request, true);
             return request;
         }

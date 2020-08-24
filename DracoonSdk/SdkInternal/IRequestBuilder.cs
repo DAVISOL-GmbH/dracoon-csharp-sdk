@@ -186,6 +186,12 @@ namespace Dracoon.Sdk.SdkInternal {
 
         IRestRequest GetAuthenticationSettings();
 
+        IRestRequest GetAuthActiveDirectorySettings();
+
+        IRestRequest GetAuthOpenIdIdpSettings();
+
+        IRestRequest GetAuthRadiusSettings();
+
         #endregion
 
         #region Groups

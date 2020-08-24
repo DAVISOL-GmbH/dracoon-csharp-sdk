@@ -1,6 +1,8 @@
-using System.Collections.Generic;
 using System;
+using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
+using Dracoon.Sdk.Error;
 using Dracoon.Sdk.Model;
 using Dracoon.Sdk.SdkInternal.ApiModel;
 using Dracoon.Sdk.SdkInternal.Util;
@@ -19,9 +21,26 @@ namespace Dracoon.Sdk.SdkInternal.Mapper {
                 MediaServerEnabled = apiGeneralConfig.MediaServerEnabled,
                 SharePasswordSmsEnabled = apiGeneralConfig.SharePasswordSmsEnabled,
                 UseS3Storage = apiGeneralConfig.UseS3Storage,
-                WeakPasswordEnabled = apiGeneralConfig.WeakPasswordEnabled
+                WeakPasswordEnabled = apiGeneralConfig.WeakPasswordEnabled,
+                S3TagsEnabled = apiGeneralConfig.S3TagsEnabled,
+                HideLoginInputFields = apiGeneralConfig.HideLoginInputFields,
+                AuthTokenRestrictions = FromApiAuthTokenRestrictions(apiGeneralConfig.AuthTokenRestrictions)
             };
             return general;
+        }
+
+        internal static AuthTokenRestrictions FromApiAuthTokenRestrictions(ApiAuthTokenRestrictions apiAuthTokenRestrictions) {
+            if (apiAuthTokenRestrictions == null) {
+                return null;
+            }
+
+            AuthTokenRestrictions authTokenRestrictions = new AuthTokenRestrictions {
+                RestrictionEnabled = apiAuthTokenRestrictions.RestrictionEnabled,
+                AccessTokenValidity = apiAuthTokenRestrictions.AccessTokenValidity,
+                RefreshTokenValidity = apiAuthTokenRestrictions.RefreshTokenValidity
+            };
+
+            return authTokenRestrictions;
         }
 
         internal static ServerInfrastructureSettings FromApiInfrastructureSettings(ApiInfrastructureSettings apiInfrastructureConfig) {
@@ -33,7 +52,9 @@ namespace Dracoon.Sdk.SdkInternal.Mapper {
                 MediaServerConfigEnabled = apiInfrastructureConfig.MediaServerConfigEnabled,
                 S3DefaultRegion = apiInfrastructureConfig.S3DefaultRegion,
                 SmsConfigEnabled = apiInfrastructureConfig.SmsConfigEnabled,
-                S3EnforceDirectUpload = apiInfrastructureConfig.S3EnforceDirectUpload
+                S3EnforceDirectUpload = apiInfrastructureConfig.S3EnforceDirectUpload,
+                DracoonCloud = apiInfrastructureConfig.DracoonCloud,
+                TenantUuid = apiInfrastructureConfig.TenantUuid
             };
             return infrastructure;
         }
@@ -44,10 +65,12 @@ namespace Dracoon.Sdk.SdkInternal.Mapper {
             }
 
             ServerDefaultSettings defaults = new ServerDefaultSettings {
-                LanguageDefault = apiDefaultsConfig.LanguageDefault,
+                LanguageDefault = string.IsNullOrEmpty(apiDefaultsConfig.LanguageDefault) ? CultureInfo.InvariantCulture : CultureInfo.GetCultureInfo(apiDefaultsConfig.LanguageDefault),
                 DownloadShareDefaultExpirationPeriodInDays = apiDefaultsConfig.DownloadShareDefaultExpirationPeriodInDays,
                 FileUploadDefaultExpirationPeriodInDays = apiDefaultsConfig.FileUploadDefaultExpirationPeriodInDays,
-                UploadShareDefaultExpirationPeriodInDays = apiDefaultsConfig.UploadShareDefaultExpirationPeriodInDays
+                UploadShareDefaultExpirationPeriodInDays = apiDefaultsConfig.UploadShareDefaultExpirationPeriodInDays,
+                NonmemberViewerDefault = apiDefaultsConfig.NonmemberViewerDefault,
+                HideLoginInputFields = apiDefaultsConfig.HideLoginInputFields
             };
             return defaults;
         }
@@ -236,5 +259,122 @@ namespace Dracoon.Sdk.SdkInternal.Mapper {
             return authMethod;
         }
 
+        internal static ActiveDirectoryConfigList FromApiActiveDirectoryConfigList(ApiActiveDirectoryConfigList apiActiveDirectoryConfigList) {
+            if (apiActiveDirectoryConfigList == null) {
+                return null;
+            }
+
+            ActiveDirectoryConfigList activeDirectoryConfigList = new ActiveDirectoryConfigList();
+            CommonMapper.FromApiSimpleList(apiActiveDirectoryConfigList, activeDirectoryConfigList, FromApiActiveDirectoryConfig);
+            return activeDirectoryConfigList;
+        }
+
+        internal static ActiveDirectoryConfig FromApiActiveDirectoryConfig(ApiActiveDirectoryConfig apiActiveDirectoryConfig) {
+            if (apiActiveDirectoryConfig == null) {
+                return null;
+            }
+
+            ActiveDirectoryConfig activeDirectoryConfig = new ActiveDirectoryConfig {
+                Id = apiActiveDirectoryConfig.Id,
+                Name = apiActiveDirectoryConfig.Name,
+                ServerIp = apiActiveDirectoryConfig.ServerIp,
+                ServerPort = apiActiveDirectoryConfig.ServerPort,
+                ServerAdminName = apiActiveDirectoryConfig.ServerAdminName,
+                LdapUsersDomain = apiActiveDirectoryConfig.LdapUsersDomain,
+                UserFilter = apiActiveDirectoryConfig.UserFilter,
+                UserImport = apiActiveDirectoryConfig.UserImport,
+                AdExportGroup = apiActiveDirectoryConfig.AdExportGroup,
+                UseLdaps = apiActiveDirectoryConfig.UseLdaps,
+                UserImportGroupId = apiActiveDirectoryConfig.UserImportGroupId,
+                SslFingerprint = apiActiveDirectoryConfig.SslFingerprint
+            };
+
+            return activeDirectoryConfig;
+        }
+
+        internal static OpenIdIdpConfigList FromApiOpenIdIpdConfigs(IEnumerable<ApiOpenIdIdpConfig> apiOpenIdIdpConfigs) {
+            if (apiOpenIdIdpConfigs == null) {
+                return null;
+            }
+
+            OpenIdIdpConfigList openIdIdpConfigList = new OpenIdIdpConfigList {
+                Items = apiOpenIdIdpConfigs.Select(FromApiOpenIdIdpConfig).ToArray()
+            };
+
+            return openIdIdpConfigList;
+        }
+
+        internal static OpenIdIdpConfig FromApiOpenIdIdpConfig(ApiOpenIdIdpConfig apiOpenIdIdpConfig) {
+            if (apiOpenIdIdpConfig == null) {
+                return null;
+            }
+
+            OpenIdIdpConfig openIdIdpConfig = new OpenIdIdpConfig {
+                Id = apiOpenIdIdpConfig.Id,
+                Name = apiOpenIdIdpConfig.Name,
+                Issuer = apiOpenIdIdpConfig.Issuer,
+                AuthorizationEndPointUrl = apiOpenIdIdpConfig.AuthorizationEndPointUrl,
+                TokenEndPointUrl = apiOpenIdIdpConfig.TokenEndPointUrl,
+                UserInfoEndPointUrl = apiOpenIdIdpConfig.UserInfoEndPointUrl,
+                JwksEndPointUrl = apiOpenIdIdpConfig.JwksEndPointUrl,
+                ClientId = apiOpenIdIdpConfig.ClientId,
+                ClientSecret = apiOpenIdIdpConfig.ClientSecret,
+                Flow = FromApiAuthFlowType(apiOpenIdIdpConfig.Flow),
+                Scopes = apiOpenIdIdpConfig.Scopes?.ToArray(),
+                RedirectUris = apiOpenIdIdpConfig.RedirectUris?.ToArray(),
+                PkceEnabled = apiOpenIdIdpConfig.PkceEnabled,
+                PkceChallengeMethod = apiOpenIdIdpConfig.PkceChallengeMethod,
+                MappingClaim = apiOpenIdIdpConfig.MappingClaim,
+                FallbackMappingClaim = apiOpenIdIdpConfig.FallbackMappingClaim,
+                UserImportEnabled = apiOpenIdIdpConfig.UserImportEnabled,
+                UserImportGroupId = apiOpenIdIdpConfig.UserImportGroupId,
+                UserUpdateEnabled = apiOpenIdIdpConfig.UserUpdateEnabled,
+                UserManagementUrl = apiOpenIdIdpConfig.UserManagementUrl
+            };
+
+            return openIdIdpConfig;
+        }
+
+        private static AuthFlowType FromApiAuthFlowType(string flow) {
+            if (StringComparer.OrdinalIgnoreCase.Equals(flow, "authorization_code"))
+                return AuthFlowType.AuthorizationCode;
+            if (StringComparer.OrdinalIgnoreCase.Equals(flow, "authorization_code"))
+                return AuthFlowType.AuthorizationCode;
+#if DEBUG
+            throw new DracoonException($"Unknwon auth flow type {flow}!");
+#else
+            return AuthFlowType.None;
+#endif
+        }
+
+        internal static RadiusConfig FromApiRadiusConfig(ApiRadiusConfig apiRadiusConfig) {
+            if (apiRadiusConfig == null) {
+                return null;
+            }
+
+            RadiusConfig radiusConfig = new RadiusConfig {
+                IpAddress = apiRadiusConfig.IpAddress,
+                Port = apiRadiusConfig.Port,
+                OtpPinFirst = apiRadiusConfig.OtpPinFirst,
+                SharedSecret = apiRadiusConfig.SharedSecret,
+                FailoverServer = FromApiFailoverServer(apiRadiusConfig.FailoverServer)
+            };
+
+            return radiusConfig;
+        }
+
+        internal static FailoverServer FromApiFailoverServer(ApiFailoverServer apiFailoverServer) {
+            if (apiFailoverServer == null) {
+                return null;
+            }
+
+            FailoverServer failoverServer = new FailoverServer {
+                FailoverEnabled = apiFailoverServer.FailoverEnabled,
+                FailoverIpAddress = apiFailoverServer.FailoverIpAddress,
+                FailoverPort = apiFailoverServer.FailoverPort
+            };
+
+            return failoverServer;
+        }
     }
 }

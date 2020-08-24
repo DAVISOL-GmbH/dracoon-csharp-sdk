@@ -1,4 +1,4 @@
-﻿using Newtonsoft.Json;
+using Newtonsoft.Json;
 
 namespace Dracoon.Sdk.SdkInternal.ApiModel {
     internal class ApiGeneralSettings {
@@ -22,5 +22,14 @@ namespace Dracoon.Sdk.SdkInternal.ApiModel {
 
         [JsonProperty("useS3Storage", NullValueHandling = NullValueHandling.Ignore)]
         public bool UseS3Storage { get; set; }
+
+        [JsonProperty("s3TagsEnabled", NullValueHandling = NullValueHandling.Ignore)]
+        public bool S3TagsEnabled { get; set; }
+
+        [JsonProperty("hideLoginInputFields", NullValueHandling = NullValueHandling.Ignore)]
+        public bool HideLoginInputFields { get; set; }
+
+        [JsonProperty("authTokenRestrictions", NullValueHandling = NullValueHandling.Ignore)]
+        public ApiAuthTokenRestrictions AuthTokenRestrictions { get; set; }
     }
 }

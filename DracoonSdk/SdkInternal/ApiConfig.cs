@@ -174,12 +174,16 @@ namespace Dracoon.Sdk.SdkInternal {
 
         #region Config-Endpoint
 
+        internal const string ApiSystemConfigPrefix = ApiPrefix + "/system/config";
+
+        internal const string ApiConfigSettingsPrefix = ApiSystemConfigPrefix + "/settings";
+
         #region GET
 
-        internal const string ApiGetGeneralConfig = ApiPrefix + "/config/info/general";
-        internal const string ApiGetInfrastructureConfig = ApiPrefix + "/config/info/infrastructure";
-        internal const string ApiGetDefaultsConfig = ApiPrefix + "/config/info/defaults";
-        internal const string ApiGetPasswordPolicies = ApiPrefix + "/config/info/policies/passwords";
+        internal const string ApiGetGeneralConfig = ApiConfigSettingsPrefix + "/general";
+        internal const string ApiGetInfrastructureConfig = ApiConfigSettingsPrefix + "/infrastructure";
+        internal const string ApiGetDefaultsConfig = ApiConfigSettingsPrefix + "/defaults";
+        internal const string ApiGetPasswordPolicies = ApiSystemConfigPrefix + "/policies/passwords";
 
         #endregion
 
@@ -205,7 +209,23 @@ namespace Dracoon.Sdk.SdkInternal {
 
         #region GET
 
-        internal const string ApiGetAuthenticationConfig = ApiPrefix + "/system/config/settings/auth";
+        internal const string ApiGetAuthenticationConfig = ApiConfigSettingsPrefix + "/auth";
+
+        #endregion
+
+        #endregion
+
+        #region System-Auth-Config-Endpoint
+
+        private const string ApiSystemAuthConfigPrefix = ApiSystemConfigPrefix + "/auth";
+
+        #region GET
+
+        internal const string ApiGetAuthActiveDirectorySettings = ApiSystemAuthConfigPrefix + "/ads";
+
+        internal const string ApiGetAuthOpenIdIdpSettings = ApiSystemAuthConfigPrefix + "/openid/idps";
+
+        internal const string ApiGetAuthRadiusSettings = ApiSystemAuthConfigPrefix + "/radius";
 
         #endregion
 

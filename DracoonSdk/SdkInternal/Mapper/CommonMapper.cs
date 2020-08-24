@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Dracoon.Sdk.Model;
 using Dracoon.Sdk.SdkInternal.ApiModel;
 using Dracoon.Sdk.SdkInternal.ApiModel.Common;
@@ -117,8 +118,10 @@ namespace Dracoon.Sdk.SdkInternal.Mapper {
             }
 
             List<T> items = new List<T>();
-            foreach (TApi currentItem in apiSimpleList.Items) {
-                items.Add(convertFunc(currentItem));
+            if (apiSimpleList.Items?.Any() ?? false) {
+                foreach (TApi currentItem in apiSimpleList.Items) {
+                    items.Add(convertFunc(currentItem));
+                }
             }
             newList.Items = items.ToArray();
             return newList;

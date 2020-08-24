@@ -1,4 +1,6 @@
-﻿namespace Dracoon.Sdk.Model {
+using System;
+
+namespace Dracoon.Sdk.Model {
     /// <include file = "ModelDoc.xml" path='docs/members[@name="serverGeneralSettings"]/ServerGeneralSettings/*'/>
     public class ServerGeneralSettings {
         /// <include file = "ModelDoc.xml" path='docs/members[@name="serverGeneralSettings"]/SharePasswordSmsEnabled/*'/>
@@ -14,12 +16,23 @@
         public bool EulaEnabled { get; internal set; }
 
         /// <include file = "ModelDoc.xml" path='docs/members[@name="serverGeneralSettings"]/MediaServerEnabled/*'/>
+        [Obsolete("Deprecated since 4.12.0")]
         public bool MediaServerEnabled { get; internal set; }
 
         /// <include file = "ModelDoc.xml" path='docs/members[@name="serverGeneralSettings"]/WeakPasswordEnabled/*'/>
+        [Obsolete("Deprecated since 4.14.0")]
         public bool WeakPasswordEnabled { get; internal set; }
 
         /// <include file = "ModelDoc.xml" path='docs/members[@name="serverGeneralSettings"]/UseS3Storage/*'/>
         public bool UseS3Storage { get; internal set; }
+
+        /// <include file = "ModelDoc.xml" path='docs/members[@name="serverGeneralSettings"]/S3TagsEnabled/*'/>
+        public bool S3TagsEnabled { get; internal set; }
+
+        /// <include file = "ModelDoc.xml" path='docs/members[@name="serverGeneralSettings"]/HideLoginInputFields/*'/>
+        public bool HideLoginInputFields { get; internal set; }
+
+        /// <include file = "ModelDoc.xml" path='docs/members[@name="serverGeneralSettings"]/AuthTokenRestrictions/*'/>
+        public AuthTokenRestrictions AuthTokenRestrictions { get; internal set; }
     }
 }

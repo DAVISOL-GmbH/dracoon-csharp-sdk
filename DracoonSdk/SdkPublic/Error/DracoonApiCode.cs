@@ -1,6 +1,5 @@
-﻿
+
 using System;
-using System.Collections.Generic;
 
 namespace Dracoon.Sdk.Error {
     /// <include file = "ErrorDoc.xml" path='docs/members[@name="dracoonApiCode"]/DracoonApiCode/*'/>
@@ -181,6 +180,8 @@ namespace Dracoon.Sdk.Error {
         public static readonly DracoonApiCode VALIDATION_PASSWORT_NOT_SECURE = new DracoonApiCode(3800, "Password is not secure.");
         // CODES: -80009
         public static readonly DracoonApiCode VALIDATION_INVALID_EMAIL_ADDRESS = new DracoonApiCode(3801, "Invalid email address.");
+        // CODES: -90072
+        public static readonly DracoonApiCode RADIUS_CONFIG_NOT_FOUND = new DracoonApiCode(3802, "RADIUS configuration not found.");
 
         #endregion
 
@@ -382,7 +383,7 @@ namespace Dracoon.Sdk.Error {
                 return false;
             }
 
-            return Equals((DracoonApiCode) obj);
+            return Equals((DracoonApiCode)obj);
         }
     }
 }

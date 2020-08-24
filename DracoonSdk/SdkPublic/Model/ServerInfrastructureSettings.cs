@@ -1,4 +1,6 @@
-﻿
+
+using System;
+
 namespace Dracoon.Sdk.Model {
     /// <include file = "ModelDoc.xml" path='docs/members[@name="serverInfrastructureSettings"]/serverInfrastructureSettings/*'/>
     public class ServerInfrastructureSettings {
@@ -20,6 +22,16 @@ namespace Dracoon.Sdk.Model {
 
         /// <include file = "ModelDoc.xml" path='docs/members[@name="serverInfrastructureSettings"]/S3EnforceDirectUpload/*'/>
         public bool S3EnforceDirectUpload {
+            get; internal set;
+        }
+
+        /// <include file = "ModelDoc.xml" path='docs/members[@name="serverInfrastructureSettings"]/DracoonCloud/*'/>
+        public bool DracoonCloud {
+            get; internal set;
+        }
+
+        /// <include file = "ModelDoc.xml" path='docs/members[@name="serverInfrastructureSettings"]/TenantUuid/*'/>
+        public Guid TenantUuid {
             get; internal set;
         }
     }
