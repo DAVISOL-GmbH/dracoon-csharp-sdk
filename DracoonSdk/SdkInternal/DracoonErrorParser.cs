@@ -39,7 +39,7 @@ namespace Dracoon.Sdk.SdkInternal {
             try {
                 ApiErrorResponse apiError = JsonConvert.DeserializeObject<ApiErrorResponse>(errorResponseBody);
                 if (apiError != null) {
-                    _client.Log.Debug(LogTag, apiError.ToString());
+                    _client.Log.Error(LogTag, apiError.ToString());
                 }
 
                 return apiError;
@@ -61,7 +61,7 @@ namespace Dracoon.Sdk.SdkInternal {
         internal void ParseError(IRestResponse response, RequestType requestType) {
             ApiErrorResponse apiError = GetApiErrorResponse(response.Content);
             DracoonApiCode resultCode = Parse((int)response.StatusCode, response, apiError, requestType);
-            _client.Log.Debug(LogTag, $"Query for '{requestType.ToString()}' failed with '{resultCode.Text}'");
+            _client.Log.Error(LogTag, $"Query for '{requestType.ToString()}' failed with '{resultCode.Text}'");
 
             throw new DracoonApiException(resultCode);
         }
@@ -127,6 +127,11 @@ namespace Dracoon.Sdk.SdkInternal {
             switch (apiErrorCode) {
                 case -10002:
                     return DracoonApiCode.VALIDATION_PASSWORT_NOT_SECURE;
+                case -10100:
+                    return DracoonApiCode.VALIDATION_INVALID_AUTH_METHOD;
+                case -10102:
+                    return DracoonApiCode.VALIDATION_MISSING_AUTH_METHOD;
+
                 case -40001 when requestType == RequestType.PostCopyNodes || requestType == RequestType.PostMoveNodes:
                     return DracoonApiCode.VALIDATION_SOURCE_ROOM_ENCRYPTED;
                 case -40001:
@@ -182,12 +187,17 @@ namespace Dracoon.Sdk.SdkInternal {
                 case -70022:
                 case -70023:
                     return DracoonApiCode.VALIDATION_USER_KEY_PAIR_INVALID;
+                case -70106:
+                    return DracoonApiCode.VALIDATION_NOTSINGLE_AUTH_METHOD;
+
                 case -80000:
                     return DracoonApiCode.VALIDATION_FIELD_CANNOT_BE_EMPTY;
                 case -80001:
                     return DracoonApiCode.VALIDATION_FIELD_NOT_POSITIVE;
                 case -80003:
                     return DracoonApiCode.VALIDATION_FIELD_NOT_ZERO_POSITIVE;
+                case -80005:
+                    return DracoonApiCode.VALIDATION_FIELD_NOT_BOOLEAN;
                 case -80006:
                     return DracoonApiCode.VALIDATION_EXPIRATION_DATE_IN_PAST;
                 case -80007:
@@ -205,16 +215,25 @@ namespace Dracoon.Sdk.SdkInternal {
                     return DracoonApiCode.VALIDATION_INVALID_CHARACTERS_CONTAINED;
                 case -80024:
                     return DracoonApiCode.VALIDATION_INVALID_OFFSET_OR_LIMIT;
+                case -80028:
+                    return DracoonApiCode.VALIDATION_FIELD_NOT_NULL;
                 case -80030:
                     return DracoonApiCode.SERVER_SMS_IS_DISABLED;
                 case -80034:
                     return DracoonApiCode.VALIDATION_KEEPSHARELINKS_ONLY_WITH_OVERWRITE;
                 case -80035:
                     return DracoonApiCode.VALIDATION_FIELD_NOT_BETWEEN_0_10;
+                case -80038:
+                    return DracoonApiCode.VALIDATION_INITAL_PASSWORD_DEACTIVATED_METHOD;
                 case -80045:
                     return DracoonApiCode.VALIDATION_INVALID_ETAG;
+
+                case -90002:
+                    return DracoonApiCode.VALIDATION_NO_DISTINCT_AUTH_CONFIG;
                 case -90033:
                     return DracoonApiCode.SERVER_S3_IS_ENFORCED;
+                case -90059:
+                    return DracoonApiCode.VALIDATION_MISSING_AD_AUTH_CONFIG;
                 default:
                     return DracoonApiCode.VALIDATION_UNKNOWN_ERROR;
             }
@@ -246,6 +265,8 @@ namespace Dracoon.Sdk.SdkInternal {
                     return DracoonApiCode.SERVER_USER_KEY_PAIR_NOT_FOUND;
                 case -40761:
                     return DracoonApiCode.SERVER_FILE_KEY_NOT_FOUND;
+                case -70505:
+                    return DracoonApiCode.SERVER_USER_QUOTA_REACHED;
                 default: {
                         switch (requestType) {
                             case RequestType.DeleteNodes:
@@ -323,6 +344,12 @@ namespace Dracoon.Sdk.SdkInternal {
                     return DracoonApiCode.SERVER_ATTRIBUTE_NOT_FOUND;
                 case -90034:
                     return DracoonApiCode.SERVER_S3_UPLOAD_ID_NOT_FOUND;
+                case -90035:
+                    return DracoonApiCode.SERVER_OPENID_IDP_CONFIG_NOT_FOUND;
+                case -90050:
+                    return DracoonApiCode.SERVER_ACTIVE_DIRECTORY_CONFIG_NOT_FOUND;
+                case -90059:
+                    return DracoonApiCode.SERVER_OPENID_IDP_CONFIG_INVALID;
                 case -90072:
                     return DracoonApiCode.RADIUS_CONFIG_NOT_FOUND;
                 default:
@@ -340,6 +367,16 @@ namespace Dracoon.Sdk.SdkInternal {
                     return DracoonApiCode.VALIDATION_CANNOT_COPY_TO_CHILD;
                 case -70021:
                     return DracoonApiCode.SERVER_USER_KEY_PAIR_ALREADY_SET;
+                case -70560:
+                    return DracoonApiCode.VALIDATION_USER_BASIC_AUTH_NAME_IN_USE;
+                case -70561:
+                    return DracoonApiCode.VALIDATION_USER_ACTIVE_DIRECTORY_AUTH_NAME_IN_USE;
+                case -70562:
+                    return DracoonApiCode.VALIDATION_USER_RADIUS_AUTH_NAME_IN_USE;
+                case -70563:
+                    return DracoonApiCode.VALIDATION_USER_OPENID_AUTH_NAME_IN_USE;
+                case -70564:
+                    return DracoonApiCode.VALIDATION_USER_NAME_ALREADY_EXISTS;
                 default: {
                         switch (requestType) {
                             case RequestType.PostRoom:

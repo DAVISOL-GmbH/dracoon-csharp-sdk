@@ -15,7 +15,7 @@ namespace Dracoon.Sdk.SdkInternal.ApiModel {
             get; internal set;
         }
         [JsonProperty("mustChangePassword", NullValueHandling = NullValueHandling.Ignore)]
-        public bool MustChangePassword {
+        public bool? MustChangePassword {
             get; internal set;
         }
         [JsonProperty("adConfigId", NullValueHandling = NullValueHandling.Ignore)]

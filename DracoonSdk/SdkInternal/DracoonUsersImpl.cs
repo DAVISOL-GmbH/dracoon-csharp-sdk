@@ -18,13 +18,11 @@ namespace Dracoon.Sdk.SdkInternal {
         internal const string Logtag = nameof(DracoonUsersImpl);
         private readonly IInternalDracoonClient _client;
 
-        internal DracoonUsersImpl(IInternalDracoonClient client)
-        {
+        internal DracoonUsersImpl(IInternalDracoonClient client) {
             _client = client;
         }
 
-        public Image GetUserAvatar(long userId, string avatarUuid)
-        {
+        public Image GetUserAvatar(long userId, string avatarUuid) {
             _client.Executor.CheckApiServerVersion();
 
             #region Parameter Validation
@@ -37,8 +35,7 @@ namespace Dracoon.Sdk.SdkInternal {
             IRestRequest request = _client.Builder.GetUserAvatar(userId, avatarUuid);
             ApiAvatarInfo apiAvatarInfo = _client.Executor.DoSyncApiCall<ApiAvatarInfo>(request, RequestType.GetResourcesAvatar);
 
-            using (WebClient avatarClient = _client.Builder.ProvideAvatarDownloadWebClient())
-            {
+            using (WebClient avatarClient = _client.Builder.ProvideAvatarDownloadWebClient()) {
                 byte[] avatarImageBytes =
                     _client.Executor.ExecuteWebClientDownload(avatarClient, new Uri(apiAvatarInfo.AvatarUri), RequestType.GetResourcesAvatar);
                 MemoryStream ms = new MemoryStream(avatarImageBytes);
@@ -124,7 +121,7 @@ namespace Dracoon.Sdk.SdkInternal {
             _client.Executor.CheckApiServerVersion();
             #region Parameter Validation
             userParams.MustNotNull(nameof(userParams));
-            userParams.UserName.MustNotNullOrEmptyOrWhitespace(nameof(userParams.UserName));
+            //userParams.UserName.MustNotNullOrEmptyOrWhitespace(nameof(userParams.UserName));
             userParams.FirstName.MustNotNullOrEmptyOrWhitespace(nameof(userParams.FirstName));
             userParams.LastName.MustNotNullOrEmptyOrWhitespace(nameof(userParams.LastName));
             #endregion

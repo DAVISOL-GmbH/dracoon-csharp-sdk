@@ -79,6 +79,10 @@ namespace Dracoon.Sdk.Error {
         public static readonly DracoonApiCode VALIDATION_INVALID_OFFSET_OR_LIMIT = new DracoonApiCode(3008, "Invalid offset or limit.");
         // CODES: -80023
         public static readonly DracoonApiCode VALIDATION_INVALID_CHARACTERS_CONTAINED = new DracoonApiCode(3009, "Invalid characters contained.");
+        // CODES: -80005
+        public static readonly DracoonApiCode VALIDATION_FIELD_NOT_BOOLEAN = new DracoonApiCode(3010, "Invalid boolean value.");
+        // CODES: -80028
+        public static readonly DracoonApiCode VALIDATION_FIELD_NOT_NULL = new DracoonApiCode(3011, "Due to existing dependency the input must be null.");
 
         #endregion
         #region NODES
@@ -167,6 +171,16 @@ namespace Dracoon.Sdk.Error {
         public static readonly DracoonApiCode VALIDATION_USER_KEY_PAIR_INVALID = new DracoonApiCode(3551, "Invalid encryption key pair.");
         // CODES: -70761
         public static readonly DracoonApiCode VALIDATION_USER_HAS_NO_FILE_KEY = new DracoonApiCode(3552, "User has no encryption file key.");
+        // CODES: -70560
+        public static readonly DracoonApiCode VALIDATION_USER_BASIC_AUTH_NAME_IN_USE = new DracoonApiCode(3553, "User with provided Basic authentication login already exists.");
+        // CODES: -70561
+        public static readonly DracoonApiCode VALIDATION_USER_ACTIVE_DIRECTORY_AUTH_NAME_IN_USE = new DracoonApiCode(3554, "User with provided Active Directory username already exists.");
+        // CODES: -70562
+        public static readonly DracoonApiCode VALIDATION_USER_RADIUS_AUTH_NAME_IN_USE = new DracoonApiCode(3555, "User with provided RADIUS login already exists.");
+        // CODES: -70563
+        public static readonly DracoonApiCode VALIDATION_USER_OPENID_AUTH_NAME_IN_USE = new DracoonApiCode(3556, "User with provided OpenID Connect username already exists.");
+        // CODES: -70564
+        public static readonly DracoonApiCode VALIDATION_USER_NAME_ALREADY_EXISTS = new DracoonApiCode(3557, "User with provided username already exists.");
 
         #endregion
         #region GROUPS
@@ -182,6 +196,18 @@ namespace Dracoon.Sdk.Error {
         public static readonly DracoonApiCode VALIDATION_INVALID_EMAIL_ADDRESS = new DracoonApiCode(3801, "Invalid email address.");
         // CODES: -90072
         public static readonly DracoonApiCode RADIUS_CONFIG_NOT_FOUND = new DracoonApiCode(3802, "RADIUS configuration not found.");
+        // CODES: -10100
+        public static readonly DracoonApiCode VALIDATION_INVALID_AUTH_METHOD = new DracoonApiCode(3803, "Invalid authentication method.");
+        // CODES: -10102
+        public static readonly DracoonApiCode VALIDATION_MISSING_AUTH_METHOD = new DracoonApiCode(3804, "At least one authentication method must be enabled.");
+        // CODES: -70106
+        public static readonly DracoonApiCode VALIDATION_NOTSINGLE_AUTH_METHOD = new DracoonApiCode(3805, "Only one authentication method allowed.");
+        // CODES: -80038
+        public static readonly DracoonApiCode VALIDATION_INITAL_PASSWORD_DEACTIVATED_METHOD = new DracoonApiCode(3806, "Deactivation of initial password change is only allowed without notification.");
+        // CODES: -90002
+        public static readonly DracoonApiCode VALIDATION_NO_DISTINCT_AUTH_CONFIG = new DracoonApiCode(3807, "No distinct authentication configuration.");
+        // CODES: -90059
+        public static readonly DracoonApiCode VALIDATION_MISSING_AD_AUTH_CONFIG = new DracoonApiCode(3808, "No valid Active Directory configuration found.");
 
         #endregion
 
@@ -249,6 +275,12 @@ namespace Dracoon.Sdk.Error {
         public static readonly DracoonApiCode SERVER_S3_UPLOAD_COMPLETION_FAILED = new DracoonApiCode(5114, "Server failed to complete S3 upload.");
         // CODES: -90027
         public static readonly DracoonApiCode SERVER_S3_CONNECTION_FAILED = new DracoonApiCode(5115, "S3 connection failed.");
+        // CODES: -90035
+        public static readonly DracoonApiCode SERVER_OPENID_IDP_CONFIG_NOT_FOUND = new DracoonApiCode(5116, "OpenID Connect IDP configuration not found.");
+        // CODES: -90059
+        public static readonly DracoonApiCode SERVER_OPENID_IDP_CONFIG_INVALID = new DracoonApiCode(5117, "No valid OpenID Connect IDP configuration found.");
+        // CODES: -90050
+        public static readonly DracoonApiCode SERVER_ACTIVE_DIRECTORY_CONFIG_NOT_FOUND = new DracoonApiCode(5118, "Active Directory configuration not found.");
         #endregion
 
         #region SHARES
@@ -280,6 +312,8 @@ namespace Dracoon.Sdk.Error {
         public static readonly DracoonApiCode SERVER_USER_AVATAR_NOT_FOUND = new DracoonApiCode(5553, "Avatar for this user could not be found.");
         // CODES: -70550
         public static readonly DracoonApiCode SERVER_ATTRIBUTE_NOT_FOUND = new DracoonApiCode(5554, "Attribute not found.");
+        // CODES: -70505
+        public static readonly DracoonApiCode SERVER_USER_QUOTA_REACHED = new DracoonApiCode(5555, "Maximum number of users reached.");
 
         #endregion
 

@@ -13,7 +13,7 @@ namespace Dracoon.Sdk.Model {
             get; set;
         }
 
-        public bool MustChangePassword {
+        public bool? MustChangePassword {
             get; set;
         }
 
