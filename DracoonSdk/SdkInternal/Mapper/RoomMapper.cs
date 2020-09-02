@@ -7,7 +7,7 @@ namespace Dracoon.Sdk.SdkInternal.Mapper {
     internal static class RoomMapper {
         internal static ApiCreateRoomRequest ToApiCreateRoomRequest(CreateRoomRequest createRoomRequest) {
             ApiCreateRoomRequest apiCreateRoomRequest = new ApiCreateRoomRequest {
-                ParentId = createRoomRequest.ParentId,
+                ParentId = null,
                 Name = createRoomRequest.Name,
                 Quota = createRoomRequest.Quota,
                 Notes = createRoomRequest.Notes,
@@ -17,6 +17,8 @@ namespace Dracoon.Sdk.SdkInternal.Mapper {
                 AdminGroupIds = createRoomRequest.AdminGroupIds,
                 NewGroupMemberAcceptance = EnumConverter.ConvertGroupMemberAcceptanceToValue(createRoomRequest.NewGroupMemberAcceptance)
             };
+            if (createRoomRequest.ParentId != 0)
+                apiCreateRoomRequest.ParentId = createRoomRequest.ParentId;
             return apiCreateRoomRequest;
         }
 
