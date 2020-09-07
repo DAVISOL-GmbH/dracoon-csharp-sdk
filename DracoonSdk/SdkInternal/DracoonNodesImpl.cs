@@ -304,7 +304,7 @@ namespace Dracoon.Sdk.SdkInternal {
             #region Parameter Validation
 
             request.MustNotNull(nameof(request));
-            request.ParentId.MustPositive(nameof(request.ParentId));
+            request.ParentId.MustNotNegative(nameof(request.ParentId));
             request.Name.MustNotNullOrEmptyOrWhitespace(nameof(request.Name));
             request.Quota.NullableMustNotNegative(nameof(request.Quota));
             request.RecycleBinRetentionPeriod.NullableMustNotNegative(nameof(request.RecycleBinRetentionPeriod));
