@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 
 namespace Dracoon.Sdk {
     /// <include file = "SdkPublicDoc.xml" path='docs/members[@name="dracoonAuth"]/DracoonAuth/*'/>
@@ -61,8 +61,10 @@ namespace Dracoon.Sdk {
         }
 
         private static void ValidateParameters(string name, string value, bool nullable = false) {
-            if (value == null && !nullable) {
-                throw new ArgumentNullException(name);
+            if (value == null) {
+                if (!nullable)
+                    throw new ArgumentNullException(name);
+                return;
             }
 
             if (string.IsNullOrWhiteSpace(value)) {
