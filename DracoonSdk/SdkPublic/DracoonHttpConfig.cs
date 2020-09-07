@@ -36,7 +36,7 @@ namespace Dracoon.Sdk {
         }
 
         private static string BuildDefaultUserAgent() {
-            AssemblyName assembly = Assembly.GetExecutingAssembly().GetName();
+            AssemblyName assembly = typeof(DracoonHttpConfig).Assembly.GetName();
             return "CSharp-SDK|" + assembly.Version.Major + "." + assembly.Version.Minor + "." + assembly.Version.Revision + "|" +
                    Environment.OSVersion + "|-|-";
         }
