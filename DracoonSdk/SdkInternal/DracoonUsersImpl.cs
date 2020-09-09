@@ -149,7 +149,7 @@ namespace Dracoon.Sdk.SdkInternal {
             _client.Executor.CheckApiServerVersion();
             #region Parameter Validation
             userId.MustPositive(nameof(userId));
-            NewMethod(userParams);
+            userParams.MustNotNull(nameof(userParams));
             userParams.UserName.MustNotNullOrEmptyOrWhitespace(nameof(userParams.UserName), true);
             userParams.FirstName.MustNotNullOrEmptyOrWhitespace(nameof(userParams.UserName), true);
             userParams.LastName.MustNotNullOrEmptyOrWhitespace(nameof(userParams.UserName), true);
@@ -159,10 +159,6 @@ namespace Dracoon.Sdk.SdkInternal {
             IRestRequest restRequest = _client.Builder.PutUser(userId, apiUpdateUserRequest);
             ApiUserData result = _client.Executor.DoSyncApiCall<ApiUserData>(restRequest, RequestType.PutUser);
             return UserMapper.FromApiUserData(result);
-        }
-
-        private static void NewMethod(UpdateUserRequest userParams) {
-            userParams.MustNotNull(nameof(userParams));
         }
 
         public UserData UpdateUserAttributes(long userId, UserAttributes userAttributeParams) {

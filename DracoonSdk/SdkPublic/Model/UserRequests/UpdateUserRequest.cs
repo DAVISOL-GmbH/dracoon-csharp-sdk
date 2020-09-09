@@ -41,7 +41,7 @@ namespace Dracoon.Sdk.Model {
         }
 
         public UserAuthDataUpdateRequest AuthData {
-            get; private set;
-        } = new UserAuthDataUpdateRequest();
+            get; set;
+        };
     }
 }
