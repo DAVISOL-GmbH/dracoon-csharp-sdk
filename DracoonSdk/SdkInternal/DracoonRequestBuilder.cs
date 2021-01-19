@@ -860,12 +860,15 @@ namespace Dracoon.Sdk.SdkInternal {
 
         #region GET
 
-        IRestRequest IRequestBuilder.GetUsers(bool? includeAttributes = null, long? offset = null, long? limit = null, GetUsersFilter filter = null, UsersSort sort = null) {
+        IRestRequest IRequestBuilder.GetUsers(bool? includeAttributes = null, bool? includeRoles = null, bool? includeHasManageableRooms = null, long? offset = null, long? limit = null, GetUsersFilter filter = null, UsersSort sort = null) {
             RestRequest request = new RestRequest(ApiConfig.ApiGetUsers, Method.GET);
             SetGeneralRestValues(request, true);
             AddFilters(filter, request);
             AddSort(sort, request);
             AddFlag(request, "include_attributes", includeAttributes);
+            AddFlag(request, "include_user_attributes", includeAttributes);
+            AddFlag(request, "include_user_roles", includeRoles);
+            AddFlag(request, "include_manageable_rooms", includeHasManageableRooms);
             if (offset.HasValue)
                 request.AddQueryParameter("offset", offset.ToString());
             if (limit.HasValue)

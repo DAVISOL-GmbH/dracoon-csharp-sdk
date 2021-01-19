@@ -220,7 +220,7 @@ namespace Dracoon.Sdk.SdkInternal {
 
         #region Users
 
-        IRestRequest GetUsers(bool? includeAttributes = null, long? offset = null, long? limit = null, GetUsersFilter filter = null, UsersSort sort = null);
+        IRestRequest GetUsers(bool? includeAttributes = null, bool? includeRoles = null, bool? includeHasManageableRooms = null, long? offset = null, long? limit = null, GetUsersFilter filter = null, UsersSort sort = null);
 
         IRestRequest GetUser(long userId, bool? effectiveRoles = null);
 

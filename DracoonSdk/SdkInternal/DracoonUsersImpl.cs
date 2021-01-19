@@ -46,14 +46,14 @@ namespace Dracoon.Sdk.SdkInternal {
 
         #region User services
 
-        public UserList GetUsers(bool? includeAttributes = null, long? offset = null, long? limit = null, GetUsersFilter filter = null, UsersSort sort = null) {
+        public UserList GetUsers(bool? includeAttributes = null, bool? includeRoles = null, bool? includeHasManageableRooms = null, long? offset = null, long? limit = null, GetUsersFilter filter = null, UsersSort sort = null) {
             _client.Executor.CheckApiServerVersion();
             #region Parameter Validation
             offset.NullableMustNotNegative(nameof(offset));
             limit.NullableMustPositive(nameof(limit));
             #endregion
 
-            IRestRequest restRequest = _client.Builder.GetUsers(includeAttributes, offset, limit, filter, sort);
+            IRestRequest restRequest = _client.Builder.GetUsers(includeAttributes, includeRoles, includeHasManageableRooms, offset, limit, filter, sort);
             ApiUserList result = _client.Executor.DoSyncApiCall<ApiUserList>(restRequest, RequestType.GetUsers);
             return UserMapper.FromApiUserList(result);
         }

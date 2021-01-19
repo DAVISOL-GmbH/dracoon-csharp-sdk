@@ -10,7 +10,7 @@ namespace Dracoon.Sdk {
         /// <include file = "SdkPublicInterfacesDoc.xml" path='docs/members[@name="iUsers"]/GetUserAvatar/*'/>
         Image GetUserAvatar(long userId, string avatarUUID);
 
-        UserList GetUsers(bool? includeAttributes = null, long? offset = null, long? limit = null, GetUsersFilter filter = null, UsersSort sort = null);
+        UserList GetUsers(bool? includeAttributes = null, bool? includeRoles = null, bool? includeHasManageableRooms = null, long? offset = null, long? limit = null, GetUsersFilter filter = null, UsersSort sort = null);
 
         UserData GetUser(long userId, bool? effectiveRoles = null);
 
