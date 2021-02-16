@@ -287,7 +287,7 @@ namespace Dracoon.Sdk.SdkInternal {
 
         internal const string ApiGetUsers = ApiUsersPrefix;
         internal const string ApiGetUser = ApiUsersUserIdPrefix;
-        internal const string ApiGetUserGroups = ApiUsersUserIdPrefix + "/users";
+        internal const string ApiGetUserGroups = ApiUsersUserIdPrefix + "/groups";
         internal const string ApiGetUserLastAdminRooms = ApiUsersUserIdPrefix + "/last_admin_rooms";
         internal const string ApiGetUserRoles = ApiUsersUserIdPrefix + "/roles";
         internal const string ApiGetUserUserAttributes = ApiUsersUserIdPrefix + "/userAttributes";
