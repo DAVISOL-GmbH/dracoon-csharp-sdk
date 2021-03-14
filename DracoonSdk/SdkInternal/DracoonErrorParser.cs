@@ -144,6 +144,8 @@ namespace Dracoon.Sdk.SdkInternal {
                     return DracoonApiCode.VALIDATION_ROOM_CANNOT_UNENCRYPTED_WITH_FILES;
                 case -40004:
                     return DracoonApiCode.VALIDATION_ROOM_STILL_HAS_RESCUE_KEY;
+                case -40006:
+                    return DracoonApiCode.VALIDATION_ROOM_REQUIRE_NONEXPIRING_ADMIN_USER_OR_GROUP;
                 case -40008:
                     return DracoonApiCode.VALIDATION_ROOM_CANNOT_ENCRYPTED_WITH_FILES;
                 case -40012:

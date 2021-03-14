@@ -147,6 +147,8 @@ namespace Dracoon.Sdk.Error {
         public static readonly DracoonApiCode VALIDATION_KEEPSHARELINKS_ONLY_WITH_OVERWRITE = new DracoonApiCode(3128, "Keep share links is only allowed with resolution strategy 'overwrite'.");
         // CODES: -80045
         public static readonly DracoonApiCode VALIDATION_INVALID_ETAG = new DracoonApiCode(3129, "Invalid Etag(s).");
+        // CODES: -40006
+        public static readonly DracoonApiCode VALIDATION_ROOM_REQUIRE_NONEXPIRING_ADMIN_USER_OR_GROUP = new DracoonApiCode(3130, "At least one non-expiring admin user / group required.");
 
         #endregion
         #region SHARES
