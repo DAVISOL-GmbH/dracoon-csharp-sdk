@@ -140,7 +140,7 @@ namespace Dracoon.Sdk.SdkInternal {
             return NodeMapper.FromApiNode(result);
         }
 
-        public NodeList SearchNodes(string searchString, long parentNodeId = 0, long offset = 0, long limit = 500, SearchNodesFilter filter = null,
+        public NodeList SearchNodes(string searchString, long parentNodeId = 0, int depthLevel = -1, long offset = 0, long limit = 500, SearchNodesFilter filter = null,
             SearchNodesSort sort = null) {
             _client.Executor.CheckApiServerVersion();
 
@@ -153,7 +153,7 @@ namespace Dracoon.Sdk.SdkInternal {
 
             #endregion
 
-            IRestRequest restRequest = _client.Builder.GetSearchNodes(parentNodeId, searchString, offset, limit, filter: filter, sort: sort);
+            IRestRequest restRequest = _client.Builder.GetSearchNodes(parentNodeId, searchString, offset, limit, depthLevel, filter: filter, sort: sort);
             ApiNodeList result = _client.Executor.DoSyncApiCall<ApiNodeList>(restRequest, RequestType.GetSearchNodes);
             return NodeMapper.FromApiNodeList(result);
         }
