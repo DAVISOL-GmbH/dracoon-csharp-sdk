@@ -868,6 +868,7 @@ namespace Dracoon.Sdk.SdkInternal {
             AddFlag(request, "include_attributes", includeAttributes);
             AddFlag(request, "include_user_attributes", includeAttributes);
             AddFlag(request, "include_user_roles", includeRoles);
+            AddFlag(request, "include_roles", includeRoles);
             AddFlag(request, "include_manageable_rooms", includeHasManageableRooms);
             if (offset.HasValue)
                 request.AddQueryParameter("offset", offset.ToString());
