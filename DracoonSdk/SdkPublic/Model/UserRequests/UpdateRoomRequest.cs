@@ -1,24 +1,16 @@
-﻿namespace Dracoon.Sdk.Model {
-    /// <include file = "UserRequestsDoc.xml" path='docs/members[@name="updateRoomRequest"]/UpdateRoomRequest/*'/>
-    public class UpdateRoomRequest {
-        /// <include file = "UserRequestsDoc.xml" path='docs/members[@name="updateRoomRequest"]/Id/*'/>
-        public long Id { get; private set; }
+using System;
 
-        /// <include file = "UserRequestsDoc.xml" path='docs/members[@name="updateRoomRequest"]/Name/*'/>
-        public string Name { get; set; }
+namespace Dracoon.Sdk.Model {
+    /// <include file = "UserRequestsDoc.xml" path='docs/members[@name="updateRoomRequest"]/UpdateRoomRequest/*'/>
+    public class UpdateRoomRequest : UpdateNodeRequestBase {
 
         /// <include file = "UserRequestsDoc.xml" path='docs/members[@name="updateRoomRequest"]/Quota/*'/>
         public long? Quota { get; set; }
 
-        /// <include file = "UserRequestsDoc.xml" path='docs/members[@name="updateRoomRequest"]/Notes/*'/>
-        public string Notes { get; set; }
-
         /// <include file = "UserRequestsDoc.xml" path='docs/members[@name="updateRoomRequest"]/UpdateRoomRequestConstructor/*'/>
-        public UpdateRoomRequest(long id, string name = null, long? quota = null, string notes = null) {
-            Id = id;
-            Name = name;
+        public UpdateRoomRequest(long id, string name = null, long? quota = null, string notes = null, DateTime? timestampCreation = null, DateTime? timestampModification = null)
+            : base(id, name, notes, timestampCreation, timestampModification) {
             Quota = quota;
-            Notes = notes;
         }
     }
 }

@@ -1,19 +1,13 @@
-﻿using Newtonsoft.Json;
 using System.Collections.Generic;
+using Newtonsoft.Json;
 
 namespace Dracoon.Sdk.SdkInternal.ApiModel.Requests {
-    internal class ApiCreateRoomRequest {
+    internal class ApiCreateRoomRequest : ApiCreateNodeRequestBase {
         [JsonProperty("parentId", NullValueHandling = NullValueHandling.Ignore)]
         public long? ParentId { get; set; }
 
-        [JsonProperty("name", NullValueHandling = NullValueHandling.Ignore)]
-        public string Name { get; set; }
-
         [JsonProperty("quota", NullValueHandling = NullValueHandling.Ignore)]
         public long? Quota { get; set; }
-
-        [JsonProperty("notes", NullValueHandling = NullValueHandling.Ignore)]
-        public string Notes { get; set; }
 
         [JsonProperty("recycleBinRetentionPeriod", NullValueHandling = NullValueHandling.Ignore)]
         public int? RecycleBinRetentionPeriod { get; set; }

@@ -1,4 +1,4 @@
-﻿using Dracoon.Sdk.Model;
+using Dracoon.Sdk.Model;
 using Dracoon.Sdk.SdkInternal.ApiModel.Requests;
 
 namespace Dracoon.Sdk.SdkInternal.Mapper {
@@ -7,7 +7,9 @@ namespace Dracoon.Sdk.SdkInternal.Mapper {
             ApiCreateFolderRequest apiCreateFolderRequest = new ApiCreateFolderRequest {
                 ParentId = createFolderRequest.ParentId,
                 Name = createFolderRequest.Name,
-                Notes = createFolderRequest.Notes
+                Notes = createFolderRequest.Notes,
+                TimestampCreation = createFolderRequest.TimestampCreation,
+                TimestampModification = createFolderRequest.TimestampModification
             };
             return apiCreateFolderRequest;
         }
@@ -15,7 +17,9 @@ namespace Dracoon.Sdk.SdkInternal.Mapper {
         internal static ApiUpdateFolderRequest ToApiUpdateFolderRequest(UpdateFolderRequest updateFolderRequest) {
             ApiUpdateFolderRequest apiUpdateFolderRequest = new ApiUpdateFolderRequest {
                 Name = updateFolderRequest.Name,
-                Notes = updateFolderRequest.Notes
+                Notes = updateFolderRequest.Notes,
+                TimestampCreation = updateFolderRequest.TimestampCreation,
+                TimestampModification = updateFolderRequest.TimestampModification
             };
             return apiUpdateFolderRequest;
         }

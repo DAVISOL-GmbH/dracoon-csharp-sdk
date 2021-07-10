@@ -61,7 +61,9 @@ namespace Dracoon.Sdk.SdkInternal.Mapper {
                 RecycleBinRetentionPeriod = apiNode.RecycleBinRetentionPeriod,
                 CountDownloadShares = apiNode.CountDownloadShares,
                 CountUploadShares = apiNode.CountUploadShares,
-                BranchVersion = apiNode.BranchVersion
+                BranchVersion = apiNode.BranchVersion,
+                TimestampCreation = apiNode.TimestampCreation,
+                TimestampModification = apiNode.TimestampModification
             };
             return node;
         }

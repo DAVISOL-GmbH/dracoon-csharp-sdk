@@ -15,7 +15,9 @@ namespace Dracoon.Sdk.SdkInternal.Mapper {
                 InheritPermissions = createRoomRequest.HasInheritPermissions,
                 AdminIds = createRoomRequest.AdminUserIds,
                 AdminGroupIds = createRoomRequest.AdminGroupIds,
-                NewGroupMemberAcceptance = EnumConverter.ConvertGroupMemberAcceptanceToValue(createRoomRequest.NewGroupMemberAcceptance)
+                NewGroupMemberAcceptance = EnumConverter.ConvertGroupMemberAcceptanceToValue(createRoomRequest.NewGroupMemberAcceptance),
+                TimestampCreation = createRoomRequest.TimestampCreation,
+                TimestampModification = createRoomRequest.TimestampModification
             };
             if (createRoomRequest.ParentId != 0)
                 apiCreateRoomRequest.ParentId = createRoomRequest.ParentId;
@@ -26,7 +28,9 @@ namespace Dracoon.Sdk.SdkInternal.Mapper {
             ApiUpdateRoomRequest apiUpdateRoomRequest = new ApiUpdateRoomRequest {
                 Name = updateRoomRequest.Name,
                 Quota = updateRoomRequest.Quota,
-                Notes = updateRoomRequest.Notes
+                Notes = updateRoomRequest.Notes,
+                TimestampCreation = updateRoomRequest.TimestampCreation,
+                TimestampModification = updateRoomRequest.TimestampModification
             };
             return apiUpdateRoomRequest;
         }

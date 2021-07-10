@@ -1,8 +1,8 @@
-﻿using Newtonsoft.Json;
 using System;
+using Newtonsoft.Json;
 
 namespace Dracoon.Sdk.SdkInternal.ApiModel {
-    internal class ApiNode {
+    internal class ApiNode : ApiTrackExternalModification {
         [JsonProperty("id", NullValueHandling = NullValueHandling.Ignore)]
         public long Id { get; set; }
 

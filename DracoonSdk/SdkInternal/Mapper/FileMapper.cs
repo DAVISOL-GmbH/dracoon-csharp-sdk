@@ -1,4 +1,4 @@
-﻿using Dracoon.Crypto.Sdk.Model;
+using Dracoon.Crypto.Sdk.Model;
 using Dracoon.Sdk.Model;
 using Dracoon.Sdk.SdkInternal.ApiModel;
 using Dracoon.Sdk.SdkInternal.ApiModel.Requests;
@@ -19,7 +19,9 @@ namespace Dracoon.Sdk.SdkInternal.Mapper {
                 Name = updateFileRequest.Name,
                 Notes = updateFileRequest.Notes,
                 Classification = EnumConverter.ConvertClassificationEnumToValue(updateFileRequest.Classification),
-                Expiration = apiExpiration
+                Expiration = apiExpiration,
+                TimestampCreation = updateFileRequest.TimestampCreation,
+                TimestampModification = updateFileRequest.TimestampModification
             };
             return apiUpdateFileRequest;
         }
@@ -58,7 +60,9 @@ namespace Dracoon.Sdk.SdkInternal.Mapper {
                 Name = fileUploadRequest.Name,
                 Classification = EnumConverter.ConvertClassificationEnumToValue(fileUploadRequest.Classification),
                 Notes = fileUploadRequest.Notes,
-                Expiration = apiExpiration
+                Expiration = apiExpiration,
+                TimestampCreation = fileUploadRequest.TimestampCreation,
+                TimestampModification = fileUploadRequest.TimestampModification
             };
             return apiCreateFileUpload;
         }

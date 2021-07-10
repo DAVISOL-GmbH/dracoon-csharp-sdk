@@ -2,7 +2,7 @@
 
 namespace Dracoon.Sdk.Model {
     /// <include file = "ModelDoc.xml" path='docs/members[@name="node"]/Node/*'/>
-    public class Node {
+    public class Node : TrackExternalModificationRequestBase {
         /// <include file = "ModelDoc.xml" path='docs/members[@name="node"]/Id/*'/>
         public long Id { get; internal set; }
 
