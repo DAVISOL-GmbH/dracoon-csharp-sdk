@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 
 namespace Dracoon.Sdk.Model {
     /// <include file = "ModelDoc.xml" path='docs/members[@name="node"]/Node/*'/>
@@ -95,5 +95,7 @@ namespace Dracoon.Sdk.Model {
 
         /// <include file = "ModelDoc.xml" path='docs/members[@name="node"]/BranchVersion/*'/>
         public long? BranchVersion { get; internal set; }
+
+        public long AuthParentId { get; internal set; }
     }
 }
