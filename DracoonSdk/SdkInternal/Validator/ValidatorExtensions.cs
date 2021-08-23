@@ -1,12 +1,12 @@
-using Dracoon.Sdk.Error;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using Dracoon.Sdk.Error;
 
 namespace Dracoon.Sdk.SdkInternal.Validator {
     internal static class ValidatorExtensions {
-        private static readonly string[] InvalidPathChars = {"<", ">", ":", "\"", "|", "?", "*"};
+        private static readonly string[] InvalidPathChars = { "<", ">", ":", "\"", "|", "?", "*" };
 
         internal static void MustNotNull<T>(this T param, string paramName) {
             if (param == null) {
@@ -19,6 +19,13 @@ namespace Dracoon.Sdk.SdkInternal.Validator {
                 throw new ArgumentNullException(paramName);
             }
         }
+
+        internal static void MustNotBeDefault<T>(this T param, string paramName) {
+            if (null == param || param.Equals(default(T))) {
+                throw new ArgumentException(paramName + " must not have a default value.");
+            }
+        }
+
 
         internal static void EnumerableMustNotNullOrEmpty<T>(this IEnumerable<T> param, string paramName) {
             param.MustNotNull(paramName);

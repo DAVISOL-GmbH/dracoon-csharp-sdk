@@ -1,4 +1,4 @@
-﻿namespace Dracoon.Sdk.Filter {
+namespace Dracoon.Sdk.Filter {
     /// <include file="SpecificFilterDoc.xml" path='docs/members[@name="searchNodesFilter"]/SearchNodesFilter/*'/>
     public class SearchNodesFilter : DracoonFilter {
         /// <include file="SpecificFilterDoc.xml" path='docs/members[@name="searchNodesFilter"]/Type/*'/>
@@ -29,10 +29,22 @@
             }
         }
 
+        public static UpdatedAtFilter UpdatedAt {
+            get {
+                return new UpdatedAtFilter();
+            }
+        }
+
         /// <include file="SpecificFilterDoc.xml" path='docs/members[@name="searchNodesFilter"]/CreatedBy/*'/>
         public static CreatedByFilter CreatedBy {
             get {
                 return new CreatedByFilter();
+            }
+        }
+
+        public static CreatedAtFilter CreatedAt {
+            get {
+                return new CreatedAtFilter();
             }
         }
 
@@ -74,6 +86,11 @@
             FiltersList.Add(updatedByFilter);
         }
 
+        public void AddUpdatedAtFilter(DracoonFilterType<UpdatedAtFilter> updatedAtFilter) {
+            CheckFilter(updatedAtFilter, nameof(updatedAtFilter));
+            FiltersList.Add(updatedAtFilter);
+        }
+
         /// <include file="SpecificFilterDoc.xml" path='docs/members[@name="searchNodesFilter"]/AddFileTypeFilter/*'/>
         public void AddFileTypeFilter(DracoonFilterType<FileTypeFilter> fileTypeFilter) {
             CheckFilter(fileTypeFilter, nameof(fileTypeFilter));
@@ -90,6 +107,11 @@
         public void AddCreatedByFilter(DracoonFilterType<CreatedByFilter> createdByFilter) {
             CheckFilter(createdByFilter, nameof(createdByFilter));
             FiltersList.Add(createdByFilter);
+        }
+
+        public void AddCreatedAtFilter(DracoonFilterType<CreatedAtFilter> createdAtFilter) {
+            CheckFilter(createdAtFilter, nameof(createdAtFilter));
+            FiltersList.Add(createdAtFilter);
         }
     }
 }

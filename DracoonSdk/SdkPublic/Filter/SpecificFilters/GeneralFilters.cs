@@ -14,6 +14,8 @@ namespace Dracoon.Sdk.Filter {
         Equals = 1 << 0,
         Contains = 1 << 1,
         StartsWith = 1 << 2,
+        GreaterThanOrEqual = 1 << 8,
+        LessThanOrEqual = 1 << 10
     }
 
     public interface IFilter {
@@ -66,6 +68,15 @@ namespace Dracoon.Sdk.Filter {
         public bool AnyAllowed { get; private set; }
 
         public override FilterOperator DefaultOperators => FilterOperator.Equals;
+    }
+
+    public abstract class DateFilterBase<TFilter> : FilterBase<TFilter> where TFilter : IFilter {
+        internal DateFilterBase(string filterName)
+            : base(filterName) { }
+        internal DateFilterBase(string filterName, FilterOperator filterOperators)
+            : base(filterName, filterOperators) { }
+
+        public override FilterOperator DefaultOperators => FilterOperator.LessThanOrEqual | FilterOperator.GreaterThanOrEqual;
     }
 
     public static class CommonFilterExtension {
@@ -129,6 +140,20 @@ namespace Dracoon.Sdk.Filter {
             value.MustNotNullOrEmptyOrWhitespace(nameof(value));
             ef.AddOperatorAndValue(value, "sw", nameof(value));
             return new FilterParam<TFilter, DracoonFilterType<TFilter>>(ef, ef);
+        }
+    }
+
+
+    public static class DateFilterExtension {
+        public static FilterParam<DateFilterBase<TFilter>, DateFilterBase<TFilter>> GreaterThanOrEqual<TFilter>(this DateFilterBase<TFilter> ef, DateTime date) where TFilter : IFilter {
+            date.MustNotBeDefault(nameof(date));
+            ef.AddOperatorAndValue(date, "ge", nameof(date));
+            return new FilterParam<DateFilterBase<TFilter>, DateFilterBase<TFilter>>(ef, ef);
+        }
+        public static FilterParam<DateFilterBase<TFilter>, DateFilterBase<TFilter>> LessThanOrEqual<TFilter>(this DateFilterBase<TFilter> ef, DateTime date) where TFilter : IFilter {
+            date.MustNotBeDefault(nameof(date));
+            ef.AddOperatorAndValue(date, "le", nameof(date));
+            return new FilterParam<DateFilterBase<TFilter>, DateFilterBase<TFilter>>(ef, ef);
         }
     }
 
@@ -275,6 +300,15 @@ namespace Dracoon.Sdk.Filter {
         }
     }
 
+    #region UpdatedAt-Filter
+
+    public class UpdatedAtFilter : DateFilterBase<UpdatedAtFilter> {
+        internal UpdatedAtFilter() : base("updatedAt") {
+        }
+    }
+
+    #endregion
+
     #endregion
 
     #region ParentPath-Filter
@@ -347,7 +381,7 @@ namespace Dracoon.Sdk.Filter {
         /// <include file="SpecificFilterDoc.xml" path='docs/members[@name="general"]/EqualTo/*'/>
         public static FilterParam<ClassificationFilter, DracoonFilterType<ClassificationFilter>> EqualTo(this ClassificationFilter ef,
             Classification value) {
-            ef.AddOperatorAndValue((int) value, "eq", nameof(value));
+            ef.AddOperatorAndValue((int)value, "eq", nameof(value));
             return new FilterParam<ClassificationFilter, DracoonFilterType<ClassificationFilter>>(ef, ef);
         }
     }
@@ -370,6 +404,24 @@ namespace Dracoon.Sdk.Filter {
             value.MustNotNullOrEmptyOrWhitespace(nameof(value));
             ef.AddOperatorAndValue(value, "cn", nameof(value));
             return new FilterParam<CreatedByFilter, DracoonFilterType<CreatedByFilter>>(ef, ef);
+        }
+    }
+
+    #endregion
+
+    #region CreatedAt-Filter
+
+    public class CreatedAtFilter : DateFilterBase<CreatedAtFilter> {
+        internal CreatedAtFilter() : base("createdAt") {
+        }
+    }
+
+    #endregion
+
+    #region ExpireAt-Filter
+
+    public class ExpireAtFilter : DateFilterBase<ExpireAtFilter> {
+        internal ExpireAtFilter() : base("expireAt") {
         }
     }
 
