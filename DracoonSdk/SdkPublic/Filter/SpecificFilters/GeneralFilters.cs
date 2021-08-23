@@ -147,12 +147,12 @@ namespace Dracoon.Sdk.Filter {
     public static class DateFilterExtension {
         public static FilterParam<DateFilterBase<TFilter>, DateFilterBase<TFilter>> GreaterThanOrEqual<TFilter>(this DateFilterBase<TFilter> ef, DateTime date) where TFilter : IFilter {
             date.MustNotBeDefault(nameof(date));
-            ef.AddOperatorAndValue(date, "ge", nameof(date));
+            ef.AddOperatorAndValue(date.ToString("yyyy-MM-dd"), "ge", nameof(date));
             return new FilterParam<DateFilterBase<TFilter>, DateFilterBase<TFilter>>(ef, ef);
         }
         public static FilterParam<DateFilterBase<TFilter>, DateFilterBase<TFilter>> LessThanOrEqual<TFilter>(this DateFilterBase<TFilter> ef, DateTime date) where TFilter : IFilter {
             date.MustNotBeDefault(nameof(date));
-            ef.AddOperatorAndValue(date, "le", nameof(date));
+            ef.AddOperatorAndValue(date.ToString("yyyy-MM-dd"), "le", nameof(date));
             return new FilterParam<DateFilterBase<TFilter>, DateFilterBase<TFilter>>(ef, ef);
         }
     }
