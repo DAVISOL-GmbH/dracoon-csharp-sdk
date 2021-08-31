@@ -367,6 +367,31 @@ namespace Dracoon.Sdk.Filter {
 
     #endregion
 
+    #region BranchVersion-Filter
+
+    public class BranchVersionFilter : DracoonFilterType<BranchVersionFilter> {
+        internal BranchVersionFilter() {
+            FilterTypeString += "branchVersion";
+        }
+    }
+
+    public static class BranchVersionFilterExtension {
+        /// <include file="SpecificFilterDoc.xml" path='docs/members[@name="general"]/GreaterThanOrEqual/*'/>
+        public static FilterParam<BranchVersionFilter, DracoonFilterType<BranchVersionFilter>> GreaterThanOrEqual(this BranchVersionFilter ef,
+            long value) {
+            ef.AddOperatorAndValue((int)value, "ge", nameof(value));
+            return new FilterParam<BranchVersionFilter, DracoonFilterType<BranchVersionFilter>>(ef, ef);
+        }
+        /// <include file="SpecificFilterDoc.xml" path='docs/members[@name="general"]/LessThanOrEqual/*'/>
+        public static FilterParam<BranchVersionFilter, DracoonFilterType<BranchVersionFilter>> LessThanOrEqual(this BranchVersionFilter ef,
+            long value) {
+            ef.AddOperatorAndValue((int)value, "le", nameof(value));
+            return new FilterParam<BranchVersionFilter, DracoonFilterType<BranchVersionFilter>>(ef, ef);
+        }
+    }
+
+    #endregion
+
     #region Classification-Filter
 
     /// <include file="SpecificFilterDoc.xml" path='docs/members[@name="generalFilters"]/ClassificationFilter/*'/>

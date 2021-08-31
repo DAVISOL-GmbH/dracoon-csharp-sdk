@@ -55,6 +55,12 @@ namespace Dracoon.Sdk.Filter {
             }
         }
 
+        public static BranchVersionFilter BranchVersion {
+            get {
+                return new BranchVersionFilter();
+            }
+        }
+
         /// <include file="SpecificFilterDoc.xml" path='docs/members[@name="searchNodesFilter"]/Classification/*'/>
         public static ClassificationFilter Classification {
             get {
@@ -95,6 +101,11 @@ namespace Dracoon.Sdk.Filter {
         public void AddFileTypeFilter(DracoonFilterType<FileTypeFilter> fileTypeFilter) {
             CheckFilter(fileTypeFilter, nameof(fileTypeFilter));
             FiltersList.Add(fileTypeFilter);
+        }
+
+        public void AddBranchVersionFilter(DracoonFilterType<BranchVersionFilter> branchVersionFilter) {
+            CheckFilter(branchVersionFilter, nameof(branchVersionFilter));
+            FiltersList.Add(branchVersionFilter);
         }
 
         /// <include file="SpecificFilterDoc.xml" path='docs/members[@name="searchNodesFilter"]/AddClassificationFilter/*'/>
