@@ -56,7 +56,6 @@ jobs:
       configuration: Release
       msbuildArguments: /p:SignAssembly=true /p:AssemblyOriginatorKeyFile=$(snkFile.secureFilePath)
       clean: true
-      restoreNugetPackages: true
   - task: CopyFiles@2
     displayName: 'Copy Files to: $(Build.ArtifactStagingDirectory)\lib\net5.0'
     inputs:
