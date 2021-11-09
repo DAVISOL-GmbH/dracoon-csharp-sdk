@@ -35,8 +35,8 @@ jobs:
       InsertAttributes: true
       PackageId: Dracoon.Sdk.Net5
       Authors: DRACOON developers
-      Company: Dracoon GmbH
-      Product: DRACOON SDK (.NET 5.0)
+      Company: DRACOON GmbH
+      Product: DRACOON Sdk for.NET 5.0
       Description: The DRACOON SDK for C# with enhancements by DAVISOL. This package references .NET 5.0 and can therefore be used on several platforms.
       Copyright: Copyright ©2018 DRACOON GmbH, Copyright ©2021 DAVISOL GmbH
       PackageLicenseUrl: https://www.apache.org/licenses/LICENSE-2.0.txt

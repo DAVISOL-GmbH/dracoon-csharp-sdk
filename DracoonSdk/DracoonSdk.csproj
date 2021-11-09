@@ -4,7 +4,7 @@
     <TargetFramework>net5.0</TargetFramework>
     <AssemblyName>Dracoon.Sdk</AssemblyName>
     <RootNamespace>Dracoon.Sdk</RootNamespace>
-    <Product>DRACOON Sdk for.NET Standard</Product>
+    <Product>DRACOON Sdk for.NET 5.0</Product>
     <Company>DRACOON GmbH</Company>
     <Description>The DRACOON SDK for C#.</Description>
     <Copyright>Copyright © 2017</Copyright>
