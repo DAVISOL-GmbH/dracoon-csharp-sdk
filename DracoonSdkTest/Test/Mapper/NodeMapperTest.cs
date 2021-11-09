@@ -2,11 +2,10 @@
 using Dracoon.Sdk.SdkInternal.ApiModel;
 using Dracoon.Sdk.SdkInternal.ApiModel.Requests;
 using Dracoon.Sdk.SdkInternal.Mapper;
+using Dracoon.Sdk.SdkInternal.Util;
 using Dracoon.Sdk.UnitTest.Factory;
 using Dracoon.Sdk.UnitTest.XUnitComparer;
 using System.Collections.Generic;
-using Dracoon.Sdk.SdkInternal.Util;
-using Dracoon.Sdk.UnitTest.Test.Util;
 using Telerik.JustMock;
 using Xunit;
 
@@ -53,14 +52,16 @@ namespace Dracoon.Sdk.UnitTest.Test.Mapper {
                     CreatedBy = new ApiUserInfo {
                         Id = current.CreatedBy.Id.Value,
                         AvatarUuid = current.CreatedBy.AvatarUUID,
-                        DisplayName = current.CreatedBy.DisplayName
+                        UserName = current.CreatedBy.UserName
                     },
                     UpdatedAt = current.UpdatedAt,
                     UpdatedBy = new ApiUserInfo {
                         Id = current.UpdatedBy.Id.Value,
                         AvatarUuid = current.UpdatedBy.AvatarUUID,
-                        DisplayName = current.UpdatedBy.DisplayName
+                        UserName = current.UpdatedBy.UserName
                     },
+                    CreationTimestamp = current.CreationTimestamp,
+                    ModificationTimestamp = current.ModificationTimestamp,
                     InheritPermissions = current.HasInheritPermissions,
                     Permissions = new ApiNodePermissions {
                         Manage = current.Permissions.Manage,
@@ -76,7 +77,6 @@ namespace Dracoon.Sdk.UnitTest.Test.Mapper {
                     },
                     IsFavorite = current.IsFavorite,
                     IsEncrypted = current.IsEncrypted,
-                    CountChildren = current.CountChildren,
                     CountFiles = current.CountFiles,
                     CountRooms = current.CountRooms,
                     CountFolders = current.CountFolders,
@@ -85,7 +85,8 @@ namespace Dracoon.Sdk.UnitTest.Test.Mapper {
                     CountDownloadShares = current.CountDownloadShares,
                     CountUploadShares = current.CountUploadShares,
                     BranchVersion = current.BranchVersion,
-                    FileType = current.Extension
+                    FileType = current.Extension,
+                    ConfigParentRoomId = current.ConfigParentRoomId
                 };
                 param.Items.Add(currentApi);
                 Mock.Arrange(() => NodeMapper.FromApiNode(currentApi)).Returns(current);
@@ -145,14 +146,16 @@ namespace Dracoon.Sdk.UnitTest.Test.Mapper {
                 CreatedBy = new ApiUserInfo {
                     Id = expected.CreatedBy.Id.Value,
                     AvatarUuid = expected.CreatedBy.AvatarUUID,
-                    DisplayName = expected.CreatedBy.DisplayName
+                    UserName = expected.CreatedBy.UserName
                 },
                 UpdatedAt = expected.UpdatedAt,
                 UpdatedBy = new ApiUserInfo {
                     Id = expected.UpdatedBy.Id.Value,
                     AvatarUuid = expected.UpdatedBy.AvatarUUID,
-                    DisplayName = expected.UpdatedBy.DisplayName
+                    UserName = expected.UpdatedBy.UserName
                 },
+                CreationTimestamp = expected.CreationTimestamp,
+                ModificationTimestamp = expected.ModificationTimestamp,
                 InheritPermissions = expected.HasInheritPermissions,
                 Permissions = new ApiNodePermissions {
                     Manage = expected.Permissions.Manage,
@@ -168,7 +171,6 @@ namespace Dracoon.Sdk.UnitTest.Test.Mapper {
                 },
                 IsFavorite = expected.IsFavorite,
                 IsEncrypted = expected.IsEncrypted,
-                CountChildren = expected.CountChildren,
                 CountFiles = expected.CountFiles,
                 CountRooms = expected.CountRooms,
                 CountFolders = expected.CountFolders,
@@ -177,7 +179,8 @@ namespace Dracoon.Sdk.UnitTest.Test.Mapper {
                 CountDownloadShares = expected.CountDownloadShares,
                 CountUploadShares = expected.CountUploadShares,
                 BranchVersion = expected.BranchVersion,
-                FileType = expected.Extension
+                FileType = expected.Extension,
+                ConfigParentRoomId = expected.ConfigParentRoomId
             };
 
             Mock.Arrange(() => EnumConverter.ConvertValueToNodeTypeEnum(expectedTypeValue)).Returns(expectedType);
@@ -460,13 +463,13 @@ namespace Dracoon.Sdk.UnitTest.Test.Mapper {
                     CreatedAt = current.CreatedAt,
                     CreatedBy = new ApiUserInfo {
                         Id = current.CreatedBy.Id.Value,
-                        DisplayName = current.CreatedBy.DisplayName,
+                        UserName = current.CreatedBy.UserName,
                         AvatarUuid = current.CreatedBy.AvatarUUID
                     },
                     DeletedAt = current.DeletedAt,
                     DeletedBy = new ApiUserInfo {
                         Id = current.DeletedBy.Id.Value,
-                        DisplayName = current.DeletedBy.DisplayName,
+                        UserName = current.DeletedBy.UserName,
                         AvatarUuid = current.DeletedBy.AvatarUUID
                     },
                     ExpireAt = current.ExpireAt,
@@ -477,7 +480,7 @@ namespace Dracoon.Sdk.UnitTest.Test.Mapper {
                     UpdatedAt = current.UpdatedAt,
                     UpdatedBy = new ApiUserInfo {
                         Id = current.UpdatedBy.Id.Value,
-                        DisplayName = current.UpdatedBy.DisplayName,
+                        UserName = current.UpdatedBy.UserName,
                         AvatarUuid = current.UpdatedBy.AvatarUUID
                     }
                 };
@@ -531,13 +534,13 @@ namespace Dracoon.Sdk.UnitTest.Test.Mapper {
                 CreatedAt = expected.CreatedAt,
                 CreatedBy = new ApiUserInfo {
                     Id = expected.CreatedBy.Id.Value,
-                    DisplayName = expected.CreatedBy.DisplayName,
+                    UserName = expected.CreatedBy.UserName,
                     AvatarUuid = expected.CreatedBy.AvatarUUID
                 },
                 DeletedAt = expected.DeletedAt,
                 DeletedBy = new ApiUserInfo {
                     Id = expected.DeletedBy.Id.Value,
-                    DisplayName = expected.DeletedBy.DisplayName,
+                    UserName = expected.DeletedBy.UserName,
                     AvatarUuid = expected.DeletedBy.AvatarUUID
                 },
                 ExpireAt = expected.ExpireAt,
@@ -548,7 +551,7 @@ namespace Dracoon.Sdk.UnitTest.Test.Mapper {
                 UpdatedAt = expected.UpdatedAt,
                 UpdatedBy = new ApiUserInfo {
                     Id = expected.UpdatedBy.Id.Value,
-                    DisplayName = expected.UpdatedBy.DisplayName,
+                    UserName = expected.UpdatedBy.UserName,
                     AvatarUuid = expected.UpdatedBy.AvatarUUID
                 }
             };

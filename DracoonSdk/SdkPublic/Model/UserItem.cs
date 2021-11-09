@@ -31,21 +31,6 @@ namespace Dracoon.Sdk.Model {
             get; internal set;
         }
 
-        [Obsolete("[Deprecated since version 4.7.0, use IsLocked instead")]
-        public int LockStatus {
-            get; internal set;
-        }
-
-        [Obsolete("[Deprecated since version 4.13.0")]
-        public string Login {
-            get; internal set;
-        }
-
-        [Obsolete("Deprecated since version 4.18.0")]
-        public string Title {
-            get; internal set;
-        }
-
         public DateTime? CreatedAt {
             get; internal set;
         }

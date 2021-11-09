@@ -1,7 +1,4 @@
-using System;
-using System.Collections.Generic;
-using System.IO;
-using Dracoon.Crypto.Sdk;
+﻿using Dracoon.Crypto.Sdk;
 using Dracoon.Crypto.Sdk.Model;
 using Dracoon.Sdk.Error;
 using Dracoon.Sdk.Filter;
@@ -13,6 +10,10 @@ using Dracoon.Sdk.SdkInternal.Util;
 using Dracoon.Sdk.SdkInternal.Validator;
 using Dracoon.Sdk.Sort;
 using RestSharp;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 using static Dracoon.Sdk.SdkInternal.DracoonRequestExecutor;
 
 namespace Dracoon.Sdk.SdkInternal {
@@ -369,15 +370,23 @@ namespace Dracoon.Sdk.SdkInternal {
             #region Parameter Validation
 
             request.MustNotNull(nameof(request));
-            request.DataRoomRescueKeyPassword.MustNotNullOrEmptyOrWhitespace(nameof(request.DataRoomRescueKeyPassword), true);
             request.Id.MustPositive(nameof(request.Id));
+
+            if (request.DataRoomRescueKeyPassword != null) {
+                request.DataRoomRescueKeyPairAlgorithm.MustNotNull(nameof(request.DataRoomRescueKeyPairAlgorithm));
+            }
+
+            if (request.DataRoomRescueKeyPairAlgorithm != null) {
+                request.DataRoomRescueKeyPassword.MustNotNullOrEmptyOrWhitespace(nameof(request.DataRoomRescueKeyPassword));
+                _client.AccountImpl.AssertUserKeyPairAlgorithmSupported(request.DataRoomRescueKeyPairAlgorithm.Value);
+            }
 
             #endregion
 
             ApiUserKeyPair apiDataRoomRescueKey = null;
             if (request.DataRoomRescueKeyPassword != null) {
                 try {
-                    UserKeyPair cryptoPair = Crypto.Sdk.Crypto.GenerateUserKeyPair(request.DataRoomRescueKeyPassword);
+                    UserKeyPair cryptoPair = Crypto.Sdk.Crypto.GenerateUserKeyPair(request.DataRoomRescueKeyPairAlgorithm.Value, request.DataRoomRescueKeyPassword);
                     apiDataRoomRescueKey = UserMapper.ToApiUserKeyPair(cryptoPair);
                 } catch (CryptoException ce) {
                     _client.Log.Debug(Logtag, $"Generation of user key pair failed with '{ce.Message}'!");
@@ -580,7 +589,7 @@ namespace Dracoon.Sdk.SdkInternal {
 
             FileUpload upload;
             if (IsNodeEncrypted(request.ParentId)) {
-                UserKeyPair keyPair = _client.AccountImpl.GetAndCheckUserKeyPair();
+                UserKeyPair keyPair = _client.AccountImpl.GetPreferredUserKeyPair();
                 upload = new EncFileUpload(_client, actionId, request, input, keyPair.UserPublicKey, fileSize);
             } else {
                 upload = new FileUpload(_client, actionId, request, input, fileSize);
@@ -604,12 +613,12 @@ namespace Dracoon.Sdk.SdkInternal {
             }
         }
 
-        public void DownloadFile(string actionId, long nodeId, Stream output, IFileDownloadCallback callback) {
+        public void DownloadFile(string actionId, long nodeId, Stream output, IFileDownloadCallback callback = null) {
             FileDownload download = CreateFileDownloadInternally(actionId, nodeId, output, callback);
             download.RunSync();
         }
 
-        public void StartDownloadFileAsync(string actionId, long nodeId, Stream output, IFileDownloadCallback callback) {
+        public void StartDownloadFileAsync(string actionId, long nodeId, Stream output, IFileDownloadCallback callback = null) {
             FileDownload download = CreateFileDownloadInternally(actionId, nodeId, output, callback);
             download.RunAsync();
         }
@@ -620,16 +629,14 @@ namespace Dracoon.Sdk.SdkInternal {
             #region Parameter Validation
 
             CheckDownloadActionId(actionId);
-            nodeId.MustPositive(nameof(nodeId));
             output.CheckStreamCanWrite(nameof(output));
 
             #endregion
 
             FileDownload download = null;
-            Node nodeToDownload = GetNode(nodeId); // Validation will be done in "GetNode"
+            Node nodeToDownload = GetNode(nodeId); // Validation for nodeId will be done in "GetNode"
             if (nodeToDownload.IsEncrypted.GetValueOrDefault(false)) {
-                UserKeyPair keyPair = _client.AccountImpl.GetAndCheckUserKeyPair();
-                download = new EncFileDownload(_client, actionId, nodeToDownload, output, keyPair.UserPrivateKey);
+                download = new EncFileDownload(_client, actionId, nodeToDownload, output);
             } else {
                 download = new FileDownload(_client, actionId, nodeToDownload, output);
             }
@@ -676,14 +683,14 @@ namespace Dracoon.Sdk.SdkInternal {
 
             #endregion
 
-            UserKeyPair userKeyPair = _client.AccountImpl.GetAndCheckUserKeyPair();
+            List<UserKeyPair> userKeyPairs = _client.AccountImpl.GetAndCheckUserKeyPairs();
             int currentBatchOffset = 0;
             const int batchLimit = 10;
             while (currentBatchOffset < limit) {
                 IRestRequest currentBatchRequest = _client.Builder.GetMissingFileKeys(nodeId, batchLimit, currentBatchOffset);
                 ApiMissingFileKeys missingFileKeys =
                     _client.Executor.DoSyncApiCall<ApiMissingFileKeys>(currentBatchRequest, RequestType.GetMissingFileKeys);
-                HandlePendingMissingFileKeys(missingFileKeys, userKeyPair.UserPrivateKey);
+                HandlePendingMissingFileKeys(missingFileKeys, userKeyPairs);
                 currentBatchOffset += missingFileKeys.Items.Count;
                 if (missingFileKeys.Items.Count < batchLimit) {
                     break;
@@ -691,13 +698,13 @@ namespace Dracoon.Sdk.SdkInternal {
             }
         }
 
-        private void HandlePendingMissingFileKeys(ApiMissingFileKeys missingFileKeys, UserPrivateKey thisUserPrivateKey) {
+        private void HandlePendingMissingFileKeys(ApiMissingFileKeys missingFileKeys, List<UserKeyPair> userKeyPairs) {
             if (missingFileKeys == null || missingFileKeys.Items.Count == 0) {
                 return;
             }
 
             Dictionary<long, UserPublicKey> userPublicKeys = UserMapper.ConvertApiUserIdPublicKeys(missingFileKeys.UserPublicKey);
-            Dictionary<long, PlainFileKey> plainFileKeys = GeneratePlainFileKeyMap(missingFileKeys.FileKeys, thisUserPrivateKey);
+            Dictionary<long, PlainFileKey> plainFileKeys = GeneratePlainFileKeyMap(missingFileKeys.FileKeys, userKeyPairs);
             ApiSetUserFileKeysRequest setUserFileKeysRequest = new ApiSetUserFileKeysRequest {
                 Items = new List<ApiSetUserFileKey>(missingFileKeys.UserPublicKey.Count)
             };
@@ -720,12 +727,20 @@ namespace Dracoon.Sdk.SdkInternal {
             _client.Executor.DoSyncApiCall<VoidResponse>(restRequest, RequestType.PostMissingFileKeys);
         }
 
-        private Dictionary<long, PlainFileKey> GeneratePlainFileKeyMap(List<ApiFileIdFileKey> fileIdFileKeys, UserPrivateKey thisUserPrivateKey) {
+        private Dictionary<long, PlainFileKey> GeneratePlainFileKeyMap(List<ApiFileIdFileKey> fileIdFileKeys, List<UserKeyPair> userKeyPairs) {
             Dictionary<long, PlainFileKey> plainFileKeys = new Dictionary<long, PlainFileKey>(fileIdFileKeys.Count);
             foreach (ApiFileIdFileKey currentEncryptedFileKey in fileIdFileKeys) {
                 EncryptedFileKey encryptedFileKey = FileMapper.FromApiFileKey(currentEncryptedFileKey.FileKeyContainer);
-                PlainFileKey decryptedFileKey = DecryptFileKey(encryptedFileKey, thisUserPrivateKey, currentEncryptedFileKey.FileId);
-                plainFileKeys.Add(currentEncryptedFileKey.FileId, decryptedFileKey);
+
+                try {
+                    UserKeyPair found = userKeyPairs.Single(o => o.UserPublicKey.Version == CryptoHelper.DetermineUserKeyPairVersion(encryptedFileKey.Version));
+                    if (found != null) {
+                        PlainFileKey decryptedFileKey = DecryptFileKey(encryptedFileKey, found.UserPrivateKey, currentEncryptedFileKey.FileId);
+                        plainFileKeys.Add(currentEncryptedFileKey.FileId, decryptedFileKey);
+                    }
+                } catch {
+                    // Next File Key
+                }
             }
 
             return plainFileKeys;
@@ -761,9 +776,13 @@ namespace Dracoon.Sdk.SdkInternal {
 
         #region IFileDownloadCallback / IFileUploadCallback implementation
 
-        public void OnStarted(string actionId) { }
+        public void OnStarted(string actionId) {
+            // Nothing to do on this point
+        }
 
-        public void OnRunning(string actionId, long bytesDownloaded, long bytesTotal) { }
+        public void OnRunning(string actionId, long bytesDownloaded, long bytesTotal) {
+            // Nothing to do on this point
+        }
 
         public void OnFinished(string actionId) {
             _runningDownloads.Remove(actionId);

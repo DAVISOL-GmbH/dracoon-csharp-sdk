@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/dracoon/dracoon-csharp-sdk.svg?branch=master)](https://travis-ci.org/dracoon/)
+[![Build Status](https://travis-ci.com/dracoon/dracoon-csharp-sdk.svg?branch=master)](https://travis-ci.com/dracoon/)
 [![GitHub license](https://img.shields.io/github/license/dracoon/dracoon-csharp-sdk.svg)](http://www.apache.org/licenses/LICENSE-2.0)
 [![NuGet](https://img.shields.io/nuget/v/Dracoon.Sdk.svg)](https://www.nuget.org/packages/Dracoon.Sdk/)
 [![NuGet downloads](https://img.shields.io/nuget/dt/Dracoon.Sdk.svg?label=nuget-downloads&colorB=F03C20)](https://www.nuget.org/packages/Dracoon.Sdk/)
@@ -7,11 +7,49 @@
 
 A library to access the DRACOON REST API.
 
+## Fork Notice
+
+This package is forked by DAVISOL GmbH. This fork has three main focuses:
+- Make SDK platform independent by supporting .NET 5.0 (update to .NET 6.0 is planned for near future)
+- Extend SDK to provide access to more REST API routes to cover espacially management and house keeping requirements
+- Keep internal dependencies up-to-date, allowing use of their recent enhancements as well as recent security and bug fixes
+
+### .NET 5.0 compliance
+
+To assure multi-platform support, we had updated the package's projects to .NET 5.0. We've dropped support for legacy .NET versions (up to 4.x.y) as well as support for .NET Standard 2.x. Additionally, references to `System.Drawing.Common` were removed and image functionality (for avatars only) is now based on [SkiaSharp]().
+
+A [.NET Standard 2.0 compliant version](https://github.com/shuebner20/dracoon-csharp-sdk/tree/netstandard) is also available. Please note, that we've stopped working on that branch. 
+
+Learn more about our decision to generally move away from System.Drawing.Common [here](https://docs.microsoft.com/en-us/dotnet/core/compatibility/core-libraries/6.0/system-drawing-common-windows-only).
+
+### Fork Dependent Requirements
+
+First of all, if you wan't to use this package, you *MUST* use .NET 5.0.
+
+Also, make sure you're referencing at least the following dependencies:
+1. Bouncy Castle (= 1.9.0): [nuget](https://www.nuget.org/packages/BouncyCastle/)
+2. Dracoon Crypto SDK (.NET 5.0 fork by DAVISOL)(= 2.1.0): [GitHub](https://github.com/shuebner20/dracoon-csharp-crypto-sdk)
+3. NewtonSoft.Json (= 13.0.1): [nuget](https://www.nuget.org/packages/Newtonsoft.Json/)
+4. RestSharp (= 106.11.5): [nuget](https://www.nuget.org/packages/RestSharp/)
+5. SkiaSharp (= 2.80.3): [nuget](https://www.nuget.org/packages/RestSharp/)
+
+The dependency to `System.Drawing.Common` does not exist any longer, as its functionality was fully replaced by SkiaSharp.
+
+### Fork's License and Copyright
+
+This package is originally created and maintained by DRACOON GmbH and licensed under Apache-2.0.
+
+The enhancements in this fork are done by DAVISOL GmbH. We'll also publish the full source code under Apache-2.0 license.
+
+Copyright 2021 DAVISOL GmbH. All rights reserved.
+
+**Please see the [original copyright notice at the end of this document](#copyright-and-license).
+
 ## Setup
 
 #### Minimum Requirements
 
-.NET version: 4.5.2\
+.NET version: 5.0\
 API version: 4.11.0
 
 #### Download
@@ -21,18 +59,18 @@ In nuget, you can find the DRACOON SDK [here](https://www.nuget.org/packages/Dra
 
 If you are using NuGet with package management "Packages.config", then edit your project's "packages.config" and add this to the packages section:
 ```xml
-<package id="Dracoon.Sdk" version="1.0.0-beta5" />
+<package id="Dracoon.Sdk.Net5" version="2.1.0-beta3" />
 ```
 If you are using Visual Studio 2017 (or higher) and you are using NuGet with package management "PackageReference" then edit your .csproj file and add this to the package dependency group:
 ```xml
-<PackageReference Include="Dracoon.Sdk" Version="1.0.0-beta5" />
+<PackageReference Include="Dracoon.Sdk.Net5" Version="2.1.0-beta3" />
 ```
 
-Note that you also need to include the following dependencies:
-1. Bouncy Castle (= 1.8.1): [nuget](https://www.nuget.org/packages/BouncyCastle/)
-2. Dracoon Crypto SDK (>= 1.0.2): [nuget](https://www.nuget.org/packages/Dracoon.Crypto.Sdk/)
-3. NewtonSoft.Json (>= 11.0.2): [nuget](https://www.nuget.org/packages/Newtonsoft.Json/)
-4. RestSharp (>= 106.4.2): [nuget](https://www.nuget.org/packages/RestSharp/)
+Note that you also need to include the following dependencies (see fork notices above):
+1. Bouncy Castle (= 1.8.6.1): [nuget](https://www.nuget.org/packages/BouncyCastle/)
+2. Dracoon Crypto SDK (= 2.1.0): [nuget](https://www.nuget.org/packages/Dracoon.Crypto.Sdk/)
+3. NewtonSoft.Json (= 12.0.3): [nuget](https://www.nuget.org/packages/Newtonsoft.Json/)
+4. RestSharp (= 106.11.5): [nuget](https://www.nuget.org/packages/RestSharp/)
 
 ## Example
 

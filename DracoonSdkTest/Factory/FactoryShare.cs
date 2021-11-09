@@ -15,7 +15,6 @@ namespace Dracoon.Sdk.UnitTest.Factory {
                     NodePath = "/Root/SubRoot",
                     Name = "ShareName",
                     Notes = "Some notes!",
-                    Classification = Classification.Confidential,
                     ExpireAt = new DateTime(2000, 1, 1, 0, 0, 0),
                     AccessKey = "LFD98725GVD!",
                     ShowCreatorName = true,
@@ -26,7 +25,8 @@ namespace Dracoon.Sdk.UnitTest.Factory {
                     CreatedAt = new DateTime(2000, 1, 1, 0, 0, 0).AddDays(1),
                     CreatedBy = FactoryUser.UserInfo,
                     IsProtected = true,
-                    IsEncrypted = true
+                    IsEncrypted = true,
+                    Type = NodeType.Folder
                 };
             }
         }
@@ -67,7 +67,6 @@ namespace Dracoon.Sdk.UnitTest.Factory {
                     NodePath = "/Root/SubRoot",
                     Name = "ShareName",
                     Notes = "Some notes!",
-                    Classification = 1,
                     ExpireAt = new DateTime(2000, 1, 1, 0, 0, 0),
                     AccessKey = "LFD98725GVD!",
                     ShowCreatorName = true,
@@ -78,7 +77,8 @@ namespace Dracoon.Sdk.UnitTest.Factory {
                     CreatedAt = new DateTime(2000, 1, 1, 0, 0, 0).AddDays(1),
                     CreatedBy = FactoryUser.ApiUserInfo,
                     IsProtected = true,
-                    IsEncrypted = true
+                    IsEncrypted = true,
+                    Type = "folder"
                 };
             }
         }
@@ -103,7 +103,8 @@ namespace Dracoon.Sdk.UnitTest.Factory {
                     CurrentUploadedFilesCount = 5,
                     ShowUploadedFiles = false,
                     MaxAllowedUploads = 7,
-                    MaxAllowedTotalSizeOverAllUploadedFiles = 51348
+                    MaxAllowedTotalSizeOverAllUploadedFiles = 51348,
+                    Type = NodeType.Folder
                 };
             }
         }
@@ -128,7 +129,8 @@ namespace Dracoon.Sdk.UnitTest.Factory {
                     CurrentUploadedFilesCount = 5,
                     ShowUploadedFiles = false,
                     MaxAllowedUploads = 7,
-                    MaxAllowedTotalSizeOverAllUploadedFiles = 51348
+                    MaxAllowedTotalSizeOverAllUploadedFiles = 51348,
+                    Type = "folder"
                 };
             }
         }

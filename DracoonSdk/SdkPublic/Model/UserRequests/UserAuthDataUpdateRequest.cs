@@ -1,7 +1,7 @@
 namespace Dracoon.Sdk.Model {
     public class UserAuthDataUpdateRequest {
 
-        public AuthMethodType Method {
+        public UserAuthMethod Method {
             get; internal set;
         }
 

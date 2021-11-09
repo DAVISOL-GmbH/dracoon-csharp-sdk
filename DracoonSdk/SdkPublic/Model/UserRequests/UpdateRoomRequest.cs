@@ -8,8 +8,8 @@ namespace Dracoon.Sdk.Model {
         public long? Quota { get; set; }
 
         /// <include file = "UserRequestsDoc.xml" path='docs/members[@name="updateRoomRequest"]/UpdateRoomRequestConstructor/*'/>
-        public UpdateRoomRequest(long id, string name = null, long? quota = null, string notes = null, DateTime? timestampCreation = null, DateTime? timestampModification = null)
-            : base(id, name, notes, timestampCreation, timestampModification) {
+        public UpdateRoomRequest(long id, string name = null, long? quota = null, string notes = null, DateTime? creationTime = null, DateTime? modificationTime = null)
+            : base(id, name, notes, creationTime, modificationTime) {
             Quota = quota;
         }
     }

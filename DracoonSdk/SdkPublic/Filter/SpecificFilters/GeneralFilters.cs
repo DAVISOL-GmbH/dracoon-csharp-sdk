@@ -1,7 +1,7 @@
+﻿using Dracoon.Sdk.Model;
+using Dracoon.Sdk.SdkInternal.Validator;
 using System;
 using System.Globalization;
-using Dracoon.Sdk.Model;
-using Dracoon.Sdk.SdkInternal.Validator;
 
 namespace Dracoon.Sdk.Filter {
 
@@ -164,7 +164,8 @@ namespace Dracoon.Sdk.Filter {
     /// <include file="SpecificFilterDoc.xml" path='docs/members[@name="generalFilters"]/NodeTypeFilter/*'/>
     public class NodeTypeFilter : DracoonFilterType<NodeTypeFilter> {
         internal NodeTypeFilter() {
-            FilterTypeString += "type";
+            FilterName = "type";
+            FilterTypeString += FilterName;
         }
     }
 
@@ -189,7 +190,8 @@ namespace Dracoon.Sdk.Filter {
     /// <include file="SpecificFilterDoc.xml" path='docs/members[@name="generalFilters"]/IsFavoriteFilter/*'/>
     public class IsFavoriteFilter : DracoonFilterType<IsFavoriteFilter> {
         internal IsFavoriteFilter() {
-            FilterTypeString += "isFavorite";
+            FilterName = "isFavorite";
+            FilterTypeString += FilterName;
         }
     }
 
@@ -233,7 +235,8 @@ namespace Dracoon.Sdk.Filter {
     /// <include file="SpecificFilterDoc.xml" path='docs/members[@name="generalFilters"]/NodeIsEncryptedFilter/*'/>
     public class NodeIsEncryptedFilter : DracoonFilterType<NodeIsEncryptedFilter> {
         internal NodeIsEncryptedFilter() {
-            FilterTypeString += "encrypted";
+            FilterName = "encrypted";
+            FilterTypeString += FilterName;
         }
     }
 
@@ -279,7 +282,8 @@ namespace Dracoon.Sdk.Filter {
     /// <include file="SpecificFilterDoc.xml" path='docs/members[@name="generalFilters"]/UpdatedByFilter/*'/>
     public class UpdatedByFilter : DracoonFilterType<UpdatedByFilter> {
         internal UpdatedByFilter() {
-            FilterTypeString += "updatedBy";
+            FilterName = "updatedBy";
+            FilterTypeString += FilterName;
         }
     }
 
@@ -311,12 +315,35 @@ namespace Dracoon.Sdk.Filter {
 
     #endregion
 
+    #region UpdatedById-Filter
+
+    /// <include file="SpecificFilterDoc.xml" path='docs/members[@name="generalFilters"]/UpdatedByIdFilter/*'/>
+    public class UpdatedByIdFilter : DracoonFilterType<UpdatedByIdFilter> {
+        internal UpdatedByIdFilter() {
+            FilterName = "updatedById";
+            FilterTypeString += FilterName;
+        }
+    }
+
+    /// <include file="SpecificFilterDoc.xml" path='docs/members[@name="generalFilters"]/UpdatedByIdFilterExtension/*'/>
+    public static class UpdatedByIdFilterExtension {
+        /// <include file="SpecificFilterDoc.xml" path='docs/members[@name="general"]/EqualTo/*'/>
+        public static FilterParam<UpdatedByIdFilter, DracoonFilterType<UpdatedByIdFilter>> EqualTo(this UpdatedByIdFilter ef, long value) {
+            value.MustPositive(nameof(value));
+            ef.AddOperatorAndValue(value, "eq", nameof(value));
+            return new FilterParam<UpdatedByIdFilter, DracoonFilterType<UpdatedByIdFilter>>(ef, ef);
+        }
+    }
+
+    #endregion
+
     #region ParentPath-Filter
 
     /// <include file="SpecificFilterDoc.xml" path='docs/members[@name="generalFilters"]/ParentPathFilter/*'/>
     public class ParentPathFilter : DracoonFilterType<ParentPathFilter> {
         internal ParentPathFilter() {
-            FilterTypeString += "parentPath";
+            FilterName = "parentPath";
+            FilterTypeString += FilterName;
         }
     }
 
@@ -344,7 +371,8 @@ namespace Dracoon.Sdk.Filter {
     /// <include file="SpecificFilterDoc.xml" path='docs/members[@name="generalFilters"]/FileTypeFilter/*'/>
     public class FileTypeFilter : DracoonFilterType<FileTypeFilter> {
         internal FileTypeFilter() {
-            FilterTypeString += "fileType";
+            FilterName = "fileType";
+            FilterTypeString += FilterName;
         }
     }
 
@@ -397,7 +425,8 @@ namespace Dracoon.Sdk.Filter {
     /// <include file="SpecificFilterDoc.xml" path='docs/members[@name="generalFilters"]/ClassificationFilter/*'/>
     public class ClassificationFilter : DracoonFilterType<ClassificationFilter> {
         internal ClassificationFilter() {
-            FilterTypeString += "classification";
+            FilterName = "classification";
+            FilterTypeString += FilterName;
         }
     }
 
@@ -418,7 +447,8 @@ namespace Dracoon.Sdk.Filter {
     /// <include file="SpecificFilterDoc.xml" path='docs/members[@name="generalFilters"]/CreatedByFilter/*'/>
     public class CreatedByFilter : DracoonFilterType<CreatedByFilter> {
         internal CreatedByFilter() {
-            FilterTypeString += "createdBy";
+            FilterName = "createdBy";
+            FilterTypeString += FilterName;
         }
     }
 
@@ -447,6 +477,28 @@ namespace Dracoon.Sdk.Filter {
 
     public class ExpireAtFilter : DateFilterBase<ExpireAtFilter> {
         internal ExpireAtFilter() : base("expireAt") {
+        }
+    }
+
+    #endregion
+
+    #region CreatedById-Filter
+
+    /// <include file="SpecificFilterDoc.xml" path='docs/members[@name="generalFilters"]/CreatedByIdFilter/*'/>
+    public class CreatedByIdFilter : DracoonFilterType<CreatedByIdFilter> {
+        internal CreatedByIdFilter() {
+            FilterName = "createdById";
+            FilterTypeString += FilterName;
+        }
+    }
+
+    /// <include file="SpecificFilterDoc.xml" path='docs/members[@name="generalFilters"]/CreatedByIdFilterExtension/*'/>
+    public static class CreatedByIdFilterExtension {
+        /// <include file="SpecificFilterDoc.xml" path='docs/members[@name="general"]/Contains/*'/>
+        public static FilterParam<CreatedByIdFilter, DracoonFilterType<CreatedByIdFilter>> EqualTo(this CreatedByIdFilter ef, long value) {
+            value.MustPositive(nameof(value));
+            ef.AddOperatorAndValue(value, "eq", nameof(value));
+            return new FilterParam<CreatedByIdFilter, DracoonFilterType<CreatedByIdFilter>>(ef, ef);
         }
     }
 
@@ -781,6 +833,42 @@ namespace Dracoon.Sdk.Filter {
 
             ef.AddOperatorAndValue(state, "eq", nameof(value));
             return new FilterParam<AssignmentStateFilter, DracoonFilterType<AssignmentStateFilter>>(ef, ef);
+        }
+    }
+
+    #endregion
+
+    #region timestampCreation
+
+    /// <include file="SpecificFilterDoc.xml" path='docs/members[@name="generalFilters"]/TimestampFilter/*'/>
+    public class TimestampFilter : DracoonFilterType<TimestampFilter> {
+        internal TimestampFilter(string filterName) {
+            FilterName = filterName;
+            FilterTypeString += FilterName;
+        }
+    }
+
+    /// <include file="SpecificFilterDoc.xml" path='docs/members[@name="generalFilters"]/TimestampFilterExtension/*'/>
+    public static class TimestampFilterExtension {
+
+        /// <include file="SpecificFilterDoc.xml" path='docs/members[@name="general"]/GreaterEqualTo/*'/>
+        public static FilterParam<TimestampFilter, DracoonFilterType<TimestampFilter>> GreaterEqualTo(this TimestampFilter tf, DateTime value) {
+            value.MustNotNull(nameof(value));
+            tf.AddOperatorAndValue(value, "ge", nameof(value));
+            return new FilterParam<TimestampFilter, DracoonFilterType<TimestampFilter>>(tf, tf);
+        }
+
+        /// <include file="SpecificFilterDoc.xml" path='docs/members[@name="general"]/LessEqualTo/*'/>
+        public static FilterParam<TimestampFilter, DracoonFilterType<TimestampFilter>> LessEqualTo(this TimestampFilter tf, DateTime value) {
+            value.MustNotNull(nameof(value));
+            tf.AddOperatorAndValue(value, "le", nameof(value));
+            return new FilterParam<TimestampFilter, DracoonFilterType<TimestampFilter>>(tf, tf);
+        }
+
+        /// <include file="SpecificFilterDoc.xml" path='docs/members[@name="general"]/And/*'/>
+        public static TimestampFilter And(this FilterParam<TimestampFilter, DracoonFilterType<TimestampFilter>> ef) {
+            ef.Parent.AddAnd();
+            return ef.Parent;
         }
     }
 

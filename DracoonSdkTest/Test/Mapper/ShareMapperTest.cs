@@ -68,7 +68,6 @@ namespace Dracoon.Sdk.UnitTest.Test.Mapper {
         public void FromApiDownloadShare() {
             // ARRANGE
             DownloadShare expected = FactoryShare.DownloadShare;
-            expected.Classification = Classification.Confidential;
 
             ApiDownloadShare param = new ApiDownloadShare {
                 ShareId = expected.ShareId,
@@ -76,7 +75,6 @@ namespace Dracoon.Sdk.UnitTest.Test.Mapper {
                 NodePath = expected.NodePath,
                 Name = expected.Name,
                 Notes = expected.Notes,
-                Classification = (int) expected.Classification,
                 ExpireAt = expected.ExpireAt,
                 AccessKey = expected.AccessKey,
                 ShowCreatorName = expected.ShowCreatorName,
@@ -87,14 +85,14 @@ namespace Dracoon.Sdk.UnitTest.Test.Mapper {
                 CreatedAt = expected.CreatedAt,
                 CreatedBy = new ApiUserInfo {
                     AvatarUuid = expected.CreatedBy.AvatarUUID,
-                    DisplayName = expected.CreatedBy.DisplayName,
+                    UserName = expected.CreatedBy.UserName,
                     Id = expected.CreatedBy.Id.Value
                 },
                 IsProtected = expected.IsProtected,
-                IsEncrypted = expected.IsEncrypted
+                IsEncrypted = expected.IsEncrypted,
+                Type = "folder"
             };
 
-            Mock.Arrange(() => EnumConverter.ConvertClassificationEnumToValue(expected.Classification)).Returns((int) expected.Classification);
             Mock.Arrange(() => UserMapper.FromApiUserInfo(param.CreatedBy)).Returns(expected.CreatedBy);
 
             // ACT
@@ -111,7 +109,6 @@ namespace Dracoon.Sdk.UnitTest.Test.Mapper {
         [Fact]
         public void FromApiDownloadShareList() {
             // ARRANGE
-            Classification expectedClassification = Classification.StrictlyConfidential;
             DownloadShareList expected = FactoryShare.DownloadShareList;
 
             ApiDownloadShareList param = new ApiDownloadShareList {
@@ -124,14 +121,12 @@ namespace Dracoon.Sdk.UnitTest.Test.Mapper {
             };
 
             foreach (DownloadShare current in expected.Items) {
-                current.Classification = expectedClassification;
                 ApiDownloadShare currentApi = new ApiDownloadShare {
                     ShareId = current.ShareId,
                     NodeId = current.NodeId,
                     NodePath = current.NodePath,
                     Name = current.Name,
                     Notes = current.Notes,
-                    Classification = (int) current.Classification,
                     ExpireAt = current.ExpireAt,
                     AccessKey = current.AccessKey,
                     ShowCreatorName = current.ShowCreatorName,
@@ -142,11 +137,12 @@ namespace Dracoon.Sdk.UnitTest.Test.Mapper {
                     CreatedAt = current.CreatedAt,
                     CreatedBy = new ApiUserInfo {
                         AvatarUuid = current.CreatedBy.AvatarUUID,
-                        DisplayName = current.CreatedBy.DisplayName,
+                        UserName = current.CreatedBy.UserName,
                         Id = current.CreatedBy.Id.Value
                     },
                     IsProtected = current.IsProtected,
-                    IsEncrypted = current.IsEncrypted
+                    IsEncrypted = current.IsEncrypted,
+                    Type = "folder"
                 };
                 param.Items.Add(currentApi);
                 Mock.Arrange(() => ShareMapper.FromApiDownloadShare(currentApi)).Returns(current);
@@ -230,7 +226,7 @@ namespace Dracoon.Sdk.UnitTest.Test.Mapper {
                 CreatedAt = expected.CreatedAt,
                 CreatedBy = new ApiUserInfo {
                     AvatarUuid = expected.CreatedBy.AvatarUUID,
-                    DisplayName = expected.CreatedBy.DisplayName,
+                    UserName = expected.CreatedBy.UserName,
                     Id = expected.CreatedBy.Id.Value
                 },
                 ExpireAt = expected.ExpireAt,
@@ -241,7 +237,8 @@ namespace Dracoon.Sdk.UnitTest.Test.Mapper {
                 CurrentUploadedFilesCount = expected.CurrentUploadedFilesCount,
                 ShowUploadedFiles = expected.ShowUploadedFiles,
                 MaxAllowedUploads = expected.MaxAllowedUploads,
-                MaxAllowedTotalSizeOverAllUploadedFiles = expected.MaxAllowedTotalSizeOverAllUploadedFiles
+                MaxAllowedTotalSizeOverAllUploadedFiles = expected.MaxAllowedTotalSizeOverAllUploadedFiles,
+                Type = "folder"
             };
 
             Mock.Arrange(() => UserMapper.FromApiUserInfo(param.CreatedBy)).Returns(expected.CreatedBy);
@@ -284,7 +281,7 @@ namespace Dracoon.Sdk.UnitTest.Test.Mapper {
                     CreatedAt = current.CreatedAt,
                     CreatedBy = new ApiUserInfo {
                         AvatarUuid = current.CreatedBy.AvatarUUID,
-                        DisplayName = current.CreatedBy.DisplayName,
+                        UserName = current.CreatedBy.UserName,
                         Id = current.CreatedBy.Id.Value
                     },
                     IsProtected = current.IsProtected,
@@ -294,7 +291,8 @@ namespace Dracoon.Sdk.UnitTest.Test.Mapper {
                     MaxAllowedTotalSizeOverAllUploadedFiles = current.MaxAllowedTotalSizeOverAllUploadedFiles,
                     MaxAllowedUploads = current.MaxAllowedUploads,
                     ShowUploadedFiles = current.ShowUploadedFiles,
-                    UploadedFilesExpirationPeriod = current.UploadedFilesExpirationPeriod
+                    UploadedFilesExpirationPeriod = current.UploadedFilesExpirationPeriod,
+                    Type = "folder"
                 };
                 param.Items.Add(currentApi);
                 Mock.Arrange(() => ShareMapper.FromApiUploadShare(currentApi)).Returns(current);

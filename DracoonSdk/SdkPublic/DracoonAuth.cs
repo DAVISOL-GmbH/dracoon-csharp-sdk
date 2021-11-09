@@ -68,7 +68,13 @@ namespace Dracoon.Sdk {
             }
 
             if (string.IsNullOrWhiteSpace(value)) {
-                throw new ArgumentException(name + " cannot be empty or whitespaced.");
+                if(value == null) {
+                    if (!nullable) {
+                        throw new ArgumentNullException(name);
+                    }
+                } else {
+                    throw new ArgumentException(name + " cannot be empty or whitespaced.");
+                }
             }
         }
     }

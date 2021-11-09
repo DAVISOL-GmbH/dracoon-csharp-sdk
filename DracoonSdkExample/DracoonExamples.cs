@@ -5,8 +5,6 @@ using Dracoon.Sdk.Sort;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Drawing;
-using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -22,7 +20,7 @@ namespace Dracoon.Sdk.Example {
 
         [STAThread]
         static void Main() {
-            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12;
+            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
 
             DracoonAuth dracoonAuth = new DracoonAuth(ACCESS_TOKEN);
             IWebProxy wp = WebRequest.GetSystemWebProxy();
@@ -46,19 +44,24 @@ namespace Dracoon.Sdk.Example {
         private static void GetServerSettings() {
             ServerGeneralSettings generalSettings = dc.Server.ServerSettings.GetGeneral();
             Console.WriteLine("Crypto is enabled: " + generalSettings.CryptoEnabled);
-            Console.WriteLine("Media server is enabled: " + generalSettings.MediaServerEnabled);
             Console.WriteLine("Share password via SMS is enabled: " + generalSettings.SharePasswordSmsEnabled);
-            Console.WriteLine("Weak passwords are enabled: " + generalSettings.WeakPasswordEnabled);
 
             ServerInfrastructureSettings infrastructureSettings = dc.Server.ServerSettings.GetInfrastructure();
             //...
         }
 
         private static void GetPasswordPolicies() {
-            PasswordPolicies policies = dc.Server.ServerSettings.GetPasswordPolicies();
-            Console.WriteLine("Minimum login password length is: " + policies.LoginPolicies.MinimumPasswordLength);
-            Console.WriteLine("Minimum share password length is: " + policies.SharePolicies.MinimumPasswordLength);
-            Console.WriteLine("Minimum encryption password length is: " + policies.EncryptionPolicies.MinimumPasswordLength);
+            PasswordEncryptionPolicies encryptionPolicy = dc.Server.ServerPolicies.GetEncryptionPasswordPolicies();
+            PasswordSharePolicies sharePolicy = dc.Server.ServerPolicies.GetSharesPasswordPolicies();
+            Console.WriteLine("Minimum share password length is: " + sharePolicy.MinimumPasswordLength);
+            Console.WriteLine("Minimum encryption password length is: " + encryptionPolicy.MinimumPasswordLength);
+        }
+
+        private static void GetAvailableUserKeyPairAlgorithms() {
+            List<UserKeyPairAlgorithmData> availableUserKeyPairAlgorithms = dc.Server.ServerSettings.GetAvailableUserKeyPairAlgorithms();
+            foreach (UserKeyPairAlgorithmData current in availableUserKeyPairAlgorithms) {
+                Console.WriteLine("Available User key pair algorithm: " + current.Algorithm + " with its state: " + current.State);
+            }
         }
 
         #endregion
@@ -90,27 +93,31 @@ namespace Dracoon.Sdk.Example {
         }
 
         private static void SetUserKeyPair() {
-            dc.Account.SetUserKeyPair();
+            dc.Account.SetUserKeyPair(Crypto.Sdk.UserKeyPairAlgorithm.RSA2048);
         }
 
         private static void CheckUserKeyPair() {
-            bool encryptionPasswordIsValid = dc.Account.CheckUserKeyPairPassword();
+            bool encryptionPasswordIsValid = dc.Account.CheckUserKeyPairPassword(Crypto.Sdk.UserKeyPairAlgorithm.RSA2048);
             Console.WriteLine("Encryption password is valid: " + encryptionPasswordIsValid);
         }
 
         private static void DeleteUserKeyPair() {
-            dc.Account.DeleteUserKeyPair();
+            dc.Account.DeleteUserKeyPair(Crypto.Sdk.UserKeyPairAlgorithm.RSA2048);
         }
 
         private static void GetUserAvatar() {
-            Image avatar = dc.Account.GetAvatar();
-            ImageCodecInfo info = ImageCodecInfo.GetImageDecoders().First(c => c.FormatID == avatar.RawFormat.Guid);
-            avatar.Save("C:\\temp\\avatar." + info.FormatDescription);
+            SkiaSharp.SKData imageData = dc.Account.GetAvatar();
+            var avatarCodec = SkiaSharp.SKCodec.Create(imageData);
+            var avatarImage = SkiaSharp.SKBitmap.Decode(imageData);
+            var targetFilePath = "C:\\temp\\avatar." + avatarCodec.EncodedFormat.ToString().ToLowerInvariant();
+            using (var fs = File.Open(targetFilePath, FileMode.Create)) {
+                avatarImage.Encode(fs, avatarCodec.EncodedFormat, 90);
+            }
         }
 
         private static void UpdateUserAvatar() {
-            Image newAvatar = Image.FromFile("C:\\temp\\avatar.jpg");
-            dc.Account.UpdateAvatar(newAvatar);
+            //Image newAvatar = Image.FromFile("C:\\temp\\avatar.jpg");
+            //dc.Account.UpdateAvatar(newAvatar);
         }
 
         private static void GetUserProfileAttributes() {
@@ -153,9 +160,9 @@ namespace Dracoon.Sdk.Example {
         private static void GetAvatarImageOfNodeCreator() {
             long nodeId = 1;
             Node node = dc.Nodes.GetNode(nodeId);
-            Image avatar = dc.Users.GetUserAvatar(node.CreatedBy.Id.Value, node.CreatedBy.AvatarUUID);
-            ImageCodecInfo info = ImageCodecInfo.GetImageDecoders().First(c => c.FormatID == avatar.RawFormat.Guid);
-            avatar.Save("C:\\temp\\avatar." + info.FormatDescription);
+            //Image avatar = dc.Users.GetUserAvatar(node.CreatedBy.Id.Value, node.CreatedBy.AvatarUUID);
+            //ImageCodecInfo info = ImageCodecInfo.GetImageDecoders().First(c => c.FormatID == avatar.RawFormat.Guid);
+            //avatar.Save("C:\\temp\\avatar." + info.FormatDescription);
         }
 
         private static void ListFilteredRootNodes() {
@@ -256,8 +263,13 @@ namespace Dracoon.Sdk.Example {
         }
 
         private static void UploadFile() {
+            string localFilePath = "C:\\temp\\test.txt";
+            FileInfo fileInfo = new FileInfo(localFilePath);
             FileUploadRequest request = new FileUploadRequest(1, "test.txt");
-            FileStream stream = File.Open("C:\\temp\\test.txt", FileMode.Open);
+            request.CreationTime = fileInfo.CreationTimeUtc;
+            request.ModificationTime = fileInfo.LastWriteTimeUtc;
+
+            FileStream stream = File.Open(localFilePath, FileMode.Open);
             Node uploadedNode = dc.Nodes.UploadFile(Guid.NewGuid().ToString(), request, stream, callback: new ULCallback());
         }
 

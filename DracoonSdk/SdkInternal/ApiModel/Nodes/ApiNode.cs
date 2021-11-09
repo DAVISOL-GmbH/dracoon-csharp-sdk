@@ -1,5 +1,6 @@
-using System;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
+using System;
 
 namespace Dracoon.Sdk.SdkInternal.ApiModel {
     internal class ApiNode : ApiTrackExternalModification {
@@ -69,9 +70,6 @@ namespace Dracoon.Sdk.SdkInternal.ApiModel {
         [JsonProperty("encryptionInfo", NullValueHandling = NullValueHandling.Ignore)]
         public ApiEncryptionInfo EncryptionInfo { get; set; }
 
-        [JsonProperty("cntChildren", NullValueHandling = NullValueHandling.Ignore)]
-        public int? CountChildren { get; set; }
-
         [JsonProperty("cntRooms", NullValueHandling = NullValueHandling.Ignore)]
         public int? CountRooms { get; set; }
 
@@ -100,6 +98,6 @@ namespace Dracoon.Sdk.SdkInternal.ApiModel {
         public string MediaToken { get; set; }
 
         [JsonProperty("authParentId", NullValueHandling = NullValueHandling.Ignore)]
-        public long AuthParentId { get; set; }
+        public long ConfigParentRoomId { get; set; }
     }
 }

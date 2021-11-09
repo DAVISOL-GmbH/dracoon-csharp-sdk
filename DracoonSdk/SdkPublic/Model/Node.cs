@@ -96,6 +96,7 @@ namespace Dracoon.Sdk.Model {
         /// <include file = "ModelDoc.xml" path='docs/members[@name="node"]/BranchVersion/*'/>
         public long? BranchVersion { get; internal set; }
 
-        public long AuthParentId { get; internal set; }
+        /// <include file = "ModelDoc.xml" path='docs/members[@name="node"]/ConfigParentRoomId/*'/>
+        public long ConfigParentRoomId { get; internal set; }
     }
 }

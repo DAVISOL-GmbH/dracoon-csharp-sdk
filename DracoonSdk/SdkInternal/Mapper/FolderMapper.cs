@@ -8,8 +8,8 @@ namespace Dracoon.Sdk.SdkInternal.Mapper {
                 ParentId = createFolderRequest.ParentId,
                 Name = createFolderRequest.Name,
                 Notes = createFolderRequest.Notes,
-                TimestampCreation = createFolderRequest.TimestampCreation,
-                TimestampModification = createFolderRequest.TimestampModification
+                CreationTimestamp = createFolderRequest.CreationTimestamp,
+                ModificationTimestamp = createFolderRequest.ModificationTimestamp
             };
             return apiCreateFolderRequest;
         }
@@ -18,8 +18,8 @@ namespace Dracoon.Sdk.SdkInternal.Mapper {
             ApiUpdateFolderRequest apiUpdateFolderRequest = new ApiUpdateFolderRequest {
                 Name = updateFolderRequest.Name,
                 Notes = updateFolderRequest.Notes,
-                TimestampCreation = updateFolderRequest.TimestampCreation,
-                TimestampModification = updateFolderRequest.TimestampModification
+                CreationTimestamp = updateFolderRequest.CreationTimestamp,
+                ModificationTimestamp = updateFolderRequest.ModificationTimestamp
             };
             return apiUpdateFolderRequest;
         }

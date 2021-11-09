@@ -1,7 +1,7 @@
 ﻿using System;
 
 namespace Dracoon.Sdk.Model {
-    /// <include file = "ModelDoc.xml" path='docs/members[@name="downloadShare"]/CustomerAccount/*'/>
+    /// <include file = "ModelDoc.xml" path='docs/members[@name="downloadShare"]/DownloadShare/*'/>
     public class DownloadShare {
         /// <include file = "ModelDoc.xml" path='docs/members[@name="downloadShare"]/ShareId/*'/>
         public long ShareId { get; internal set; }
@@ -30,9 +30,6 @@ namespace Dracoon.Sdk.Model {
         /// <include file = "ModelDoc.xml" path='docs/members[@name="downloadShare"]/Name/*'/>
         public string Name { get; internal set; }
 
-        /// <include file = "ModelDoc.xml" path='docs/members[@name="downloadShare"]/Classification/*'/>
-        public Classification? Classification { get; internal set; }
-
         /// <include file = "ModelDoc.xml" path='docs/members[@name="downloadShare"]/Notes/*'/>
         public string Notes { get; internal set; }
 
@@ -53,5 +50,8 @@ namespace Dracoon.Sdk.Model {
 
         /// <include file = "ModelDoc.xml" path='docs/members[@name="downloadShare"]/IsEncrypted/*'/>
         public bool? IsEncrypted { get; internal set; }
+
+        /// <include file = "ModelDoc.xml" path='docs/members[@name="downloadShare"]/Type/*'/>
+        public NodeType Type { get; internal set; }
     }
 }

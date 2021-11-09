@@ -1,11 +1,12 @@
-using System;
-using System.Collections.Generic;
+﻿using Dracoon.Crypto.Sdk;
 using Dracoon.Crypto.Sdk.Model;
+using Dracoon.Sdk.Error;
 using Dracoon.Sdk.Model;
 using Dracoon.Sdk.SdkInternal.ApiModel;
-using Dracoon.Sdk.SdkInternal.ApiModel.Common;
 using Dracoon.Sdk.SdkInternal.ApiModel.Requests;
 using Dracoon.Sdk.SdkInternal.Util;
+using System;
+using System.Collections.Generic;
 
 namespace Dracoon.Sdk.SdkInternal.Mapper {
     internal static class UserMapper {
@@ -16,13 +17,11 @@ namespace Dracoon.Sdk.SdkInternal.Mapper {
 
             UserInfo userInfo = new UserInfo {
                 Id = apiUserInfo.Id,
-                DisplayName = apiUserInfo.DisplayName,
-                AvatarUUID = apiUserInfo.AvatarUuid,
                 UserName = apiUserInfo.UserName,
+                AvatarUUID = apiUserInfo.AvatarUuid,
                 Email = apiUserInfo.Email,
                 FirstName = apiUserInfo.FirstName,
                 LastName = apiUserInfo.LastName,
-                Title = apiUserInfo.Title,
                 UserType = EnumConverter.ConvertValueToUserTypeEnum(apiUserInfo.UserType)
             };
             return userInfo;
@@ -35,8 +34,8 @@ namespace Dracoon.Sdk.SdkInternal.Mapper {
 
             UserAccount userAccount = new UserAccount {
                 Id = apiUserAccount.Id,
-                LoginName = apiUserAccount.LoginName,
-                UserName = apiUserAccount.UserName ?? apiUserAccount.LoginName,
+                AuthData = FromApiUserAuthData(apiUserAccount.AuthData),
+                UserName = apiUserAccount.UserName,
                 Title = apiUserAccount.Title,
                 FirstName = apiUserAccount.FirstName,
                 LastName = apiUserAccount.LastName,
@@ -50,6 +49,22 @@ namespace Dracoon.Sdk.SdkInternal.Mapper {
                 HomeRoomId = apiUserAccount.HomeRoomId
             };
             return userAccount;
+        }
+
+        internal static UserAuthData FromApiUserAuthData(ApiAuthData apiUserAuthData) {
+            if (apiUserAuthData == null) {
+                return null;
+            }
+
+            UserAuthData userAuthData = new UserAuthData {
+                Method = EnumConverter.ConvertValueToUserAuthMethodEnum(apiUserAuthData.Method),
+                Login = apiUserAuthData.Login,
+                Password = apiUserAuthData.Password,
+                MustChangePassword = apiUserAuthData.MustChangePassword,
+                ADConfigId = apiUserAuthData.ADConfigId,
+                OIDConfigId = apiUserAuthData.OIDConfigId
+            };
+            return userAuthData;
         }
 
         private static List<UserRole> ConvertApiUserRoles(ApiUserRoleList apiUserRoles) {
@@ -79,7 +94,7 @@ namespace Dracoon.Sdk.SdkInternal.Mapper {
             if (userPublicKey == null)
                 return null;
             ApiUserPublicKey apiUserPublicKey = new ApiUserPublicKey {
-                Version = userPublicKey.Version,
+                Version = ToApiUserKeyPairVersion(userPublicKey.Version),
                 PublicKey = userPublicKey.PublicKey
             };
             return apiUserPublicKey;
@@ -89,7 +104,7 @@ namespace Dracoon.Sdk.SdkInternal.Mapper {
             if (userPrivateKey == null)
                 return null;
             ApiUserPrivateKey apiUserPrivateKey = new ApiUserPrivateKey {
-                Version = userPrivateKey.Version,
+                Version = ToApiUserKeyPairVersion(userPrivateKey.Version),
                 PrivateKey = userPrivateKey.PrivateKey
             };
             return apiUserPrivateKey;
@@ -109,7 +124,7 @@ namespace Dracoon.Sdk.SdkInternal.Mapper {
             if (apiUserPublicKey == null)
                 return null;
             UserPublicKey userPublicKey = new UserPublicKey() {
-                Version = apiUserPublicKey.Version,
+                Version = FromApiUserKeyPairVersion(apiUserPublicKey.Version),
                 PublicKey = apiUserPublicKey.PublicKey
             };
             return userPublicKey;
@@ -119,7 +134,7 @@ namespace Dracoon.Sdk.SdkInternal.Mapper {
             if (apiUserPrivateKey == null)
                 return null;
             UserPrivateKey userPrivateKey = new UserPrivateKey() {
-                Version = apiUserPrivateKey.Version,
+                Version = FromApiUserKeyPairVersion(apiUserPrivateKey.Version),
                 PrivateKey = apiUserPrivateKey.PrivateKey
             };
             return userPrivateKey;
@@ -152,9 +167,6 @@ namespace Dracoon.Sdk.SdkInternal.Mapper {
                 IsLocked = apiUserItem.IsLocked,
                 HasManagableRooms = apiUserItem.HasManagableRooms,
                 AvatarUuid = apiUserItem.AvatarUuid,
-                LockStatus = apiUserItem.LockStatus,
-                Login = apiUserItem.Login,
-                Title = apiUserItem.Title,
                 CreatedAt = apiUserItem.CreatedAt,
                 LastLoginSuccessAt = apiUserItem.LastLoginSuccessAt,
                 ExpireAt = apiUserItem.ExpireAt,
@@ -177,9 +189,6 @@ namespace Dracoon.Sdk.SdkInternal.Mapper {
                 IsLocked = apiUserData.IsLocked,
                 HasManagableRooms = apiUserData.HasManagableRooms,
                 AvatarUuid = apiUserData.AvatarUuid,
-                LockStatus = apiUserData.LockStatus,
-                Login = apiUserData.Login,
-                Title = apiUserData.Title,
                 CreatedAt = apiUserData.CreatedAt,
                 LastLoginSuccessAt = apiUserData.LastLoginSuccessAt,
                 ExpireAt = apiUserData.ExpireAt,
@@ -191,12 +200,8 @@ namespace Dracoon.Sdk.SdkInternal.Mapper {
                 UserAttributes = FromApiUserAttributes(apiUserData.UserAttributes),
 
                 AuthData = FromApiUserAuthData(apiUserData.AuthData),
-                AuthMethods = new List<UserAuthMethod>(),
                 PublicKeyContainer = FromApiUserPublicKey(apiUserData.PublicKeyContainer)
             };
-            foreach (ApiUserAuthMethod apiUserAuthMethod in apiUserData.AuthMethods) {
-                userData.AuthMethods.Add(FromApiUserAuthMethod(apiUserAuthMethod));
-            }
             return userData;
         }
 
@@ -244,26 +249,14 @@ namespace Dracoon.Sdk.SdkInternal.Mapper {
                 return null;
             }
             UserAuthData userAuthData = new UserAuthData() {
-                Method = FromAuthMethodTypeString(apiUserAuthData.Method),
+                Method = EnumConverter.ConvertValueToUserAuthMethodEnum(apiUserAuthData.Method),
                 Login = apiUserAuthData.Login,
                 Password = apiUserAuthData.Password,
                 MustChangePassword = apiUserAuthData.MustChangePassword,
-                AdConfigId = apiUserAuthData.AdConfigId,
-                OidConfigId = apiUserAuthData.OidConfigId
+                ADConfigId = apiUserAuthData.AdConfigId,
+                OIDConfigId = apiUserAuthData.OidConfigId
             };
             return userAuthData;
-        }
-
-        private static UserAuthMethod FromApiUserAuthMethod(ApiUserAuthMethod apiUserAuthMethod) {
-            UserAuthMethod userAuthMethod = new UserAuthMethod() {
-                AuthId = FromAuthMethodTypeString(apiUserAuthMethod.AuthId),
-                IsEnabled = apiUserAuthMethod.IsEnabled,
-                Options = new List<KeyValuePair<string, string>>()
-            };
-            foreach (ApiKeyValuePair option in apiUserAuthMethod.Options) {
-                userAuthMethod.Options.Add(CommonMapper.FromApiKeyValuePair(option));
-            }
-            return userAuthMethod;
         }
 
         internal static AttributesResponse FromApiAttributesResponse(ApiAttributesResponse apiAttributesResponse) {
@@ -318,12 +311,12 @@ namespace Dracoon.Sdk.SdkInternal.Mapper {
             }
 
             ApiUserAuthData apiUserAuthData = new ApiUserAuthData() {
-                Method = ToAuthMethodTypeString(userAuthData.Method),
+                Method = EnumConverter.ConvertUserAuthMethodEnumToValue(userAuthData.Method),
                 Login = userAuthData.Login,
                 Password = userAuthData.Password,
                 MustChangePassword = userAuthData.MustChangePassword,
-                AdConfigId = userAuthData.AdConfigId,
-                OidConfigId = userAuthData.OidConfigId
+                AdConfigId = userAuthData.ADConfigId,
+                OidConfigId = userAuthData.OIDConfigId
             };
             return apiUserAuthData;
         }
@@ -334,50 +327,12 @@ namespace Dracoon.Sdk.SdkInternal.Mapper {
             }
 
             ApiUserAuthDataUpdateRequest apiUserAuthDataUpdateRequest = new ApiUserAuthDataUpdateRequest() {
-                Method = ToAuthMethodTypeString(userAuthDataUpdateRequest.Method),
+                Method = EnumConverter.ConvertUserAuthMethodEnumToValue(userAuthDataUpdateRequest.Method),
                 Login = userAuthDataUpdateRequest.Login,
                 AdConfigId = userAuthDataUpdateRequest.AdConfigId,
                 OidConfigId = userAuthDataUpdateRequest.OidConfigId
             };
             return apiUserAuthDataUpdateRequest;
-        }
-
-
-        private const string AuthMethodTypeBasic = "basic";
-        private const string AuthMethodTypeSql = "sql";
-        private const string AuthMethodTypeAD = "active_directory";
-        private const string AuthMethodTypeRadius = "radius";
-        private const string AuthMethodTypeOpenId = "openid";
-
-        private static AuthMethodType FromAuthMethodTypeString(string authMethodTypeString) {
-            if (authMethodTypeString.Equals(AuthMethodTypeBasic, StringComparison.OrdinalIgnoreCase) || authMethodTypeString.Equals(AuthMethodTypeSql, StringComparison.OrdinalIgnoreCase)) {
-                return AuthMethodType.BasicOrSql;
-            }
-            if (authMethodTypeString.Equals(AuthMethodTypeAD, StringComparison.OrdinalIgnoreCase)) {
-                return AuthMethodType.ActiveDirectory;
-            }
-            if (authMethodTypeString.Equals(AuthMethodTypeRadius, StringComparison.OrdinalIgnoreCase)) {
-                return AuthMethodType.Radius;
-            }
-            if (authMethodTypeString.Equals(AuthMethodTypeOpenId, StringComparison.OrdinalIgnoreCase)) {
-                return AuthMethodType.OpenId;
-            }
-            return AuthMethodType.BasicOrSql;
-        }
-
-        private static string ToAuthMethodTypeString(AuthMethodType authMethodType) {
-            switch (authMethodType) {
-                case AuthMethodType.BasicOrSql:
-                    return AuthMethodTypeBasic;
-                case AuthMethodType.ActiveDirectory:
-                    return AuthMethodTypeAD;
-                case AuthMethodType.Radius:
-                    return AuthMethodTypeRadius;
-                case AuthMethodType.OpenId:
-                    return AuthMethodTypeOpenId;
-                default:
-                    return null;
-            }
         }
 
         internal static AvatarInfo FromApiAvatarInfo(ApiAvatarInfo apiInfo) {
@@ -387,5 +342,28 @@ namespace Dracoon.Sdk.SdkInternal.Mapper {
             };
             return info;
         }
+
+        internal static UserKeyPairAlgorithm FromApiUserKeyPairVersion(string version) {
+            switch (version) {
+                case "RSA-4096":
+                    return UserKeyPairAlgorithm.RSA4096;
+                case "A":
+                    return UserKeyPairAlgorithm.RSA2048;
+                default:
+                    throw new DracoonCryptoException(new DracoonCryptoCode(DracoonCryptoCode.UNKNOWN_ALGORITHM_ERROR.Code, "Unknown user key pair algorithm: " + version + "."));
+            }
+        }
+
+        internal static string ToApiUserKeyPairVersion(UserKeyPairAlgorithm algorithm) {
+            switch (algorithm) {
+                case UserKeyPairAlgorithm.RSA4096:
+                    return "RSA-4096";
+                case UserKeyPairAlgorithm.RSA2048:
+                    return "A";
+                default:
+                    throw new DracoonCryptoException(new DracoonCryptoCode(DracoonCryptoCode.UNKNOWN_ALGORITHM_ERROR.Code, "Unknown user key pair algorithm: " + algorithm.GetStringValue() + "."));
+            }
+        }
+
     }
 }

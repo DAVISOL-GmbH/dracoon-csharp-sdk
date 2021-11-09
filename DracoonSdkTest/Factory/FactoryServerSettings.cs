@@ -1,5 +1,8 @@
-﻿using Dracoon.Sdk.Model;
+﻿using Dracoon.Crypto.Sdk;
+using Dracoon.Sdk.Model;
 using Dracoon.Sdk.SdkInternal.ApiModel;
+using Dracoon.Sdk.SdkInternal.ApiModel.Settings;
+using System.Collections.Generic;
 
 namespace Dracoon.Sdk.UnitTest.Factory {
     internal class FactoryServerSettings {
@@ -11,8 +14,7 @@ namespace Dracoon.Sdk.UnitTest.Factory {
                     EulaEnabled = true,
                     MediaServerEnabled = false,
                     SharePasswordSmsEnabled = true,
-                    UseS3Storage = false,
-                    WeakPasswordEnabled = true
+                    UseS3Storage = false
                 };
             }
         }
@@ -25,8 +27,7 @@ namespace Dracoon.Sdk.UnitTest.Factory {
                     EulaEnabled = true,
                     MediaServerEnabled = false,
                     SharePasswordSmsEnabled = true,
-                    UseS3Storage = false,
-                    WeakPasswordEnabled = true
+                    UseS3Storage = false
                 };
             }
         }
@@ -38,6 +39,67 @@ namespace Dracoon.Sdk.UnitTest.Factory {
                     S3DefaultRegion = "DE",
                     SmsConfigEnabled = true,
                     S3EnforceDirectUpload = false
+                };
+            }
+        }
+
+        internal static List<FileKeyAlgorithmData> FileKeyAlgorithms {
+            get {
+                return new List<FileKeyAlgorithmData> {
+                    new FileKeyAlgorithmData {
+                        Algorithm = EncryptedFileKeyAlgorithm.RSA2048_AES256GCM,
+                        State = AlgorithmState.Discouraged
+                    },
+                    new FileKeyAlgorithmData {
+                        Algorithm = EncryptedFileKeyAlgorithm.RSA4096_AES256GCM,
+                        State = AlgorithmState.Required
+                    }
+                };
+            }
+        }
+
+        internal static List<UserKeyPairAlgorithmData> UserKeyPairAlgorithms {
+            get {
+                return new List<UserKeyPairAlgorithmData> {
+                    new UserKeyPairAlgorithmData {
+                        Algorithm = UserKeyPairAlgorithm.RSA2048,
+                        State = AlgorithmState.Discouraged
+                    },
+                    new UserKeyPairAlgorithmData {
+                        Algorithm = UserKeyPairAlgorithm.RSA4096,
+                        State = AlgorithmState.Required
+                    }
+                };
+            }
+        }
+
+        internal static ApiAlgorithms ApiAlgorithms {
+            get {
+                return new ApiAlgorithms {
+                    FileKeyAlgorithms = new List<ApiAlgorithm> {
+                        new ApiAlgorithm {
+                            Version = "RSA-4096/AES-256-GCM",
+                            Status = "REQUIRED",
+                            Description = "RSA-4096/AES-256-GCM"
+                        },
+                        new ApiAlgorithm {
+                            Version = "A",
+                            Status = "DISCOURAGED",
+                            Description = "RSA-2048/AES-256-GCM"
+                        }
+                    },
+                    KeyPairAlgorithms = new List<ApiAlgorithm> {
+                        new ApiAlgorithm {
+                            Version = "RSA-4096",
+                            Status = "REQUIRED",
+                            Description = "RSA-4096-OAEP-SHA256MGFSHA256"
+                        },
+                        new ApiAlgorithm {
+                            Version = "A",
+                            Status = "DISCOURAGED",
+                            Description = "RSA-2048-OAEP-SHA256MGF1"
+                        }
+                    }
                 };
             }
         }

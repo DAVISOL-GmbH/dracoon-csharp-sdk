@@ -34,6 +34,12 @@ namespace Dracoon.Sdk.Filter {
                 return new UpdatedAtFilter();
             }
         }
+        /// <include file="SpecificFilterDoc.xml" path='docs/members[@name="searchNodesFilter"]/UpdatedById/*'/>
+        public static UpdatedByIdFilter UpdatedById {
+            get {
+                return new UpdatedByIdFilter();
+            }
+        }
 
         /// <include file="SpecificFilterDoc.xml" path='docs/members[@name="searchNodesFilter"]/CreatedBy/*'/>
         public static CreatedByFilter CreatedBy {
@@ -45,6 +51,12 @@ namespace Dracoon.Sdk.Filter {
         public static CreatedAtFilter CreatedAt {
             get {
                 return new CreatedAtFilter();
+            }
+        }
+        /// <include file="SpecificFilterDoc.xml" path='docs/members[@name="searchNodesFilter"]/CreatedById/*'/>
+        public static CreatedByIdFilter CreatedById {
+            get {
+                return new CreatedByIdFilter();
             }
         }
 
@@ -65,6 +77,20 @@ namespace Dracoon.Sdk.Filter {
         public static ClassificationFilter Classification {
             get {
                 return new ClassificationFilter();
+            }
+        }
+
+        /// <include file="SpecificFilterDoc.xml" path='docs/members[@name="searchNodesFilter"]/ModificationTimestamp/*'/>
+        public static TimestampFilter ModificationTimestamp {
+            get {
+                return new TimestampFilter("timestampModification");
+            }
+        }
+
+        /// <include file="SpecificFilterDoc.xml" path='docs/members[@name="searchNodesFilter"]/CreationTimestamp/*'/>
+        public static TimestampFilter CreationTimestamp {
+            get {
+                return new TimestampFilter("timestampCreation");
             }
         }
 
@@ -97,6 +123,12 @@ namespace Dracoon.Sdk.Filter {
             FiltersList.Add(updatedAtFilter);
         }
 
+        /// <include file="SpecificFilterDoc.xml" path='docs/members[@name="searchNodesFilter"]/AddUpdatedByIdFilter/*'/>
+        public void AddUpdatedByIdFilter(DracoonFilterType<UpdatedByIdFilter> updatedByIdFilter) {
+            CheckFilter(updatedByIdFilter, nameof(updatedByIdFilter));
+            FiltersList.Add(updatedByIdFilter);
+        }
+
         /// <include file="SpecificFilterDoc.xml" path='docs/members[@name="searchNodesFilter"]/AddFileTypeFilter/*'/>
         public void AddFileTypeFilter(DracoonFilterType<FileTypeFilter> fileTypeFilter) {
             CheckFilter(fileTypeFilter, nameof(fileTypeFilter));
@@ -123,6 +155,18 @@ namespace Dracoon.Sdk.Filter {
         public void AddCreatedAtFilter(DracoonFilterType<CreatedAtFilter> createdAtFilter) {
             CheckFilter(createdAtFilter, nameof(createdAtFilter));
             FiltersList.Add(createdAtFilter);
+        }
+
+        /// <include file="SpecificFilterDoc.xml" path='docs/members[@name="searchNodesFilter"]/AddCreatedByIdFilter/*'/>
+        public void AddCreatedByIdFilter(DracoonFilterType<CreatedByIdFilter> createdByIdFilter) {
+            CheckFilter(createdByIdFilter, nameof(createdByIdFilter));
+            FiltersList.Add(createdByIdFilter);
+        }
+
+        /// <include file="SpecificFilterDoc.xml" path='docs/members[@name="searchNodesFilter"]/AddTimestampFilter/*'/>
+        public void AddTimestampFilter(DracoonFilterType<TimestampFilter> timestampFilter) {
+            CheckFilter(timestampFilter, nameof(timestampFilter));
+            FiltersList.Add(timestampFilter);
         }
     }
 }

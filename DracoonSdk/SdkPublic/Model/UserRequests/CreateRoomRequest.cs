@@ -29,8 +29,8 @@ namespace Dracoon.Sdk.Model {
         public CreateRoomRequest(string name, long parentId = 0, GroupMemberAcceptance newGroupMemberAcceptance = GroupMemberAcceptance.AutoAllow,
             long? quota = null, string notes = null, int? recycleBinRetentionPeriod = null, bool? hasInheritPermissions = null,
             List<long> adminUserIds = null, List<long> adminGroupIds = null,
-            DateTime? timestampCreation = null, DateTime? timestampModification = null)
-            : base(name, notes, timestampCreation, timestampModification) {
+            DateTime? creationTime = null, DateTime? modificationTime = null)
+            : base(name, notes, creationTime, modificationTime) {
             ParentId = parentId;
             Quota = quota;
             RecycleBinRetentionPeriod = recycleBinRetentionPeriod;

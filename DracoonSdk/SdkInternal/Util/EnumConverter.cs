@@ -3,7 +3,7 @@ using System;
 
 namespace Dracoon.Sdk.SdkInternal.Util {
     internal static class EnumConverter {
-        public static Func<string, NodeType> ConvertValueToNodeTypeEnum = value => {
+        public static readonly Func<string, NodeType> ConvertValueToNodeTypeEnum = value => {
             switch (value) {
                 case "room":
                     return NodeType.Room;
@@ -14,7 +14,7 @@ namespace Dracoon.Sdk.SdkInternal.Util {
             }
         };
 
-        public static Func<NodeType, string> ConvertNodeTypeEnumToValue = typeEnum => {
+        public static readonly Func<NodeType, string> ConvertNodeTypeEnumToValue = typeEnum => {
             switch (typeEnum) {
                 case NodeType.Room:
                     return "room";
@@ -22,6 +22,37 @@ namespace Dracoon.Sdk.SdkInternal.Util {
                     return "folder";
                 default:
                     return "file";
+            }
+        };
+
+        public static readonly Func<string, UserAuthMethod> ConvertValueToUserAuthMethodEnum = value => {
+            switch (value) {
+                case InternalAuthMethodConstants.Sql:
+                case InternalAuthMethodConstants.Basic:
+                    return UserAuthMethod.Basic;
+                case InternalAuthMethodConstants.ActiveDirectory:
+                    return UserAuthMethod.ActiveDirectory;
+                case InternalAuthMethodConstants.Radius:
+                    return UserAuthMethod.Radius;
+                case InternalAuthMethodConstants.OpenId:
+                    return UserAuthMethod.OpenID;
+                default:
+                    return UserAuthMethod.Unknown;
+            }
+        };
+
+        public static readonly Func<UserAuthMethod, string> ConvertUserAuthMethodEnumToValue = typeEnum => {
+            switch (typeEnum) {
+                case UserAuthMethod.Basic:
+                    return InternalAuthMethodConstants.Basic;
+                case UserAuthMethod.ActiveDirectory:
+                    return InternalAuthMethodConstants.ActiveDirectory;
+                case UserAuthMethod.Radius:
+                    return InternalAuthMethodConstants.Radius;
+                case UserAuthMethod.OpenID:
+                    return InternalAuthMethodConstants.OpenId;
+                default:
+                    return InternalAuthMethodConstants.Unknown;
             }
         };
 
@@ -104,13 +135,13 @@ namespace Dracoon.Sdk.SdkInternal.Util {
         public static string ConvertUserTypeToValue(UserType userType) {
             switch (userType) {
                 case UserType.Internal:
-                    return "internal";
+                    return InternalUserTypeConstants.Internal;
                 case UserType.External:
-                    return "external";
+                    return InternalUserTypeConstants.External;
                 case UserType.System:
-                    return "system";
+                    return InternalUserTypeConstants.System;
                 case UserType.Deleted:
-                    return "deleted";
+                    return InternalUserTypeConstants.Deleted;
                 default:
                     return null;
             }
@@ -133,17 +164,26 @@ namespace Dracoon.Sdk.SdkInternal.Util {
             }
         }
 
-        public static Func<string, UserType> ConvertValueToUserTypeEnum = value => {
+        public static readonly Func<string, UserType> ConvertValueToUserTypeEnum = value => {
             switch (value) {
-                case "internal":
+                case InternalUserTypeConstants.Internal:
                     return UserType.Internal;
-                case "external":
+                case InternalUserTypeConstants.External:
                     return UserType.External;
-                case "deleted":
+                case InternalUserTypeConstants.Deleted:
                     return UserType.Deleted;
                 default:
                     return UserType.System;
             }
         };
+
+        public static AlgorithmState ConvertValueToAlgorithmState(string value) {
+            switch (value) {
+                case "REQUIRED":
+                    return AlgorithmState.Required;
+                default:
+                    return AlgorithmState.Discouraged;
+            }
+        }
     }
 }

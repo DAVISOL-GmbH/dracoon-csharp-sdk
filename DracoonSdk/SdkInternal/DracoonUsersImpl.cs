@@ -1,7 +1,3 @@
-using System;
-using System.Drawing;
-using System.IO;
-using System.Net;
 using Dracoon.Sdk.Filter;
 using Dracoon.Sdk.Model;
 using Dracoon.Sdk.SdkInternal.ApiModel;
@@ -10,6 +6,8 @@ using Dracoon.Sdk.SdkInternal.Mapper;
 using Dracoon.Sdk.SdkInternal.Validator;
 using Dracoon.Sdk.Sort;
 using RestSharp;
+using System;
+using System.Net;
 using static Dracoon.Sdk.SdkInternal.DracoonRequestExecutor;
 
 namespace Dracoon.Sdk.SdkInternal {
@@ -22,7 +20,7 @@ namespace Dracoon.Sdk.SdkInternal {
             _client = client;
         }
 
-        public Image GetUserAvatar(long userId, string avatarUuid) {
+        public SkiaSharp.SKData GetUserAvatar(long userId, string avatarUuid) {
             _client.Executor.CheckApiServerVersion();
 
             #region Parameter Validation
@@ -38,8 +36,7 @@ namespace Dracoon.Sdk.SdkInternal {
             using (WebClient avatarClient = _client.Builder.ProvideAvatarDownloadWebClient()) {
                 byte[] avatarImageBytes =
                     _client.Executor.ExecuteWebClientDownload(avatarClient, new Uri(apiAvatarInfo.AvatarUri), RequestType.GetResourcesAvatar);
-                MemoryStream ms = new MemoryStream(avatarImageBytes);
-                return Image.FromStream(ms);
+                return SkiaSharp.SKData.CreateCopy(avatarImageBytes);
             }
         }
 

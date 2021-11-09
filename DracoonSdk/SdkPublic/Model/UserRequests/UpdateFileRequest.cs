@@ -12,8 +12,8 @@ namespace Dracoon.Sdk.Model {
 
         /// <include file="UserRequestsDoc.xml" path='docs/members[@name="updateFileRequest"]/UpdateFileRequestConstructor/*'/>
         public UpdateFileRequest(long id, string name = null, Classification? classification = null, string notes = null,
-            DateTime? expiration = null, DateTime? timestampCreation = null, DateTime? timestampModification = null)
-            : base(id, name, notes, timestampCreation, timestampModification) {
+            DateTime? expiration = null, DateTime? creationTime = null, DateTime? modificationTime = null)
+            : base(id, name, notes, creationTime, modificationTime) {
             Classification = classification;
             Expiration = expiration;
         }

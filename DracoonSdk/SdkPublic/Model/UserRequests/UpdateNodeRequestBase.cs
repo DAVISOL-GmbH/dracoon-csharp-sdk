@@ -3,8 +3,8 @@ using System;
 namespace Dracoon.Sdk.Model {
     public abstract class UpdateNodeRequestBase : TrackExternalModificationRequestBase {
 
-        public UpdateNodeRequestBase(long id, string name = null, string notes = null, DateTime? timestampCreation = null, DateTime? timestampModification = null)
-            : base(timestampCreation, timestampModification) {
+        public UpdateNodeRequestBase(long id, string name = null, string notes = null, DateTime? creationTime = null, DateTime? modificationTime = null)
+            : base(creationTime, modificationTime) {
             Id = id;
             Name = name;
             Notes = notes;

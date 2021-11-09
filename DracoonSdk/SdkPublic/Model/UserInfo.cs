@@ -7,13 +7,10 @@ namespace Dracoon.Sdk.Model {
         /// <include file = "ModelDoc.xml" path='docs/members[@name="userInfo"]/Id/*'/>
         public long? Id { get; internal set; }
 
-        /// <include file = "ModelDoc.xml" path='docs/members[@name="userInfo"]/DisplayName/*'/>
-        [Obsolete("Deprecated since version 4.11.0, use other fields from UserInfo instead to combine a display name")]
-        public string DisplayName { get; internal set; }
-
         /// <include file = "ModelDoc.xml" path='docs/members[@name="userInfo"]/AvatarUUID/*'/>
         public string AvatarUUID { get; internal set; }
 
+        /// <include file = "ModelDoc.xml" path='docs/members[@name="userInfo"]/UserName/*'/>
         public string UserName { get; internal set; }
 
         /// <include file = "ModelDoc.xml" path='docs/members[@name="userInfo"]/FirstName/*'/>

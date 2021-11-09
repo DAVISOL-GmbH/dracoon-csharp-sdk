@@ -1,11 +1,12 @@
+using Dracoon.Sdk.Error;
+using Dracoon.Sdk.Model;
+using Dracoon.Sdk.SdkInternal.ApiModel;
+using Dracoon.Sdk.SdkInternal.ApiModel.Settings;
+using Dracoon.Sdk.SdkInternal.Util;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using Dracoon.Sdk.Error;
-using Dracoon.Sdk.Model;
-using Dracoon.Sdk.SdkInternal.ApiModel;
-using Dracoon.Sdk.SdkInternal.Util;
 
 namespace Dracoon.Sdk.SdkInternal.Mapper {
     internal static class SettingsMapper {
@@ -18,10 +19,8 @@ namespace Dracoon.Sdk.SdkInternal.Mapper {
                 CryptoEnabled = apiGeneralConfig.CryptoEnabled,
                 EmailNotificationButtonEnabled = apiGeneralConfig.EmailNotificationButtonEnabled,
                 EulaEnabled = apiGeneralConfig.EulaEnabled,
-                MediaServerEnabled = apiGeneralConfig.MediaServerEnabled,
                 SharePasswordSmsEnabled = apiGeneralConfig.SharePasswordSmsEnabled,
                 UseS3Storage = apiGeneralConfig.UseS3Storage,
-                WeakPasswordEnabled = apiGeneralConfig.WeakPasswordEnabled,
                 S3TagsEnabled = apiGeneralConfig.S3TagsEnabled,
                 HideLoginInputFields = apiGeneralConfig.HideLoginInputFields,
                 AuthTokenRestrictions = FromApiAuthTokenRestrictions(apiGeneralConfig.AuthTokenRestrictions)
@@ -75,19 +74,6 @@ namespace Dracoon.Sdk.SdkInternal.Mapper {
             return defaults;
         }
 
-        internal static PasswordPolicies FromApiPasswordPolicies(ApiPasswordSettings apiPolicies) {
-            if (apiPolicies == null) {
-                return null;
-            }
-
-            PasswordPolicies policies = new PasswordPolicies {
-                EncryptionPolicies = FromApiPasswordEncryptionPolicies(apiPolicies.EncryptionPasswordSettings),
-                LoginPolicies = FromApiPasswordLoginPolicies(apiPolicies.LoginPasswordSettings),
-                SharePolicies = FromApiPasswordSharePolicies(apiPolicies.SharePasswordSettings)
-            };
-            return policies;
-        }
-
         internal static PasswordSharePolicies FromApiPasswordSharePolicies(ApiSharePasswordSettings apiPolicies) {
             if (apiPolicies == null) {
                 return null;
@@ -105,26 +91,6 @@ namespace Dracoon.Sdk.SdkInternal.Mapper {
             return policies;
         }
 
-        internal static PasswordLoginPolicies FromApiPasswordLoginPolicies(ApiLoginPasswordSettings apiPolicies) {
-            if (apiPolicies == null) {
-                return null;
-            }
-
-            PasswordLoginPolicies policies = new PasswordLoginPolicies {
-                CharacterPolicies = FromApiPasswordCharacterPolicies(apiPolicies.CharacterRules),
-                MinimumPasswordLength = apiPolicies.MinimumPasswordLength,
-                RejectDictionaryWords = apiPolicies.RejectDictionaryWords,
-                RejectKeyboardPatterns = apiPolicies.RejectKeyboardPatterns,
-                RejectOwnUserInfo = apiPolicies.RejectUserInfo,
-                NumberOfArchivedPasswords = apiPolicies.NumberOfArchivedPasswords,
-                UpdatedAt = apiPolicies.UpdatedAt,
-                UpdatedBy = UserMapper.FromApiUserInfo(apiPolicies.UpdatedBy),
-                LoginFailurePolicies = FromApiPasswordLoginFailurePolicies(apiPolicies.UserLockoutRules),
-                PasswordExpirationPolicies = FromApiPasswordExpirationPolicies(apiPolicies.PasswordExpirationRules)
-            };
-            return policies;
-        }
-
         internal static PasswordEncryptionPolicies FromApiPasswordEncryptionPolicies(ApiEncryptionPasswordSettings apiPolicies) {
             if (apiPolicies == null) {
                 return null;
@@ -137,31 +103,6 @@ namespace Dracoon.Sdk.SdkInternal.Mapper {
                 RejectOwnUserInfo = apiPolicies.RejectUserInfo,
                 UpdatedAt = apiPolicies.UpdatedAt,
                 UpdatedBy = UserMapper.FromApiUserInfo(apiPolicies.UpdatedBy)
-            };
-            return policies;
-        }
-
-        internal static PasswordExpiration FromApiPasswordExpirationPolicies(ApiPasswordExpiration apiPolicies) {
-            if (apiPolicies == null) {
-                return null;
-            }
-
-            PasswordExpiration policies = new PasswordExpiration {
-                IsEnabled = apiPolicies.ExpirationIsEnabled,
-                ExpiresAfterDays = apiPolicies.MaximumPasswordAgeInDays
-            };
-            return null;
-        }
-
-        internal static PasswordLoginFailurePolicies FromApiPasswordLoginFailurePolicies(ApiUserLockout apiPolicies) {
-            if (apiPolicies == null) {
-                return null;
-            }
-
-            PasswordLoginFailurePolicies policies = new PasswordLoginFailurePolicies {
-                IsEnabled = apiPolicies.Enabled,
-                LoginRetryPeriodMinutes = apiPolicies.MinutesToNextLoginAttempt,
-                MaximumNumberOfLoginFailures = apiPolicies.MaximumLoginFailureAttempts
             };
             return policies;
         }
@@ -241,15 +182,8 @@ namespace Dracoon.Sdk.SdkInternal.Mapper {
             if (apiAuthenticationMethod == null || string.IsNullOrEmpty(apiAuthenticationMethod.Name)) {
                 return null;
             }
-            var authMethodType = AuthMethodType.BasicOrSql;
-            if (string.Compare(apiAuthenticationMethod.Name, "active_directory", StringComparison.OrdinalIgnoreCase) == 0)
-                authMethodType = AuthMethodType.ActiveDirectory;
-            else if (string.Compare(apiAuthenticationMethod.Name, "radius", StringComparison.OrdinalIgnoreCase) == 0)
-                authMethodType = AuthMethodType.Radius;
-            else if (string.Compare(apiAuthenticationMethod.Name, "openid", StringComparison.OrdinalIgnoreCase) == 0)
-                authMethodType = AuthMethodType.OpenId;
-            //else if (string.Compare(apiAuthenticationMethod.Name, "basic", StringComparison.OrdinalIgnoreCase) != 0 && string.Compare(apiAuthenticationMethod.Name, "sql", StringComparison.OrdinalIgnoreCase) != 0)
-            //    return null;
+
+            var authMethodType = EnumConverter.ConvertValueToUserAuthMethodEnum(apiAuthenticationMethod.Name);
 
             ServerAuthenticationMethod authMethod = new ServerAuthenticationMethod() {
                 AuthMethod = authMethodType,
@@ -375,6 +309,61 @@ namespace Dracoon.Sdk.SdkInternal.Mapper {
             };
 
             return failoverServer;
+        }
+        internal static List<FileKeyAlgorithmData> FromApiFileKeyAlgorithms(List<ApiAlgorithm> apiFileKeyAlgorithms) {
+            if (apiFileKeyAlgorithms == null) {
+                return new List<FileKeyAlgorithmData>(0);
+            }
+
+            List<FileKeyAlgorithmData> fileKeyAlgorithms = new List<FileKeyAlgorithmData>(apiFileKeyAlgorithms.Count);
+            foreach (ApiAlgorithm current in apiFileKeyAlgorithms) {
+                fileKeyAlgorithms.Add(new FileKeyAlgorithmData() {
+                    Algorithm = FileMapper.FromApiFileKeyVersion(current.Version),
+                    State = EnumConverter.ConvertValueToAlgorithmState(current.Status)
+                });
+            }
+
+            return fileKeyAlgorithms;
+        }
+
+        internal static List<UserKeyPairAlgorithmData> FromApiUserKeyPairAlgorithms(List<ApiAlgorithm> apiUserKeyPairAlgorithms) {
+            if (apiUserKeyPairAlgorithms == null) {
+                return new List<UserKeyPairAlgorithmData>(0);
+            }
+
+            List<UserKeyPairAlgorithmData> userKeyPairAlgorithms = new List<UserKeyPairAlgorithmData>(apiUserKeyPairAlgorithms.Count);
+            foreach (ApiAlgorithm current in apiUserKeyPairAlgorithms) {
+                userKeyPairAlgorithms.Add(new UserKeyPairAlgorithmData() {
+                    Algorithm = UserMapper.FromApiUserKeyPairVersion(current.Version),
+                    State = EnumConverter.ConvertValueToAlgorithmState(current.Status)
+                });
+            }
+
+            return userKeyPairAlgorithms;
+        }
+
+        internal static ClassificationPolicies FromApiClassificationPolicies(ApiClassificationPolicies apiClassificationPolicies) {
+            if (apiClassificationPolicies == null) {
+                return null;
+            }
+
+            ClassificationPolicies classificationPolicies = new ClassificationPolicies {
+                ShareClassificationPolicy = FromApiShareClassificationPolicy(apiClassificationPolicies.SharePolicy)
+            };
+
+            return classificationPolicies;
+        }
+
+        internal static ShareClassificationPolicy FromApiShareClassificationPolicy(ApiShareClassificationPolicy apiShareClassificationPolicy) {
+            if (apiShareClassificationPolicy == null) {
+                return null;
+            }
+
+            ShareClassificationPolicy shareClassificationPolicy = new ShareClassificationPolicy {
+                ClassificationMinimumForSharePasswort = EnumConverter.ConvertValueToClassificationEnum(apiShareClassificationPolicy.PasswordRequirementMinimumClassification)
+            };
+
+            return shareClassificationPolicy;
         }
     }
 }

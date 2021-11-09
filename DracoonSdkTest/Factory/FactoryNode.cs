@@ -61,6 +61,8 @@ namespace Dracoon.Sdk.UnitTest.Factory {
                     CreatedBy = FactoryUser.UserInfo,
                     UpdatedAt = new DateTime(2000, 1, 1, 0, 0, 0).AddDays(2),
                     UpdatedBy = FactoryUser.UserInfo,
+                    CreationTimestamp = new DateTime(1999, 1, 1, 0, 0, 0),
+                    ModificationTimestamp = new DateTime(1999, 5, 1, 0, 0, 0),
                     HasInheritPermissions = true,
                     Permissions = NodePermissions,
                     IsFavorite = false,
@@ -73,7 +75,8 @@ namespace Dracoon.Sdk.UnitTest.Factory {
                     RecycleBinRetentionPeriod = 15,
                     CountDownloadShares = 6,
                     CountUploadShares = 4,
-                    BranchVersion = 12358239758
+                    BranchVersion = 12358239758,
+                    ConfigParentRoomId = 8
                 };
             }
         }
@@ -111,11 +114,12 @@ namespace Dracoon.Sdk.UnitTest.Factory {
                     CreatedBy = FactoryUser.ApiUserInfo,
                     UpdatedAt = new DateTime(2000, 1, 1, 0, 0, 0).AddDays(2),
                     UpdatedBy = FactoryUser.ApiUserInfo,
+                    CreationTimestamp = new DateTime(1999, 1, 1, 0, 0, 0),
+                    ModificationTimestamp = new DateTime(1999, 5, 1, 0, 0, 0),
                     InheritPermissions = true,
                     Permissions = ApiNodePermissions,
                     IsFavorite = false,
                     IsEncrypted = true,
-                    CountChildren = 5,
                     CountFiles = 1,
                     CountRooms = 2,
                     CountFolders = 2,
@@ -124,7 +128,8 @@ namespace Dracoon.Sdk.UnitTest.Factory {
                     CountDownloadShares = 6,
                     CountUploadShares = 4,
                     BranchVersion = 12358239758,
-                    FileType = ".txt"
+                    FileType = ".txt",
+                    ConfigParentRoomId = 8
                 };
             }
         }

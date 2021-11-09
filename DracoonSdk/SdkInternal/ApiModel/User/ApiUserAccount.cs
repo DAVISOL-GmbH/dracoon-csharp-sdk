@@ -6,8 +6,8 @@ namespace Dracoon.Sdk.SdkInternal.ApiModel {
         [JsonProperty("id", NullValueHandling = NullValueHandling.Ignore)]
         public long Id { get; set; }
 
-        [JsonProperty("login", NullValueHandling = NullValueHandling.Ignore)]
-        public string LoginName { get; set; }
+        [JsonProperty("authData", NullValueHandling = NullValueHandling.Ignore)]
+        public ApiAuthData AuthData { get; set; }
 
         [JsonProperty("userName", NullValueHandling = NullValueHandling.Ignore)]
         public string UserName { get; set; }
@@ -29,9 +29,6 @@ namespace Dracoon.Sdk.SdkInternal.ApiModel {
 
         [JsonProperty("hasManageableRooms", NullValueHandling = NullValueHandling.Ignore)]
         public bool HasManageableRooms { get; set; }
-
-        [JsonProperty("lockStatus", NullValueHandling = NullValueHandling.Ignore)]
-        public int LockStatus { get; set; }
 
         [JsonProperty("expireAt", NullValueHandling = NullValueHandling.Ignore)]
         public DateTime? ExpireAt { get; set; }

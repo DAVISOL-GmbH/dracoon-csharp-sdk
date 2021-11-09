@@ -6,10 +6,6 @@ namespace Dracoon.Sdk.SdkInternal.ApiModel {
         [JsonProperty("id", NullValueHandling = NullValueHandling.Ignore)]
         public long Id { get; set; }
 
-        [JsonProperty("displayName", NullValueHandling = NullValueHandling.Ignore)]
-        [Obsolete("Deprecated since version 4.11.0, use other fields from UserInfo instead to combine a display name")]
-        public string DisplayName { get; set; }
-
         [JsonProperty("avatarUuid", NullValueHandling = NullValueHandling.Ignore)]
         public string AvatarUuid { get; set; }
 

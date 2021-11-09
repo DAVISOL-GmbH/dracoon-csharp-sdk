@@ -1,5 +1,5 @@
-using System;
 using Dracoon.Sdk.SdkInternal;
+using System;
 
 namespace Dracoon.Sdk {
     /// <include file = "SdkPublicDoc.xml" path='docs/members[@name="dracoonClient"]/DracoonClient/*'/>

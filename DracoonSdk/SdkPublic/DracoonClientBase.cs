@@ -1,8 +1,8 @@
-using System;
 using Dracoon.Sdk.Model;
 using Dracoon.Sdk.SdkInternal;
 using Dracoon.Sdk.SdkInternal.OAuth;
 using Dracoon.Sdk.SdkInternal.Validator;
+using System;
 
 namespace Dracoon.Sdk {
     public abstract class DracoonClientBase : IInternalDracoonClientBase {
@@ -42,10 +42,6 @@ namespace Dracoon.Sdk {
 
         IRequestExecutor IInternalDracoonClientBase.Executor => _requestExecutor;
 
-        internal DracoonErrorParser ApiErrorParser {
-            get; private set;
-        }
-
         IOAuth IInternalDracoonClientBase.OAuth => _oauth;
 
         IDracoonHttpConfig IInternalDracoonClientBase.HttpConfig => _httpConfig;
@@ -67,8 +63,8 @@ namespace Dracoon.Sdk {
             _oauth = new OAuthClient(this, auth);
             _requestBuilder = new DracoonRequestBuilder(this, _oauth);
             _requestExecutor = new DracoonRequestExecutor(this, _oauth);
-            ApiErrorParser = new DracoonErrorParser(this);
-
+            DracoonErrorParser.DracoonClient = this;
+            
             #endregion
         }
 

@@ -1,8 +1,8 @@
-using System.Collections.Generic;
 using Dracoon.Sdk.Model;
 using Dracoon.Sdk.SdkInternal.ApiModel;
 using Dracoon.Sdk.SdkInternal.ApiModel.Requests;
 using Dracoon.Sdk.SdkInternal.Util;
+using System.Collections.Generic;
 
 namespace Dracoon.Sdk.SdkInternal.Mapper {
     internal static class NodeMapper {
@@ -29,6 +29,19 @@ namespace Dracoon.Sdk.SdkInternal.Mapper {
                 return null;
             }
 
+            int? countChildrens = 0;
+            if (apiNode.CountFiles.HasValue) {
+                countChildrens += apiNode.CountFiles.Value;
+            }
+
+            if (apiNode.CountFolders.HasValue) {
+                countChildrens += apiNode.CountFolders.Value;
+            }
+
+            if (apiNode.CountRooms.HasValue) {
+                countChildrens += apiNode.CountRooms.Value;
+            }
+
             Node node = new Node {
                 Id = apiNode.Id,
                 Type = EnumConverter.ConvertValueToNodeTypeEnum(apiNode.Type),
@@ -48,11 +61,13 @@ namespace Dracoon.Sdk.SdkInternal.Mapper {
                 CreatedBy = UserMapper.FromApiUserInfo(apiNode.CreatedBy),
                 UpdatedAt = apiNode.UpdatedAt,
                 UpdatedBy = UserMapper.FromApiUserInfo(apiNode.UpdatedBy),
+                CreationTimestamp = apiNode.CreationTimestamp,
+                ModificationTimestamp = apiNode.ModificationTimestamp,
                 HasInheritPermissions = apiNode.InheritPermissions,
                 Permissions = FromApiNodePermissions(apiNode.Permissions),
                 IsFavorite = apiNode.IsFavorite,
                 IsEncrypted = apiNode.IsEncrypted,
-                CountChildren = apiNode.CountChildren,
+                CountChildren = countChildrens,
                 CountRooms = apiNode.CountRooms,
                 CountFolders = apiNode.CountFolders,
                 CountFiles = apiNode.CountFiles,
@@ -61,9 +76,7 @@ namespace Dracoon.Sdk.SdkInternal.Mapper {
                 CountDownloadShares = apiNode.CountDownloadShares,
                 CountUploadShares = apiNode.CountUploadShares,
                 BranchVersion = apiNode.BranchVersion,
-                AuthParentId = apiNode.AuthParentId,
-                TimestampCreation = apiNode.TimestampCreation,
-                TimestampModification = apiNode.TimestampModification
+                ConfigParentRoomId = apiNode.ConfigParentRoomId
             };
             return node;
         }

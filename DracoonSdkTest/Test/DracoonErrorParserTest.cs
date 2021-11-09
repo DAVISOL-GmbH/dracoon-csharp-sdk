@@ -102,6 +102,7 @@ namespace Dracoon.Sdk.UnitTest.Test {
         [InlineData(RequestType.GetAuthenticatedPing, -80034, new string[] { }, new string[] { }, 3128)]
         [InlineData(RequestType.GetAuthenticatedPing, -80035, new string[] { }, new string[] { }, 3005)]
         [InlineData(RequestType.GetAuthenticatedPing, -80045, new string[] { }, new string[] { }, 3129)]
+        [InlineData(RequestType.GetAuthenticatedPing, -80064, new string[] { }, new string[] { }, 3750)]
         [InlineData(RequestType.GetAuthenticatedPing, -90033, new string[] { }, new string[] { }, 5802)]
         [InlineData(RequestType.GetAuthenticatedPing, 0, new string[] { }, new string[] { }, 3000)]
         internal void TestBadRequestCodes(RequestType type, int apiCode, string[] headerNames, string[] headerValues, int expectedSdkErrorCode) {
@@ -277,6 +278,45 @@ namespace Dracoon.Sdk.UnitTest.Test {
         }
 
         [Theory]
+        [InlineData(RequestType.GetAuthenticatedPing, 0, new string[] { "Retry-After" }, new string[] { "2" }, 5011)]
+        [InlineData(RequestType.GetAuthenticatedPing, 0, new string[] { }, new string[] { }, 5011)]
+        internal void TestTooManyRequestsFailedCodes(RequestType type, int apiCode, string[] headerNames, string[] headerValues,
+            int expectedSdkErrorCode) {
+            // ARRANGE
+            HttpWebResponse r = CreateMockedHttpWebResponse(429, GenerateJsonError(429, apiCode), headerNames, headerValues);
+            WebException we = new WebException("Some message!", null, WebExceptionStatus.ProtocolError, r);
+
+            try {
+                // ACT
+                DracoonErrorParser.ParseError(we, type);
+            } catch (DracoonApiException dae) {
+                // ASSERT
+                Assert.Equal(expectedSdkErrorCode, dae.ErrorCode.Code);
+            } finally {
+                r.Close();
+            }
+        }
+
+        [Theory]
+        [InlineData(RequestType.GetAuthenticatedPing, 0, new string[] { }, new string[] { }, 2105)]
+        internal void TestPaymentRequiredFailedCodes(RequestType type, int apiCode, string[] headerNames, string[] headerValues,
+            int expectedSdkErrorCode) {
+            // ARRANGE
+            HttpWebResponse r = CreateMockedHttpWebResponse(402, GenerateJsonError(402, apiCode), headerNames, headerValues);
+            WebException we = new WebException("Some message!", null, WebExceptionStatus.ProtocolError, r);
+
+            try {
+                // ACT
+                DracoonErrorParser.ParseError(we, type);
+            } catch (DracoonApiException dae) {
+                // ASSERT
+                Assert.Equal(expectedSdkErrorCode, dae.ErrorCode.Code);
+            } finally {
+                r.Close();
+            }
+        }
+
+        [Theory]
         [InlineData(RequestType.GetAuthenticatedPing, -90090, new string[] { }, new string[] { }, 5801)]
         [InlineData(RequestType.GetAuthenticatedPing, 0, new string[] { }, new string[] { }, 5000)]
         internal void TestBadGatewayCodes(RequestType type, int apiCode, string[] headerNames, string[] headerValues, int expectedSdkErrorCode) {
@@ -300,7 +340,7 @@ namespace Dracoon.Sdk.UnitTest.Test {
         [InlineData(RequestType.GetAuthenticatedPing, -40200, new string[] { }, new string[] { }, 5109)]
         [InlineData(RequestType.GetAuthenticatedPing, -50504, new string[] { }, new string[] { }, 5110)]
         [InlineData(RequestType.GetAuthenticatedPing, 0, new string[] { }, new string[] { }, 5107)]
-        internal void TestInsufficentStorageCodes(RequestType type, int apiCode, string[] headerNames, string[] headerValues,
+        internal void TestInsufficientStorageCodes(RequestType type, int apiCode, string[] headerNames, string[] headerValues,
             int expectedSdkErrorCode) {
             // ARRANGE
             HttpWebResponse r = CreateMockedHttpWebResponse(507, GenerateJsonError(507, apiCode), headerNames, headerValues);
@@ -339,14 +379,8 @@ namespace Dracoon.Sdk.UnitTest.Test {
         internal void TestCustomErrorCodesIRestRequest() {
             // ARRANGE
             IRestResponse response = FactoryRestSharp.RestResponse;
-            response.Headers.Add(new Parameter() {
-                Name = "testHeader",
-                Value = "1234"
-            });
-            response.Headers.Add(new Parameter() {
-                Name = "X-Forbidden",
-                Value = "403"
-            });
+            response.Headers.Add(new Parameter("testHeader", "1234", ParameterType.HttpHeader));
+            response.Headers.Add(new Parameter("X-Forbidden", "403", ParameterType.HttpHeader));
 
             try {
                 // ACT

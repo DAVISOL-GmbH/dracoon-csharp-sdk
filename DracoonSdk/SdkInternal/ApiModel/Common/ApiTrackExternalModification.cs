@@ -1,13 +1,13 @@
-using System;
 using Newtonsoft.Json;
+using System;
 
 namespace Dracoon.Sdk.SdkInternal.ApiModel {
     internal abstract class ApiTrackExternalModification {
 
         [JsonProperty("timestampCreation", NullValueHandling = NullValueHandling.Ignore)]
-        public DateTime? TimestampCreation { get; set; }
+        public DateTime? CreationTimestamp { get; set; }
 
         [JsonProperty("timestampModification", NullValueHandling = NullValueHandling.Ignore)]
-        public DateTime? TimestampModification { get; set; }
+        public DateTime? ModificationTimestamp { get; set; }
     }
 }

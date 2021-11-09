@@ -3,7 +3,6 @@ using static Dracoon.Sdk.SdkInternal.DracoonRequestExecutor;
 
 namespace Dracoon.Sdk.SdkInternal.OAuth {
     internal class OAuthClient : IOAuth {
-        private const string Logtag = nameof(OAuthClient);
 
         private readonly IInternalDracoonClientBase _client;
         private DracoonAuth _auth;
@@ -20,6 +19,7 @@ namespace Dracoon.Sdk.SdkInternal.OAuth {
         internal OAuthClient(IInternalDracoonClientBase client, DracoonAuth auth) {
             _client = client;
             _auth = auth;
+            OAuthErrorParser.DracoonClient = client;
         }
 
         string IOAuth.BuildAuthString() {

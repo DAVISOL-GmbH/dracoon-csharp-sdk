@@ -1,5 +1,5 @@
-using System;
 using Dracoon.Sdk.Model;
+using System;
 
 namespace Dracoon.Sdk {
     /// <include file = "SdkPublicInterfacesDoc.xml" path='docs/members[@name="iServer"]/IServer/*'/>
@@ -11,7 +11,10 @@ namespace Dracoon.Sdk {
         DateTime? GetTime();
 
         /// <include file = "SdkPublicInterfacesDoc.xml" path='docs/members[@name="iServer"]/ServerSettings/*'/>
-        IServerSettings ServerSettings { get; set; }
+        IServerSettings ServerSettings { get; }
+
+        /// <include file = "SdkPublicInterfacesDoc.xml" path='docs/members[@name="iServer"]/ServerPolicies/*'/>
+        IServerPolicies ServerPolicies { get; }
 
         PublicDownloadShare GetPublicDownloadShare(string accessKey);
 

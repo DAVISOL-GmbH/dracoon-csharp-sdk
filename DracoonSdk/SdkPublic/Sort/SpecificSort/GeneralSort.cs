@@ -30,12 +30,14 @@ namespace Dracoon.Sdk.Sort {
             Parent.SortString += "createdAt";
         }
     }
+}
+namespace Dracoon.Sdk.Sort {
 
-    /// <include file = "SpecificSort.xml" path='docs/members[@name="generalSort"]/NameSort/*'/>
-    public class NameSort<T> : DracoonSortOrder<T> where T : DracoonSort {
-        /// <include file = "SpecificSort.xml" path='docs/members[@name="generalSort"]/NameSortConstructor/*'/>
-        public NameSort(T p) : base(p) {
-            Parent.SortString += "name";
+    /// <include file = "SpecificSort.xml" path='docs/members[@name="generalSort"]/SortField/*'/>
+    public class SortField<T> : DracoonSortOrder<T> where T : DracoonSort {
+        /// <include file = "SpecificSort.xml" path='docs/members[@name="generalSort"]/SortFieldConstructor/*'/>
+        public SortField(T p, string sortField) : base(p) {
+            Parent.SortString += sortField;
         }
     }
 
@@ -57,6 +59,13 @@ namespace Dracoon.Sdk.Sort {
 
         public ValueSort(T p) : base(p) {
             Parent.SortString += "value";
+        }
+    }
+
+    public class NameSort<T> : DracoonSortOrder<T> where T : DracoonSort {
+
+        public NameSort(T p) : base(p) {
+            Parent.SortString += "name";
         }
     }
 

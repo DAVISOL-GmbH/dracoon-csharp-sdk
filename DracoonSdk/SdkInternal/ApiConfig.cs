@@ -2,20 +2,22 @@ using System;
 using System.Text;
 
 namespace Dracoon.Sdk.SdkInternal {
-    internal class ApiConfig {
-        internal const string MinimumApiVersion = "4.11.0";
+    internal static class ApiConfig {
+        internal const string MinimumApiVersion = "4.23.0";
         internal const string ApiPrefix = "api/v4";
         internal const string BrandingApiPrefix = "branding/api/v1";
         internal const string AuthorizationHeader = "Authorization";
-        // mediaserver/image/{mediaToken}/{width}x{height}
+        // token template: mediaserver/image/{mediaToken}/{width}x{height}
         internal const string MediaTokenTemplate = "mediaserver/image/{0}/{1}x{2}";
 
+
+        // Character set based on https://wiki.dracoon.com/display/DevOrga/Password+Policies
         internal static readonly char[] UPPERCASE_SET = {
             'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'
         };
 
         internal static readonly char[] LOWERCASE_SET = {
-            'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'
+            'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'
         };
 
         internal static readonly char[] NUMERIC_SET = {
@@ -28,6 +30,12 @@ namespace Dracoon.Sdk.SdkInternal {
         };
 
         internal static readonly Encoding ENCODING = Encoding.UTF8;
+
+        #region Crypto-Algorithm
+
+        internal const string ApiVersionMin_Algorithm_UserKeyPair_RSA4096 = "4.24.0";
+
+        #endregion
 
         #region Public-Endpoint
 
@@ -50,9 +58,9 @@ namespace Dracoon.Sdk.SdkInternal {
         internal const string ApiGetUserAccount = ApiPrefix + "/user/account";
         internal const string ApiGetCustomerAccount = ApiPrefix + "/user/account/customer";
         internal const string ApiGetUserKeyPair = ApiPrefix + "/user/account/keypair";
+        internal const string ApiGetUserKeyPairs = ApiPrefix + "/user/account/keypairs";
         internal const string ApiGetAuthenticatedPing = ApiPrefix + "/user/ping";
         internal const string ApiGetAvatar = ApiPrefix + "/user/account/avatar";
-        internal const string ApiDeleteAvatar = ApiPrefix + "/user/account/avatar";
         internal const string ApiGetUserProfileAttributes = ApiPrefix + "/user/profileAttributes";
 
         #endregion
@@ -74,6 +82,13 @@ namespace Dracoon.Sdk.SdkInternal {
 
         internal const string ApiDeleteUserKeyPair = ApiPrefix + "/user/account/keypair";
         internal const string ApiDeleteUserProfileAttributes = ApiPrefix + "/user/profileAttributes/{key}";
+        internal const string ApiDeleteAvatar = ApiPrefix + "/user/account/avatar";
+
+        #endregion
+
+        #region Minimum version requirements
+
+        internal const string ApiGetUserKeyPairsMinimumVersion = "4.24.0";
 
         #endregion
 
@@ -86,7 +101,6 @@ namespace Dracoon.Sdk.SdkInternal {
         internal const string ApiGetChildNodes = ApiPrefix + "/nodes";
         internal const string ApiGetNode = ApiPrefix + "/nodes/{nodeId}";
         internal const string ApiGetFileKey = ApiPrefix + "/nodes/files/{fileId}/user_file_key";
-        internal const string ApiGetFileDownload = ApiPrefix + "/downloads";
         internal const string ApiGetSearchNodes = ApiPrefix + "/nodes/search";
         internal const string ApiGetMissingFileKeys = ApiPrefix + "/nodes/missingFileKeys";
         internal const string ApiGetRecycleBin = ApiPrefix + "/nodes/{roomId}/deleted_nodes";
@@ -174,22 +188,34 @@ namespace Dracoon.Sdk.SdkInternal {
 
         #region Config-Endpoint
 
+        internal const string ApiConfigInfoPrefix = ApiPrefix + "/config/info";
         internal const string ApiSystemConfigPrefix = ApiPrefix + "/system/config";
-
         internal const string ApiConfigSettingsPrefix = ApiSystemConfigPrefix + "/settings";
+        internal const string ApiPoliciesSettingsPrefix = ApiSystemConfigPrefix + "/policies";
 
         #region GET
 
-        internal const string ApiGetGeneralConfig = ApiConfigSettingsPrefix + "/general";
-        internal const string ApiGetInfrastructureConfig = ApiConfigSettingsPrefix + "/infrastructure";
-        internal const string ApiGetDefaultsConfig = ApiConfigSettingsPrefix + "/defaults";
-        internal const string ApiGetPasswordPolicies = ApiSystemConfigPrefix + "/policies/passwords";
+        internal const string ApiGetGeneralConfig = ApiConfigInfoPrefix + "/general";
+        internal const string ApiGetInfrastructureConfig = ApiConfigInfoPrefix + "/infrastructure";
+        internal const string ApiGetDefaultsConfig = ApiConfigInfoPrefix + "/defaults";
+        internal const string ApiGetPasswordPolicies = ApiConfigInfoPrefix + "/policies/passwords";
+        internal const string ApiGetAlgorithms = ApiConfigInfoPrefix + "/policies/algorithms";
+        internal const string ApiGetClassificationPolicies = ApiConfigInfoPrefix + "/policies/classifications";
+
+        internal const string ApiGetSystemSettingsGeneralConfig = ApiConfigSettingsPrefix + "/general";
+        internal const string ApiGetSystemSettingsInfrastructureConfig = ApiConfigSettingsPrefix + "/infrastructure";
+        internal const string ApiGetSystemSettingsDefaultsConfig = ApiConfigSettingsPrefix + "/defaults";
+        internal const string ApiGetSystemSettingsEventlogConfig = ApiConfigSettingsPrefix + "/eventlog";
+        internal const string ApiGetSystemSettingsAuthConfig = ApiConfigSettingsPrefix + "/auth";
+
+        internal const string ApiGetSystemSettingsPasswordPolicies = ApiPoliciesSettingsPrefix + "/passwords";
 
         #endregion
 
         #region Minimum version requirements
 
-        internal const string ApiGetPasswordPoliciesMinimumVersion = "4.14.0";
+        internal const string ApiGetAlgorithmsMinimumVersion = "4.24.0";
+        internal const string ApiGetClassificationPoliciesMinimumVersion = "4.30.0";
 
         #endregion
 
@@ -367,11 +393,13 @@ namespace Dracoon.Sdk.SdkInternal {
         #endregion
 
         internal static Uri BuildApiUrl(Uri baseUrl, params string[] pathSegments) {
-            UriBuilder uriBuilder = new UriBuilder(baseUrl);
+            StringBuilder sb = new StringBuilder();
             for (int i = 0; i < pathSegments.Length; i++) {
-                uriBuilder.Path += i != 0 ? "/" + pathSegments[i] : pathSegments[i];
+                sb.Append(i != 0 ? "/" + pathSegments[i] : pathSegments[i]);
             }
 
+            UriBuilder uriBuilder = new UriBuilder(baseUrl);
+            uriBuilder.Path = sb.ToString();
             return uriBuilder.Uri;
         }
     }

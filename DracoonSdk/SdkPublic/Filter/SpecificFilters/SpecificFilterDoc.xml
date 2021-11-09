@@ -120,6 +120,18 @@
       </summary>
     </UpdatedByFilterExtension>
 
+    <UpdatedByIdFilter>
+      <summary>
+        Filter for a specific user id which updated a e.g. node.
+      </summary>
+    </UpdatedByIdFilter>
+
+    <UpdatedByIdFilterExtension>
+      <summary>
+        Extends the functions for <see cref="Dracoon.Sdk.Filter.UpdatedByIdFilter"/>.
+      </summary>
+    </UpdatedByIdFilterExtension>
+
     <ParentPathFilter>
       <summary>
         Filter to get only results where the parent path field matches the requested.
@@ -168,6 +180,18 @@
       </summary>
     </CreatedByFilterExtension>
 
+    <CreatedByIdFilter>
+      <summary>
+        Filter to get only results where the creator id equals the specified value.
+      </summary>
+    </CreatedByIdFilter>
+
+    <CreatedByIdFilterExtension>
+      <summary>
+        Extends the functions for <see cref="Dracoon.Sdk.Filter.CreatedByIdFilter"/>.
+      </summary>
+    </CreatedByIdFilterExtension>
+
     <TargetIdFilter>
       <summary>
         Filter to get only results where the referenced node is the specified id.
@@ -180,6 +204,17 @@
       </summary>
     </TargetIdFilterExtension>
 
+    <TimestampFilter>
+      <summary>
+        Filter to restrict the period of time.
+      </summary>
+    </TimestampFilter>
+
+    <TimestampFilterExtension>
+      <summary>
+        Extends the functions for <see cref="Dracoon.Sdk.Filter.TimestampFilter"/>.
+      </summary>
+    </TimestampFilterExtension>
   </members>
 
   <members name="getDownloadSharesFilter">
@@ -478,12 +513,21 @@
 
     <UpdatedBy>
       <summary>
-        Gets a new filter for the UpdatedBy field of a node  of a node (<see cref="Dracoon.Sdk.Model.Node"/>).
+        Gets a new filter for the UpdatedBy field of a node (<see cref="Dracoon.Sdk.Model.Node"/>).
         <para>
           See also <seealso cref="Dracoon.Sdk.Filter.UpdatedByFilter"/>
         </para>
       </summary>
     </UpdatedBy>
+
+    <UpdatedById>
+      <summary>
+        Gets a new filter for the UpdatedById field of a node (<see cref="Dracoon.Sdk.Model.Node"/>).
+        <para>
+          See also <seealso cref="Dracoon.Sdk.Filter.UpdatedByIdFilter"/>
+        </para>
+      </summary>
+    </UpdatedById>
 
     <CreatedBy>
       <summary>
@@ -493,6 +537,15 @@
         </para>
       </summary>
     </CreatedBy>
+
+    <CreatedById>
+      <summary>
+        Gets a new filter for created by id.
+        <para>
+          See also <seealso cref="Dracoon.Sdk.Filter.CreatedByIdFilter"/>
+        </para>
+      </summary>
+    </CreatedById>
 
     <FileType>
       <summary>
@@ -511,6 +564,24 @@
         </para>
       </summary>
     </Classification>
+
+    <ModificationTimestamp>
+      <summary>
+        Gets a new timestamp filter for the time of modification of the file.
+        <para>
+          See also <seealso cref="Dracoon.Sdk.Filter.TimestampFilter"/>
+        </para>
+      </summary>
+    </ModificationTimestamp>
+
+    <CreationTimestamp>
+      <summary>
+        Gets a new timestamp filter for the time of creation of the file.
+        <para>
+          See also <seealso cref="Dracoon.Sdk.Filter.TimestampFilter"/>
+        </para>
+      </summary>
+    </CreationTimestamp>
 
     <AddNodeTypeFilter>
       <summary>
@@ -560,6 +631,18 @@
       </exception>
     </AddUpdatedByFilter>
 
+    <AddUpdatedByIdFilter>
+      <summary>
+        Adds a updated by user id filter to the search nodes filter.
+      </summary>
+      <param name="updatedByIdFilter">
+        The defined updated by id filter.
+      </param>
+      <exception cref="System.ArgumentException">
+        <include file="../../Error/ErrorDoc.xml" path='docs/members[@name="system"]/ArgumentException/*'/>
+      </exception>
+    </AddUpdatedByIdFilter>
+
     <AddFileTypeFilter>
       <summary>
         Adds a file type filter to the search nodes filter.
@@ -595,6 +678,30 @@
         <include file="../../Error/ErrorDoc.xml" path='docs/members[@name="system"]/ArgumentException/*'/>
       </exception>
     </AddCreatedByFilter>
+
+    <AddCreatedByIdFilter>
+      <summary>
+        Adds a created by id filter to the search nodes filter.
+      </summary>
+      <param name="createdByIdFilter">
+        The defined created by id filter.
+      </param>
+      <exception cref="System.ArgumentException">
+        <include file="../../Error/ErrorDoc.xml" path='docs/members[@name="system"]/ArgumentException/*'/>
+      </exception>
+    </AddCreatedByIdFilter>
+
+    <AddTimestampFilter>
+      <summary>
+        Adds a timestamp filter to the search nodes filter.
+      </summary>
+      <param name="timestampFilter">
+        The defined timestamp filter.
+      </param>
+      <exception cref="System.ArgumentException">
+        <include file="../../Error/ErrorDoc.xml" path='docs/members[@name="system"]/ArgumentException/*'/>
+      </exception>
+    </AddTimestampFilter>
 
   </members>
 

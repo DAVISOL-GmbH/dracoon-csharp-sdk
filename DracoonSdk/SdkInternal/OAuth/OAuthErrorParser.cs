@@ -1,15 +1,14 @@
-using System;
-using System.Net;
 using Dracoon.Sdk.Error;
 using Newtonsoft.Json;
 using RestSharp;
+using System;
+using System.Net;
 using static Dracoon.Sdk.SdkInternal.DracoonRequestExecutor;
 
 namespace Dracoon.Sdk.SdkInternal.OAuth {
-    internal class OAuthErrorParser {
+    internal static class OAuthErrorParser {
         private const string Logtag = nameof(OAuthErrorParser);
 
-        private const string ErrInvalidRequest = "invalid_request";
         private const string ErrUnsupportedResponseType = "unsupported_response_type";
         private const string ErrUnsupportedGrantType = "unsupported_grant_type";
         private const string ErrInvalidClient = "invalid_client";
@@ -17,11 +16,19 @@ namespace Dracoon.Sdk.SdkInternal.OAuth {
         private const string ErrInvalidScope = "invalid_scope";
         private const string ErrAccessDenied = "access_denied";
 
-        private readonly IInternalDracoonClientBase _client;
+        internal static IInternalDracoonClientBase DracoonClient { get; set; }
 
-        internal OAuthErrorParser(IInternalDracoonClientBase client)
-        {
-            _client = client;
+        private static OAuthError GetOAuthError(string errorResponseBody) {
+            try {
+                OAuthError apiError = JsonConvert.DeserializeObject<OAuthError>(errorResponseBody);
+                if (apiError != null) {
+                    DracoonClient.Log.Debug(Logtag, apiError.ToString());
+                }
+
+                return apiError;
+            } catch (Exception) {
+                return null;
+            }
         }
 
         internal static void ParseError(string error) {
@@ -41,33 +48,20 @@ namespace Dracoon.Sdk.SdkInternal.OAuth {
             }
         }
 
-        private OAuthError GetOAuthError(string errorResponseBody) {
-            try {
-                OAuthError apiError = JsonConvert.DeserializeObject<OAuthError>(errorResponseBody);
-                if (apiError != null) {
-                    _client.Log.Debug(Logtag, apiError.ToString());
-                }
-
-                return apiError;
-            } catch (Exception) {
-                return null;
-            }
-        }
-
-        internal void ParseError(IRestResponse response, RequestType requestType) {
+        internal static void ParseError(IRestResponse response, RequestType requestType) {
             OAuthError oauthError = GetOAuthError(response.Content);
             DracoonApiCode resultCode = Parse(response.StatusCode, oauthError, requestType);
-            _client.Log.Debug(Logtag, $"Query for '{requestType}' failed with {resultCode.Text}");
+            DracoonClient.Log.Debug(Logtag, $"Query for '{requestType}' failed with {resultCode.Text}");
 
             throw new DracoonApiException(resultCode);
         }
 
         private static DracoonApiCode Parse(HttpStatusCode statusCode, OAuthError oAuthError, RequestType requestType) {
-            switch ((int) statusCode) {
-                case (int) HttpStatusCode.BadRequest:
+            switch ((int)statusCode) {
+                case (int)HttpStatusCode.BadRequest:
                     return ParseBadRequest(oAuthError, requestType);
-                case (int) HttpStatusCode.Unauthorized:
-                    return ParseUnauthorized(oAuthError, requestType);
+                case (int)HttpStatusCode.Unauthorized:
+                    return ParseUnauthorized();
                 default:
                     return DracoonApiCode.AUTH_UNKNOWN_ERROR;
             }
@@ -102,7 +96,7 @@ namespace Dracoon.Sdk.SdkInternal.OAuth {
             }
         }
 
-        private static DracoonApiCode ParseUnauthorized(OAuthError oAuthError, RequestType requestType) {
+        private static DracoonApiCode ParseUnauthorized() {
             return DracoonApiCode.AUTH_OAUTH_CLIENT_UNAUTHORIZED;
         }
     }

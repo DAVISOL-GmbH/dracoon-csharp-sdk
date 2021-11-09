@@ -1,4 +1,6 @@
+﻿using Dracoon.Crypto.Sdk;
 using Dracoon.Crypto.Sdk.Model;
+using Dracoon.Sdk.Error;
 using Dracoon.Sdk.Model;
 using Dracoon.Sdk.SdkInternal.ApiModel;
 using Dracoon.Sdk.SdkInternal.ApiModel.Requests;
@@ -20,8 +22,8 @@ namespace Dracoon.Sdk.SdkInternal.Mapper {
                 Notes = updateFileRequest.Notes,
                 Classification = EnumConverter.ConvertClassificationEnumToValue(updateFileRequest.Classification),
                 Expiration = apiExpiration,
-                TimestampCreation = updateFileRequest.TimestampCreation,
-                TimestampModification = updateFileRequest.TimestampModification
+                CreationTimestamp = updateFileRequest.CreationTimestamp,
+                ModificationTimestamp = updateFileRequest.ModificationTimestamp
             };
             return apiUpdateFileRequest;
         }
@@ -31,7 +33,7 @@ namespace Dracoon.Sdk.SdkInternal.Mapper {
                 Key = encryptedFileKey.Key,
                 Iv = encryptedFileKey.Iv,
                 Tag = encryptedFileKey.Tag,
-                Version = encryptedFileKey.Version
+                Version = ToApiFileKeyVersion(encryptedFileKey.Version)
             };
             return apiEncryptedFileKey;
         }
@@ -41,7 +43,7 @@ namespace Dracoon.Sdk.SdkInternal.Mapper {
                 Key = apiEncryptedFileKey.Key,
                 Iv = apiEncryptedFileKey.Iv,
                 Tag = apiEncryptedFileKey.Tag,
-                Version = apiEncryptedFileKey.Version
+                Version = FromApiFileKeyVersion(apiEncryptedFileKey.Version)
             };
             return encryptedFileKey;
         }
@@ -61,8 +63,8 @@ namespace Dracoon.Sdk.SdkInternal.Mapper {
                 Classification = EnumConverter.ConvertClassificationEnumToValue(fileUploadRequest.Classification),
                 Notes = fileUploadRequest.Notes,
                 Expiration = apiExpiration,
-                TimestampCreation = fileUploadRequest.TimestampCreation,
-                TimestampModification = fileUploadRequest.TimestampModification
+                CreationTimestamp = fileUploadRequest.CreationTime,
+                ModificationTimestamp = fileUploadRequest.ModificationTime
             };
             return apiCreateFileUpload;
         }
@@ -74,5 +76,28 @@ namespace Dracoon.Sdk.SdkInternal.Mapper {
             };
             return apiCompleteFileUpload;
         }
+
+        internal static string ToApiFileKeyVersion(EncryptedFileKeyAlgorithm algorithm) {
+            switch (algorithm) {
+                case EncryptedFileKeyAlgorithm.RSA4096_AES256GCM:
+                    return "RSA-4096/AES-256-GCM";
+                case EncryptedFileKeyAlgorithm.RSA2048_AES256GCM:
+                    return "A";
+                default:
+                    throw new DracoonCryptoException(new DracoonCryptoCode(DracoonCryptoCode.UNKNOWN_ALGORITHM_ERROR.Code, "Unknown algorithm " + algorithm.GetStringValue() + "."));
+            }
+        }
+
+        internal static EncryptedFileKeyAlgorithm FromApiFileKeyVersion(string algorithm) {
+            switch (algorithm) {
+                case "A":
+                    return EncryptedFileKeyAlgorithm.RSA2048_AES256GCM;
+                case "RSA-4096/AES-256-GCM":
+                    return EncryptedFileKeyAlgorithm.RSA4096_AES256GCM;
+                default:
+                    throw new DracoonCryptoException(new DracoonCryptoCode(DracoonCryptoCode.UNKNOWN_ALGORITHM_ERROR.Code, "Unknown algorithm " + algorithm + "."));
+            }
+        }
+
     }
 }

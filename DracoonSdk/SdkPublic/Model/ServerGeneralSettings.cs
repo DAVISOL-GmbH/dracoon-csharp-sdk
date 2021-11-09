@@ -1,5 +1,3 @@
-using System;
-
 namespace Dracoon.Sdk.Model {
     /// <include file = "ModelDoc.xml" path='docs/members[@name="serverGeneralSettings"]/ServerGeneralSettings/*'/>
     public class ServerGeneralSettings {
@@ -14,14 +12,6 @@ namespace Dracoon.Sdk.Model {
 
         /// <include file = "ModelDoc.xml" path='docs/members[@name="serverGeneralSettings"]/EulaEnabled/*'/>
         public bool EulaEnabled { get; internal set; }
-
-        /// <include file = "ModelDoc.xml" path='docs/members[@name="serverGeneralSettings"]/MediaServerEnabled/*'/>
-        [Obsolete("Deprecated since 4.12.0")]
-        public bool MediaServerEnabled { get; internal set; }
-
-        /// <include file = "ModelDoc.xml" path='docs/members[@name="serverGeneralSettings"]/WeakPasswordEnabled/*'/>
-        [Obsolete("Deprecated since 4.14.0")]
-        public bool WeakPasswordEnabled { get; internal set; }
 
         /// <include file = "ModelDoc.xml" path='docs/members[@name="serverGeneralSettings"]/UseS3Storage/*'/>
         public bool UseS3Storage { get; internal set; }
