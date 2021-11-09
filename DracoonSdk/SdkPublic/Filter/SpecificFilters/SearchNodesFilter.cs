@@ -1,6 +1,9 @@
 namespace Dracoon.Sdk.Filter {
+
+#pragma warning disable CS1574 // XML comment has cref attribute that could not be resolved
     /// <include file="SpecificFilterDoc.xml" path='docs/members[@name="searchNodesFilter"]/SearchNodesFilter/*'/>
     public class SearchNodesFilter : DracoonFilter {
+#pragma warning restore CS1574 // XML comment has cref attribute that could not be resolved
         /// <include file="SpecificFilterDoc.xml" path='docs/members[@name="searchNodesFilter"]/Type/*'/>
         public static NodeTypeFilter Type {
             get {

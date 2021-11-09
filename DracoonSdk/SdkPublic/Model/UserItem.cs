@@ -1,6 +1,7 @@
 using System;
 
 namespace Dracoon.Sdk.Model {
+#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
     public class UserItem {
 
         public long Id {
@@ -67,4 +68,5 @@ namespace Dracoon.Sdk.Model {
             get; internal set;
         }
     }
+#pragma warning restore CS1591 // Missing XML comment for publicly visible type or member
 }

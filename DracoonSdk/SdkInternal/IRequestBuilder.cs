@@ -1,11 +1,11 @@
-using System;
-using System.Net;
 using Dracoon.Sdk.Filter;
 using Dracoon.Sdk.Model;
 using Dracoon.Sdk.SdkInternal.ApiModel;
 using Dracoon.Sdk.SdkInternal.ApiModel.Requests;
 using Dracoon.Sdk.Sort;
 using RestSharp;
+using System;
+using System.Net;
 
 namespace Dracoon.Sdk.SdkInternal {
     internal interface IRequestBuilder {
@@ -57,7 +57,7 @@ namespace Dracoon.Sdk.SdkInternal {
 
         #region Nodes
 
-        IRestRequest GetNodes(long parentNodeId, long? offset = null, long? limit = null, GetNodesFilter filter = null);
+        IRestRequest GetNodes(long parentNodeId, long? offset, long? limit, GetNodesFilter filter);
 
         IRestRequest GetNode(long nodeId);
 
@@ -68,21 +68,21 @@ namespace Dracoon.Sdk.SdkInternal {
 
         IRestRequest GetMissingFileKeys(long? fileId, int limit = 10, int offset = 0);
 
-        IRestRequest GetRecycleBin(long parentRoomId, long? offset = null, long? limit = null);
+        IRestRequest GetRecycleBin(long parentRoomId, long? offset, long? limit);
 
-        IRestRequest GetPreviousVersions(long nodeId, string type, string nodeName, long? offset = null, long? limit = null);
+        IRestRequest GetPreviousVersions(long nodeId, string type, string nodeName, long? offset, long? limit);
 
         IRestRequest GetPreviousVersion(long previousNodeId);
 
         IRestRequest GetS3Status(string uploadId);
 
-        IRestRequest GetRoomEvents(long roomId, DateTime? dateStart = null, DateTime? dateEnd = null, EventStatus? status = null, int? type = null, long? userId = null, long? offset = null, long? limit = null, EventLogsSort sort = null);
+        IRestRequest GetRoomEvents(long roomId, DateTime? dateStart, DateTime? dateEnd, EventStatus? status, int? type, long? userId, long? offset, long? limit, EventLogsSort sort);
 
-        IRestRequest GetRoomGroups(long roomId, long? offset = null, long? limit = null, GetRoomGroupsFilter filter = null);
+        IRestRequest GetRoomGroups(long roomId, long? offset, long? limit, GetRoomGroupsFilter filter);
 
-        IRestRequest GetRoomUsers(long roomId, long? offset = null, long? limit = null, GetRoomUsersFilter filter = null);
+        IRestRequest GetRoomUsers(long roomId, long? offset, long? limit, GetRoomUsersFilter filter);
 
-        IRestRequest GetRoomPending(long roomId, long? offset = null, long? limit = null, GetRoomPendingFilter filter = null, PendingAssignmentsSort sort = null);
+        IRestRequest GetRoomPending(long roomId, long? offset, long? limit, GetRoomPendingFilter filter, PendingAssignmentsSort sort);
 
         IRestRequest PostRoom(ApiCreateRoomRequest roomParams);
 
@@ -144,9 +144,9 @@ namespace Dracoon.Sdk.SdkInternal {
 
         #region Share
 
-        IRestRequest GetDownloadShares(long? offset, long? limit, GetDownloadSharesFilter filter = null, SharesSort sort = null);
+        IRestRequest GetDownloadShares(long? offset, long? limit, GetDownloadSharesFilter filter, SharesSort sort);
 
-        IRestRequest GetUploadShares(long? offset, long? limit, GetUploadSharesFilter filter = null, SharesSort sort = null);
+        IRestRequest GetUploadShares(long? offset, long? limit, GetUploadSharesFilter filter, SharesSort sort);
 
         IRestRequest PostCreateDownloadShare(ApiCreateDownloadShareRequest downloadShareParams);
 
@@ -202,7 +202,7 @@ namespace Dracoon.Sdk.SdkInternal {
 
         #region Groups
 
-        IRestRequest GetGroups(long? offset = null, long? limit = null, GetGroupsFilter filter = null, GroupsSort sort = null);
+        IRestRequest GetGroups(long? offset, long? limit, GetGroupsFilter filter, GroupsSort sort);
 
         IRestRequest GetGroup(long groupId);
 
@@ -210,7 +210,7 @@ namespace Dracoon.Sdk.SdkInternal {
 
         IRestRequest GetGroupRoles(long groupId);
 
-        IRestRequest GetGroupUsers(long groupId, long? offset = null, long? limit = null, GetGroupUsersFilter filter = null);
+        IRestRequest GetGroupUsers(long groupId, long? offset, long? limit, GetGroupUsersFilter filter);
 
         IRestRequest PostGroup(ApiCreateGroupRequest groupParams);
 
@@ -226,17 +226,17 @@ namespace Dracoon.Sdk.SdkInternal {
 
         #region Users
 
-        IRestRequest GetUsers(bool? includeAttributes = null, bool? includeRoles = null, bool? includeHasManageableRooms = null, long? offset = null, long? limit = null, GetUsersFilter filter = null, UsersSort sort = null);
+        IRestRequest GetUsers(bool? includeAttributes, bool? includeRoles, bool? includeHasManageableRooms, long? offset, long? limit, GetUsersFilter filter, UsersSort sort);
 
         IRestRequest GetUser(long userId, bool? effectiveRoles = null);
 
-        IRestRequest GetUserGroups(long userId, long? offset = null, long? limit = null, GetUserGroupsFilter filter = null);
+        IRestRequest GetUserGroups(long userId, long? offset, long? limit, GetUserGroupsFilter filter);
 
         IRestRequest GetUserLastAdminRooms(long userId);
 
         IRestRequest GetUserRoles(long userId);
 
-        IRestRequest GetUserUserAttributes(long userId, long? offset = null, long? limit = null, GetUserAttributesFilter filter = null, UserAttributesSort sort = null);
+        IRestRequest GetUserUserAttributes(long userId, long? offset, long? limit, GetUserAttributesFilter filter, UserAttributesSort sort);
 
         IRestRequest PostUser(ApiCreateUserRequest userParams);
 
@@ -256,9 +256,9 @@ namespace Dracoon.Sdk.SdkInternal {
 
         IRestRequest GetRoles();
 
-        IRestRequest GetRoleGroups(long roleId, long? offset = null, long? limit = null, GetUserGroupsFilter filter = null);
+        IRestRequest GetRoleGroups(long roleId, long? offset, long? limit, GetUserGroupsFilter filter);
 
-        IRestRequest GetRoleUsers(long roleId, long? offset = null, long? limit = null, GetGroupUsersFilter filter = null);
+        IRestRequest GetRoleUsers(long roleId, long? offset, long? limit, GetGroupUsersFilter filter);
 
         IRestRequest PostRoleGroups(long roleId, ApiChangeMembersRequest addGroupsParams);
 
@@ -272,11 +272,11 @@ namespace Dracoon.Sdk.SdkInternal {
 
         #region Event Log
 
-        IRestRequest GetAuditNodes(long? offset = null, long? limit = null, GetAuditNodesFilter filter = null, AuditNodesSort sort = null);
+        IRestRequest GetAuditNodes(long? offset, long? limit, GetAuditNodesFilter filter, AuditNodesSort sort);
 
-        IRestRequest GetEvents(DateTime? dateStart = null, DateTime? dateEnd = null, EventStatus? status = null, int? type = null, long? userId = null, string userClient = null, long? offset = null, long? limit = null, EventLogsSort sort = null);
+        IRestRequest GetEvents(DateTime? dateStart, DateTime? dateEnd, EventStatus? status, int? type, long? userId, string userClient, long? offset, long? limit, EventLogsSort sort);
 
-        IRestRequest GetOperations(bool? isDeprecated = null);
+        IRestRequest GetOperations(bool? isDeprecated);
 
         #endregion
 

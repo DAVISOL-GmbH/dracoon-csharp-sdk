@@ -1,4 +1,5 @@
 namespace Dracoon.Sdk.Sort {
+#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
     public class AuditNodesSort : DracoonSort {
 
         public static NodeIdSort<AuditNodesSort> NodeId => new NodeIdSort<AuditNodesSort>(new AuditNodesSort());
@@ -11,4 +12,5 @@ namespace Dracoon.Sdk.Sort {
 
         public static NodeQuotaSort<AuditNodesSort> NodeQuota => new NodeQuotaSort<AuditNodesSort>(new AuditNodesSort());
     }
+#pragma warning restore CS1591 // Missing XML comment for publicly visible type or member
 }

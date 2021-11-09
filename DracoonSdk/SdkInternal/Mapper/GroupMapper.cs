@@ -1,8 +1,7 @@
-using System;
-using System.Linq;
 using Dracoon.Sdk.Model;
 using Dracoon.Sdk.SdkInternal.ApiModel;
 using Dracoon.Sdk.SdkInternal.ApiModel.Requests;
+using System.Linq;
 
 namespace Dracoon.Sdk.SdkInternal.Mapper {
     internal static class GroupMapper {
@@ -58,11 +57,6 @@ namespace Dracoon.Sdk.SdkInternal.Mapper {
             GroupUser groupUser = new GroupUser() {
                 UserInfo = UserMapper.FromApiUserInfo(apiGroupUser.UserInfo),
                 IsMember = apiGroupUser.IsMember,
-
-                Id = apiGroupUser.Id,
-                Login = apiGroupUser.Login,
-                DisplayName = apiGroupUser.DisplayName,
-                Email = apiGroupUser.Email
             };
             return groupUser;
         }

@@ -25,6 +25,7 @@ namespace Dracoon.Sdk.SdkInternal {
         protected Stopwatch ProgressReportTimer;
         protected bool IsInterrupted;
         protected long LastNotifiedProgressValue;
+        private WebClient _currentWebClient;
 
         public FileDownload(IInternalDracoonClient client, string actionId, Node nodeToDownload, Stream output) {
             Client = client;
@@ -53,6 +54,7 @@ namespace Dracoon.Sdk.SdkInternal {
             }
 
             RunningThread = new Thread(Child);
+
             RunningThread.Start();
         }
 
@@ -70,9 +72,15 @@ namespace Dracoon.Sdk.SdkInternal {
         }
 
         public void CancelDownload() {
-            if (RunningThread != null && RunningThread.IsAlive) {
+            var requestClient = _currentWebClient;
+            if (!IsInterrupted) {
                 IsInterrupted = true;
-                RunningThread.Abort();
+                try {
+                    requestClient?.CancelAsync();
+                } catch (Exception e) {
+                    // Fail silently
+                    Client.Log.Error(LogTag, "Failed to trigger cancellation in current web client.", e);
+                }
             }
         }
 
@@ -118,22 +126,31 @@ namespace Dracoon.Sdk.SdkInternal {
                 requestCount = Client.HttpConfig.ChunkSize;
             }
 
-            using (WebClient requestClient = Client.Builder.ProvideChunkDownloadWebClient(downloadedByteCount, requestCount)) {
-                long currentDownloadedByteCount = downloadedByteCount;
-                requestClient.DownloadProgressChanged += (o, progessEvent) => {
-                    lock (ProgressReportTimer) {
-                        if (ProgressReportTimer.ElapsedMilliseconds > ProgressUpdateInterval) {
-                            NotifyProgress(ActionId, currentDownloadedByteCount + progessEvent.BytesReceived, totalSize);
-                            LastNotifiedProgressValue = currentDownloadedByteCount + progessEvent.BytesReceived;
-                            ProgressReportTimer.Restart();
-                        }
-                    }
-                };
-                chunkDownloadedResultBytes =
-                    Client.Executor.ExecuteWebClientDownload(requestClient, downloadUri, RequestType.GetDownloadChunk, RunningThread);
+            if (IsInterrupted) {
+                throw new ThreadInterruptedException();
             }
 
-            return chunkDownloadedResultBytes;
+            try {
+                using (WebClient requestClient = Client.Builder.ProvideChunkDownloadWebClient(downloadedByteCount, requestCount)) {
+                    _currentWebClient = requestClient;
+                    long currentDownloadedByteCount = downloadedByteCount;
+                    requestClient.DownloadProgressChanged += (o, progessEvent) => {
+                        lock (ProgressReportTimer) {
+                            if (ProgressReportTimer.ElapsedMilliseconds > ProgressUpdateInterval) {
+                                NotifyProgress(ActionId, currentDownloadedByteCount + progessEvent.BytesReceived, totalSize);
+                                LastNotifiedProgressValue = currentDownloadedByteCount + progessEvent.BytesReceived;
+                                ProgressReportTimer.Restart();
+                            }
+                        }
+                    };
+                    chunkDownloadedResultBytes =
+                        Client.Executor.ExecuteWebClientDownload(requestClient, downloadUri, RequestType.GetDownloadChunk, RunningThread);
+                }
+
+                return chunkDownloadedResultBytes;
+            } finally {
+                _currentWebClient = null;
+            }
         }
 
         #region Callback helper functions

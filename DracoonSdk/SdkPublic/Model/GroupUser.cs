@@ -10,25 +10,5 @@ namespace Dracoon.Sdk.Model {
         public bool IsMember {
             get; internal set;
         }
-
-        [Obsolete("Deprecated since version 4.11.0")]
-        public long Id {
-            get; internal set;
-        }
-
-        [Obsolete("Deprecated since version 4.11.0")]
-        public string Login {
-            get; internal set;
-        }
-
-        [Obsolete("Deprecated since version 4.11.0")]
-        public string DisplayName {
-            get; internal set;
-        }
-
-        [Obsolete("Deprecated since version 4.11.0")]
-        public string Email {
-            get; internal set;
-        }
     }
 }

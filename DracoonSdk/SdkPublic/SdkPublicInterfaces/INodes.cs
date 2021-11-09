@@ -1,9 +1,9 @@
-using System;
-using System.Collections.Generic;
-using System.IO;
 using Dracoon.Sdk.Filter;
 using Dracoon.Sdk.Model;
 using Dracoon.Sdk.Sort;
+using System;
+using System.Collections.Generic;
+using System.IO;
 
 namespace Dracoon.Sdk {
     /// <include file = "SdkPublicInterfacesDoc.xml" path='docs/members[@name="iNodes"]/INodes/*'/>
@@ -81,7 +81,9 @@ namespace Dracoon.Sdk {
         void CancelDownloadFileAsync(string actionId);
 
         /// <include file = "SdkPublicInterfacesDoc.xml" path='docs/members[@name="iNodes"]/SearchNodes/*'/>
+#pragma warning disable CS1573 // Parameter has no matching param tag in the XML comment (but other parameters do)
         NodeList SearchNodes(string searchString, long parentNodeId = 0, int depthLevel = -1, long offset = 0, long limit = 500, SearchNodesFilter filter = null,
+#pragma warning restore CS1573 // Parameter has no matching param tag in the XML comment (but other parameters do)
             SearchNodesSort sort = null);
 
         /// <include file = "SdkPublicInterfacesDoc.xml" path='docs/members[@name="iNodes"]/GenerateMissingFileKeys/*'/>

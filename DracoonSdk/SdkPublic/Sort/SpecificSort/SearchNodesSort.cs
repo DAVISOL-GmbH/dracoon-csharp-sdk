@@ -1,6 +1,9 @@
 ﻿namespace Dracoon.Sdk.Sort {
+
+#pragma warning disable CS1574 // XML comment has cref attribute that could not be resolved
     /// <include file = "SpecificSort.xml" path='docs/members[@name="searchNodesSort"]/SearchNodesSort/*'/>
     public class SearchNodesSort : DracoonSort {
+#pragma warning restore CS1574 // XML comment has cref attribute that could not be resolved
         /// <include file = "SpecificSort.xml" path='docs/members[@name="searchNodesSort"]/UpdatedAt/*'/>
         public static SortField<SearchNodesSort> UpdatedAt {
             get {

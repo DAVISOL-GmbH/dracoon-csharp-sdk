@@ -329,7 +329,7 @@ namespace Dracoon.Sdk.SdkInternal {
             return request;
         }
 
-        IRestRequest IRequestBuilder.GetRoomEvents(long roomId, DateTime? dateStart = null, DateTime? dateEnd = null, EventStatus? status = null, int? type = null, long? userId = null, long? offset = null, long? limit = null, EventLogsSort sort = null) {
+        IRestRequest IRequestBuilder.GetRoomEvents(long roomId, DateTime? dateStart, DateTime? dateEnd, EventStatus? status, int? type, long? userId, long? offset, long? limit, EventLogsSort sort) {
             RestRequest request = new RestRequest(ApiConfig.ApiGetRoomEvents, Method.GET);
             SetGeneralRestValues(request, true);
             request.AddUrlSegment("roomId", roomId);
@@ -347,7 +347,7 @@ namespace Dracoon.Sdk.SdkInternal {
             return request;
         }
 
-        IRestRequest IRequestBuilder.GetRoomGroups(long roomId, long? offset = null, long? limit = null, GetRoomGroupsFilter filter = null) {
+        IRestRequest IRequestBuilder.GetRoomGroups(long roomId, long? offset, long? limit, GetRoomGroupsFilter filter) {
             RestRequest request = new RestRequest(ApiConfig.ApiGetRoomGroups, Method.GET);
             SetGeneralRestValues(request, true);
             request.AddUrlSegment("roomId", roomId);
@@ -359,7 +359,7 @@ namespace Dracoon.Sdk.SdkInternal {
             return request;
         }
 
-        IRestRequest IRequestBuilder.GetRoomUsers(long roomId, long? offset = null, long? limit = null, GetRoomUsersFilter filter = null) {
+        IRestRequest IRequestBuilder.GetRoomUsers(long roomId, long? offset, long? limit, GetRoomUsersFilter filter) {
             RestRequest request = new RestRequest(ApiConfig.ApiGetRoomUsers, Method.GET);
             SetGeneralRestValues(request, true);
             request.AddUrlSegment("roomId", roomId);
@@ -371,7 +371,7 @@ namespace Dracoon.Sdk.SdkInternal {
             return request;
         }
 
-        IRestRequest IRequestBuilder.GetRoomPending(long roomId, long? offset = null, long? limit = null, GetRoomPendingFilter filter = null, PendingAssignmentsSort sort = null) {
+        IRestRequest IRequestBuilder.GetRoomPending(long roomId, long? offset, long? limit, GetRoomPendingFilter filter, PendingAssignmentsSort sort) {
             RestRequest request = new RestRequest(ApiConfig.ApiGetRoomPending, Method.GET);
             SetGeneralRestValues(request, true);
             request.AddUrlSegment("roomId", roomId);
@@ -785,7 +785,7 @@ namespace Dracoon.Sdk.SdkInternal {
 
         #region GET
 
-        IRestRequest IRequestBuilder.GetGroups(long? offset = null, long? limit = null, GetGroupsFilter filter = null, GroupsSort sort = null) {
+        IRestRequest IRequestBuilder.GetGroups(long? offset, long? limit, GetGroupsFilter filter, GroupsSort sort) {
             RestRequest request = new RestRequest(ApiConfig.ApiGetGroups, Method.GET);
             SetGeneralRestValues(request, true);
             AddFilters(filter, request);
@@ -818,7 +818,7 @@ namespace Dracoon.Sdk.SdkInternal {
             return request;
         }
 
-        IRestRequest IRequestBuilder.GetGroupUsers(long groupId, long? offset = null, long? limit = null, GetGroupUsersFilter filter = null) {
+        IRestRequest IRequestBuilder.GetGroupUsers(long groupId, long? offset, long? limit, GetGroupUsersFilter filter) {
             RestRequest request = new RestRequest(ApiConfig.ApiGetGroupUsers, Method.GET);
             SetGeneralRestValues(request, true);
             request.AddUrlSegment("groupId", groupId.ToString());
@@ -882,7 +882,7 @@ namespace Dracoon.Sdk.SdkInternal {
 
         #region GET
 
-        IRestRequest IRequestBuilder.GetUsers(bool? includeAttributes = null, bool? includeRoles = null, bool? includeHasManageableRooms = null, long? offset = null, long? limit = null, GetUsersFilter filter = null, UsersSort sort = null) {
+        IRestRequest IRequestBuilder.GetUsers(bool? includeAttributes, bool? includeRoles, bool? includeHasManageableRooms, long? offset, long? limit, GetUsersFilter filter, UsersSort sort) {
             RestRequest request = new RestRequest(ApiConfig.ApiGetUsers, Method.GET);
             SetGeneralRestValues(request, true);
             AddFilters(filter, request);
@@ -899,7 +899,7 @@ namespace Dracoon.Sdk.SdkInternal {
             return request;
         }
 
-        IRestRequest IRequestBuilder.GetUser(long userId, bool? effectiveRoles = null) {
+        IRestRequest IRequestBuilder.GetUser(long userId, bool? effectiveRoles) {
             RestRequest request = new RestRequest(ApiConfig.ApiGetUser, Method.GET);
             SetGeneralRestValues(request, true);
             AddFlag(request, "effective_roles", effectiveRoles);
@@ -907,7 +907,7 @@ namespace Dracoon.Sdk.SdkInternal {
             return request;
         }
 
-        IRestRequest IRequestBuilder.GetUserGroups(long userId, long? offset = null, long? limit = null, GetUserGroupsFilter filter = null) {
+        IRestRequest IRequestBuilder.GetUserGroups(long userId, long? offset, long? limit, GetUserGroupsFilter filter) {
             RestRequest request = new RestRequest(ApiConfig.ApiGetUserGroups, Method.GET);
             SetGeneralRestValues(request, true);
             request.AddUrlSegment("userId", userId.ToString());
@@ -933,7 +933,7 @@ namespace Dracoon.Sdk.SdkInternal {
             return request;
         }
 
-        IRestRequest IRequestBuilder.GetUserUserAttributes(long userId, long? offset = null, long? limit = null, GetUserAttributesFilter filter = null, UserAttributesSort sort = null) {
+        IRestRequest IRequestBuilder.GetUserUserAttributes(long userId, long? offset, long? limit, GetUserAttributesFilter filter, UserAttributesSort sort) {
             RestRequest request = new RestRequest(ApiConfig.ApiGetUserUserAttributes, Method.GET);
             SetGeneralRestValues(request, true);
             request.AddUrlSegment("userId", userId.ToString());
@@ -1075,7 +1075,7 @@ namespace Dracoon.Sdk.SdkInternal {
 
         #region GET
 
-        IRestRequest IRequestBuilder.GetAuditNodes(long? offset = null, long? limit = null, GetAuditNodesFilter filter = null, AuditNodesSort sort = null) {
+        IRestRequest IRequestBuilder.GetAuditNodes(long? offset, long? limit, GetAuditNodesFilter filter, AuditNodesSort sort) {
             RestRequest request = new RestRequest(ApiConfig.ApiGetAuditNodes, Method.GET);
             SetGeneralRestValues(request, true);
             AddFilters(filter, request);
@@ -1087,7 +1087,7 @@ namespace Dracoon.Sdk.SdkInternal {
             return request;
         }
 
-        IRestRequest IRequestBuilder.GetEvents(DateTime? dateStart = null, DateTime? dateEnd = null, EventStatus? status = null, int? type = null, long? userId = null, string userClient = null, long? offset = null, long? limit = null, EventLogsSort sort = null) {
+        IRestRequest IRequestBuilder.GetEvents(DateTime? dateStart, DateTime? dateEnd, EventStatus? status, int? type, long? userId, string userClient, long? offset, long? limit, EventLogsSort sort) {
             RestRequest request = new RestRequest(ApiConfig.ApiGetEvents, Method.GET);
             SetGeneralRestValues(request, true);
             AddSort(sort, request);
@@ -1106,7 +1106,7 @@ namespace Dracoon.Sdk.SdkInternal {
             return request;
         }
 
-        IRestRequest IRequestBuilder.GetOperations(bool? isDeprecated = null) {
+        IRestRequest IRequestBuilder.GetOperations(bool? isDeprecated) {
             RestRequest request = new RestRequest(ApiConfig.ApiGetOperations, Method.GET);
             SetGeneralRestValues(request, true);
             AddFlag(request, "is_deprecated", isDeprecated);

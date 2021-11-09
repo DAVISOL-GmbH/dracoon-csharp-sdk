@@ -34,6 +34,7 @@ namespace Dracoon.Sdk.Model {
         internal NodePermissions() {
         }
 
+#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
         public NodePermissions(bool manage, bool read, bool create, bool change, bool delete,
             bool manageDownloadShare, bool manageUploadShare,
             bool readRecycleBin, bool restoreRecycleBin, bool deleteRecycleBin) {
@@ -48,5 +49,6 @@ namespace Dracoon.Sdk.Model {
             CanRestoreRecycleBin = restoreRecycleBin;
             CanDeleteRecycleBin = deleteRecycleBin;
         }
+#pragma warning restore CS1591 // Missing XML comment for publicly visible type or member
     }
 }
