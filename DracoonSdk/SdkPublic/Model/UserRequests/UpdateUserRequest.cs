@@ -41,7 +41,37 @@ namespace Dracoon.Sdk.Model {
         }
 
         public UserAuthDataUpdateRequest AuthData {
-            get; set;
+            get; private set;
         }
+
+
+        public void SetBasicAuth(string password, bool mustChangePassword = true) {
+            AuthData = new UserAuthDataUpdateRequest {
+                Method = UserAuthMethod.Basic,
+                Login = UserName,
+                OIDConfigId = null,
+                ADConfigId = null,
+            };
+        }
+
+        public void SetOpenIDAuth(string openIdLogin, int openIDConfigId) {
+            AuthData = new UserAuthDataUpdateRequest {
+
+                Method = UserAuthMethod.OpenID,
+                Login = openIdLogin,
+                OIDConfigId = openIDConfigId,
+                ADConfigId = null,
+            };
+        }
+
+        public void SetActiveDirectoryAuth(string adLogin, int adConfigId) {
+            AuthData = new UserAuthDataUpdateRequest {
+                Method = UserAuthMethod.OpenID,
+                Login = adLogin,
+                OIDConfigId = null,
+                ADConfigId = adConfigId
+            };
+        }
+
     }
 }

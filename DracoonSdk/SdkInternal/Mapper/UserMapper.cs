@@ -329,8 +329,8 @@ namespace Dracoon.Sdk.SdkInternal.Mapper {
             ApiUserAuthDataUpdateRequest apiUserAuthDataUpdateRequest = new ApiUserAuthDataUpdateRequest() {
                 Method = EnumConverter.ConvertUserAuthMethodEnumToValue(userAuthDataUpdateRequest.Method),
                 Login = userAuthDataUpdateRequest.Login,
-                AdConfigId = userAuthDataUpdateRequest.AdConfigId,
-                OidConfigId = userAuthDataUpdateRequest.OidConfigId
+                AdConfigId = userAuthDataUpdateRequest.ADConfigId,
+                OidConfigId = userAuthDataUpdateRequest.OIDConfigId
             };
             return apiUserAuthDataUpdateRequest;
         }

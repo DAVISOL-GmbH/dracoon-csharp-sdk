@@ -9,11 +9,11 @@ namespace Dracoon.Sdk.Model {
             get; internal set;
         }
 
-        public int? AdConfigId {
+        public int? ADConfigId {
             get; internal set;
         }
 
-        public int? OidConfigId {
+        public int? OIDConfigId {
             get; internal set;
         }
     }

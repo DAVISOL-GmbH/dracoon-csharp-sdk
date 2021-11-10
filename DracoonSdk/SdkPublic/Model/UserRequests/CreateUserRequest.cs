@@ -54,5 +54,34 @@ namespace Dracoon.Sdk.Model {
             LastName = lastName;
             Email = email;
         }
+
+        public void SetBasicAuth(string password, bool mustChangePassword = true) {
+            AuthData.Method = UserAuthMethod.Basic;
+            AuthData.Login = UserName;
+            AuthData.Password = password;
+            AuthData.MustChangePassword = mustChangePassword;
+            AuthData.OIDConfigId = null;
+            AuthData.ADConfigId = null;
+        }
+
+        public void SetOpenIDAuth(string openIdLogin, int openIDConfigId) {
+            AuthData.Method = UserAuthMethod.OpenID;
+            AuthData.Login = openIdLogin;
+            AuthData.Password = null;
+            AuthData.MustChangePassword = null;
+            AuthData.OIDConfigId = openIDConfigId;
+            AuthData.ADConfigId = null;
+        }
+
+        public void SetActiveDirectoryAuth(string adLogin, int adConfigId) {
+            AuthData.Method = UserAuthMethod.OpenID;
+            AuthData.Login = adLogin;
+            AuthData.Password = null;
+            AuthData.MustChangePassword = null;
+            AuthData.OIDConfigId = null;
+            AuthData.ADConfigId = adConfigId;
+        }
+
+
     }
 }
