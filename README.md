@@ -37,13 +37,14 @@ The dependency to `System.Drawing.Common` does not exist any longer, as its func
 
 ### Fork's License and Copyright
 
+**Please see the [original copyright notice at the end of this document](#copyright-and-license).**
+
 This package is originally created and maintained by DRACOON GmbH and licensed under Apache-2.0.
 
 The enhancements in this fork are done by DAVISOL GmbH. We'll also publish the full source code under Apache-2.0 license.
 
+Copyright DRACOON GmbH. All rights reserved.
 Copyright 2021 DAVISOL GmbH. All rights reserved.
-
-**Please see the [original copyright notice at the end of this document](#copyright-and-license).**
 
 ## Setup
 
