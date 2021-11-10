@@ -6,8 +6,8 @@
     <title>DRACOON SDK (.NET 5.0)</title>
     <authors>DRACOON developers</authors>
     <owners>dracoon</owners>
-    <licenseUrl>https://www.apache.org/licenses/LICENSE-2.0.txt</licenseUrl>
-    <projectUrl>https://github.com/shuebner20/dracoon-csharp-sdk</projectUrl>
+    <license type="expression">Apache-2.0</license>
+    <projectUrl>https://github.com/DAVISOL-GmbH/dracoon-csharp-sdk</projectUrl>
     <iconUrl>https://raw.githubusercontent.com/dracoon/dracoon-csharp-sdk/master/DracoonSdk/DracoonSdk_NugetImage.png</iconUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>The DRACOON SDK for C# with enhancements by DAVISOL. This package references .NET 5.0 and can therefore be used on several platforms.</description>

@@ -28,10 +28,10 @@ First of all, if you wan't to use this package, you *MUST* use .NET 5.0.
 
 Also, make sure you're referencing at least the following dependencies:
 1. Bouncy Castle (= 1.9.0): [nuget](https://www.nuget.org/packages/BouncyCastle/)
-2. Dracoon Crypto SDK (.NET 5.0 fork by DAVISOL)(= 2.1.0): [GitHub](https://github.com/shuebner20/dracoon-csharp-crypto-sdk)
+2. Dracoon Crypto SDK (.NET 5.0 fork by DAVISOL)(= 2.1.0): [GitHub](https://github.com/DAVISOL-GmbH/dracoon-csharp-crypto-sdk)
 3. NewtonSoft.Json (= 13.0.1): [nuget](https://www.nuget.org/packages/Newtonsoft.Json/)
 4. RestSharp (= 106.11.5): [nuget](https://www.nuget.org/packages/RestSharp/)
-5. SkiaSharp (= 2.80.3): [nuget](https://www.nuget.org/packages/RestSharp/)
+5. SkiaSharp (= 2.80.3): [nuget](https://www.nuget.org/packages/SkiaSharp/)
 
 The dependency to `System.Drawing.Common` does not exist any longer, as its functionality was fully replaced by SkiaSharp.
 
@@ -43,7 +43,7 @@ The enhancements in this fork are done by DAVISOL GmbH. We'll also publish the f
 
 Copyright 2021 DAVISOL GmbH. All rights reserved.
 
-**Please see the [original copyright notice at the end of this document](#copyright-and-license).
+**Please see the [original copyright notice at the end of this document](#copyright-and-license).**
 
 ## Setup
 
