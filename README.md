@@ -43,7 +43,7 @@ This package is originally created and maintained by DRACOON GmbH and licensed u
 
 The enhancements in this fork are done by DAVISOL GmbH. We'll also publish the full source code under Apache-2.0 license.
 
-Copyright DRACOON GmbH. All rights reserved.
+Copyright DRACOON GmbH. All rights reserved.\
 Copyright 2021 DAVISOL GmbH. All rights reserved.
 
 ## Setup
