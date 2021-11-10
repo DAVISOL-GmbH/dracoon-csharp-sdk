@@ -18,7 +18,7 @@ This package is forked by DAVISOL GmbH. This fork has three main focuses:
 
 To assure multi-platform support, we had updated the package's projects to .NET 5.0. We've dropped support for legacy .NET versions (up to 4.x.y) as well as support for .NET Standard 2.x. Additionally, references to `System.Drawing.Common` were removed and image functionality (for avatars only) is now based on [SkiaSharp](https://github.com/mono/SkiaSharp).
 
-A [.NET Standard 2.0 compliant version](https://github.com/shuebner20/dracoon-csharp-sdk/tree/netstandard) is also available. Please note, that we've stopped working on that branch. 
+A [.NET Standard 2.0 compliant version](https://github.com/DAVISOL-GmbH/dracoon-csharp-sdk/tree/netstandard) is also available. Please note, that we've stopped working on that branch. 
 
 Learn more about our decision to generally move away from System.Drawing.Common [here](https://docs.microsoft.com/en-us/dotnet/core/compatibility/core-libraries/6.0/system-drawing-common-windows-only).
 
