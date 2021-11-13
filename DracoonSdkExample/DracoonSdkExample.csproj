@@ -42,10 +42,7 @@
     <ProjectReference Include="..\DracoonSdk\DracoonSdk.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Dracoon.Crypto.Sdk.Net5" Version="2.1.1676.1" />
-    <PackageReference Include="Microsoft.DotNet.UpgradeAssistant.Extensions.Default.Analyzers" Version="0.3.252501">
-      <PrivateAssets>all</PrivateAssets>
-    </PackageReference>
+    <PackageReference Include="Dracoon.Crypto.Sdk.Net5" Version="2.1.1725.1" />
     <PackageReference Include="Microsoft.Windows.Compatibility" Version="6.0.0" />
     <PackageReference Include="SkiaSharp" Version="2.80.3" />
   </ItemGroup>
