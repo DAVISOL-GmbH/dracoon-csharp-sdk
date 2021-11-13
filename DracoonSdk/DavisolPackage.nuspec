@@ -15,7 +15,7 @@
     <tags>DRACOON rest api sdk net5 netcore netframework davisol</tags>
     <releaseNotes>Enhanced fork of offical Dracoon C# Crypto SDK, ported to .NET 5.0. Official release notes can be found at https://github.com/dracoon/dracoon-csharp-sdk</releaseNotes>
     <dependencies>
-      <dependency id="Dracoon.Crypto.Sdk.Net5" version="2.1.1725.1"/>
+      <dependency id="Dracoon.Crypto.Sdk.Net5" version="2.1.1727.1"/>
       <dependency id="Newtonsoft.Json" version="13.0.1"/>
       <dependency id="RestSharp" version="106.13.0"/>
       <dependency id="Portable.BouncyCastle" version="1.9.0"/>
@@ -23,6 +23,12 @@
     </dependencies>
   </metadata>
   <files>
+      
+    <!-- .Net Standard 2.0 -->
+    <file src="bin\Release\netstandard2.0\Dracoon.Sdk.dll" target="lib\netstandard2.0\Dracoon.Sdk.dll" />
+    <file src="bin\Release\netstandard2.0\Dracoon.Sdk.xml" target="lib\netstandard2.0\Dracoon.Sdk.xml" />
+    <file src="bin\Release\netstandard2.0\Dracoon.Sdk.dll.config" target="lib\netstandard2.0\Dracoon.Sdk.dll.config" />
+    <file src="bin\Release\netstandard2.0\Dracoon.Sdk.pdb" target="lib\netstandard2.0\Dracoon.Sdk.pdb" />
       
     <!-- .Net Standard 2.1 -->
     <file src="bin\Release\netstandard2.1\Dracoon.Sdk.dll" target="lib\netstandard2.1\Dracoon.Sdk.dll" />
