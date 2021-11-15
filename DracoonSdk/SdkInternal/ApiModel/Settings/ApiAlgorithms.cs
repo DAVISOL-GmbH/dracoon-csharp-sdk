@@ -1,7 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System.Collections.Generic;
 
-namespace Dracoon.Sdk.SdkInternal.ApiModel.Settings {
+namespace Dracoon.Sdk.SdkInternal.ApiModel {
     internal class ApiAlgorithms {
         [JsonProperty("fileKeyAlgorithms", NullValueHandling = NullValueHandling.Ignore)]
         public List<ApiAlgorithm> FileKeyAlgorithms { get; set; }

@@ -22,13 +22,5 @@ namespace Dracoon.Sdk {
 
         /// <include file = "SdkPublicInterfacesDoc.xml" path='docs/members[@name="iServerSettings"]/GetAvailableFileKeyAlgorithms/*'/>
         List<FileKeyAlgorithmData> GetAvailableFileKeyAlgorithms();
-
-        ServerAuthenticationSettings GetAuth();
-
-        ActiveDirectoryConfigList GetAuthActiveDirectorySettings();
-
-        OpenIdIdpConfigList GetAuthOpenIdIdpSettings();
-
-        RadiusConfig GetAuthRadiusSettings();
     }
 }

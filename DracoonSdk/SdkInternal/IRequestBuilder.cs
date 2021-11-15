@@ -190,13 +190,27 @@ namespace Dracoon.Sdk.SdkInternal {
 
         #region System Settings
 
-        IRestRequest GetAuthenticationSettings();
+        IRestRequest GetGeneralConfiguration();
 
-        IRestRequest GetAuthActiveDirectorySettings();
+        IRestRequest UpdateGeneralConfiguration(ApiUpdateSystemGeneralConfigRequest updateRequest);
 
-        IRestRequest GetAuthOpenIdIdpSettings();
+        IRestRequest GetAuthenticationConfiguration();
 
-        IRestRequest GetAuthRadiusSettings();
+        IRestRequest GetAuthActiveDirectoryConfigurations();
+
+        IRestRequest GetAuthOpenIdIdpConfigurations();
+
+        IRestRequest GetAuthRadiusConfiguration();
+
+        IRestRequest GetOAuthClientConfigurations(GetOAuthClientsFilter filter);
+
+        IRestRequest GetOAuthClientConfiguration(string clientId);
+
+        IRestRequest CreateOAuthClientConfiguration(ApiCreateOAuthClientRequest createRequest);
+
+        IRestRequest UpdateOAuthClientConfiguration(string clientId, ApiUpdateOAuthClientRequest updateRequest);
+
+        IRestRequest DeleteOAuthClientConfiguration(string clientId);
 
         #endregion
 

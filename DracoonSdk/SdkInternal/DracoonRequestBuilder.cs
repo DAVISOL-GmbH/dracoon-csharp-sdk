@@ -1,6 +1,3 @@
-using System;
-using System.Globalization;
-using System.Net;
 using Dracoon.Sdk.Filter;
 using Dracoon.Sdk.Model;
 using Dracoon.Sdk.SdkInternal.ApiModel;
@@ -10,6 +7,9 @@ using Dracoon.Sdk.SdkInternal.Util;
 using Dracoon.Sdk.Sort;
 using Newtonsoft.Json;
 using RestSharp;
+using System;
+using System.Globalization;
+using System.Net;
 
 namespace Dracoon.Sdk.SdkInternal {
     internal class DracoonRequestBuilder : IRequestBuilder {
@@ -745,12 +745,20 @@ namespace Dracoon.Sdk.SdkInternal {
 
         #region GET
 
-        IRestRequest IRequestBuilder.GetAuthenticationSettings() {
-            RestRequest request = new RestRequest(ApiConfig.ApiGetAuthenticationConfig, Method.GET);
+        IRestRequest IRequestBuilder.GetGeneralConfiguration() {
+            RestRequest request = new RestRequest(ApiConfig.ApiGetSystemSettingsGeneralConfig, Method.GET);
             SetGeneralRestValues(request, true);
             return request;
         }
 
+        IRestRequest IRequestBuilder.GetAuthenticationConfiguration() {
+            RestRequest request = new RestRequest(ApiConfig.ApiGetSystemSettingsAuthenticationConfig, Method.GET);
+            SetGeneralRestValues(request, true);
+            return request;
+        }
+
+        #endregion
+        #region PUT
         #endregion
 
         #endregion
@@ -759,27 +767,78 @@ namespace Dracoon.Sdk.SdkInternal {
 
         #region GET
 
-        IRestRequest IRequestBuilder.GetAuthActiveDirectorySettings() {
-            RestRequest request = new RestRequest(ApiConfig.ApiGetAuthActiveDirectorySettings, Method.GET);
+        IRestRequest IRequestBuilder.GetAuthActiveDirectoryConfigurations() {
+            RestRequest request = new RestRequest(ApiConfig.ApiGetAuthActiveDirectoryConfigurations, Method.GET);
             SetGeneralRestValues(request, true);
             return request;
         }
 
-        IRestRequest IRequestBuilder.GetAuthOpenIdIdpSettings() {
-            RestRequest request = new RestRequest(ApiConfig.ApiGetAuthOpenIdIdpSettings, Method.GET);
+        IRestRequest IRequestBuilder.GetAuthOpenIdIdpConfigurations() {
+            RestRequest request = new RestRequest(ApiConfig.ApiGetAuthOpenIdIdpConfigurations, Method.GET);
             SetGeneralRestValues(request, true);
             return request;
         }
 
-        IRestRequest IRequestBuilder.GetAuthRadiusSettings() {
-            RestRequest request = new RestRequest(ApiConfig.ApiGetAuthRadiusSettings, Method.GET);
+        IRestRequest IRequestBuilder.GetAuthRadiusConfiguration() {
+            RestRequest request = new RestRequest(ApiConfig.ApiGetAuthRadiusConfiguration, Method.GET);
             SetGeneralRestValues(request, true);
+            return request;
+        }
+
+
+        IRestRequest IRequestBuilder.GetOAuthClientConfigurations(GetOAuthClientsFilter filter) {
+            RestRequest request = new RestRequest(ApiConfig.ApiGetAuthClientConfigurations, Method.GET);
+            SetGeneralRestValues(request, true);
+            AddFilters(filter, request);
+            return request;
+        }
+
+        IRestRequest IRequestBuilder.GetOAuthClientConfiguration(string clientId) {
+            RestRequest request = new RestRequest(ApiConfig.ApiGetAuthClientConfigurationClientId, Method.GET);
+            SetGeneralRestValues(request, true);
+            request.AddUrlSegment("clientId", clientId);
+            return request;
+        }
+
+
+        #endregion
+        #region POST
+
+        IRestRequest IRequestBuilder.UpdateGeneralConfiguration(ApiUpdateSystemGeneralConfigRequest updateRequest) {
+            RestRequest request = new RestRequest(ApiConfig.ApiPutAuthClientConfiguration, Method.PUT);
+            SetGeneralRestValues(request, true, updateRequest);
+            return request;
+        }
+
+        IRestRequest IRequestBuilder.CreateOAuthClientConfiguration(ApiCreateOAuthClientRequest createRequest) {
+            RestRequest request = new RestRequest(ApiConfig.ApiPostAuthClientConfiguration, Method.POST);
+            SetGeneralRestValues(request, true, createRequest);
+            return request;
+        }
+
+        #endregion
+        #region PUT
+
+        IRestRequest IRequestBuilder.UpdateOAuthClientConfiguration(string clientId, ApiUpdateOAuthClientRequest updateRequest) {
+            RestRequest request = new RestRequest(ApiConfig.ApiPutAuthClientConfiguration, Method.PUT);
+            SetGeneralRestValues(request, true, updateRequest);
+            request.AddUrlSegment("clientId", clientId);
+            return request;
+        }
+
+        #endregion
+        #region DELETE
+
+        IRestRequest IRequestBuilder.DeleteOAuthClientConfiguration(string clientId) {
+            RestRequest request = new RestRequest(ApiConfig.ApiDeleteAuthClientConfiguration, Method.DELETE);
+            SetGeneralRestValues(request, true);
+            request.AddUrlSegment("clientId", clientId);
             return request;
         }
 
         #endregion
 
-        #endregion
+#endregion
 
         #region Groups-Endpoint
 

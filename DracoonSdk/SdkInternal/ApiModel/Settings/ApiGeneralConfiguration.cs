@@ -1,8 +1,7 @@
 using Newtonsoft.Json;
-using System;
 
 namespace Dracoon.Sdk.SdkInternal.ApiModel {
-    internal class ApiGeneralSettings {
+    internal class ApiGeneralConfiguration {
         [JsonProperty("sharePasswordSmsEnabled", NullValueHandling = NullValueHandling.Ignore)]
         public bool SharePasswordSmsEnabled { get; set; }
 
@@ -16,7 +15,6 @@ namespace Dracoon.Sdk.SdkInternal.ApiModel {
         public bool EulaEnabled { get; set; }
 
         [JsonProperty("mediaServerEnabled", NullValueHandling = NullValueHandling.Ignore)]
-        [Obsolete("Deprecated since v4.12.0")]
         public bool MediaServerEnabled { get; set; }
 
         [JsonProperty("useS3Storage", NullValueHandling = NullValueHandling.Ignore)]
@@ -25,13 +23,10 @@ namespace Dracoon.Sdk.SdkInternal.ApiModel {
         [JsonProperty("s3TagsEnabled", NullValueHandling = NullValueHandling.Ignore)]
         public bool S3TagsEnabled { get; set; }
 
-        [JsonProperty("homeRoomsActive", NullValueHandling = NullValueHandling.Ignore)]
-        public bool HomeRoomsActive { get; set; }
+        [JsonProperty("hideLoginInputFields", NullValueHandling = NullValueHandling.Ignore)]
+        public bool HideLoginInputFields { get; set; }
 
-        [JsonProperty("homeRoomParentId", NullValueHandling = NullValueHandling.Ignore)]
-        public long? HomeRoomParentId { get; set; }
-
-        [JsonProperty("subscriptionPlan", NullValueHandling = NullValueHandling.Ignore)]
-        public int SubscriptionPlan { get; set; }
+        [JsonProperty("authTokenRestrictions", NullValueHandling = NullValueHandling.Ignore)]
+        public ApiAuthTokenRestrictions AuthTokenRestrictions { get; set; }
     }
 }

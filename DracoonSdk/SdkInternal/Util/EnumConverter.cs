@@ -1,5 +1,7 @@
 using Dracoon.Sdk.Model;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Dracoon.Sdk.SdkInternal.Util {
     internal static class EnumConverter {
@@ -185,5 +187,84 @@ namespace Dracoon.Sdk.SdkInternal.Util {
                     return AlgorithmState.Discouraged;
             }
         }
+
+        public static readonly Func<int, DracoonSubscriptionPlan> ConvertValueToSubscriptionPlanEnum = value => {
+            switch (value) {
+                case 0:
+                    return DracoonSubscriptionPlan.Standard;
+                case 1:
+                    return DracoonSubscriptionPlan.Premium;
+                case 2:
+                    return DracoonSubscriptionPlan.Free;
+                default:
+                    return DracoonSubscriptionPlan.Unknown;
+            }
+        };
+
+        public static readonly Func<string, OAuthClientType> ConvertValueToOAuthClientTypeEnum = value => {
+            switch (value) {
+                case InternalOAuthClientTypeConstants.Confidential:
+                    return OAuthClientType.Confidential;
+                case InternalOAuthClientTypeConstants.Public:
+                    return OAuthClientType.Public;
+                default:
+                    return OAuthClientType.Unknown;
+            }
+        };
+
+        public static readonly Func<OAuthClientType?, string> ConvertOAuthClientTypeEnumToValue = value => {
+            switch (value) {
+                case OAuthClientType.Confidential:
+                    return InternalOAuthClientTypeConstants.Confidential;
+                case OAuthClientType.Public:
+                    return InternalOAuthClientTypeConstants.Public;
+                case OAuthClientType.Unknown:
+                default:
+                    return null;
+            }
+        };
+
+        public static readonly Func<IEnumerable<string>, AuthorizedGrantTypes> ConvertValueToAuthorizedGrantTypesEnum = value => {
+            var result = AuthorizedGrantTypes.None;
+            if (value != null && value.Any()) {
+                foreach (var item in value) {
+                    if (StringComparer.OrdinalIgnoreCase.Equals(item, InternalOAuthGrantTypeConstants.AuthorizationCode))
+                        result |= AuthorizedGrantTypes.AuthorizationCode;
+                    else if (StringComparer.OrdinalIgnoreCase.Equals(item, InternalOAuthGrantTypeConstants.Implicit))
+                        result |= AuthorizedGrantTypes.Implicit;
+                    else if (StringComparer.OrdinalIgnoreCase.Equals(item, InternalOAuthGrantTypeConstants.Password))
+                        result |= AuthorizedGrantTypes.Password;
+                    else if (StringComparer.OrdinalIgnoreCase.Equals(item, InternalOAuthGrantTypeConstants.ClientCredentials))
+                        result |= AuthorizedGrantTypes.ClientCredentials;
+                    else if (StringComparer.OrdinalIgnoreCase.Equals(item, InternalOAuthGrantTypeConstants.RefreshToken))
+                        result |= AuthorizedGrantTypes.RefreshToken;
+                }
+            }
+            return result;
+        };
+
+        public static readonly Func<AuthorizedGrantTypes?, IEnumerable<string>> ConvertAuthorizedGrantTypesEnumToValue = value => {
+            var result = new List<string>();
+            if ((value & AuthorizedGrantTypes.AuthorizationCode) == AuthorizedGrantTypes.AuthorizationCode) {
+                result.Add(InternalOAuthGrantTypeConstants.AuthorizationCode);
+            }
+            if ((value & AuthorizedGrantTypes.Implicit) == AuthorizedGrantTypes.Implicit) {
+                result.Add(InternalOAuthGrantTypeConstants.Implicit);
+            }
+            if ((value & AuthorizedGrantTypes.Password) == AuthorizedGrantTypes.Password) {
+                result.Add(InternalOAuthGrantTypeConstants.Password);
+            }
+            if ((value & AuthorizedGrantTypes.ClientCredentials) == AuthorizedGrantTypes.ClientCredentials) {
+                result.Add(InternalOAuthGrantTypeConstants.ClientCredentials);
+            }
+            if ((value & AuthorizedGrantTypes.RefreshToken) == AuthorizedGrantTypes.RefreshToken) {
+                result.Add(InternalOAuthGrantTypeConstants.RefreshToken);
+            }
+
+            if (result.Count == 0)
+                return null;
+
+            return result.ToArray();
+        };
     }
 }

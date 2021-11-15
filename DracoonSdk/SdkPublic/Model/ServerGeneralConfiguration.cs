@@ -1,6 +1,6 @@
 namespace Dracoon.Sdk.Model {
     /// <include file = "ModelDoc.xml" path='docs/members[@name="serverGeneralSettings"]/ServerGeneralSettings/*'/>
-    public class ServerGeneralSettings {
+    public class ServerGeneralConfiguration {
         /// <include file = "ModelDoc.xml" path='docs/members[@name="serverGeneralSettings"]/SharePasswordSmsEnabled/*'/>
         public bool SharePasswordSmsEnabled { get; internal set; }
 
@@ -19,10 +19,10 @@ namespace Dracoon.Sdk.Model {
         /// <include file = "ModelDoc.xml" path='docs/members[@name="serverGeneralSettings"]/S3TagsEnabled/*'/>
         public bool S3TagsEnabled { get; internal set; }
 
-        public bool HomeRoomsActive { get; internal set; }
+        /// <include file = "ModelDoc.xml" path='docs/members[@name="serverGeneralSettings"]/HideLoginInputFields/*'/>
+        public bool HideLoginInputFields { get; internal set; }
 
-        public long? HomeRoomParentId { get; internal set; }
-
-        public DracoonSubscriptionPlan SubscriptionPlan { get; internal set; }
+        /// <include file = "ModelDoc.xml" path='docs/members[@name="serverGeneralSettings"]/AuthTokenRestrictions/*'/>
+        public AuthTokenRestrictions AuthTokenRestrictions { get; internal set; }
     }
 }

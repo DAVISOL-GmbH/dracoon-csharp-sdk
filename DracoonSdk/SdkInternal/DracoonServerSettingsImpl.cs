@@ -2,7 +2,6 @@
 using Dracoon.Sdk.Error;
 using Dracoon.Sdk.Model;
 using Dracoon.Sdk.SdkInternal.ApiModel;
-using Dracoon.Sdk.SdkInternal.ApiModel.Settings;
 using Dracoon.Sdk.SdkInternal.Mapper;
 using RestSharp;
 using System.Collections.Generic;
@@ -41,36 +40,6 @@ namespace Dracoon.Sdk.SdkInternal {
             return SettingsMapper.FromApiInfrastructureSettings(apiInfrastructureSettings);
         }
 
-        public ServerAuthenticationSettings GetAuth() {
-            _client.Executor.CheckApiServerVersion();
-            IRestRequest request = _client.Builder.GetAuthenticationSettings();
-            ApiAuthenticationSettings apiAuthenticationSettings = _client.Executor.DoSyncApiCall<ApiAuthenticationSettings>(request, RequestType.GetAuthenticationSettings);
-            return SettingsMapper.FromApiAuthenticationSettings(apiAuthenticationSettings);
-        }
-
-        public ActiveDirectoryConfigList GetAuthActiveDirectorySettings() {
-            _client.Executor.CheckApiServerVersion();
-            IRestRequest request = _client.Builder.GetAuthActiveDirectorySettings();
-            ApiActiveDirectoryConfigList apiActiveDirectoryConfigList =
-                _client.Executor.DoSyncApiCall<ApiActiveDirectoryConfigList>(request, RequestType.GetAuthActiveDirectorySettings);
-            return SettingsMapper.FromApiActiveDirectoryConfigList(apiActiveDirectoryConfigList);
-        }
-
-        public OpenIdIdpConfigList GetAuthOpenIdIdpSettings() {
-            _client.Executor.CheckApiServerVersion();
-            IRestRequest request = _client.Builder.GetAuthOpenIdIdpSettings();
-            IEnumerable<ApiOpenIdIdpConfig> apiOpenIdIdpConfigs =
-                _client.Executor.DoSyncApiCall<List<ApiOpenIdIdpConfig>>(request, RequestType.GetAuthOpenIdIdpSettings);
-            return SettingsMapper.FromApiOpenIdIpdConfigs(apiOpenIdIdpConfigs);
-        }
-
-        public RadiusConfig GetAuthRadiusSettings() {
-            _client.Executor.CheckApiServerVersion();
-            IRestRequest request = _client.Builder.GetAuthRadiusSettings();
-            ApiRadiusConfig apiRadiusConfig =
-                _client.Executor.DoSyncApiCall<ApiRadiusConfig>(request, RequestType.GetAuthRadiusSettings);
-            return SettingsMapper.FromApiRadiusConfig(apiRadiusConfig);
-        }
         public List<UserKeyPairAlgorithmData> GetAvailableUserKeyPairAlgorithms() {
             try {
                 // Check if api supports this api endpoint. If not only provide the algorithm for the "old" crypto.

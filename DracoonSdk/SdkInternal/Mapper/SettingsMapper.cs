@@ -1,7 +1,6 @@
-using Dracoon.Sdk.Error;
 using Dracoon.Sdk.Model;
 using Dracoon.Sdk.SdkInternal.ApiModel;
-using Dracoon.Sdk.SdkInternal.ApiModel.Settings;
+using Dracoon.Sdk.SdkInternal.ApiModel.Requests;
 using Dracoon.Sdk.SdkInternal.Util;
 using System;
 using System.Collections.Generic;
@@ -22,10 +21,44 @@ namespace Dracoon.Sdk.SdkInternal.Mapper {
                 SharePasswordSmsEnabled = apiGeneralConfig.SharePasswordSmsEnabled,
                 UseS3Storage = apiGeneralConfig.UseS3Storage,
                 S3TagsEnabled = apiGeneralConfig.S3TagsEnabled,
+                HomeRoomsActive = apiGeneralConfig.HomeRoomsActive,
+                HomeRoomParentId = apiGeneralConfig.HomeRoomParentId,
+                SubscriptionPlan = EnumConverter.ConvertValueToSubscriptionPlanEnum(apiGeneralConfig.SubscriptionPlan)
+            };
+            return general;
+        }
+        internal static ServerGeneralConfiguration FromApiGeneralConfiguration(ApiGeneralConfiguration apiGeneralConfig) {
+            if (apiGeneralConfig == null) {
+                return null;
+            }
+
+            ServerGeneralConfiguration general = new ServerGeneralConfiguration {
+                CryptoEnabled = apiGeneralConfig.CryptoEnabled,
+                EmailNotificationButtonEnabled = apiGeneralConfig.EmailNotificationButtonEnabled,
+                EulaEnabled = apiGeneralConfig.EulaEnabled,
+                SharePasswordSmsEnabled = apiGeneralConfig.SharePasswordSmsEnabled,
+                UseS3Storage = apiGeneralConfig.UseS3Storage,
+                S3TagsEnabled = apiGeneralConfig.S3TagsEnabled,
                 HideLoginInputFields = apiGeneralConfig.HideLoginInputFields,
                 AuthTokenRestrictions = FromApiAuthTokenRestrictions(apiGeneralConfig.AuthTokenRestrictions)
             };
             return general;
+        }
+        internal static ApiUpdateSystemGeneralConfigRequest ToApiUpdateSystemGeneralConfigRequest(UpdateSystemGeneralConfigRequest updateRequest) {
+            if (updateRequest == null) {
+                return null;
+            }
+
+            ApiUpdateSystemGeneralConfigRequest apiUpdateRequest = new ApiUpdateSystemGeneralConfigRequest {
+                CryptoEnabled = updateRequest.CryptoEnabled,
+                EmailNotificationButtonEnabled = updateRequest.EmailNotificationButtonEnabled,
+                EulaEnabled = updateRequest.EulaEnabled,
+                SharePasswordSmsEnabled = updateRequest.SharePasswordSmsEnabled,
+                S3TagsEnabled = updateRequest.S3TagsEnabled,
+                HideLoginInputFields = updateRequest.HideLoginInputFields,
+                AuthTokenRestrictions = ToApiUpdateAuthTokenRestrictionsRequest(updateRequest.AuthTokenRestrictions)
+            };
+            return apiUpdateRequest;
         }
 
         internal static AuthTokenRestrictions FromApiAuthTokenRestrictions(ApiAuthTokenRestrictions apiAuthTokenRestrictions) {
@@ -40,6 +73,19 @@ namespace Dracoon.Sdk.SdkInternal.Mapper {
             };
 
             return authTokenRestrictions;
+        }
+        internal static ApiUpdateAuthTokenRestrictionsRequest ToApiUpdateAuthTokenRestrictionsRequest(UpdateAuthTokenRestrictionsRequest updateRequest) {
+            if (updateRequest == null) {
+                return null;
+            }
+
+            ApiUpdateAuthTokenRestrictionsRequest apiUpdateRequest = new ApiUpdateAuthTokenRestrictionsRequest {
+                OverwriteEnabled = updateRequest.OverwriteEnabled,
+                AccessTokenValidity = updateRequest.AccessTokenValidity,
+                RefreshTokenValidity = updateRequest.RefreshTokenValidity
+            };
+
+            return apiUpdateRequest;
         }
 
         internal static ServerInfrastructureSettings FromApiInfrastructureSettings(ApiInfrastructureSettings apiInfrastructureConfig) {
@@ -164,7 +210,7 @@ namespace Dracoon.Sdk.SdkInternal.Mapper {
             }
         }
 
-        internal static ServerAuthenticationSettings FromApiAuthenticationSettings(ApiAuthenticationSettings apiAuthenticationConfig) {
+        internal static ServerAuthenticationConfiguration FromApiAuthenticationConfiguration(ApiAuthenticationConfiguration apiAuthenticationConfig) {
             if (apiAuthenticationConfig == null) {
                 return null;
             }
@@ -172,7 +218,7 @@ namespace Dracoon.Sdk.SdkInternal.Mapper {
             if (apiAuthenticationConfig.AuthMethods != null) {
                 authMethods = apiAuthenticationConfig.AuthMethods.Select(x => FromApiAuthenticationMethod(x)).Where(x => x != null);
             }
-            ServerAuthenticationSettings authentication = new ServerAuthenticationSettings() {
+            ServerAuthenticationConfiguration authentication = new ServerAuthenticationConfiguration() {
                 AuthMethods = authMethods.ToArray()
             };
             return authentication;
@@ -226,7 +272,7 @@ namespace Dracoon.Sdk.SdkInternal.Mapper {
             return activeDirectoryConfig;
         }
 
-        internal static OpenIdIdpConfigList FromApiOpenIdIpdConfigs(IEnumerable<ApiOpenIdIdpConfig> apiOpenIdIdpConfigs) {
+        internal static OpenIdIdpConfigList FromApiOpenIdIpdConfigList(IEnumerable<ApiOpenIdIdpConfig> apiOpenIdIdpConfigs) {
             if (apiOpenIdIdpConfigs == null) {
                 return null;
             }
@@ -281,7 +327,7 @@ namespace Dracoon.Sdk.SdkInternal.Mapper {
 #endif
         }
 
-        internal static RadiusConfig FromApiRadiusConfig(ApiRadiusConfig apiRadiusConfig) {
+        internal static RadiusConfig FromApiRadiusConfiguration(ApiRadiusConfig apiRadiusConfig) {
             if (apiRadiusConfig == null) {
                 return null;
             }
@@ -295,6 +341,77 @@ namespace Dracoon.Sdk.SdkInternal.Mapper {
             };
 
             return radiusConfig;
+        }
+
+        internal static OAuthClientConfigList FromApiOAuthClientConfigList(IEnumerable<ApiOAuthClientConfiguration> apiOAuthClientConfigs) {
+            if (apiOAuthClientConfigs == null) {
+                return null;
+            }
+
+            OAuthClientConfigList oauthClientConfigList = new OAuthClientConfigList {
+                Items = apiOAuthClientConfigs.Select(FromApiOAuthClientConfiguration).ToArray()
+            };
+
+            return oauthClientConfigList;
+        }
+
+        internal static OAuthClientConfiguration FromApiOAuthClientConfiguration(ApiOAuthClientConfiguration apiOAuthClientConfig) {
+            if (apiOAuthClientConfig == null) {
+                return null;
+            }
+
+            OAuthClientConfiguration oauthClientConfig = new OAuthClientConfiguration {
+                ClientId = apiOAuthClientConfig.ClientId,
+                ClientName = apiOAuthClientConfig.ClientName,
+                ClientSecret = apiOAuthClientConfig.ClientSecret,
+                ClientType = EnumConverter.ConvertValueToOAuthClientTypeEnum(apiOAuthClientConfig.ClientType),
+                IsStandard = apiOAuthClientConfig.IsStandard,
+                IsExternal = apiOAuthClientConfig.IsExternal,
+                IsEnabled = apiOAuthClientConfig.IsEnabled,
+                GrantTypes = EnumConverter.ConvertValueToAuthorizedGrantTypesEnum(apiOAuthClientConfig.GrantTypes),
+                RedirectUris = apiOAuthClientConfig.RedirectUris?.ToArray(),
+                AccessTokenValidity = apiOAuthClientConfig.AccessTokenValidity,
+                RefreshTokenValidity = apiOAuthClientConfig.RefreshTokenValidity,
+                ApprovalValidity = apiOAuthClientConfig.ApprovalValidity
+            };
+
+            return oauthClientConfig;
+        }
+
+        internal static ApiCreateOAuthClientRequest ToApiCreateOAuthClientRequest(CreateOAuthClientRequest createRequest) {
+            if (createRequest == null) {
+                return null;
+            }
+            ApiCreateOAuthClientRequest apiCreateRequest = new ApiCreateOAuthClientRequest() {
+                ClientId = createRequest.ClientId,
+                ClientName = createRequest.ClientName,
+                ClientSecret = createRequest.ClientSecret,
+                ClientType = EnumConverter.ConvertOAuthClientTypeEnumToValue(createRequest.ClientType),
+                GrantTypes = EnumConverter.ConvertAuthorizedGrantTypesEnumToValue(createRequest.GrantTypes),
+                RedirectUris = createRequest.RedirectUris?.ToArray(),
+                AccessTokenValidity = createRequest.AccessTokenValidity,
+                RefreshTokenValidity = createRequest.RefreshTokenValidity,
+                ApprovalValidity = createRequest.ApprovalValidity
+            };
+            return apiCreateRequest;
+        }
+
+        internal static ApiUpdateOAuthClientRequest ToApiUpdateOAuthClientRequest(UpdateOAuthClientRequest updateRequest) {
+            if (updateRequest == null) {
+                return null;
+            }
+            ApiUpdateOAuthClientRequest apiUpdateRequest = new ApiUpdateOAuthClientRequest() {
+                ClientName = updateRequest.ClientName,
+                ClientSecret = updateRequest.ClientSecret,
+                ClientType = EnumConverter.ConvertOAuthClientTypeEnumToValue(updateRequest.ClientType),
+                IsEnabled = updateRequest.IsEnabled,
+                GrantTypes = EnumConverter.ConvertAuthorizedGrantTypesEnumToValue(updateRequest.GrantTypes),
+                RedirectUris = updateRequest.RedirectUris?.ToArray(),
+                AccessTokenValidity = updateRequest.AccessTokenValidity,
+                RefreshTokenValidity = updateRequest.RefreshTokenValidity,
+                ApprovalValidity = updateRequest.ApprovalValidity
+            };
+            return apiUpdateRequest;
         }
 
         internal static FailoverServer FromApiFailoverServer(ApiFailoverServer apiFailoverServer) {

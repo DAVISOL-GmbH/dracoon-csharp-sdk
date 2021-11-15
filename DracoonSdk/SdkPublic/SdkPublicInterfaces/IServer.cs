@@ -16,6 +16,8 @@ namespace Dracoon.Sdk {
         /// <include file = "SdkPublicInterfacesDoc.xml" path='docs/members[@name="iServer"]/ServerPolicies/*'/>
         IServerPolicies ServerPolicies { get; }
 
+        ISystemConfig SystemConfig { get; }
+
         PublicDownloadShare GetPublicDownloadShare(string accessKey);
 
         PublicUploadShare GetPublicUploadShare(string accessKey);

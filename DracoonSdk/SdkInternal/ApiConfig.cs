@@ -189,9 +189,6 @@ namespace Dracoon.Sdk.SdkInternal {
         #region Config-Endpoint
 
         internal const string ApiConfigInfoPrefix = ApiPrefix + "/config/info";
-        internal const string ApiSystemConfigPrefix = ApiPrefix + "/system/config";
-        internal const string ApiConfigSettingsPrefix = ApiSystemConfigPrefix + "/settings";
-        internal const string ApiPoliciesSettingsPrefix = ApiSystemConfigPrefix + "/policies";
 
         #region GET
 
@@ -201,14 +198,6 @@ namespace Dracoon.Sdk.SdkInternal {
         internal const string ApiGetPasswordPolicies = ApiConfigInfoPrefix + "/policies/passwords";
         internal const string ApiGetAlgorithms = ApiConfigInfoPrefix + "/policies/algorithms";
         internal const string ApiGetClassificationPolicies = ApiConfigInfoPrefix + "/policies/classifications";
-
-        internal const string ApiGetSystemSettingsGeneralConfig = ApiConfigSettingsPrefix + "/general";
-        internal const string ApiGetSystemSettingsInfrastructureConfig = ApiConfigSettingsPrefix + "/infrastructure";
-        internal const string ApiGetSystemSettingsDefaultsConfig = ApiConfigSettingsPrefix + "/defaults";
-        internal const string ApiGetSystemSettingsEventlogConfig = ApiConfigSettingsPrefix + "/eventlog";
-        internal const string ApiGetSystemSettingsAuthConfig = ApiConfigSettingsPrefix + "/auth";
-
-        internal const string ApiGetSystemSettingsPasswordPolicies = ApiPoliciesSettingsPrefix + "/passwords";
 
         #endregion
 
@@ -233,9 +222,22 @@ namespace Dracoon.Sdk.SdkInternal {
 
         #region System-Settings-Config-Endpoint
 
+        internal const string ApiSystemConfigPrefix = ApiPrefix + "/system/config";
+        internal const string ApiConfigSettingsPrefix = ApiSystemConfigPrefix + "/settings";
+        internal const string ApiPoliciesSettingsPrefix = ApiSystemConfigPrefix + "/policies";
+
         #region GET
 
-        internal const string ApiGetAuthenticationConfig = ApiConfigSettingsPrefix + "/auth";
+        internal const string ApiGetSystemSettingsAuthenticationConfig = ApiConfigSettingsPrefix + "/auth";
+
+        internal const string ApiGetSystemSettingsGeneralConfig = ApiConfigSettingsPrefix + "/general";
+        internal const string ApiGetSystemSettingsInfrastructureConfig = ApiConfigSettingsPrefix + "/infrastructure";
+        internal const string ApiGetSystemSettingsDefaultsConfig = ApiConfigSettingsPrefix + "/defaults";
+        internal const string ApiGetSystemSettingsEventlogConfig = ApiConfigSettingsPrefix + "/eventlog";
+        internal const string ApiGetSystemSettingsAuthConfig = ApiConfigSettingsPrefix + "/auth";
+
+        internal const string ApiGetSystemSettingsClassificationPolicies = ApiPoliciesSettingsPrefix + "/classifications";
+        internal const string ApiGetSystemSettingsPasswordPolicies = ApiPoliciesSettingsPrefix + "/passwords";
 
         #endregion
 
@@ -243,15 +245,30 @@ namespace Dracoon.Sdk.SdkInternal {
 
         #region System-Auth-Config-Endpoint
 
-        private const string ApiSystemAuthConfigPrefix = ApiSystemConfigPrefix + "/auth";
+        private const string ApiSystemAuthConfigPrefix = ApiSystemConfigPrefix + "/oauth";
 
         #region GET
 
-        internal const string ApiGetAuthActiveDirectorySettings = ApiSystemAuthConfigPrefix + "/ads";
+        internal const string ApiGetAuthActiveDirectoryConfigurations = ApiSystemAuthConfigPrefix + "/ads";
+        internal const string ApiGetAuthOpenIdIdpConfigurations = ApiSystemAuthConfigPrefix + "/openid/idps";
+        internal const string ApiGetAuthRadiusConfiguration = ApiSystemAuthConfigPrefix + "/radius";
+        internal const string ApiGetAuthClientConfigurations = ApiSystemAuthConfigPrefix + "/clients";
+        internal const string ApiGetAuthClientConfigurationClientId = ApiGetAuthClientConfigurations + "/{clientId}";
 
-        internal const string ApiGetAuthOpenIdIdpSettings = ApiSystemAuthConfigPrefix + "/openid/idps";
+        #endregion
+        #region POST
 
-        internal const string ApiGetAuthRadiusSettings = ApiSystemAuthConfigPrefix + "/radius";
+        internal const string ApiPostAuthClientConfiguration = ApiGetAuthClientConfigurations;
+
+        #endregion
+        #region PUT
+
+        internal const string ApiPutAuthClientConfiguration = ApiGetAuthClientConfigurationClientId;
+
+        #endregion
+        #region DELETE
+
+        internal const string ApiDeleteAuthClientConfiguration = ApiGetAuthClientConfigurationClientId;
 
         #endregion
 
