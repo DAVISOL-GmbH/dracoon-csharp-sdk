@@ -61,7 +61,7 @@ namespace Dracoon.Sdk.SdkInternal {
             userId.MustPositive(nameof(userId));
             #endregion
 
-            IRestRequest restRequest = _client.Builder.GetUser(userId);
+            IRestRequest restRequest = _client.Builder.GetUser(userId, effectiveRoles);
             ApiUserData result = _client.Executor.DoSyncApiCall<ApiUserData>(restRequest, RequestType.GetUser);
             return UserMapper.FromApiUserData(result);
         }
