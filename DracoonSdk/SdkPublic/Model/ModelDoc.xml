@@ -2037,6 +2037,12 @@
       </summary>
     </LogAuditor>
 
+    <NonmemberViewer>
+      <summary>
+        The user has the permission to view users and groups when having room manage permission.
+      </summary>
+    </NonmemberViewer>
+
   </members>
 
 </docs>
