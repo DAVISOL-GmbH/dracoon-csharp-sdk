@@ -245,14 +245,15 @@ namespace Dracoon.Sdk.SdkInternal {
 
         #region System-Auth-Config-Endpoint
 
-        private const string ApiSystemAuthConfigPrefix = ApiSystemConfigPrefix + "/oauth";
+        private const string ApiSystemAuthConfigPrefix = ApiSystemConfigPrefix + "/auth";
+        private const string ApiSystemOAuthConfigPrefix = ApiSystemConfigPrefix + "/oauth";
 
         #region GET
 
         internal const string ApiGetAuthActiveDirectoryConfigurations = ApiSystemAuthConfigPrefix + "/ads";
         internal const string ApiGetAuthOpenIdIdpConfigurations = ApiSystemAuthConfigPrefix + "/openid/idps";
         internal const string ApiGetAuthRadiusConfiguration = ApiSystemAuthConfigPrefix + "/radius";
-        internal const string ApiGetAuthClientConfigurations = ApiSystemAuthConfigPrefix + "/clients";
+        internal const string ApiGetAuthClientConfigurations = ApiSystemOAuthConfigPrefix + "/clients";
         internal const string ApiGetAuthClientConfigurationClientId = ApiGetAuthClientConfigurations + "/{clientId}";
 
         #endregion

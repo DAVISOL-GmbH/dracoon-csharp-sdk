@@ -321,7 +321,7 @@ namespace Dracoon.Sdk.SdkInternal.Mapper {
             if (StringComparer.OrdinalIgnoreCase.Equals(flow, "authorization_code"))
                 return AuthFlowType.AuthorizationCode;
 #if DEBUG
-            throw new DracoonException($"Unknwon auth flow type {flow}!");
+            throw new Error.DracoonException($"Unknwon auth flow type {flow}!");
 #else
             return AuthFlowType.None;
 #endif
