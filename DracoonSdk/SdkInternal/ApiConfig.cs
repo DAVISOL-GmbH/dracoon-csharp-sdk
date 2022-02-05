@@ -39,13 +39,20 @@ namespace Dracoon.Sdk.SdkInternal {
 
         #region Public-Endpoint
 
+        internal const string ApiPublicPrefix = ApiPrefix + "/public";
+        internal const string ApiPublicSystemPrefix = ApiPublicPrefix + "/system";
+
         #region GET
 
-        internal const string ApiGetServerVersion = ApiPrefix + "/public/software/version";
-        internal const string ApiGetServerTime = ApiPrefix + "/public/time";
+        internal const string ApiGetServerVersion = ApiPublicPrefix + "/software/version";
+        internal const string ApiGetServerTime = ApiPublicPrefix + "/time";
 
-        internal const string ApiGetPublicDownloadShare = ApiPrefix + "/public/shares/downloads/{accessKey}";
-        internal const string ApiGetPublicUploadShare = ApiPrefix + "/public/shares/uploads/{accessKey}";
+        internal const string ApiGetPublicDownloadShare = ApiPublicPrefix + "/shares/downloads/{accessKey}";
+        internal const string ApiGetPublicUploadShare = ApiPublicPrefix + "/shares/uploads/{accessKey}";
+
+        internal const string ApiGetPublicSystemInfo = ApiPublicSystemPrefix + "/info";
+        internal const string ApiGetPublicSystemAuthActiveDirectory = ApiPublicSystemPrefix + "/info/auth/ad";
+        internal const string ApiGetPublicSystemAuthOpenId = ApiPublicSystemPrefix + "/info/auth/openid";
 
         #endregion
 

@@ -19,6 +19,12 @@ namespace Dracoon.Sdk.SdkInternal {
 
         IRestRequest GetPublicUploadShare(string accessKey);
 
+        IRestRequest GetPublicSystemInfo();
+
+        IRestRequest GetPublicSystemActiveDirectoryAuth();
+
+        IRestRequest GetPublicSystemOpenIdAuth();
+
         #endregion
 
         #region User

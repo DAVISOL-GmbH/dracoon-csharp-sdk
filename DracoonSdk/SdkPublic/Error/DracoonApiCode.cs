@@ -511,15 +511,35 @@ namespace Dracoon.Sdk.Error {
         /// Api-Error-Codes or contexts: -70761
         /// </summary>
         public static readonly DracoonApiCode VALIDATION_USER_HAS_NO_FILE_KEY = new DracoonApiCode(3552, "User has no encryption file key.");
-        // CODES: -70560
+        /// <summary>
+        /// User with provided Basic authentication login already exists.
+        /// 
+        /// Api-Error-Codes or contexts: 
+        /// </summary>
         public static readonly DracoonApiCode VALIDATION_USER_BASIC_AUTH_NAME_IN_USE = new DracoonApiCode(3553, "User with provided Basic authentication login already exists.");
-        // CODES: -70561
+        /// <summary>
+        /// User with provided Active Directory username already exists.
+        /// 
+        /// Api-Error-Codes or contexts: -70561
+        /// </summary>
         public static readonly DracoonApiCode VALIDATION_USER_ACTIVE_DIRECTORY_AUTH_NAME_IN_USE = new DracoonApiCode(3554, "User with provided Active Directory username already exists.");
-        // CODES: -70562
+        /// <summary>
+        /// User with provided RADIUS login already exists.
+        /// 
+        /// Api-Error-Codes or contexts: -70562
+        /// </summary>
         public static readonly DracoonApiCode VALIDATION_USER_RADIUS_AUTH_NAME_IN_USE = new DracoonApiCode(3555, "User with provided RADIUS login already exists.");
-        // CODES: -70563
+        /// <summary>
+        /// User with provided OpenID Connect username already exists.
+        /// 
+        /// Api-Error-Codes or contexts: -70563
+        /// </summary>
         public static readonly DracoonApiCode VALIDATION_USER_OPENID_AUTH_NAME_IN_USE = new DracoonApiCode(3556, "User with provided OpenID Connect username already exists.");
-        // CODES: -70564
+        /// <summary>
+        /// User with provided username already exists.
+        /// 
+        /// Api-Error-Codes or contexts: -70564
+        /// </summary>
         public static readonly DracoonApiCode VALIDATION_USER_NAME_ALREADY_EXISTS = new DracoonApiCode(3557, "User with provided username already exists.");
 
         #endregion

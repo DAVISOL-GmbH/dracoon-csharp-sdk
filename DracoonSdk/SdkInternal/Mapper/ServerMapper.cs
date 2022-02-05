@@ -1,8 +1,8 @@
-using System.Collections.Generic;
-using System.Linq;
 using Dracoon.Sdk.Model;
 using Dracoon.Sdk.SdkInternal.ApiModel;
-using Dracoon.Sdk.SdkInternal.ApiModel.Requests;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Dracoon.Sdk.SdkInternal.Mapper {
     internal static class ServerMapper {
@@ -48,8 +48,8 @@ namespace Dracoon.Sdk.SdkInternal.Mapper {
                 IsEncrypted = apiPublicUploadShare.IsEncrypted,
                 ExpireAt = apiPublicUploadShare.ExpireAt,
 
-                UploadedFiles = apiPublicUploadShare.ShowUploadedFiles 
-                    ? apiPublicUploadShare.UploadedFiles?.Select(x => FromApiPublicUploadedFileData(x))?.Where(x => x != null)?.ToArray() 
+                UploadedFiles = apiPublicUploadShare.ShowUploadedFiles
+                    ? apiPublicUploadShare.UploadedFiles?.Select(x => FromApiPublicUploadedFileData(x))?.Where(x => x != null)?.ToArray()
                     : null,
             };
             return publicUploadShare;
@@ -67,6 +67,113 @@ namespace Dracoon.Sdk.SdkInternal.Mapper {
                 Hash = apiPublicUploadedFileData.Hash
             };
             return publicUploadedFileData;
+        }
+
+        internal static SystemInfo FromApiSystemInfo(ApiSystemInfo apiSystemInfo) {
+            if (apiSystemInfo == null) {
+                return null;
+            }
+
+            SystemInfo systemInfo = new SystemInfo() {
+                LanguageDefault = apiSystemInfo.LanguageDefault,
+                HideLoginInputFields = apiSystemInfo.HideLoginInputFields,
+                S3Hosts = apiSystemInfo.S3Hosts?.ToArray() ?? Array.Empty<string>(),
+                S3EnforceDirectUpload = apiSystemInfo.S3EnforceDirectUpload,
+                UseS3Storage = apiSystemInfo.UseS3Storage
+            };
+
+#pragma warning disable CS0618 // Type or member is obsolete
+            if (apiSystemInfo.AuthMethods != null && apiSystemInfo.AuthMethods.Any()) {
+                systemInfo.AuthMethods = apiSystemInfo.AuthMethods.Select(x => SettingsMapper.FromApiAuthenticationMethod(x)).Where(x => x != null).ToArray();
+            }
+#pragma warning restore CS0618 // Type or member is obsolete
+
+            return systemInfo;
+        }
+
+        internal static ActiveDirectoryAuthInfo FromApiActiveDirectoryAuthInfo(ApiActiveDirectoryAuthInfo apiActiveDirectoryAuthInfo) {
+            if (apiActiveDirectoryAuthInfo == null)
+                return null;
+
+            ActiveDirectoryAuthInfo activeDirectoryAuthInfo = new ActiveDirectoryAuthInfo() {
+                Items = FromApiActiveDirectoryAuthInfoItems(apiActiveDirectoryAuthInfo).ToArray()
+            };
+
+            return activeDirectoryAuthInfo;
+        }
+
+        private static IEnumerable<ActiveDirectoryAuthProvider> FromApiActiveDirectoryAuthInfoItems(ApiActiveDirectoryAuthInfo apiActiveDirectoryAuthInfo) {
+            if (apiActiveDirectoryAuthInfo == null || apiActiveDirectoryAuthInfo.Items == null)
+                yield break;
+
+            foreach (var item in apiActiveDirectoryAuthInfo.Items) {
+                ActiveDirectoryAuthProvider activeDirectoryAuthProvider = FromApiActiveDirectory(item);
+                if (activeDirectoryAuthProvider != null)
+                    yield return activeDirectoryAuthProvider;
+            }
+
+            yield break;
+        }
+
+        internal static ActiveDirectoryAuthProvider FromApiActiveDirectory(ApiActiveDirectory apiActiveDirectory) {
+            if (apiActiveDirectory == null) {
+                return null;
+            }
+
+            ActiveDirectoryAuthProvider activeDirectoryAuthProvider = new ActiveDirectoryAuthProvider() {
+                Id = apiActiveDirectory.Id,
+                Name = apiActiveDirectory.Name,
+                IsGlobalAvailable = apiActiveDirectory.IsGlobalAvailable
+            };
+
+            if (string.IsNullOrEmpty(activeDirectoryAuthProvider.Name))
+                activeDirectoryAuthProvider.Name = apiActiveDirectory.Alias;
+
+            return activeDirectoryAuthProvider;
+        }
+
+        internal static OpenIdAuthInfo FromApiOpenIdAuthInfo(ApiOpenIdAuthInfo apiOpenIdAuthInfo) {
+            if (apiOpenIdAuthInfo == null)
+                return null;
+
+            OpenIdAuthInfo openIdAuthInfo = new OpenIdAuthInfo() {
+                Items = FromApiOpenIdAuthInfoItems(apiOpenIdAuthInfo).ToArray()
+            };
+
+            return openIdAuthInfo;
+        }
+
+        private static IEnumerable<OpenIdAuthProvider> FromApiOpenIdAuthInfoItems(ApiOpenIdAuthInfo apiOpenIdAuthInfo) {
+            if (apiOpenIdAuthInfo == null || apiOpenIdAuthInfo.Items == null)
+                yield break;
+
+            foreach (var item in apiOpenIdAuthInfo.Items) {
+                OpenIdAuthProvider openIdAuthProvider = FromApiOpenIdProvider(item);
+                if (openIdAuthProvider != null)
+                    yield return openIdAuthProvider;
+            }
+
+            yield break;
+        }
+
+        internal static OpenIdAuthProvider FromApiOpenIdProvider(ApiOpenIdProvider apiOpenIdProvider) {
+            if (apiOpenIdProvider == null) {
+                return null;
+            }
+
+            OpenIdAuthProvider openIdAuthProvider = new OpenIdAuthProvider() {
+                Id = apiOpenIdProvider.Id,
+                Name = apiOpenIdProvider.Name,
+                Issuer = apiOpenIdProvider.Issuer,
+                MappingClaim = apiOpenIdProvider.MappingClaim,
+                UserManagementUrl = apiOpenIdProvider.UserManagementUrl,
+                IsGlobalAvailable = apiOpenIdProvider.IsGlobalAvailable
+            };
+
+            if (string.IsNullOrEmpty(openIdAuthProvider.Name))
+                openIdAuthProvider.Name = apiOpenIdProvider.Alias;
+
+            return openIdAuthProvider;
         }
     }
 }

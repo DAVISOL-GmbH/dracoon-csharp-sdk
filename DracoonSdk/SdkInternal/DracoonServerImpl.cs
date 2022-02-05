@@ -59,5 +59,26 @@ namespace Dracoon.Sdk.SdkInternal {
             ApiPublicUploadShare result = _client.Executor.DoSyncApiCall<ApiPublicUploadShare>(restRequest, RequestType.GetPublicUploadShare);
             return ServerMapper.FromApiPublicUploadShare(result);
         }
+
+        public SystemInfo GetPublicSystemInfo() {
+            _client.Executor.CheckApiServerVersion();
+            IRestRequest request = _client.Builder.GetPublicSystemInfo();
+            ApiSystemInfo result = _client.Executor.DoSyncApiCall<ApiSystemInfo>(request, RequestType.GetPublicSystemInfo);
+            return ServerMapper.FromApiSystemInfo(result);
+        }
+
+        public ActiveDirectoryAuthInfo GetPublicSystemActiveDirectoryAuth() {
+            _client.Executor.CheckApiServerVersion();
+            IRestRequest request = _client.Builder.GetPublicSystemActiveDirectoryAuth();
+            ApiActiveDirectoryAuthInfo result = _client.Executor.DoSyncApiCall<ApiActiveDirectoryAuthInfo>(request, RequestType.GetPublicSystemActiveDirectoryAuth);
+            return ServerMapper.FromApiActiveDirectoryAuthInfo(result);
+        }
+
+        public OpenIdAuthInfo GetPublicSystemOpenIdAuth() {
+            _client.Executor.CheckApiServerVersion();
+            IRestRequest request = _client.Builder.GetPublicSystemOpenIdAuth();
+            ApiOpenIdAuthInfo result = _client.Executor.DoSyncApiCall<ApiOpenIdAuthInfo>(request, RequestType.GetPublicSystemOpenIdAuth);
+            return ServerMapper.FromApiOpenIdAuthInfo(result);
+        }
     }
 }

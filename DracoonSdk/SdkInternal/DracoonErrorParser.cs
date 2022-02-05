@@ -83,7 +83,7 @@ namespace Dracoon.Sdk.SdkInternal {
         internal static void ParseError(IRestResponse response, RequestType requestType) {
             ApiErrorResponse apiError = GetApiErrorResponse(response.Content);
             DracoonApiCode resultCode = Parse((int)response.StatusCode, response, apiError, requestType);
-            DracoonClient.Log.Error(LogTag, $"Query for '{requestType.ToString()}' failed with '{resultCode.Text}'");
+            DracoonClient.Log.Error(LogTag, $"Query for '{requestType}' failed with '{resultCode.Text}'");
 
             throw new DracoonApiException(resultCode);
         }

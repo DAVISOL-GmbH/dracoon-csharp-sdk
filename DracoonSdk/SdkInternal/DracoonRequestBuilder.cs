@@ -112,6 +112,25 @@ namespace Dracoon.Sdk.SdkInternal {
             return request;
         }
 
+        IRestRequest IRequestBuilder.GetPublicSystemInfo() {
+            RestRequest request = new RestRequest(ApiConfig.ApiGetPublicSystemInfo, Method.GET);
+            SetGeneralRestValues(request, false);
+            return request;
+        }
+
+        IRestRequest IRequestBuilder.GetPublicSystemActiveDirectoryAuth() {
+            RestRequest request = new RestRequest(ApiConfig.ApiGetPublicSystemAuthActiveDirectory, Method.GET);
+            SetGeneralRestValues(request, false);
+            return request;
+        }
+
+        IRestRequest IRequestBuilder.GetPublicSystemOpenIdAuth() {
+            RestRequest request = new RestRequest(ApiConfig.ApiGetPublicSystemAuthOpenId, Method.GET);
+            SetGeneralRestValues(request, false);
+            return request;
+        }
+
+
         #endregion
 
         #endregion
@@ -838,7 +857,7 @@ namespace Dracoon.Sdk.SdkInternal {
 
         #endregion
 
-#endregion
+        #endregion
 
         #region Groups-Endpoint
 
