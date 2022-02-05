@@ -430,6 +430,9 @@ namespace Dracoon.Sdk.SdkInternal {
                                 return DracoonApiCode.VALIDATION_ROOM_ALREADY_EXISTS;
                             case RequestType.PutFile:
                                 return DracoonApiCode.VALIDATION_FILE_ALREADY_EXISTS;
+                            case RequestType.PostUser:
+                                // 2022-02-04: Workaround as error code is currently not provided by the API (current v4.34.2, see: https://cloud.support.dracoon.com/hc/en-us/requests/26364)
+                                return DracoonApiCode.VALIDATION_USER_NAME_ALREADY_EXISTS;
                             default: {
                                     if (apiErrorCode == -40010) {
                                         return DracoonApiCode.VALIDATION_ROOM_FOLDER_CAN_NOT_BE_OVERWRITTEN;
