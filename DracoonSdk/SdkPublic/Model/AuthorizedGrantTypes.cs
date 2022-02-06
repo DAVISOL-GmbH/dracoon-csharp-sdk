@@ -2,7 +2,7 @@
 
 namespace Dracoon.Sdk.Model {
     /// <summary>
-    /// <seealso cref="https://tools.ietf.org/html/rfc6749"/>
+    /// <seealso href="https://tools.ietf.org/html/rfc6749"/>
     /// </summary>
     [Flags]
     public enum AuthorizedGrantTypes : int {
