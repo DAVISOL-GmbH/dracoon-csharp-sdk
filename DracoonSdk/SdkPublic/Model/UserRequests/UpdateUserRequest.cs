@@ -66,7 +66,7 @@ namespace Dracoon.Sdk.Model {
 
         public void SetActiveDirectoryAuth(string adLogin, int adConfigId) {
             AuthData = new UserAuthDataUpdateRequest {
-                Method = UserAuthMethod.OpenID,
+                Method = UserAuthMethod.ActiveDirectory,
                 Login = adLogin,
                 OIDConfigId = null,
                 ADConfigId = adConfigId

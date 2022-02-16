@@ -74,7 +74,7 @@ namespace Dracoon.Sdk.Model {
         }
 
         public void SetActiveDirectoryAuth(string adLogin, int adConfigId) {
-            AuthData.Method = UserAuthMethod.OpenID;
+            AuthData.Method = UserAuthMethod.ActiveDirectory;
             AuthData.Login = adLogin;
             AuthData.Password = null;
             AuthData.MustChangePassword = null;
