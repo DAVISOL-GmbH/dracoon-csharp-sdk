@@ -62,7 +62,7 @@ namespace Dracoon.Sdk.SdkInternal {
         internal void ParseError(IRestResponse response, RequestType requestType) {
             ApiErrorResponse apiError = GetApiErrorResponse(response.Content);
             DracoonApiCode resultCode = Parse((int)response.StatusCode, response, apiError, requestType, _client.Log);
-            _client.Log.Error(LogTag, $"Query for '{requestType.ToString()}' failed with '{resultCode.Text}'");
+            _client.Log.Error(LogTag, $"Query for '{requestType.ToString()}' failed with parsed error '{resultCode.Text}' (HTTP status {response.StatusCode}, response from {response.ResponseUri}): {response.Content}");
 
             throw new DracoonApiException(resultCode);
         }
@@ -72,7 +72,7 @@ namespace Dracoon.Sdk.SdkInternal {
                 ApiErrorResponse apiError = GetApiErrorResponse(ReadErrorResponseFromWebException(exception));
                 if (exception.Response is HttpWebResponse response) {
                     DracoonApiCode resultCode = Parse((int)response.StatusCode, response, apiError, requestType, _client.Log);
-                    _client.Log.Debug(LogTag, $"Query for '{requestType.ToString()}' failed with '{resultCode.Text}'");
+                    _client.Log.Debug(LogTag, $"Query for '{requestType.ToString()}' failed with parsed protocol error '{resultCode.Text}'");
                     throw new DracoonApiException(resultCode);
                 }
 
@@ -97,8 +97,11 @@ namespace Dracoon.Sdk.SdkInternal {
         private static DracoonApiCode Parse(int httpStatusCode, dynamic response, ApiErrorResponse apiError, RequestType requestType, ILog clientLog) {
             int? apiErrorCode = null;
             if (apiError != null) {
-                clientLog?.Warn(LogTag, $"Parsing API error: HTTP status {httpStatusCode}, error code {apiError.ErrorCode}, code {apiError.Code}, message '{apiError.Message}', debug info '${apiError.DebugInfo}'");
+                clientLog?.Error(LogTag, $"Parsing API error: HTTP status {httpStatusCode}, error code {apiError.ErrorCode}, code {apiError.Code}, message '{apiError.Message}', debug info '${apiError.DebugInfo}'");
                 apiErrorCode = apiError.ErrorCode;
+            }
+            else {
+                clientLog?.Error(LogTag, $"Parsing non API error: HTTP status {httpStatusCode}");
             }
 
             switch (httpStatusCode) {
@@ -123,7 +126,7 @@ namespace Dracoon.Sdk.SdkInternal {
                 case 901:
                     return ParseCustomError(apiErrorCode, response, requestType);
                 default:
-                    clientLog?.Warn(LogTag, $"UNKNOWN ERROR: The HTTP status code {httpStatusCode} is not recognized, the error code is therefore set to the generic SERVER_UNKNOWN_ERROR (5000).'");
+                    clientLog?.Error(LogTag, $"UNKNOWN ERROR: The HTTP status code {httpStatusCode} is not recognized, the error code is therefore set to the generic SERVER_UNKNOWN_ERROR (5000).'");
                     return DracoonApiCode.SERVER_UNKNOWN_ERROR;
             }
         }
