@@ -49,6 +49,10 @@ namespace Dracoon.Sdk.SdkInternal {
         }
 
         private static ApiErrorResponse GetApiErrorResponse(string errorResponseBody) {
+            if (string.IsNullOrEmpty(errorResponseBody)) {
+                DracoonClient.Log.Warn(LogTag, "Request failed but no body present in error response");
+                return null;
+            }
             try {
                 ApiErrorResponse apiError = JsonConvert.DeserializeObject<ApiErrorResponse>(errorResponseBody);
                 if (apiError != null) {
@@ -56,7 +60,8 @@ namespace Dracoon.Sdk.SdkInternal {
                 }
 
                 return apiError;
-            } catch (Exception) {
+            } catch (Exception e) {
+                DracoonClient.Log.Error(LogTag, $"Request failed and error response is not a valid JSON object (parsing body failed with {e.GetType().FullName}: {e.Message}). The raw response is: {errorResponseBody}");
                 return null;
             }
         }
@@ -75,7 +80,8 @@ namespace Dracoon.Sdk.SdkInternal {
                 using (StreamReader sr = new StreamReader(s)) {
                     return sr.ReadToEnd();
                 }
-            } catch (Exception) {
+            } catch (Exception e) {
+                DracoonClient.Log.Warn(LogTag, $"Failed to read error from response with {e.GetType().FullName}: {e.Message}");
                 return null;
             }
         }
