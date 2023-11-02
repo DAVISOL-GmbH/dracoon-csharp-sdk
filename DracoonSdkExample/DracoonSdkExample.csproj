@@ -44,6 +44,6 @@
   <ItemGroup>
     <PackageReference Include="Dracoon.Crypto.Sdk.Net5" Version="2.1.1727.1" />
     <PackageReference Include="Microsoft.Windows.Compatibility" Version="6.0.0" />
-    <PackageReference Include="SkiaSharp" Version="2.80.3" />
+    <PackageReference Include="SkiaSharp" Version="2.88.6" />
   </ItemGroup>
 </Project>
