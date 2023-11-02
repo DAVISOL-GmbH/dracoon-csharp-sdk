@@ -676,6 +676,39 @@ namespace Dracoon.Sdk.Error {
         /// </summary>
         public static readonly DracoonApiCode SERVER_MALICIOUS_FILE_DETECTED = new DracoonApiCode(5090, "The AV scanner detected that the file could be malicious.");
 
+        /// <summary>
+        /// The DRACOON API endpoint is currently not available.
+        /// </summary>
+        /// <remarks>
+        /// Added by DAVISOL GmbH to recognize API outages. Not part of the official SDK implementation.
+        /// </remarks>
+        public static readonly DracoonApiCode SERVER_UNAVAILABLE = new DracoonApiCode(5901, "The DRACOON API endpoint is currently not available.");
+
+        /// <summary>
+        /// The DRACOON API endpoint is available, but depending DRACOON systems are not.
+        /// </summary>
+        /// <remarks>
+        /// Added by DAVISOL GmbH to recognize API outages. Not part of the official SDK implementation.
+        /// According to DRACOON support, this error might occur right after the weekly maintenance at wednesday night.
+        /// </remarks>
+        public static readonly DracoonApiCode SERVER_BAD_GATEWAY = new DracoonApiCode(5902, "The DRACOON API endpoint is available, but depending DRACOON systems are not.");
+
+        /// <summary>
+        /// The DRACOON API endpoint might be available but did not respond in time.
+        /// </summary>
+        /// <remarks>
+        /// Added by DAVISOL GmbH to recognize API outages. Not part of the official SDK implementation.
+        /// </remarks>
+        public static readonly DracoonApiCode SERVER_GATEWAY_TIMEOUT = new DracoonApiCode(5903, "The DRACOON API endpoint might be available but did not respond in time.");
+
+        /// <summary>
+        /// The DRACOON API endpoint is currently in maintenance.
+        /// </summary>
+        /// <remarks>
+        /// Added by DAVISOL GmbH to recognize API outages. Not part of the official SDK implementation.
+        /// </remarks>
+        public static readonly DracoonApiCode SERVER_MAINTENANCE = new DracoonApiCode(5904, "The DRACOON API endpoint is currently in maintenance.");
+
         #endregion
 
         #region NODES

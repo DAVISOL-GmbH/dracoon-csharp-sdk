@@ -48,7 +48,7 @@ namespace Dracoon.Sdk.SdkInternal {
             return null;
         }
 
-        private static ApiErrorResponse GetApiErrorResponse(string errorResponseBody) {
+        private static ApiErrorResponse GetApiErrorResponse(string errorResponseBody, HttpStatusCode? statusCode = null) {
             if (string.IsNullOrEmpty(errorResponseBody)) {
                 DracoonClient.Log.Warn(LogTag, "Request failed but no body present in error response");
                 return null;
@@ -61,7 +61,11 @@ namespace Dracoon.Sdk.SdkInternal {
 
                 return apiError;
             } catch (Exception e) {
-                DracoonClient.Log.Error(LogTag, $"Request failed and error response is not a valid JSON object (parsing body failed with {e.GetType().FullName}: {e.Message}). The raw response is: {errorResponseBody}");
+                if (statusCode == HttpStatusCode.ServiceUnavailable) {
+                    DracoonClient.Log.Debug(LogTag, $"Request failed and error response is not a valid JSON object (parsing body failed with {e.GetType().FullName}: {e.Message}). The raw response is: {errorResponseBody}");
+                } else {
+                    DracoonClient.Log.Error(LogTag, $"Request failed and error response is not a valid JSON object (parsing body failed with {e.GetType().FullName}: {e.Message}). The raw response is: {errorResponseBody}");
+                }
                 return null;
             }
         }
@@ -86,10 +90,21 @@ namespace Dracoon.Sdk.SdkInternal {
             }
         }
 
-        internal static void ParseError(IRestResponse response, RequestType requestType) {
-            ApiErrorResponse apiError = GetApiErrorResponse(response.Content);
-            DracoonApiCode resultCode = Parse((int)response.StatusCode, response, apiError, requestType, DracoonClient.Log);
-            DracoonClient.Log.Error(LogTag, $"Query for '{requestType}' failed with parsed error '{resultCode.Text}' (HTTP status {response.StatusCode}, response from {response.ResponseUri}): {response.Content}");
+        private static DracoonApiCode ParseApiErrorCodeFromResponse(IRestResponse response, RequestType requestType) {
+            var responseContent = response.Content;
+            if (!string.IsNullOrEmpty(responseContent)) {
+                // Check if the API is in maintenance (usually every wednesday night)
+                if (responseContent.IndexOf("<title>DRACOON Maintenance</title>", StringComparison.OrdinalIgnoreCase) > 0) {
+                    return DracoonApiCode.SERVER_MAINTENANCE;
+                }
+            }
+            ApiErrorResponse apiError = GetApiErrorResponse(responseContent, response.StatusCode);
+            return Parse((int)response.StatusCode, response, apiError, requestType, DracoonClient.Log);
+        }
+
+        internal static void ParseError(IRestResponse response, RequestType requestType, long elapsedMilliseconds) {
+            DracoonApiCode resultCode = ParseApiErrorCodeFromResponse(response, requestType);
+            DracoonClient.Log.Error(LogTag, $"Query for '{requestType}' failed with parsed error '{resultCode.Text}' after {elapsedMilliseconds} ms (code {resultCode.Code}, HTTP status {((int)response.StatusCode)} {response.StatusCode}, response from {response.ResponseUri}){(resultCode.Code == DracoonApiCode.SERVER_MAINTENANCE.Code ? "" : $": {response.Content}")}");
 
             throw new DracoonApiException(resultCode);
         }
@@ -150,6 +165,10 @@ namespace Dracoon.Sdk.SdkInternal {
                     return ParseTooManyRequests(response);
                 case (int)HttpStatusCode.BadGateway:
                     return ParseBadGateway(apiErrorCode, requestType);
+                case (int)HttpStatusCode.ServiceUnavailable:
+                    // This is the usual response content when API is not available:
+                    //   upstream connect error or disconnect/reset before headers. reset reason: remote connection failure, transport failure reason: delayed connect error: 111
+                    return DracoonApiCode.SERVER_UNAVAILABLE;
                 case (int)HttpStatusCode.GatewayTimeout:
                     return ParseGatewayTimeout(apiErrorCode);
                 case 507:
@@ -486,7 +505,7 @@ namespace Dracoon.Sdk.SdkInternal {
                         case RequestType.PutCompleteS3Upload:
                             return DracoonApiCode.SERVER_S3_UPLOAD_COMPLETION_FAILED;
                         default:
-                            return DracoonApiCode.SERVER_UNKNOWN_ERROR;
+                            return DracoonApiCode.SERVER_BAD_GATEWAY;
                     }
             }
         }
@@ -496,7 +515,7 @@ namespace Dracoon.Sdk.SdkInternal {
                 case -90027:
                     return DracoonApiCode.SERVER_S3_CONNECTION_FAILED;
                 default:
-                    return DracoonApiCode.SERVER_UNKNOWN_ERROR;
+                    return DracoonApiCode.SERVER_GATEWAY_TIMEOUT;
             }
         }
 

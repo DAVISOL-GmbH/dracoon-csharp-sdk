@@ -102,7 +102,9 @@ namespace Dracoon.Sdk.SdkInternal {
                 client.Proxy = _client.HttpConfig.WebProxy;
             }
 
+            var sw = System.Diagnostics.Stopwatch.StartNew();
             IRestResponse response = client.Execute(request);
+            sw.Stop();
             try {
                 if (response.ErrorException is WebException we) {
                     // It's an HTTP exception
@@ -116,7 +118,7 @@ namespace Dracoon.Sdk.SdkInternal {
                     }
 
                     try {
-                        DracoonErrorParser.ParseError(response, requestType);
+                        DracoonErrorParser.ParseError(response, requestType, sw.ElapsedMilliseconds);
                     } catch (DracoonApiException apiError) {
                         if (apiError.ErrorCode.Code == DracoonApiCode.AUTH_UNAUTHORIZED.Code && sendTry < 3) {
                             _client.Log.Debug(Logtag, "Retry the refresh of the access token in " + sendTry * 1000 + " millis again.");
