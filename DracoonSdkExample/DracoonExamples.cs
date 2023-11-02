@@ -27,6 +27,24 @@ namespace Dracoon.Sdk.Example {
             wp.Credentials = CredentialCache.DefaultNetworkCredentials;
             DracoonHttpConfig config = new DracoonHttpConfig(retryEnabled: true, webProxy: wp);
             dc = new DracoonClient(SERVER_URI, dracoonAuth, ENCRYPTION_PASSWORD, new Logger(), config);
+            //GetServerData();
+
+            //var maxInvokes = 1000;
+            //var currentInvoke = 0;
+            ////var operationFailed = false;
+            //while (currentInvoke < maxInvokes) {
+            //    currentInvoke++;
+            //    try {
+            //        if (System.Diagnostics.Debugger.IsAttached && currentInvoke % 10 == 0) {
+            //            System.Diagnostics.Debugger.Log(2, "INVOKE", $"Read page no. {currentInvoke}\r\n");
+            //        }                    
+            //        //ListRootNodes();
+            //        ListAuditLogEvents((currentInvoke - 1) * 10);
+            //    } catch (Exception) {
+            //        Console.WriteLine($"List audit log events failed at page no. {currentInvoke}");
+            //        break;
+            //    }
+            //}
         }
 
         #region DracoonClient.Server
@@ -391,6 +409,18 @@ namespace Dracoon.Sdk.Example {
                 Console.WriteLine("ULCallback -> " + "Upload started: " + actionId);
             }
         }
+
+        #endregion
+
+        #region Audit Log
+
+        private static void ListAuditLogEvents(long offset = 0, long? limit = null) {
+            LogEventList events = dc.EventLog.GetEvents(offset: offset, limit: limit);
+            foreach (LogEvent current in events.Items) {
+                Console.WriteLine($"EventId: {current.Id}; Timestamp: {current.Time.ToString("o")}; Message: {current.Message}");
+            }
+        }
+
 
         #endregion
     }
