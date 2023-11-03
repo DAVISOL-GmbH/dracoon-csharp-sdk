@@ -167,6 +167,10 @@ namespace Dracoon.Sdk.SdkInternal {
             try {
                 int chunkSize = DefineS3ChunkSize();
                 int s3UrlBatchSize = DefineS3BatchSize(chunkSize);
+
+                List<ApiS3FileUploadPart> S3Parts = new List<ApiS3FileUploadPart>();
+                Queue<Uri> S3Urls = new Queue<Uri>();
+
                 long uploadedByteCount = 0;
                 byte[] buffer = new byte[chunkSize];
                 int bytesRead, offset = 0;
@@ -203,7 +207,7 @@ namespace Dracoon.Sdk.SdkInternal {
 
                     if (nextByte != -1) {
                         // Do it every time if the current block isn't the last
-                        Buffer.SetByte(buffer, 0, (byte) nextByte);
+                        Buffer.SetByte(buffer, 0, (byte)nextByte);
                         offset = 1;
                     } else {
                         break;

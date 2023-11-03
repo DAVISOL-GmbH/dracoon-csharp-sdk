@@ -188,6 +188,30 @@ namespace Dracoon.Sdk.SdkInternal.Util {
             }
         }
 
+        public static SubscriptionPlan ConvertValueToSubscriptionPlanEnum(int value) {
+            switch (value) {
+                case 1:
+                    return SubscriptionPlan.Premium;
+                case 2:
+                    return SubscriptionPlan.Free;
+                default:
+                    return SubscriptionPlan.Standard;
+            }
+        }
+
+        public static readonly Func<string, VirusProtectionVerdict> ConvertValueToVirusProtectionVerdictEnum = value => {
+            switch (value) {
+                case "MALICIOUS":
+                    return VirusProtectionVerdict.Malicious;
+                case "IN_PROGRESS":
+                    return VirusProtectionVerdict.InProgress;
+                case "CLEAN":
+                    return VirusProtectionVerdict.Clean;
+                default:
+                    return VirusProtectionVerdict.NoScanning;
+            }
+        };
+
         public static readonly Func<int, DracoonSubscriptionPlan> ConvertValueToSubscriptionPlanEnum = value => {
             switch (value) {
                 case 0:

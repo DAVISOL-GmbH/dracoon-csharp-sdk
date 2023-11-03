@@ -29,7 +29,7 @@ namespace Dracoon.Sdk.SdkInternal {
 
         #region Node services
 
-        public NodeList GetNodes(long parentNodeId = 0, long? offset = null, long? limit = null, GetNodesFilter filter = null) {
+        public NodeList GetNodes(long parentNodeId = 0, long? offset = null, long? limit = null, GetNodesFilter filter = null, GetNodesSort sort = null) {
             _client.Executor.CheckApiServerVersion();
 
             #region Parameter Validation
@@ -40,7 +40,7 @@ namespace Dracoon.Sdk.SdkInternal {
 
             #endregion
 
-            IRestRequest restRequest = _client.Builder.GetNodes(parentNodeId, offset, limit, filter: filter);
+            IRestRequest restRequest = _client.Builder.GetNodes(parentNodeId, offset, limit, filter: filter, sort: sort);
             ApiNodeList result = _client.Executor.DoSyncApiCall<ApiNodeList>(restRequest, RequestType.GetNodes);
             return NodeMapper.FromApiNodeList(result);
         }
@@ -305,7 +305,7 @@ namespace Dracoon.Sdk.SdkInternal {
             #region Parameter Validation
 
             request.MustNotNull(nameof(request));
-            request.ParentId.MustNotNegative(nameof(request.ParentId));
+            request.ParentId.NullableMustPositive(nameof(request.ParentId));
             request.Name.MustNotNullOrEmptyOrWhitespace(nameof(request.Name));
             request.Quota.NullableMustNotNegative(nameof(request.Quota));
             request.RecycleBinRetentionPeriod.NullableMustNotNegative(nameof(request.RecycleBinRetentionPeriod));
@@ -378,7 +378,6 @@ namespace Dracoon.Sdk.SdkInternal {
 
             if (request.DataRoomRescueKeyPairAlgorithm != null) {
                 request.DataRoomRescueKeyPassword.MustNotNullOrEmptyOrWhitespace(nameof(request.DataRoomRescueKeyPassword));
-                _client.AccountImpl.AssertUserKeyPairAlgorithmSupported(request.DataRoomRescueKeyPairAlgorithm.Value);
             }
 
             #endregion
@@ -772,6 +771,42 @@ namespace Dracoon.Sdk.SdkInternal {
             IRestRequest fileKeyRequest = _client.Builder.GetFileKey(nodeId);
             return FileMapper.FromApiFileKey(
                 _client.Executor.DoSyncApiCall<ApiFileKey>(fileKeyRequest, RequestType.GetFileKey));
+        }
+
+        public List<FileVirusProtectionInfo> GenerateVirusProtectionInfo(List<long> fileIds) {
+            _client.Executor.CheckApiServerVersion();
+
+            #region Parameter Validation
+
+            fileIds.EnumerableMustNotNullOrEmpty(nameof(fileIds));
+            fileIds.ForEach(currentId => currentId.MustPositive(nameof(fileIds)));
+
+            #endregion
+
+            ApiGenerateVirusProtectionInfoRequest apiRequest = new ApiGenerateVirusProtectionInfoRequest() {
+                FileIds = fileIds
+            };
+            IRestRequest restRequest = _client.Builder.GenerateVirusProtectionInfo(apiRequest);
+            List<ApiFileVirusProtectionInfo> result = _client.Executor.DoSyncApiCall<List<ApiFileVirusProtectionInfo>>(restRequest, RequestType.GenerateVirusProtectionInfo);
+
+            List<FileVirusProtectionInfo> returnValue = new List<FileVirusProtectionInfo>(result.Count);
+            foreach (ApiFileVirusProtectionInfo current in result) {
+                returnValue.Add(FileMapper.FromApiFileVirusProtectionInfo(current));
+            }
+            return returnValue;
+        }
+
+        public void DeleteMaliciousFile(long fileId) {
+            _client.Executor.CheckApiServerVersion();
+
+            #region Parameter Validation
+
+            fileId.MustPositive(nameof(fileId));
+
+            #endregion
+
+            IRestRequest restRequest = _client.Builder.DeleteMaliciousFile(fileId);
+            _client.Executor.DoSyncApiCall<VoidResponse>(restRequest, RequestType.DeleteMaliciousFile);
         }
 
         #region IFileDownloadCallback / IFileUploadCallback implementation

@@ -1,9 +1,11 @@
+
 namespace Dracoon.Sdk.Model {
-
-#pragma warning disable CS1574 // XML comment has cref attribute that could not be resolved
-    /// <include file = "ModelDoc.xml" path='docs/members[@name="recycleBinItemList"]/RecycleBinItemList/*'/>
+    /// <summary>
+    ///     This model stores a list of all nodes in the recycle bin of a room. The list may be a paginated response.
+    ///     <para>
+    ///         <see cref = "RecycleBinItemList.Offset" /> and <see cref="RecycleBinItemList.Limit"/> can be used to get the start and length of the page.
+    ///     </para>
+    /// </summary>
     public class RecycleBinItemList : RangeListBase<RecycleBinItem> {
-
     }
-#pragma warning restore CS1574 // XML comment has cref attribute that could not be resolved
 }

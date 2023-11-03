@@ -47,20 +47,28 @@ namespace Dracoon.Sdk.SdkInternal {
         }
 
         private void AddFilters<T>(T filter, IRestRequest requestForFilterAdding) where T : DracoonFilter {
-            if (filter == null)
+            if (filter == null) {
                 return;
+            }
+
             string filterString = filter.ToString();
-            if (string.IsNullOrWhiteSpace(filterString))
+            if (string.IsNullOrWhiteSpace(filterString)) {
                 return;
+            }
+
             requestForFilterAdding.AddQueryParameter("filter", filterString);
         }
 
         private void AddSort<T>(T sort, IRestRequest requestForSortAdding) where T : DracoonSort {
-            if (sort == null)
+            if (sort == null) {
                 return;
+            }
+
             string sortString = sort.ToString();
-            if (string.IsNullOrWhiteSpace(sortString))
+            if (string.IsNullOrWhiteSpace(sortString)) {
                 return;
+            }
+
             requestForSortAdding.AddQueryParameter("sort", sortString);
         }
 
@@ -190,6 +198,34 @@ namespace Dracoon.Sdk.SdkInternal {
             return request;
         }
 
+        public IRestRequest GetDownloadShareSubscriptions(long? offset, long? limit) {
+            RestRequest request = new RestRequest(ApiConfig.ApiGetDownloadShareSubscriptions, Method.GET);
+            SetGeneralRestValues(request, true);
+            if (offset.HasValue) {
+                request.AddQueryParameter("offset", offset.ToString());
+            }
+
+            if (limit.HasValue) {
+                request.AddQueryParameter("limit", limit.ToString());
+            }
+
+            return request;
+        }
+
+        public IRestRequest GetUploadShareSubscriptions(long? offset, long? limit) {
+            RestRequest request = new RestRequest(ApiConfig.ApiGetUploadShareSubscriptions, Method.GET);
+            SetGeneralRestValues(request, true);
+            if (offset.HasValue) {
+                request.AddQueryParameter("offset", offset.ToString());
+            }
+
+            if (limit.HasValue) {
+                request.AddQueryParameter("limit", limit.ToString());
+            }
+
+            return request;
+        }
+
         #endregion
 
         #region POST
@@ -197,6 +233,20 @@ namespace Dracoon.Sdk.SdkInternal {
         IRestRequest IRequestBuilder.SetUserKeyPair(ApiUserKeyPair apiUserKeyPair) {
             RestRequest request = new RestRequest(ApiConfig.ApiPostUserKeyPair, Method.POST);
             SetGeneralRestValues(request, true, apiUserKeyPair);
+            return request;
+        }
+
+        public IRestRequest AddDownloadShareSubscription(long shareId) {
+            RestRequest request = new RestRequest(ApiConfig.ApiPostDownloadShareSubscription, Method.POST);
+            SetGeneralRestValues(request, true);
+            request.AddUrlSegment("shareId", shareId);
+            return request;
+        }
+
+        public IRestRequest AddUploadShareSubscription(long shareId) {
+            RestRequest request = new RestRequest(ApiConfig.ApiPostUploadShareSubscription, Method.POST);
+            SetGeneralRestValues(request, true);
+            request.AddUrlSegment("shareId", shareId);
             return request;
         }
 
@@ -234,6 +284,20 @@ namespace Dracoon.Sdk.SdkInternal {
             return request;
         }
 
+        public IRestRequest RemoveDownloadShareSubscription(long shareId) {
+            RestRequest request = new RestRequest(ApiConfig.ApiDeleteDownloadShareSubscription, Method.DELETE);
+            SetGeneralRestValues(request, true);
+            request.AddUrlSegment("shareId", shareId);
+            return request;
+        }
+
+        public IRestRequest RemoveUploadShareSubscription(long shareId) {
+            RestRequest request = new RestRequest(ApiConfig.ApiDeleteUploadShareSubscription, Method.DELETE);
+            SetGeneralRestValues(request, true);
+            request.AddUrlSegment("shareId", shareId);
+            return request;
+        }
+
         #endregion
 
         #region HTTP-Request
@@ -258,15 +322,20 @@ namespace Dracoon.Sdk.SdkInternal {
 
         #region GET
 
-        IRestRequest IRequestBuilder.GetNodes(long parentNodeId, long? offset, long? limit, GetNodesFilter filter) {
+        IRestRequest IRequestBuilder.GetNodes(long parentNodeId, long? offset, long? limit, GetNodesFilter filter, GetNodesSort sort) {
             RestRequest request = new RestRequest(ApiConfig.ApiGetChildNodes, Method.GET);
             SetGeneralRestValues(request, true);
             AddFilters(filter, request);
+            AddSort(sort, request);
             request.AddQueryParameter("parent_id", parentNodeId.ToString());
-            if (offset.HasValue)
+            if (offset.HasValue) {
                 request.AddQueryParameter("offset", offset.ToString());
-            if (limit.HasValue)
+            }
+
+            if (limit.HasValue) {
                 request.AddQueryParameter("limit", limit.ToString());
+            }
+
             return request;
         }
 
@@ -314,10 +383,14 @@ namespace Dracoon.Sdk.SdkInternal {
             RestRequest request = new RestRequest(ApiConfig.ApiGetRecycleBin, Method.GET);
             SetGeneralRestValues(request, true);
             request.AddUrlSegment("roomId", parentRoomId);
-            if (offset.HasValue)
+            if (offset.HasValue) {
                 request.AddQueryParameter("offset", offset.ToString());
-            if (limit.HasValue)
+            }
+
+            if (limit.HasValue) {
                 request.AddQueryParameter("limit", limit.ToString());
+            }
+
             return request;
         }
 
@@ -327,10 +400,14 @@ namespace Dracoon.Sdk.SdkInternal {
             request.AddUrlSegment("nodeId", nodeId);
             request.AddQueryParameter("type", type);
             request.AddQueryParameter("name", nodeName);
-            if (offset.HasValue)
+            if (offset.HasValue) {
                 request.AddQueryParameter("offset", offset.ToString());
-            if (limit.HasValue)
+            }
+
+            if (limit.HasValue) {
                 request.AddQueryParameter("limit", limit.ToString());
+            }
+
             return request;
         }
 
@@ -472,6 +549,12 @@ namespace Dracoon.Sdk.SdkInternal {
             return request;
         }
 
+        IRestRequest IRequestBuilder.GenerateVirusProtectionInfo(ApiGenerateVirusProtectionInfoRequest generateParams) {
+            RestRequest request = new RestRequest(ApiConfig.ApiGenerateVirusProtectionInfo, Method.POST);
+            SetGeneralRestValues(request, true, generateParams);
+            return request;
+        }
+
         #endregion
 
         #region PUT
@@ -568,6 +651,13 @@ namespace Dracoon.Sdk.SdkInternal {
             return request;
         }
 
+        public IRestRequest DeleteMaliciousFile(long fileId) {
+            RestRequest request = new RestRequest(ApiConfig.ApiDeleteMaliciousFile, Method.DELETE);
+            SetGeneralRestValues(request, true);
+            request.AddUrlSegment("fileId", fileId);
+            return request;
+        }
+
         IRestRequest IRequestBuilder.DeleteRoomGroups(long roomId, ApiRoomGroupsDeleteBatchRequest deleteParams) {
             RestRequest request = new RestRequest(ApiConfig.ApiDeleteRoomGroups, Method.DELETE);
             SetGeneralRestValues(request, true, deleteParams);
@@ -617,10 +707,14 @@ namespace Dracoon.Sdk.SdkInternal {
             SetGeneralRestValues(request, true);
             AddFilters(filter, request);
             AddSort(sort, request);
-            if (offset.HasValue)
+            if (offset.HasValue) {
                 request.AddQueryParameter("offset", offset.ToString());
-            if (limit.HasValue)
+            }
+
+            if (limit.HasValue) {
                 request.AddQueryParameter("limit", limit.ToString());
+            }
+
             return request;
         }
 
@@ -629,10 +723,14 @@ namespace Dracoon.Sdk.SdkInternal {
             SetGeneralRestValues(request, true);
             AddFilters(filter, request);
             AddSort(sort, request);
-            if (offset.HasValue)
+            if (offset.HasValue) {
                 request.AddQueryParameter("offset", offset.ToString());
-            if (limit.HasValue)
+            }
+
+            if (limit.HasValue) {
                 request.AddQueryParameter("limit", limit.ToString());
+            }
+
             return request;
         }
 
@@ -649,6 +747,20 @@ namespace Dracoon.Sdk.SdkInternal {
         IRestRequest IRequestBuilder.PostCreateUploadShare(ApiCreateUploadShareRequest uploadShareParams) {
             RestRequest request = new RestRequest(ApiConfig.ApiPostCreateUploadShare, Method.POST);
             SetGeneralRestValues(request, true, uploadShareParams);
+            return request;
+        }
+
+        IRestRequest IRequestBuilder.PostMailDownloadShare(long shareId, ApiMailShareInfoRequest mailParams) {
+            RestRequest request = new RestRequest(ApiConfig.ApiPostMailDownloadShare, Method.POST);
+            SetGeneralRestValues(request, true, mailParams);
+            request.AddUrlSegment("shareId", shareId);
+            return request;
+        }
+
+        IRestRequest IRequestBuilder.PostMailUploadShare(long shareId, ApiMailShareInfoRequest mailParams) {
+            RestRequest request = new RestRequest(ApiConfig.ApiPostMailUploadShare, Method.POST);
+            SetGeneralRestValues(request, true, mailParams);
+            request.AddUrlSegment("shareId", shareId);
             return request;
         }
 

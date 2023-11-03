@@ -1,6 +1,7 @@
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using System;
+using System;
 
 namespace Dracoon.Sdk.SdkInternal.ApiModel {
     internal class ApiNode : ApiTrackExternalModification {
@@ -79,6 +80,9 @@ namespace Dracoon.Sdk.SdkInternal.ApiModel {
         [JsonProperty("cntFiles", NullValueHandling = NullValueHandling.Ignore)]
         public int? CountFiles { get; set; }
 
+        [JsonProperty("cntComments", NullValueHandling = NullValueHandling.Ignore)]
+        public int? CountComments { get; set; }
+
         [JsonProperty("cntDeletedVersions", NullValueHandling = NullValueHandling.Ignore)]
         public int? CountDeletedVersions { get; set; }
 
@@ -98,6 +102,15 @@ namespace Dracoon.Sdk.SdkInternal.ApiModel {
         public string MediaToken { get; set; }
 
         [JsonProperty("authParentId", NullValueHandling = NullValueHandling.Ignore)]
-        public long ConfigParentRoomId { get; set; }
+        public long? ConfigParentRoomId { get; set; }
+        
+        [JsonProperty("isBrowsable", NullValueHandling = NullValueHandling.Ignore)]
+        public bool? IsBrowsable { get; set; }
+
+        [JsonProperty("hasActivitiesLog", NullValueHandling = NullValueHandling.Ignore)]
+        public bool? HasActivitiesLog { get; set; }
+
+        [JsonProperty("virusProtectionInfo", NullValueHandling = NullValueHandling.Ignore)]
+        public ApiVirusProtectionInfo VirusProtectionInfo { get; set; }
     }
 }

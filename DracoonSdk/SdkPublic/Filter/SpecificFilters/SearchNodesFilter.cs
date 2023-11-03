@@ -1,121 +1,138 @@
 namespace Dracoon.Sdk.Filter {
-
-#pragma warning disable CS1574 // XML comment has cref attribute that could not be resolved
-    /// <include file="SpecificFilterDoc.xml" path='docs/members[@name="searchNodesFilter"]/SearchNodesFilter/*'/>
+    /// <summary>
+    ///     This class provides filters for <see cref="Dracoon.Sdk.INodes.SearchNodes(string, long, long, long, SearchNodesFilter, Sort.SearchNodesSort)"/>.
+    /// </summary>
     public class SearchNodesFilter : DracoonFilter {
-#pragma warning restore CS1574 // XML comment has cref attribute that could not be resolved
-        /// <include file="SpecificFilterDoc.xml" path='docs/members[@name="searchNodesFilter"]/Type/*'/>
-        public static NodeTypeFilter Type {
-            get {
-                return new NodeTypeFilter();
-            }
-        }
+        /// <summary>
+        ///     Gets a new filter for the Type field of a node (<see cref="Dracoon.Sdk.Model.Node"/>).
+        ///     <para>
+        ///         See also <seealso cref="Dracoon.Sdk.Filter.NodeTypeFilter"/>
+        ///     </para>
+        /// </summary>
+        public static NodeTypeFilter Type => new NodeTypeFilter();
 
-        /// <include file="SpecificFilterDoc.xml" path='docs/members[@name="searchNodesFilter"]/IsFavorite/*'/>
-        public static IsFavoriteFilter IsFavorite {
-            get {
-                return new IsFavoriteFilter();
-            }
-        }
+        /// <summary>
+        ///     Gets a new filter for the IsFavorite field of a node (<see cref="Dracoon.Sdk.Model.Node"/>).
+        ///     <para>
+        ///         See also <seealso cref="Dracoon.Sdk.Filter.IsFavoriteFilter"/>
+        ///     </para>
+        /// </summary>
+        public static IsFavoriteFilter IsFavorite => new IsFavoriteFilter();
 
-        /// <include file="SpecificFilterDoc.xml" path='docs/members[@name="searchNodesFilter"]/ParentPath/*'/>
-        public static ParentPathFilter ParentPath {
-            get {
-                return new ParentPathFilter();
-            }
-        }
+        /// <summary>
+        ///     Gets a new filter for the ParentPath field of a node (<see cref="Dracoon.Sdk.Model.Node"/>).
+        ///     <para>
+        ///         See also <seealso cref="Dracoon.Sdk.Filter.ParentPathFilter"/>
+        ///     </para>
+        /// </summary>
+        public static ParentPathFilter ParentPath => new ParentPathFilter();
 
-        /// <include file="SpecificFilterDoc.xml" path='docs/members[@name="searchNodesFilter"]/UpdatedBy/*'/>
-        public static UpdatedByFilter UpdatedBy {
-            get {
-                return new UpdatedByFilter();
-            }
-        }
+        /// <summary>
+        ///     Gets a new filter for the UpdatedBy field of a node (<see cref="Dracoon.Sdk.Model.Node"/>).
+        ///     <para>
+        ///         See also <seealso cref="Dracoon.Sdk.Filter.UpdatedByFilter"/>
+        ///     </para>
+        /// </summary>
+        public static UpdatedByFilter UpdatedBy => new UpdatedByFilter();
 
-        public static UpdatedAtFilter UpdatedAt {
-            get {
-                return new UpdatedAtFilter();
-            }
-        }
-        /// <include file="SpecificFilterDoc.xml" path='docs/members[@name="searchNodesFilter"]/UpdatedById/*'/>
-        public static UpdatedByIdFilter UpdatedById {
-            get {
-                return new UpdatedByIdFilter();
-            }
-        }
+        /// <summary>
+        ///     Gets a new filter for the UpdatedById field of a node (<see cref="Dracoon.Sdk.Model.Node"/>).
+        ///     <para>
+        ///         See also <seealso cref="Dracoon.Sdk.Filter.UpdatedByIdFilter"/>
+        ///     </para>
+        /// </summary>
+        public static UpdatedByIdFilter UpdatedById => new UpdatedByIdFilter();
 
-        /// <include file="SpecificFilterDoc.xml" path='docs/members[@name="searchNodesFilter"]/CreatedBy/*'/>
-        public static CreatedByFilter CreatedBy {
-            get {
-                return new CreatedByFilter();
-            }
-        }
+        public static UpdatedAtFilter UpdatedAt => new UpdatedAtFilter();
 
-        public static CreatedAtFilter CreatedAt {
-            get {
-                return new CreatedAtFilter();
-            }
-        }
-        /// <include file="SpecificFilterDoc.xml" path='docs/members[@name="searchNodesFilter"]/CreatedById/*'/>
-        public static CreatedByIdFilter CreatedById {
-            get {
-                return new CreatedByIdFilter();
-            }
-        }
+        /// <summary>
+        ///     Gets a new filter for created by.
+        ///     <para>
+        ///         See also <seealso cref="Dracoon.Sdk.Filter.CreatedByFilter"/>
+        ///     </para>
+        /// </summary>
+        public static CreatedByFilter CreatedBy => new CreatedByFilter();
 
-        /// <include file="SpecificFilterDoc.xml" path='docs/members[@name="searchNodesFilter"]/FileType/*'/>
-        public static FileTypeFilter FileType {
-            get {
-                return new FileTypeFilter();
-            }
-        }
+        /// <summary>
+        ///     Gets a new filter for created by id.
+        ///     <para>
+        ///         See also <seealso cref="Dracoon.Sdk.Filter.CreatedByIdFilter"/>
+        ///     </para>
+        /// </summary>
+        public static CreatedByIdFilter CreatedById => new CreatedByIdFilter();
 
-        public static BranchVersionFilter BranchVersion {
-            get {
-                return new BranchVersionFilter();
-            }
-        }
+        public static CreatedAtFilter CreatedAt => new CreatedAtFilter();
 
-        /// <include file="SpecificFilterDoc.xml" path='docs/members[@name="searchNodesFilter"]/Classification/*'/>
-        public static ClassificationFilter Classification {
-            get {
-                return new ClassificationFilter();
-            }
-        }
+        /// <summary>
+        ///     Gets a new file type filter.
+        ///     <para>
+        ///         See also <seealso cref="Dracoon.Sdk.Filter.FileTypeFilter"/>
+        ///     </para>
+        /// </summary>
+        public static FileTypeFilter FileType => new FileTypeFilter();
 
-        /// <include file="SpecificFilterDoc.xml" path='docs/members[@name="searchNodesFilter"]/ModificationTimestamp/*'/>
-        public static TimestampFilter ModificationTimestamp {
-            get {
-                return new TimestampFilter("timestampModification");
-            }
-        }
+        public static BranchVersionFilter BranchVersion => new BranchVersionFilter();
 
-        /// <include file="SpecificFilterDoc.xml" path='docs/members[@name="searchNodesFilter"]/CreationTimestamp/*'/>
-        public static TimestampFilter CreationTimestamp {
-            get {
-                return new TimestampFilter("timestampCreation");
-            }
-        }
 
-        /// <include file="SpecificFilterDoc.xml" path='docs/members[@name="searchNodesFilter"]/AddNodeTypeFilter/*'/>
+        /// <summary>
+        ///     Gets a new classification filter.
+        ///     <para>
+        ///         See also <seealso cref="Dracoon.Sdk.Filter.ClassificationFilter"/>
+        ///     </para>
+        /// </summary>
+        public static ClassificationFilter Classification => new ClassificationFilter();
+
+        /// <summary>
+        ///     Gets a new timestamp filter for the time of modification of the file.
+        ///     <para>
+        ///         See also <seealso cref="Dracoon.Sdk.Filter.TimestampFilter"/>
+        ///     </para>
+        /// </summary>
+        public static TimestampFilter ModificationTimestamp => new TimestampFilter("timestampModification");
+
+        /// <summary>
+        ///     Gets a new timestamp filter for the time of creation of the file.
+        ///     <para>
+        ///         See also <seealso cref="Dracoon.Sdk.Filter.TimestampFilter"/>
+        ///     </para>
+        /// </summary>
+        public static TimestampFilter CreationTimestamp => new TimestampFilter("timestampCreation");
+
+        /// <summary>
+        ///     Adds a type filter to the search nodes filter.
+        /// </summary>
+        /// <param name="typeFilter">The defined type filter.</param>
+        /// <exception cref="System.ArgumentException"></exception>
         public void AddNodeTypeFilter(DracoonFilterType<NodeTypeFilter> typeFilter) {
             CheckFilter(typeFilter, nameof(typeFilter));
             FiltersList.Add(typeFilter);
         }
 
-        /// <include file="SpecificFilterDoc.xml" path='docs/members[@name="searchNodesFilter"]/AddIsFavoriteFilter/*'/>
+        /// <summary>
+        ///     Adds a favorite filter to the search nodes filter.
+        /// </summary>
+        /// <param name="isFavoriteFilter">The defined favorite filter.</param>
+        /// <exception cref="System.ArgumentException"></exception>
         public void AddIsFavoriteFilter(DracoonFilterType<IsFavoriteFilter> isFavoriteFilter) {
             CheckFilter(isFavoriteFilter, nameof(isFavoriteFilter));
             FiltersList.Add(isFavoriteFilter);
         }
 
-        /// <include file="SpecificFilterDoc.xml" path='docs/members[@name="searchNodesFilter"]/AddParentPathFilter/*'/>
+        /// <summary>
+        ///     Adds a parent path filter to the search nodes filter.
+        /// </summary>
+        /// <param name="parentPathFilter">The defined parent path filter.</param>
+        /// <exception cref="System.ArgumentException"></exception>
         public void AddParentPathFilter(DracoonFilterType<ParentPathFilter> parentPathFilter) {
             CheckFilter(parentPathFilter, nameof(parentPathFilter));
             FiltersList.Add(parentPathFilter);
         }
 
-        /// <include file="SpecificFilterDoc.xml" path='docs/members[@name="searchNodesFilter"]/AddUpdatedByFilter/*'/>
+        /// <summary>
+        ///     Adds a updated by user filter to the search nodes filter.
+        /// </summary>
+        /// <param name="updatedByFilter">The defined updated by filter.</param>
+        /// <exception cref="System.ArgumentException"></exception>
         public void AddUpdatedByFilter(DracoonFilterType<UpdatedByFilter> updatedByFilter) {
             CheckFilter(updatedByFilter, nameof(updatedByFilter));
             FiltersList.Add(updatedByFilter);
@@ -126,13 +143,26 @@ namespace Dracoon.Sdk.Filter {
             FiltersList.Add(updatedAtFilter);
         }
 
-        /// <include file="SpecificFilterDoc.xml" path='docs/members[@name="searchNodesFilter"]/AddUpdatedByIdFilter/*'/>
+        public void AddUpdatedAtFilter(DracoonFilterType<UpdatedAtFilter> updatedAtFilter) {
+            CheckFilter(updatedAtFilter, nameof(updatedAtFilter));
+            FiltersList.Add(updatedAtFilter);
+        }
+
+        /// <summary>
+        ///     Adds a updated by user id filter to the search nodes filter.
+        /// </summary>
+        /// <param name="updatedByIdFilter">The defined updated by id filter.</param>
+        /// <exception cref="System.ArgumentException"></exception>
         public void AddUpdatedByIdFilter(DracoonFilterType<UpdatedByIdFilter> updatedByIdFilter) {
             CheckFilter(updatedByIdFilter, nameof(updatedByIdFilter));
             FiltersList.Add(updatedByIdFilter);
         }
 
-        /// <include file="SpecificFilterDoc.xml" path='docs/members[@name="searchNodesFilter"]/AddFileTypeFilter/*'/>
+        /// <summary>
+        ///     Adds a file type filter to the search nodes filter.
+        /// </summary>
+        /// <param name="fileTypeFilter">The defined file type filter.</param>
+        /// <exception cref="System.ArgumentException"></exception>
         public void AddFileTypeFilter(DracoonFilterType<FileTypeFilter> fileTypeFilter) {
             CheckFilter(fileTypeFilter, nameof(fileTypeFilter));
             FiltersList.Add(fileTypeFilter);
@@ -143,13 +173,26 @@ namespace Dracoon.Sdk.Filter {
             FiltersList.Add(branchVersionFilter);
         }
 
-        /// <include file="SpecificFilterDoc.xml" path='docs/members[@name="searchNodesFilter"]/AddClassificationFilter/*'/>
+        public void AddBranchVersionFilter(DracoonFilterType<BranchVersionFilter> branchVersionFilter) {
+            CheckFilter(branchVersionFilter, nameof(branchVersionFilter));
+            FiltersList.Add(branchVersionFilter);
+        }
+
+        /// <summary>
+        ///     Adds a classification filter to the search nodes filter.
+        /// </summary>
+        /// <param name="classificationFilter">The defined classification filter.</param>
+        /// <exception cref="System.ArgumentException"></exception>
         public void AddClassificationFilter(DracoonFilterType<ClassificationFilter> classificationFilter) {
             CheckFilter(classificationFilter, nameof(classificationFilter));
             FiltersList.Add(classificationFilter);
         }
 
-        /// <include file="SpecificFilterDoc.xml" path='docs/members[@name="searchNodesFilter"]/AddCreatedByFilter/*'/>
+        /// <summary>
+        ///     Adds a created by filter to the search nodes filter.
+        /// </summary>
+        /// <param name="createdByFilter">The defined created by filter.</param>
+        /// <exception cref="System.ArgumentException"></exception>
         public void AddCreatedByFilter(DracoonFilterType<CreatedByFilter> createdByFilter) {
             CheckFilter(createdByFilter, nameof(createdByFilter));
             FiltersList.Add(createdByFilter);
@@ -160,13 +203,26 @@ namespace Dracoon.Sdk.Filter {
             FiltersList.Add(createdAtFilter);
         }
 
-        /// <include file="SpecificFilterDoc.xml" path='docs/members[@name="searchNodesFilter"]/AddCreatedByIdFilter/*'/>
+        public void AddCreatedAtFilter(DracoonFilterType<CreatedAtFilter> createdAtFilter) {
+            CheckFilter(createdAtFilter, nameof(createdAtFilter));
+            FiltersList.Add(createdAtFilter);
+        }
+
+        /// <summary>
+        ///     Adds a created by id filter to the search nodes filter.
+        /// </summary>
+        /// <param name="createdByIdFilter">The defined created by id filter.</param>
+        /// <exception cref="System.ArgumentException"></exception>
         public void AddCreatedByIdFilter(DracoonFilterType<CreatedByIdFilter> createdByIdFilter) {
             CheckFilter(createdByIdFilter, nameof(createdByIdFilter));
             FiltersList.Add(createdByIdFilter);
         }
 
-        /// <include file="SpecificFilterDoc.xml" path='docs/members[@name="searchNodesFilter"]/AddTimestampFilter/*'/>
+        /// <summary>
+        ///     Adds a timestamp filter to the search nodes filter.
+        /// </summary>
+        /// <param name="timestampFilter">The defined timestamp filter.</param>
+        /// <exception cref="System.ArgumentException"></exception>
         public void AddTimestampFilter(DracoonFilterType<TimestampFilter> timestampFilter) {
             CheckFilter(timestampFilter, nameof(timestampFilter));
             FiltersList.Add(timestampFilter);

@@ -1,9 +1,12 @@
 namespace Dracoon.Sdk.Model {
 
-#pragma warning disable CS1574 // XML comment has cref attribute that could not be resolved
-    /// <include file = "ModelDoc.xml" path='docs/members[@name="previousVersionList"]/PreviousVersionList/*'/>
+    /// <summary>
+    ///     This model stores a list of versioned nodes. The list may be a paginated response.
+    ///     <para>
+    ///         <see cref = "PreviousVersionList.Offset" /> and <see cref="PreviousVersionList.Limit"/> can be used to get the start and length of the page.
+    ///     </para>
+    /// </summary>
     public class PreviousVersionList : RangeListBase<PreviousVersion> {
 
     }
-#pragma warning restore CS1574 // XML comment has cref attribute that could not be resolved
 }

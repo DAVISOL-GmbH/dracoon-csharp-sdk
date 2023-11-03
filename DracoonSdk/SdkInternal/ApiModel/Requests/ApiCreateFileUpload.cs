@@ -1,12 +1,10 @@
 ﻿using Newtonsoft.Json;
+using System;
 
 namespace Dracoon.Sdk.SdkInternal.ApiModel.Requests {
     internal class ApiCreateFileUpload : ApiCreateNodeRequestBase {
         [JsonProperty("parentId", NullValueHandling = NullValueHandling.Ignore)]
         public long ParentId { get; set; }
-
-        [JsonProperty("classification", NullValueHandling = NullValueHandling.Ignore)]
-        public int? Classification { get; set; }
 
         [JsonProperty("expiration", NullValueHandling = NullValueHandling.Ignore)]
         public ApiExpiration Expiration {

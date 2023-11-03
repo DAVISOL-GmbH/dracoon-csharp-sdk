@@ -2,13 +2,88 @@ using Dracoon.Sdk.SdkInternal;
 using System;
 
 namespace Dracoon.Sdk {
-    /// <include file = "SdkPublicDoc.xml" path='docs/members[@name="dracoonClient"]/DracoonClient/*'/>
+    /// <summary>
+    ///     <para>
+    ///         DracoonClient is the main class of the DRACOON SDK.It contains several handlers which group the functions of the SDK logically.
+    ///     </para>
+    ///     <list type = "bullet" >
+    ///         <listheader>
+    ///             <description>Following handlers are available:</description>
+    ///         </listheader>
+    ///         <item>
+    ///             <term><see cref="Dracoon.Sdk.DracoonClient.Server"/>:</term>
+    ///             <description><see cref="Dracoon.Sdk.IServer"/></description>
+    ///         </item>
+    ///         <item>
+    ///             <term><see cref="Dracoon.Sdk.DracoonClient.Account"/>:</term>
+    ///             <description><see cref="Dracoon.Sdk.IAccount"/></description>
+    ///         </item>
+    ///         <item>
+    ///             <term><see cref="Dracoon.Sdk.DracoonClient.Nodes"/>:</term>
+    ///             <description><see cref="Dracoon.Sdk.INodes"/></description>
+    ///         </item>
+    ///         <item>
+    ///             <term><see cref= "Dracoon.Sdk.DracoonClient.Shares"/>:</term>
+    ///             <description><see cref="Dracoon.Sdk.IShares"/></description>
+    ///         </item>
+    ///         <item>
+    ///             <term><see cref= "Dracoon.Sdk.DracoonClient.Users"/>:</term>
+    ///             <description><see cref="Dracoon.Sdk.IUsers"/></description>
+    ///         </item>
+    ///     </list>
+    /// </summary>
     public class DracoonClient : DracoonClientBase, IInternalDracoonClient, IInternalDracoonClientBase {
 
         #region Class-Members
 
-        /// <include file = "SdkPublicDoc.xml" path='docs/members[@name="dracoonClient"]/EncryptionPassword/*'/>
+        /// <summary>
+        ///     The used target server URI.
+        /// </summary>
+        public Uri ServerUri { get; }
+
+        /// <summary>
+        ///     The current authorization data. See also <seealso cref="Dracoon.Sdk.DracoonAuth"/>
+        /// </summary>
+        public DracoonAuth Auth {
+            get => _oAuth.Auth;
+            set => _oAuth.Auth = value;
+        }
+
+        /// <summary>
+        ///     The client's encryption password.
+        /// </summary>
         public string EncryptionPassword { get; set; }
+
+        #region Internal
+
+        private static DracoonHttpConfig _httpConfig;
+
+        internal static DracoonHttpConfig HttpConfig {
+            get => _httpConfig ?? (_httpConfig = new DracoonHttpConfig());
+            set => _httpConfig = value;
+        }
+
+
+        private static ILog _logger;
+
+        internal static ILog Log {
+            get => _logger ?? (_logger = new EmptyLog());
+            set => _logger = value;
+        }
+
+        private readonly IRequestBuilder _builder;
+
+        IRequestBuilder IInternalDracoonClient.Builder => _builder;
+
+        private readonly IRequestExecutor _executor;
+
+        IRequestExecutor IInternalDracoonClient.Executor => _executor;
+
+        private readonly IOAuth _oAuth;
+
+        IOAuth IInternalDracoonClient.OAuth => _oAuth;
+
+        #endregion
 
         #region Public interfaces
 
@@ -23,6 +98,8 @@ namespace Dracoon.Sdk {
 
         DracoonAccountImpl IInternalDracoonClient.AccountImpl => _account;
 
+        DracoonAccountImpl IInternalDracoonClient.AccountImpl => _account;
+
         DracoonNodesImpl IInternalDracoonClient.NodesImpl => _nodes;
 
         DracoonSharesImpl IInternalDracoonClient.SharesImpl => _shares;
@@ -31,38 +108,49 @@ namespace Dracoon.Sdk {
 
         DracoonUsersImpl IInternalDracoonClient.UsersImpl => _users;
 
+        /// <summary>
+        ///     Get Account handler. See also <seealso cref="Dracoon.Sdk.IAccount"/>
+        /// </summary>
+        public IAccount Account => _account;
+
+        /// <summary>
+        ///     Get Server handler. See also <seealso cref="Dracoon.Sdk.IServer"/>
+        /// </summary>
+        public IServer Server => _server;
+
+        /// <summary>
+        ///     Get Nodes handler. See also <seealso cref="Dracoon.Sdk.INodes"/>
+        /// </summary>
+        public INodes Nodes => _nodes;
+
+        /// <summary>
+        ///     Get Shares handler. See also <seealso cref="Dracoon.Sdk.IShares"/>
+        /// </summary>
+        public IShares Shares => _shares;
+
+        /// <summary>
+        ///     Get Users handler. See also <seealso cref="Dracoon.Sdk.IUsers"/>
+        /// </summary>
+        public IUsers Users => _users;
+
         DracoonGroupsImpl IInternalDracoonClient.GroupsImpl => _groups;
 
         DracoonRolesImpl IInternalDracoonClient.RolesImpl => _roles;
 
         DracoonEventLogImpl IInternalDracoonClient.EventLogImpl => _eventLog;
 
-        /// <include file = "SdkPublicDoc.xml" path='docs/members[@name="dracoonClient"]/Account/*'/>
-        public IAccount Account => _account;
-
-        /// <include file = "SdkPublicDoc.xml" path='docs/members[@name="dracoonClient"]/Server/*'/>
-        public IServer Server => _server;
-
-        /// <include file = "SdkPublicDoc.xml" path='docs/members[@name="dracoonClient"]/Nodes/*'/>
-        public INodes Nodes => _nodes;
-
-        /// <include file = "SdkPublicDoc.xml" path='docs/members[@name="dracoonClient"]/Shares/*'/>
-        public IShares Shares => _shares;
-
-        /// <include file = "SdkPublicDoc.xml" path='docs/members[@name="dracoonClient"]/Users/*'/>
-        public IUsers Users => _users;
-
-        public IGroups Groups => _groups;
-
-        public IRoles Roles => _roles;
-
-        public IEventLog EventLog => _eventLog;
-
         #endregion
 
         #endregion
 
-        /// <include file = "SdkPublicDoc.xml" path='docs/members[@name="dracoonClient"]/DracoonClientConstructor/*'/>
+        /// <summary>
+        ///     Creates a new instance DRACOON client.
+        /// </summary>
+        /// <param name="serverUri">The used target server URI.</param>
+        /// <param name="auth">The current authorization data. See also <seealso cref="Dracoon.Sdk.DracoonAuth"/></param>
+        /// <param name="encryptionPassword">The client's encryption password.</param>
+        /// <param name="logger">The logger which should be used. See also <seealso cref="Dracoon.Sdk.ILog"/></param>
+        /// <param name="httpConfig">The self defined http configuration (otherwise the defaults of the DracoonHttpConfig is used). See also <seealso cref="Dracoon.Sdk.DracoonHttpConfig"/></param>
         public DracoonClient(Uri serverUri, DracoonAuth auth = null, string encryptionPassword = null, ILog logger = null, DracoonHttpConfig httpConfig = null) {
             EncryptionPassword = encryptionPassword;
             InitInternal(serverUri, auth, logger, httpConfig);

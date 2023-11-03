@@ -217,7 +217,7 @@ namespace Dracoon.Sdk.SdkInternal {
         #region S3 upload
 
         protected bool CheckUseS3() {
-            Client.Executor.CheckApiServerVersion(ApiConfig.ApiS3DirectUploadPossible);
+            Client.Executor.CheckApiServerVersion();
             IRestRequest generalSettingsRequest = Client.Builder.GetGeneralSettings();
             ApiGeneralSettings apiGeneralSettings =
                 Client.Executor.DoSyncApiCall<ApiGeneralSettings>(generalSettingsRequest, RequestType.GetGeneralSettings);
@@ -287,6 +287,9 @@ namespace Dracoon.Sdk.SdkInternal {
                 int chunkSize = DefineS3ChunkSize();
                 int s3UrlBatchSize = DefineS3BatchSize(chunkSize);
 
+                List<ApiS3FileUploadPart> S3Parts = new List<ApiS3FileUploadPart>();
+                Queue<Uri> S3Urls = new Queue<Uri>();
+
                 long uploadedByteCount = 0;
                 byte[] buffer = new byte[chunkSize];
                 int bytesRead;
@@ -305,6 +308,16 @@ namespace Dracoon.Sdk.SdkInternal {
                         PartNumber = S3Parts.Count + 1
                     });
                     uploadedByteCount += chunk.Length;
+                }
+
+                if(S3Parts.Count == 0) { // if it was an empty file we have to put an empty part to s3 so that we put the empty file info to our api
+                    DracoonClient.Log.Debug(LogTag, "The file [" + FileUploadRequest.Name + "] was an empty file. Therefore an empty part is uploaded to s3 now.");
+                    S3Urls = RequestS3Urls(S3Parts.Count + 1, 1, 0);
+                    string partETag = UploadS3ChunkWebClient(S3Urls.Dequeue(), new byte[0], 0);
+                    S3Parts.Add(new ApiS3FileUploadPart {
+                        PartEtag = partETag,
+                        PartNumber = S3Parts.Count + 1
+                    });
                 }
 
                 if (LastNotifiedProgressValue != uploadedByteCount) {

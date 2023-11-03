@@ -1,18 +1,32 @@
 using System;
 
+using System;
+
 namespace Dracoon.Sdk.Model {
-    /// <include file = "UserRequestsDoc.xml" path='docs/members[@name="updateRoomRequest"]/UpdateRoomRequest/*'/>
+    /// <summary>
+    ///     Request to update the meta data of a room.
+    /// </summary>
     public class UpdateRoomRequest : UpdateNodeRequestBase {
 
-        /// <include file = "UserRequestsDoc.xml" path='docs/members[@name="updateRoomRequest"]/Quota/*'/>
+        /// <summary>
+        ///     The new quota of the room.
+        /// </summary>
         public long? Quota { get; set; }
 
-        /// <include file = "UserRequestsDoc.xml" path='docs/members[@name="updateRoomRequest"]/UpdateRoomRequestConstructor/*'/>
-#pragma warning disable CS1573 // Parameter has no matching param tag in the XML comment (but other parameters do)
-        public UpdateRoomRequest(long id, string name = null, long? quota = null, string notes = null, DateTime? creationTime = null, DateTime? modificationTime = null)
-#pragma warning restore CS1573 // Parameter has no matching param tag in the XML comment (but other parameters do)
-            : base(id, name, notes, creationTime, modificationTime) {
+        /// <summary>
+        ///     Constructs a new update room request.
+        /// </summary>
+        /// <param name="id"><see cref="Id"/></param>
+        /// <param name="name"><see cref="Name"/></param>
+        /// <param name="quota"><see cref="Quota"/></param>
+        /// <param name="notes"><see cref="Notes"/></param>
+        /// <param name="creationTime"><see cref="CreationTime"/></param>
+        /// <param name="modificationTime"><see cref="ModificationTime"/></param>
+        public UpdateRoomRequest(long id, string name = null, long? quota = null, string notes = null, DateTime? creationTime = null, DateTime? modificationTime = null) : base(id, 17) {
+            Id = id;
+            Name = name;
             Quota = quota;
+            Notes = notes;
         }
     }
 }

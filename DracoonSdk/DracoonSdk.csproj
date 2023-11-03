@@ -1,35 +1,50 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>netstandard2.0;netstandard2.1;net472;net5.0</TargetFrameworks>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <Company>DRACOON GmbH</Company>
+    <PackageId>Dracoon.Sdk</PackageId>
+    <Title>Dracoon SDK</Title>
+    <Product>Dracoon Sdk for .NET Standard</Product>
+    <Copyright>Copyright ©2021 Dracoon GmbH</Copyright>
     <AssemblyName>Dracoon.Sdk</AssemblyName>
     <RootNamespace>Dracoon.Sdk</RootNamespace>
-    <Product>DRACOON Sdk for.NET 5.0</Product>
-    <Company>DRACOON GmbH</Company>
-    <Description>The DRACOON SDK for C#.</Description>
-    <Copyright>Copyright © 2017</Copyright>
-    <Authors>DRACOON developers</Authors>
-    <Version>2.1.0</Version>
+    <PackageTags>dracoon, sdk, rest, api</PackageTags>
+    <Authors>DRACOON Developers</Authors>
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+    <PackageIcon>DracoonSdk_NugetImage.png</PackageIcon>
+    <PackageIconUrl />
+    <PackageProjectUrl>https://github.com/dracoon/dracoon-csharp-sdk</PackageProjectUrl>
+    <PackageLicenseFile>LICENSE</PackageLicenseFile>
+    <Version>3.3.0-SNAPSHOT</Version>
+    <OutDir></OutDir>
+    <Description>The DRACOON SDK for .NET Standard.</Description>
+    <Copyright>Copyright ©2021 DRACOON GmbH</Copyright>
+    <PackageLicenseFile>LICENSE</PackageLicenseFile>
+    <GenerateDocumentationFile>True</GenerateDocumentationFile>
   </PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <DocumentationFile>bin\Debug\Dracoon.Sdk.xml</DocumentationFile>
-    <OutputPath>bin\Debug\</OutputPath>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <OutputPath>bin\Release\</OutputPath>
-    <DocumentationFile>bin\Release\Dracoon.Sdk.xml</DocumentationFile>
-    <NoWarn>1701;1702;1591</NoWarn>
-  </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Dracoon.Crypto.Sdk.Net5" Version="2.1.1727.1" />
-    <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
+    <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
+      <_Parameter1>Dracoon.Sdk.UnitTest</_Parameter1>
+    </AssemblyAttribute>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Dracoon.Crypto.Sdk" Version="3.1.0" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
-    <PackageReference Include="Portable.BouncyCastle" Version="1.9.0" />
-    <PackageReference Include="RestSharp" Version="106.13.0" />
-    <PackageReference Include="SkiaSharp" Version="2.88.6" />
-    <PackageReference Include="System.Dynamic.Runtime" Version="4.3.0" />
+    <PackageReference Include="RestSharp" Version="106.15.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\LICENSE">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
+    <None Include="DracoonSdk_NugetImage.png">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
   </ItemGroup>
 
 </Project>

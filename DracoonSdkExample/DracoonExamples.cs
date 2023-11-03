@@ -13,13 +13,13 @@ using Attribute = Dracoon.Sdk.Model.Attribute;
 namespace Dracoon.Sdk.Example {
     public static class DracoonExamples {
         private static readonly Uri SERVER_URI = new Uri("https://dracoon.team");
-        private static readonly string ACCESS_TOKEN = "access-token";
-        private static readonly string ENCRYPTION_PASSWORD = "encryption-password";
+        private static readonly string ACCESS_TOKEN = "ACCESS_TOKEN";
+        private static readonly string ENCRYPTION_PASSWORD = "ENCRYPTION_PASSWORD";
 
         private static DracoonClient dc;
 
         [STAThread]
-        static void Main() {
+        private static void Main() {
             ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
 
             DracoonAuth dracoonAuth = new DracoonAuth(ACCESS_TOKEN);
@@ -124,6 +124,7 @@ namespace Dracoon.Sdk.Example {
         }
 
         private static void GetUserAvatar() {
+            // byte[] avatar = dc.Account.GetAvatar();
             SkiaSharp.SKData imageData = dc.Account.GetAvatar();
             var avatarCodec = SkiaSharp.SKCodec.Create(imageData);
             var avatarImage = SkiaSharp.SKBitmap.Decode(imageData);
@@ -178,6 +179,9 @@ namespace Dracoon.Sdk.Example {
         private static void GetAvatarImageOfNodeCreator() {
             long nodeId = 1;
             Node node = dc.Nodes.GetNode(nodeId);
+
+            // byte[] avatar = dc.Users.GetUserAvatar(node.CreatedBy.Id, node.CreatedBy.AvatarUUID);
+
             //Image avatar = dc.Users.GetUserAvatar(node.CreatedBy.Id.Value, node.CreatedBy.AvatarUUID);
             //ImageCodecInfo info = ImageCodecInfo.GetImageDecoders().First(c => c.FormatID == avatar.RawFormat.Guid);
             //avatar.Save("C:\\temp\\avatar." + info.FormatDescription);
@@ -308,6 +312,47 @@ namespace Dracoon.Sdk.Example {
             Node node = dc.Nodes.GetNode(10);
             FileStream stream = File.Create("C:\\temp\\" + node.Name);
             dc.Nodes.DownloadFile(Guid.NewGuid().ToString(), node.Id, stream, new DLCallback());
+        }
+
+        private static void GenerateVirusProtectionInfo() {
+            List<long> requestFileIds = new List<long> {
+                2549
+            };
+
+            List<FileVirusProtectionInfo> infoList = dc.Nodes.GenerateVirusProtectionInfo(requestFileIds);
+
+            foreach (FileVirusProtectionInfo current in infoList) {
+                Console.WriteLine("FileId: " + current.NodeId + "; Verdict: " + current.Verdict);
+            }
+        }
+
+        #endregion
+
+        #region DracoonClient.Shares
+
+        public static void CreateDownloadShare() {
+            CreateDownloadShareRequest req = new CreateDownloadShareRequest(1, password: "Passw0rd!");
+
+            DownloadShare dl = dc.Shares.CreateDownloadShare(req);
+        }
+
+        public static void SendDownloadShareInfoMail() {
+            MailShareInfoRequest req = new MailShareInfoRequest(1, "Testmail!", new List<string> { "test@mail.com" });
+            dc.Shares.SendMailForDownloadShare(req);
+        }
+
+        public static void GetDownloadShares() {
+            GetDownloadSharesFilter filter = new GetDownloadSharesFilter();
+            filter.AddAccessKeyFilter(GetDownloadSharesFilter.AccessKey.Contains("ACCESSKEY").Build());
+
+            DownloadShareList res = dc.Shares.GetDownloadShares(filter: filter, sort: SharesSort.CreatedAt.Descending());
+        }
+
+        public static void GetUploadShares() {
+            GetUploadSharesFilter filter = new GetUploadSharesFilter();
+            filter.AddAccessKeyFilter(GetUploadSharesFilter.AccessKey.Contains("ACCESSKEY").Build());
+
+            UploadShareList res = dc.Shares.GetUploadShares(filter: filter, sort: SharesSort.CreatedAt.Ascending());
         }
 
         #endregion

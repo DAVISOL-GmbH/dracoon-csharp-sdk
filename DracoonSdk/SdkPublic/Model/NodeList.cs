@@ -1,9 +1,12 @@
 namespace Dracoon.Sdk.Model {
 
-#pragma warning disable CS1574 // XML comment has cref attribute that could not be resolved
-    /// <include file = "ModelDoc.xml" path='docs/members[@name="nodeList"]/NodeList/*'/>
+    /// <summary>
+    ///     This model stores a list of nodes. The list may be a paginated response.
+    ///     <para>
+    ///         <see cref = "NodeList.Offset"/> and <see cref="NodeList.Limit"/> can be used to get the start and length of the page.
+    ///     </para>
+    /// </summary>
     public class NodeList : RangeListBase<Node> {
 
     }
-#pragma warning restore CS1574 // XML comment has cref attribute that could not be resolved
 }

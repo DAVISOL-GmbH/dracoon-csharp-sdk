@@ -23,5 +23,8 @@ namespace Dracoon.Sdk.SdkInternal.ApiModel.Requests {
 
         [JsonProperty("newGroupMemberAcceptance", NullValueHandling = NullValueHandling.Ignore)]
         public string NewGroupMemberAcceptance { get; set; }
+
+        [JsonProperty("hasActivitiesLog", NullValueHandling = NullValueHandling.Ignore)]
+        public bool HasActivitiesLog { get; set; }
     }
 }

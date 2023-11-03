@@ -59,11 +59,23 @@ namespace Dracoon.Sdk.SdkInternal {
 
         WebClient ProvideAvatarUploadWebClient(string formDataBoundary);
 
+        IRestRequest GetDownloadShareSubscriptions(long? offset, long? limit);
+
+        IRestRequest RemoveDownloadShareSubscription(long shareId);
+
+        IRestRequest AddDownloadShareSubscription(long shareId);
+
+        IRestRequest GetUploadShareSubscriptions(long? offset, long? limit);
+
+        IRestRequest RemoveUploadShareSubscription(long shareId);
+
+        IRestRequest AddUploadShareSubscription(long shareId);
+
         #endregion
 
         #region Nodes
 
-        IRestRequest GetNodes(long parentNodeId, long? offset, long? limit, GetNodesFilter filter);
+        IRestRequest GetNodes(long parentNodeId, long? offset = null, long? limit = null, GetNodesFilter filter = null, GetNodesSort sort = null);
 
         IRestRequest GetNode(long nodeId);
 
@@ -146,6 +158,10 @@ namespace Dracoon.Sdk.SdkInternal {
 
         WebClient ProvideS3ChunkUploadWebClient();
 
+        IRestRequest GenerateVirusProtectionInfo(ApiGenerateVirusProtectionInfoRequest generateParams);
+
+        IRestRequest DeleteMaliciousFile(long fileId);
+
         #endregion
 
         #region Share
@@ -157,6 +173,10 @@ namespace Dracoon.Sdk.SdkInternal {
         IRestRequest PostCreateDownloadShare(ApiCreateDownloadShareRequest downloadShareParams);
 
         IRestRequest PostCreateUploadShare(ApiCreateUploadShareRequest uploadShareParams);
+
+        IRestRequest PostMailDownloadShare(long shareId, ApiMailShareInfoRequest mailParams);
+
+        IRestRequest PostMailUploadShare(long shareId, ApiMailShareInfoRequest mailParams);
 
         IRestRequest DeleteDownloadShare(long shareId);
 

@@ -1,14 +1,35 @@
 using System;
 
 namespace Dracoon.Sdk.Model {
-    /// <include file = "UserRequestsDoc.xml" path='docs/members[@name="updateFolderRequest"]/UpdateFolderRequest/*'/>
+    /// <summary>
+    ///     Request to update the meta data of a folder.
+    /// </summary>
     public class UpdateFolderRequest : UpdateNodeRequestBase {
 
-        /// <include file = "UserRequestsDoc.xml" path='docs/members[@name="updateFolderRequest"]/UpdateFolderRequestConstructor/*'/>
-#pragma warning disable CS1573 // Parameter has no matching param tag in the XML comment (but other parameters do)
-        public UpdateFolderRequest(long id, string name = null, string notes = null, DateTime? creationTime = null, DateTime? modificationTime = null)
-            : base(id, name, notes, creationTime, modificationTime) {
+        /// <summary>
+        ///     The classification for this node.
+        ///     <para>
+        ///         Nullable. If not set the parent room classification (or default if not available which is internal) is used.
+        ///     </para>
+        /// </summary>
+        public Classification? Classification { get; set; }
+
+        /// <summary>
+        ///     Constructs a new update folder request.
+        /// </summary>
+        /// <param name="id"><see cref="Id"/></param>
+        /// <param name="name"><see cref="Name"/></param>
+        /// <param name="notes"><see cref="Notes"/></param>
+        /// <param name="classification"><see cref="Classification"/></param>
+        /// <param name="creationTime"><see cref="CreationTime"/></param>
+        /// <param name="modificationTime"><see cref="ModificationTime"/></param>
+        public UpdateFolderRequest(long id, string name = null, string notes = null, Classification? classification = null, DateTime? creationTime = null, DateTime? modificationTime = null) {
+            Id = id;
+            Name = name;
+            Notes = notes;
+            Classification = classification;
+            CreationTime = creationTime;
+            ModificationTime = modificationTime;
         }
-#pragma warning restore CS1573 // Parameter has no matching param tag in the XML comment (but other parameters do)
     }
 }

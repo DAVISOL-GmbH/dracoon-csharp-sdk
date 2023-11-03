@@ -37,10 +37,7 @@ namespace Dracoon.Sdk.SdkInternal.Mapper {
                 EmailNotificationButtonEnabled = apiGeneralConfig.EmailNotificationButtonEnabled,
                 EulaEnabled = apiGeneralConfig.EulaEnabled,
                 SharePasswordSmsEnabled = apiGeneralConfig.SharePasswordSmsEnabled,
-                UseS3Storage = apiGeneralConfig.UseS3Storage,
-                S3TagsEnabled = apiGeneralConfig.S3TagsEnabled,
-                HideLoginInputFields = apiGeneralConfig.HideLoginInputFields,
-                AuthTokenRestrictions = FromApiAuthTokenRestrictions(apiGeneralConfig.AuthTokenRestrictions)
+                UseS3Storage = apiGeneralConfig.UseS3Storage
             };
             return general;
         }
@@ -98,7 +95,7 @@ namespace Dracoon.Sdk.SdkInternal.Mapper {
                 S3DefaultRegion = apiInfrastructureConfig.S3DefaultRegion,
                 SmsConfigEnabled = apiInfrastructureConfig.SmsConfigEnabled,
                 S3EnforceDirectUpload = apiInfrastructureConfig.S3EnforceDirectUpload,
-                DracoonCloud = apiInfrastructureConfig.DracoonCloud,
+                IsDracoonCloud = apiInfrastructureConfig.IsDracoonCloud,
                 TenantUuid = apiInfrastructureConfig.TenantUuid
             };
             return infrastructure;
@@ -114,13 +111,13 @@ namespace Dracoon.Sdk.SdkInternal.Mapper {
                 DownloadShareDefaultExpirationPeriodInDays = apiDefaultsConfig.DownloadShareDefaultExpirationPeriodInDays,
                 FileUploadDefaultExpirationPeriodInDays = apiDefaultsConfig.FileUploadDefaultExpirationPeriodInDays,
                 UploadShareDefaultExpirationPeriodInDays = apiDefaultsConfig.UploadShareDefaultExpirationPeriodInDays,
-                NonmemberViewerDefault = apiDefaultsConfig.NonmemberViewerDefault,
+                NonMemberViewerDefault = apiDefaultsConfig.NonMemberViewerDefault,
                 HideLoginInputFields = apiDefaultsConfig.HideLoginInputFields
             };
             return defaults;
         }
 
-        internal static PasswordSharePolicies FromApiPasswordSharePolicies(ApiSharePasswordSettings apiPolicies) {
+        internal static PasswordSharePolicies FromApiPasswordSharePolicies(ApiSharePasswordPolicy apiPolicies) {
             if (apiPolicies == null) {
                 return null;
             }
@@ -137,7 +134,7 @@ namespace Dracoon.Sdk.SdkInternal.Mapper {
             return policies;
         }
 
-        internal static PasswordEncryptionPolicies FromApiPasswordEncryptionPolicies(ApiEncryptionPasswordSettings apiPolicies) {
+        internal static PasswordEncryptionPolicies FromApiPasswordEncryptionPolicies(ApiEncryptionPasswordPolicy apiPolicies) {
             if (apiPolicies == null) {
                 return null;
             }
@@ -151,6 +148,37 @@ namespace Dracoon.Sdk.SdkInternal.Mapper {
                 UpdatedBy = UserMapper.FromApiUserInfo(apiPolicies.UpdatedBy)
             };
             return policies;
+        }
+
+        internal static PasswordLoginPolicies FromApiPasswordLoginPolicies(ApiLoginPasswordPolicy apiPolicies) {
+            if (apiPolicies == null) {
+                return null;
+            }
+
+            PasswordLoginPolicies policies = new PasswordLoginPolicies {
+                CharacterPolicies = FromApiPasswordCharacterPolicies(apiPolicies.CharacterRules),
+                MinimumPasswordLength = apiPolicies.MinimumPasswordLength,
+                RejectKeyboardPatterns = apiPolicies.RejectKeyboardPatterns,
+                RejectOwnUserInfo = apiPolicies.RejectUserInfo,
+                RejectDictionaryWords = apiPolicies.RejectDictionaryWords,
+                NumberOfArchivedPasswords = apiPolicies.NumberOfArchivedPasswords,
+                PasswordExpiration = FromApiPasswordExpiration(apiPolicies.PasswordExpiration),
+                UpdatedAt = apiPolicies.UpdatedAt,
+                UpdatedBy = UserMapper.FromApiUserInfo(apiPolicies.UpdatedBy)
+            };
+            return policies;
+        }
+
+        internal static PasswordExpiration FromApiPasswordExpiration(ApiPasswordExpiration apiExpiration) {
+            if (apiExpiration == null) {
+                return null;
+            }
+
+            PasswordExpiration expiration = new PasswordExpiration {
+                IsEnabled = apiExpiration.Enabled,
+                ExpiresAfterDays = apiExpiration.MaxDaysPasswordAge
+            };
+            return expiration;
         }
 
         internal static PasswordCharacterPolicies FromApiPasswordCharacterPolicies(ApiCharacterRules apiPolicies) {

@@ -13,9 +13,11 @@ namespace Dracoon.Sdk.SdkInternal {
 
         internal static IInternalDracoonClientBase DracoonClient { get; set; }
 
-        private static bool CheckResponseHasHeader(dynamic response, string headerName, string headerValue) {
+        internal static IInternalDracoonClientBase DracoonClient { get; set; }
+
+        private static bool CheckResponseHasHeader(object response, string headerName, string headerValue) {
             if (response is IRestResponse restResponse && restResponse.Headers != null) {
-                foreach (var current in restResponse.Headers) {
+                foreach (Parameter current in restResponse.Headers) {
                     if (headerName.Equals(current.Name) && headerValue.Equals(current.Value)) {
                         return true;
                     }
@@ -32,9 +34,9 @@ namespace Dracoon.Sdk.SdkInternal {
             return false;
         }
 
-        public static string GetResponseHeaderValue(dynamic response, string headerName) {
+        public static string GetResponseHeaderValue(object response, string headerName) {
             if (response is IRestResponse restResponse && restResponse.Headers != null) {
-                foreach (var current in restResponse.Headers) {
+                foreach (Parameter current in restResponse.Headers) {
                     if (headerName.Equals(current.Name)) {
                         return current.Value.ToString();
                     }
@@ -149,10 +151,12 @@ namespace Dracoon.Sdk.SdkInternal {
             switch (httpStatusCode) {
                 case (int)HttpStatusCode.BadRequest:
                     return ParseBadRequest(apiErrorCode, requestType);
-                case (int)HttpStatusCode.Unauthorized:
-                    return ParseUnauthorized(apiErrorCode);
                 case (int)HttpStatusCode.PaymentRequired:
                     return ParsePaymentRequired();
+                case (int)HttpStatusCode.TooManyRequests:
+                    return ParseTooManyRequests(response);
+                case (int)HttpStatusCode.Unauthorized:
+                    return ParseUnauthorized(apiErrorCode);
                 case (int)HttpStatusCode.Forbidden:
                     return ParseForbidden(apiErrorCode, response, requestType);
                 case (int)HttpStatusCode.NotFound:
@@ -161,8 +165,6 @@ namespace Dracoon.Sdk.SdkInternal {
                     return ParseConflict(apiErrorCode, requestType);
                 case (int)HttpStatusCode.PreconditionFailed:
                     return ParsePreconditionFailed(apiErrorCode);
-                case 429: // too many requests
-                    return ParseTooManyRequests(response);
                 case (int)HttpStatusCode.BadGateway:
                     return ParseBadGateway(apiErrorCode, requestType);
                 case (int)HttpStatusCode.ServiceUnavailable:
@@ -218,6 +220,8 @@ namespace Dracoon.Sdk.SdkInternal {
                     return DracoonApiCode.VALIDATION_BAD_FILE_NAME;
                 case -40761:
                     return DracoonApiCode.VALIDATION_USER_HAS_NO_FILE_KEY;
+                case -41002:
+                    return DracoonApiCode.VALIDATION_NODE_NOT_A_FILE;
                 case -41052 when requestType == RequestType.PostCopyNodes:
                     return DracoonApiCode.VALIDATION_CANNOT_COPY_ROOM;
                 case -41052 when requestType == RequestType.PostMoveNodes:
@@ -288,7 +292,7 @@ namespace Dracoon.Sdk.SdkInternal {
                 case -80045:
                     return DracoonApiCode.VALIDATION_INVALID_ETAG;
                 case -80064:
-                    return DracoonApiCode.VALIDATION_CLASSIFICATION_POLICY_VIOLATION;
+                    return DracoonApiCode.VALIDATION_POLICY_VIOLATION;
 
                 case -90002:
                     return DracoonApiCode.VALIDATION_NO_DISTINCT_AUTH_CONFIG;
@@ -305,7 +309,7 @@ namespace Dracoon.Sdk.SdkInternal {
             return DracoonApiCode.PRECONDITION_PAYMENT_REQUIRED;
         }
 
-        private static DracoonApiCode ParseTooManyRequests(dynamic response) {
+        private static DracoonApiCode ParseTooManyRequests(object response) {
             string waitTime = GetResponseHeaderValue(response, "Retry-After");
             if (string.IsNullOrWhiteSpace(waitTime)) {
                 waitTime = "1";
@@ -322,7 +326,7 @@ namespace Dracoon.Sdk.SdkInternal {
             }
         }
 
-        private static DracoonApiCode ParseForbidden(int? apiErrorCode, dynamic response, RequestType requestType) {
+        private static DracoonApiCode ParseForbidden(int? apiErrorCode, object response, RequestType requestType) {
             if (CheckResponseHasHeader(response, "X-Forbidden", "403")) {
                 return DracoonApiCode.SERVER_MALICIOUS_FILE_DETECTED;
             }
@@ -339,6 +343,10 @@ namespace Dracoon.Sdk.SdkInternal {
                     return DracoonApiCode.SERVER_USER_KEY_PAIR_NOT_FOUND;
                 case -40761:
                     return DracoonApiCode.SERVER_FILE_KEY_NOT_FOUND;
+                case -40764:
+                    return DracoonApiCode.SERVER_VIRUS_SCAN_IN_PROGRESS;
+                case -40765:
+                    return DracoonApiCode.SERVER_MALICIOUS_FILE_DETECTED;
                 case -70505:
                     return DracoonApiCode.SERVER_USER_QUOTA_REACHED;
                 default: {
@@ -404,6 +412,8 @@ namespace Dracoon.Sdk.SdkInternal {
                     return DracoonApiCode.SERVER_TARGET_NODE_NOT_FOUND;
                 case -41100:
                     return DracoonApiCode.SERVER_RESTOREVERSION_NOT_FOUND;
+                case -41150:
+                    return DracoonApiCode.SERVER_MALICIOUS_FILE_NOT_FOUND;
                 case -60000:
                     return DracoonApiCode.SERVER_DL_SHARE_NOT_FOUND;
                 case -60500:

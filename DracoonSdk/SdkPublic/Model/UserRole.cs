@@ -1,19 +1,35 @@
 ﻿namespace Dracoon.Sdk.Model {
-    /// <include file = "ModelDoc.xml" path='docs/members[@name="userRole"]/UserRole/*'/>
+    /// <summary>
+    ///     Enumeration of the user roles.
+    /// </summary>
     public enum UserRole {
-        /// <include file = "ModelDoc.xml" path='docs/members[@name="userRole"]/Undefined/*'/>
-        Undefined = 0,
-        /// <include file = "ModelDoc.xml" path='docs/members[@name="userRole"]/ConfigManager/*'/>
-        ConfigManager = 1,
-        /// <include file = "ModelDoc.xml" path='docs/members[@name="userRole"]/UserManager/*'/>
-        UserManager = 2,
-        /// <include file = "ModelDoc.xml" path='docs/members[@name="userRole"]/GroupManager/*'/>
-        GroupManager = 3,
-        /// <include file = "ModelDoc.xml" path='docs/members[@name="userRole"]/RoomManager/*'/>
-        RoomManager = 4,
-        /// <include file = "ModelDoc.xml" path='docs/members[@name="userRole"]/LogAuditor/*'/>
-        LogAuditor = 5,
-        /// <include file = "ModelDoc.xml" path='docs/members[@name="userRole"]/NonmemberViewer/*'/>
-        NonmemberViewer = 6
+        /// <summary>
+        ///     The role of the user not defined.
+        /// </summary>
+        Undefined,
+        /// <summary>
+        ///     The user has the permission to change the configuration of the server.
+        /// </summary>
+        ConfigManager,
+        /// <summary>
+        ///     The user has the permission to manage the user accounts.
+        /// </summary>
+        UserManager,
+        /// <summary>
+        ///     The user has the permission to manage the groups.
+        /// </summary>
+        GroupManager,
+        /// <summary>
+        ///     The user has the permission to change room configurations.
+        /// </summary>
+        RoomManager,
+        /// <summary>
+        ///     The user has the permission to change the configuration of the log.
+        /// </summary>
+        LogAuditor,        
+        /// <summary>
+        ///     The user has the permission to view users and groups when having room manage permission.
+        /// </summary>
+        NonmemberViewer
     }
 }

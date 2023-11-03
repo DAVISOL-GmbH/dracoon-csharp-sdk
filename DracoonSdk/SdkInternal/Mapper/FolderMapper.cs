@@ -1,5 +1,6 @@
 using Dracoon.Sdk.Model;
 using Dracoon.Sdk.SdkInternal.ApiModel.Requests;
+using Dracoon.Sdk.SdkInternal.Util;
 
 namespace Dracoon.Sdk.SdkInternal.Mapper {
     internal static class FolderMapper {
@@ -8,8 +9,9 @@ namespace Dracoon.Sdk.SdkInternal.Mapper {
                 ParentId = createFolderRequest.ParentId,
                 Name = createFolderRequest.Name,
                 Notes = createFolderRequest.Notes,
-                CreationTimestamp = createFolderRequest.CreationTimestamp,
-                ModificationTimestamp = createFolderRequest.ModificationTimestamp
+                Classification = EnumConverter.ConvertClassificationEnumToValue(createFolderRequest.Classification),
+                TimestampCreation = createFolderRequest.TimestampCreation,
+                TimestampModification = createFolderRequest.TimestampModification
             };
             return apiCreateFolderRequest;
         }
@@ -18,8 +20,9 @@ namespace Dracoon.Sdk.SdkInternal.Mapper {
             ApiUpdateFolderRequest apiUpdateFolderRequest = new ApiUpdateFolderRequest {
                 Name = updateFolderRequest.Name,
                 Notes = updateFolderRequest.Notes,
-                CreationTimestamp = updateFolderRequest.CreationTimestamp,
-                ModificationTimestamp = updateFolderRequest.ModificationTimestamp
+                Classification = EnumConverter.ConvertClassificationEnumToValue(updateFolderRequest.Classification),
+                TimestampCreation = updateFolderRequest.TimestampCreation,
+                TimestampModification = updateFolderRequest.TimestampModification
             };
             return apiUpdateFolderRequest;
         }

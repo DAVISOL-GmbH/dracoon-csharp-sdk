@@ -2,7 +2,9 @@
 using System;
 
 namespace Dracoon.Sdk.Error {
-    /// <include file = "ErrorDoc.xml" path='docs/members[@name="dracoonApiCode"]/DracoonApiCode/*'/>
+    /// <summary>
+    ///     Collection of DRACOON API error codes.
+    /// </summary>
     public sealed class DracoonApiCode : IEquatable<DracoonApiCode> {
 
         /// <summary>
@@ -455,10 +457,24 @@ namespace Dracoon.Sdk.Error {
         /// Api-Error-Codes or contexts: -80045
         /// </summary>
         public static readonly DracoonApiCode VALIDATION_INVALID_ETAG = new DracoonApiCode(3129, "Invalid Etag(s).");
-        // CODES: -40006
-        public static readonly DracoonApiCode VALIDATION_ROOM_REQUIRE_NONEXPIRING_ADMIN_USER_OR_GROUP = new DracoonApiCode(3130, "At least one non-expiring admin user / group required.");
+
+        /// <summary>
+        /// Node is not a file.
+        ///
+        /// Api-Error-Codes or contexts: -41002
+        /// </summary>
+        public static readonly DracoonApiCode VALIDATION_NODE_NOT_A_FILE = new DracoonApiCode(3130, "Node is not a file.");
+
+        /// <summary>
+        /// At least one non-expiring admin user / group required.
+        ///
+        /// Api-Error-Codes or contexts: -40006
+        /// </summary>
+        public static readonly DracoonApiCode VALIDATION_ROOM_REQUIRE_NONEXPIRING_ADMIN_USER_OR_GROUP = new DracoonApiCode(3139, "At least one non-expiring admin user / group required.");
 
         #endregion
+
+
         #region SHARES
 
         /// <summary>
@@ -554,9 +570,9 @@ namespace Dracoon.Sdk.Error {
         #region Policies
 
         /// <summary>
-        /// Groups error.
+        /// Policies error.
         /// </summary>
-        public static readonly DracoonApiCode VALIDATION_CLASSIFICATION_POLICY_VIOLATION = new DracoonApiCode(3750, "A classification policy is violated.");
+        public static readonly DracoonApiCode VALIDATION_POLICY_VIOLATION = new DracoonApiCode(3750, "A policy is violated.");
 
         #endregion
         #region OTHERS
@@ -672,9 +688,14 @@ namespace Dracoon.Sdk.Error {
         public static readonly DracoonApiCode SERVER_TOO_MANY_REQUESTS = new DracoonApiCode(5011, "You sent to many requests in a short time, wait {0} seconds until your next call.");
 
         /// <summary>
-        /// The AV scanner detected that the file could be malicious.
+        /// Detected that the file could be malicious.
         /// </summary>
-        public static readonly DracoonApiCode SERVER_MALICIOUS_FILE_DETECTED = new DracoonApiCode(5090, "The AV scanner detected that the file could be malicious.");
+        public static readonly DracoonApiCode SERVER_MALICIOUS_FILE_DETECTED = new DracoonApiCode(5090, "Detected that the file could be malicious.");
+
+        /// <summary>
+        /// Virus scan in progress.
+        /// </summary>
+        public static readonly DracoonApiCode SERVER_VIRUS_SCAN_IN_PROGRESS = new DracoonApiCode(5091, "Virus scan in progress.");
 
         /// <summary>
         /// The DRACOON API endpoint is currently not available.
@@ -822,12 +843,35 @@ namespace Dracoon.Sdk.Error {
         /// Api-Error-Codes or contexts: -90027
         /// </summary>
         public static readonly DracoonApiCode SERVER_S3_CONNECTION_FAILED = new DracoonApiCode(5115, "S3 connection failed.");
-        // CODES: -90035
-        public static readonly DracoonApiCode SERVER_OPENID_IDP_CONFIG_NOT_FOUND = new DracoonApiCode(5116, "OpenID Connect IDP configuration not found.");
-        // CODES: -90059
-        public static readonly DracoonApiCode SERVER_OPENID_IDP_CONFIG_INVALID = new DracoonApiCode(5117, "No valid OpenID Connect IDP configuration found.");
-        // CODES: -90050
-        public static readonly DracoonApiCode SERVER_ACTIVE_DIRECTORY_CONFIG_NOT_FOUND = new DracoonApiCode(5118, "Active Directory configuration not found.");
+
+        /// <summary>
+        /// Malicious file was not found.
+        /// 
+        /// Api-Error-Codes or contexts: -41150
+        /// </summary>
+        public static readonly DracoonApiCode SERVER_MALICIOUS_FILE_NOT_FOUND = new DracoonApiCode(5116, "Malicious file not found.");
+
+        /// <summary>
+        /// OpenID Connect IDP configuration not found.
+        /// 
+        /// Api-Error-Codes or contexts: -90035
+        /// </summary>
+        public static readonly DracoonApiCode SERVER_OPENID_IDP_CONFIG_NOT_FOUND = new DracoonApiCode(5121, "OpenID Connect IDP configuration not found.");
+
+        /// <summary>
+        /// No valid OpenID Connect IDP configuration found.
+        /// 
+        /// Api-Error-Codes or contexts: -90059
+        /// </summary>
+        public static readonly DracoonApiCode SERVER_OPENID_IDP_CONFIG_INVALID = new DracoonApiCode(5122, "No valid OpenID Connect IDP configuration found.");
+
+        /// <summary>
+        /// Active Directory configuration not found.
+        /// 
+        /// Api-Error-Codes or contexts: -90050
+        /// </summary>
+        public static readonly DracoonApiCode SERVER_ACTIVE_DIRECTORY_CONFIG_NOT_FOUND = new DracoonApiCode(5123, "Active Directory configuration not found.");
+
         #endregion
 
         #region SHARES
@@ -942,14 +986,14 @@ namespace Dracoon.Sdk.Error {
         #endregion
 
         /// <summary>
-        /// The error message.
+        ///     The error message.
         /// </summary>
         public string Text {
             get;
         }
 
         /// <summary>
-        /// The error code.
+        ///     The error code.
         /// </summary>
         public int Code {
             get;
@@ -960,7 +1004,12 @@ namespace Dracoon.Sdk.Error {
             Text = text;
         }
 
-        /// <include file = "ErrorDoc.xml" path='docs/members[@name="dracoonApiCode"]/ToString/*'/>
+        /// <summary>
+        ///     Creates a string which contains the error number and the error message.
+        /// </summary>
+        /// <returns>
+        ///     A string with: Code + " " + Text
+        /// </returns>
         public override string ToString() {
             return Code + " " + Text;
         }

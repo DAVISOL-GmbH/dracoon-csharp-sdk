@@ -4,6 +4,7 @@ using Dracoon.Sdk.Error;
 using Dracoon.Sdk.Model;
 using Dracoon.Sdk.SdkInternal.ApiModel;
 using Dracoon.Sdk.SdkInternal.ApiModel.Requests;
+using Dracoon.Sdk.SdkInternal.User;
 using Dracoon.Sdk.SdkInternal.Util;
 using System;
 using System.Collections.Generic;
@@ -36,7 +37,6 @@ namespace Dracoon.Sdk.SdkInternal.Mapper {
                 Id = apiUserAccount.Id,
                 AuthData = FromApiUserAuthData(apiUserAccount.AuthData),
                 UserName = apiUserAccount.UserName,
-                Title = apiUserAccount.Title,
                 FirstName = apiUserAccount.FirstName,
                 LastName = apiUserAccount.LastName,
                 Email = apiUserAccount.Email,
@@ -46,8 +46,19 @@ namespace Dracoon.Sdk.SdkInternal.Mapper {
                 LastLoginSuccessAt = apiUserAccount.LastLoginSuccessAt,
                 LastLoginFailAt = apiUserAccount.LastLoginFailAt,
                 UserRoles = ConvertApiUserRoles(apiUserAccount.UserRoles),
-                HomeRoomId = apiUserAccount.HomeRoomId
+                HomeRoomId = apiUserAccount.HomeRoomId,
+                IsLocked = apiUserAccount.IsLocked,
+                Language = apiUserAccount.Language,
+                MustSetEmail = apiUserAccount.MustSetEmail,
+                NeedsToAcceptEULA = apiUserAccount.NeedsToAcceptEULA,
+                Phone = apiUserAccount.Phone,
+                UserGroups = new List<UserGroup>()
             };
+            if (apiUserAccount.UserGroups != null) {
+                foreach (ApiUserGroup currentGroup in apiUserAccount.UserGroups) {
+                    userAccount.UserGroups.Add(FromApiUserGroup(currentGroup));
+                }
+            }
             return userAccount;
         }
 
@@ -67,6 +78,19 @@ namespace Dracoon.Sdk.SdkInternal.Mapper {
             return userAuthData;
         }
 
+        internal static UserGroup FromApiUserGroup(ApiUserGroup apiUserGroup) {
+            if (apiUserGroup == null) {
+                return null;
+            }
+
+            UserGroup userGroup = new UserGroup {
+                Id = apiUserGroup.Id,
+                IsMember = apiUserGroup.IsMember,
+                Name = apiUserGroup.Name
+            };
+            return userGroup;
+        }
+
         private static List<UserRole> ConvertApiUserRoles(ApiUserRoleList apiUserRoles) {
             List<UserRole> returnValue = new List<UserRole>();
             if (apiUserRoles == null) {
@@ -74,6 +98,7 @@ namespace Dracoon.Sdk.SdkInternal.Mapper {
             }
 
             foreach (ApiUserRole currentRole in apiUserRoles.Items) {
+                returnValue.Add((UserRole)Enum.ToObject(typeof(UserRole), currentRole.Id));
                 returnValue.Add((UserRole)Enum.ToObject(typeof(UserRole), currentRole.Id));
             }
 

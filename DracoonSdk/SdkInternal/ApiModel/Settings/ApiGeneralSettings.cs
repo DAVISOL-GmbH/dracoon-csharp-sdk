@@ -15,10 +15,6 @@ namespace Dracoon.Sdk.SdkInternal.ApiModel {
         [JsonProperty("eulaEnabled", NullValueHandling = NullValueHandling.Ignore)]
         public bool EulaEnabled { get; set; }
 
-        [JsonProperty("mediaServerEnabled", NullValueHandling = NullValueHandling.Ignore)]
-        [Obsolete("Deprecated since v4.12.0")]
-        public bool MediaServerEnabled { get; set; }
-
         [JsonProperty("useS3Storage", NullValueHandling = NullValueHandling.Ignore)]
         public bool UseS3Storage { get; set; }
 

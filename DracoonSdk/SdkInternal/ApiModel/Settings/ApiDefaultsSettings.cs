@@ -15,7 +15,7 @@ namespace Dracoon.Sdk.SdkInternal.ApiModel {
         public int FileUploadDefaultExpirationPeriodInDays { get; set; }
 
         [JsonProperty("nonmemberViewerDefault", NullValueHandling = NullValueHandling.Ignore)]
-        public bool NonmemberViewerDefault { get; set; }
+        public bool NonMemberViewerDefault { get; set; }
 
         [JsonProperty("hideLoginInputFields", NullValueHandling = NullValueHandling.Ignore)]
         public bool HideLoginInputFields { get; set; }

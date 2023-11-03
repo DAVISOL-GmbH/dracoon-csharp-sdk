@@ -16,6 +16,19 @@ namespace Dracoon.Sdk.SdkInternal {
             SetUserKeyPair, GetCustomerAccount, GetUserAccount, GetUserKeyPair, DeleteUserKeyPair,
             GetUserAvatar, DeleteUserAvatar, PostUserAvatar,
             GetUserProfileAttributes, PutUserProfileAttributes, DeleteUserProfileAttributes,
+            GetResourcesAvatar, GetNodes, GetNode, PostRoom, PostFolder,
+            PutFolder, PutRoom, PutEnableRoomEncryption, PutFile, DeleteNodes,
+            PostDownloadToken, GetFileKey, PostUploadToken, PutCompleteUpload, PutCompleteS3Upload,
+            PostUploadChunk, PutUploadS3Chunk, GetDownloadChunk, PostCopyNodes, PostMoveNodes,
+            GetSearchNodes, GetMissingFileKeys, PostMissingFileKeys, PostCreateDownloadShare, DeleteDownloadShare,
+            PostMailDownloadShare, PostMailUploadShare,
+            GetDownloadShares, PostCreateUploadShare, DeleteUploadShare, GetUploadShares, PostFavorite,
+            DeleteFavorite, GetAuthenticatedPing, PostOAuthToken, PostOAuthRefresh, GetGeneralSettings,
+            GetInfrastructureSettings, GetDefaultsSettings, GetRecycleBin, DeleteRecycleBin, GetPreviousVersions,
+            GetPreviousVersion, PostRestoreNodeVersion, DeletePreviousVersions, PostGetS3Urls, GetS3Status, GetPasswordPolicies,
+            GetAlgorithms, GetClassificationPolicies, GenerateVirusProtectionInfo, DeleteMaliciousFile, GetDownloadShareSubscriptions,
+            GetUploadShareSubscriptions, PostUploadShareSubscription, PostDownloadShareSubscription, DeleteDownloadShareSubscription,
+            DeleteUploadShareSubscription
             GetResourcesAvatar,
             GetNodes, GetNode, PostFolder, PutFolder, PutFile, DeleteNodes,
             GetRoomEvents, GetRoomGroups, GetRoomUsers, GetRoomPending, PostRoom, PutRoom, PutRoomConfig, PutRoomGroups, PutRoomUsers, DeleteRoomGroups, DeleteRoomUsers, PutEnableRoomEncryption,
@@ -64,15 +77,16 @@ namespace Dracoon.Sdk.SdkInternal {
             if (_apiVersion == null) {
                 ApiServerVersion serverVersion =
                     ((IRequestExecutor)this).DoSyncApiCall<ApiServerVersion>(_client.Builder.GetServerVersion(), RequestType.GetServerVersion);
+                    ((IRequestExecutor)this).DoSyncApiCall<ApiServerVersion>(_client.Builder.GetServerVersion(), RequestType.GetServerVersion);
                 string version = serverVersion.RestApiVersion;
                 if (version.Contains("-")) {
                     version = version.Remove(version.IndexOf("-"));
                 }
 
-                _apiVersion = Regex.Split(version, "\\.");
+                _apiVersion = Regex.Split(version, "\\.", RegexOptions.None, new TimeSpan(0, 5, 0));
             }
 
-            string[] minVersion = Regex.Split(minVersionForCheck, "\\.");
+            string[] minVersion = Regex.Split(minVersionForCheck, "\\.", RegexOptions.None, new TimeSpan(0, 5, 0));
             for (int iterate = 0; iterate < 3; iterate++) {
                 int remoteVersionPart = int.Parse(_apiVersion[iterate]);
                 int minVersionPart = int.Parse(minVersion[iterate]);
@@ -124,12 +138,13 @@ namespace Dracoon.Sdk.SdkInternal {
                             _client.Log.Debug(Logtag, "Retry the refresh of the access token in " + sendTry * 1000 + " millis again.");
                             Thread.Sleep(1000 * sendTry);
                             _auth.RefreshAccessToken();
-                            foreach (var cur in request.Parameters) {
+                            foreach (Parameter cur in request.Parameters) {
                                 if (cur.Name == ApiConfig.AuthorizationHeader) {
                                     cur.Value = _auth.BuildAuthString();
                                 }
                             }
 
+                            return ((IRequestExecutor)this).DoSyncApiCall<T>(request, requestType, sendTry + 1);
                             return ((IRequestExecutor)this).DoSyncApiCall<T>(request, requestType, sendTry + 1);
                         }
 
@@ -138,6 +153,7 @@ namespace Dracoon.Sdk.SdkInternal {
                 }
             } catch (DracoonApiException dae) {
                 if (sendTry < 3 && CheckTooManyRequestsResult(dae, response)) {
+                    return ((IRequestExecutor)this).DoSyncApiCall<T>(request, requestType, sendTry + 1);
                     return ((IRequestExecutor)this).DoSyncApiCall<T>(request, requestType, sendTry + 1);
                 }
 
@@ -179,6 +195,7 @@ namespace Dracoon.Sdk.SdkInternal {
                                 _client.Log.Debug(Logtag, "Retry the request in " + sendTry * 1000 + " millis again.");
                                 Thread.Sleep(1000 * sendTry);
                                 return ((IRequestExecutor)this).ExecuteWebClientDownload(requestClient, target, type, asyncThread, sendTry + 1);
+                                return ((IRequestExecutor)this).ExecuteWebClientDownload(requestClient, target, type, asyncThread, sendTry + 1);
                             } else {
                                 if (asyncThread != null && asyncThread.ThreadState == ThreadState.Aborted) {
                                     throw new ThreadInterruptedException();
@@ -189,6 +206,7 @@ namespace Dracoon.Sdk.SdkInternal {
                         }
                     } catch (DracoonApiException dae) {
                         if (sendTry < 3 && CheckTooManyRequestsResult(dae, we.Response)) {
+                            return ((IRequestExecutor)this).ExecuteWebClientDownload(requestClient, target, type, asyncThread, sendTry + 1);
                             return ((IRequestExecutor)this).ExecuteWebClientDownload(requestClient, target, type, asyncThread, sendTry + 1);
                         }
 
@@ -245,6 +263,7 @@ namespace Dracoon.Sdk.SdkInternal {
                                 _client.Log.Debug(Logtag, "Retry the request in " + sendTry * 1000 + " millis again.");
                                 Thread.Sleep(1000 * sendTry);
                                 return ((IRequestExecutor)this).ExecuteWebClientChunkUpload(requestClient, target, data, type, asyncThread, sendTry + 1);
+                                return ((IRequestExecutor)this).ExecuteWebClientChunkUpload(requestClient, target, data, type, asyncThread, sendTry + 1);
                             } else {
                                 if (asyncThread != null && asyncThread.ThreadState == ThreadState.Aborted) {
                                     throw new ThreadInterruptedException();
@@ -255,6 +274,7 @@ namespace Dracoon.Sdk.SdkInternal {
                         }
                     } catch (DracoonApiException dae) {
                         if (sendTry < 3 && CheckTooManyRequestsResult(dae, we.Response)) {
+                            return ((IRequestExecutor)this).ExecuteWebClientChunkUpload(requestClient, target, data, type, asyncThread, sendTry + 1);
                             return ((IRequestExecutor)this).ExecuteWebClientChunkUpload(requestClient, target, data, type, asyncThread, sendTry + 1);
                         }
 

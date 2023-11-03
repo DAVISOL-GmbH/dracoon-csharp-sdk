@@ -1,15 +1,27 @@
 namespace Dracoon.Sdk.Model {
-    /// <include file = "ModelDoc.xml" path='docs/members[@name="userAuthMethod"]/UserAuthMethod/*'/>
+    /// <summary>
+    ///     The method which are available for authentication.
+    /// </summary>
     public enum UserAuthMethod {
-        /// <include file = "ModelDoc.xml" path='docs/members[@name="userAuthMethod"]/Basic/*'/>
+        /// <summary>
+        ///     The basic authentication.
+        /// </summary>
         Basic,
-        /// <include file = "ModelDoc.xml" path='docs/members[@name="userAuthMethod"]/ActiveDirectory/*'/>
+        /// <summary>
+        ///     The active directory authentication.
+        /// </summary>
         ActiveDirectory,
-        /// <include file = "ModelDoc.xml" path='docs/members[@name="userAuthMethod"]/Radius/*'/>
+        /// <summary>
+        ///     The radius authentication.
+        /// </summary>
         Radius,
-        /// <include file = "ModelDoc.xml" path='docs/members[@name="userAuthMethod"]/OpenID/*'/>
+        /// <summary>
+        ///     The openID authentication.
+        /// </summary>
         OpenID,
-        /// <include file = "ModelDoc.xml" path='docs/members[@name="userAuthMethod"]/Unknown/*'/>
+        /// <summary>
+        ///     An authentication method which the sdk currently doesn't knows.
+        /// </summary>
         Unknown
     }
 }

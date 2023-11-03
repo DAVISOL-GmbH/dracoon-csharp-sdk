@@ -5,6 +5,7 @@ using Dracoon.Sdk.Model;
 using Dracoon.Sdk.SdkInternal.ApiModel;
 using Dracoon.Sdk.SdkInternal.ApiModel.Requests;
 using Dracoon.Sdk.SdkInternal.Mapper;
+using Dracoon.Sdk.SdkInternal.User;
 using Dracoon.Sdk.SdkInternal.Validator;
 using Newtonsoft.Json;
 using RestSharp;
@@ -25,23 +26,6 @@ namespace Dracoon.Sdk.SdkInternal {
             _client = client;
         }
 
-        internal void AssertUserKeyPairAlgorithmSupported(UserKeyPairAlgorithm algorithm) {
-            string minAlgorithmVersion = "4.0.0";
-            switch (algorithm) {
-                case UserKeyPairAlgorithm.RSA2048:
-                    return;
-                case UserKeyPairAlgorithm.RSA4096:
-                    minAlgorithmVersion = ApiConfig.ApiVersionMin_Algorithm_UserKeyPair_RSA4096;
-                    break;
-            }
-
-            try {
-                _client.Executor.CheckApiServerVersion(minAlgorithmVersion);
-            } catch (DracoonApiException) {
-                throw new DracoonApiException(new DracoonApiCode(DracoonApiCode.SERVER_CRYPTO_VERSION_NOT_SUPPORTED.Code, "Algorithm " + algorithm.GetStringValue() + " requires minimum api version of " + minAlgorithmVersion + "."));
-            }
-        }
-
         public UserAccount GetUserAccount() {
             _client.Executor.CheckApiServerVersion();
             IRestRequest request = _client.Builder.GetUserAccount();
@@ -58,8 +42,6 @@ namespace Dracoon.Sdk.SdkInternal {
 
         public void SetUserKeyPair(UserKeyPairAlgorithm algorithm) {
             _client.Executor.CheckApiServerVersion();
-
-            AssertUserKeyPairAlgorithmSupported(algorithm);
 
             UserKeyPair cryptoPair = GenerateNewUserKeyPair(algorithm, _client.EncryptionPassword);
             ApiUserKeyPair apiUserKeyPair = UserMapper.ToApiUserKeyPair(cryptoPair);
@@ -85,8 +67,6 @@ namespace Dracoon.Sdk.SdkInternal {
         public void DeleteUserKeyPair(UserKeyPairAlgorithm algorithm) {
             _client.Executor.CheckApiServerVersion();
 
-            AssertUserKeyPairAlgorithmSupported(algorithm);
-
             string algorithmString = UserMapper.ToApiUserKeyPairVersion(algorithm);
             IRestRequest request = _client.Builder.DeleteUserKeyPair(algorithmString);
             _client.Executor.DoSyncApiCall<VoidResponse>(request, RequestType.DeleteUserKeyPair);
@@ -102,8 +82,6 @@ namespace Dracoon.Sdk.SdkInternal {
         }
 
         internal UserKeyPair GetAndCheckUserKeyPair(UserKeyPairAlgorithm algorithm) {
-            AssertUserKeyPairAlgorithmSupported(algorithm);
-
             try {
                 UserKeyPair userKeyPair = GetUserKeyPair(algorithm);
                 CheckKeyPair(userKeyPair);
@@ -176,20 +154,15 @@ namespace Dracoon.Sdk.SdkInternal {
 
         private List<UserKeyPair> GetUserKeyPairs() {
             List<UserKeyPair> returnValue = new List<UserKeyPair>();
-            try {
-                // Check if api supports this api endpoint. If not only provide the keypair using the "old" api.
-                _client.Executor.CheckApiServerVersion(ApiConfig.ApiGetUserKeyPairsMinimumVersion);
+            // Check if api supports this api endpoint. If not only provide the keypair using the "old" api.
+            _client.Executor.CheckApiServerVersion();
 
-                IRestRequest request = _client.Builder.GetUserKeyPairs();
-                List<ApiUserKeyPair> result = _client.Executor.DoSyncApiCall<List<ApiUserKeyPair>>(request, RequestType.GetUserKeyPairs);
+            IRestRequest request = _client.Builder.GetUserKeyPairs();
+            List<ApiUserKeyPair> result = _client.Executor.DoSyncApiCall<List<ApiUserKeyPair>>(request, RequestType.GetUserKeyPairs);
 
-                foreach (ApiUserKeyPair apiUserKeyPair in result) {
-                    UserKeyPair userKeyPair = UserMapper.FromApiUserKeyPair(apiUserKeyPair);
-                    returnValue.Add(userKeyPair);
-                }
-            } catch (DracoonApiException error) when (error.ErrorCode.Code == DracoonApiCode.API_VERSION_NOT_SUPPORTED.Code) {
-                UserKeyPair keyPair = GetUserKeyPair(UserKeyPairAlgorithm.RSA2048);
-                returnValue.Add(keyPair);
+            foreach (ApiUserKeyPair apiUserKeyPair in result) {
+                UserKeyPair userKeyPair = UserMapper.FromApiUserKeyPair(apiUserKeyPair);
+                returnValue.Add(userKeyPair);
             }
             return returnValue;
         }
@@ -253,7 +226,7 @@ namespace Dracoon.Sdk.SdkInternal {
             byte[] packageHeader = ApiConfig.ENCODING.GetBytes(
                 $"--{formDataBoundary}\r\nContent-Disposition: form-data; name=\"{"file"}\"; filename=\"{"avatarImage"}\"\r\n\r\n");
             byte[] packageFooter = ApiConfig.ENCODING.GetBytes(string.Format("\r\n--" + formDataBoundary + "--"));
-            byte[] multipartFormatedChunkData = new byte[packageHeader.Length + packageFooter.Length + avatarBytes.Length];
+            byte[] multipartFormatedChunkData = new byte[packageHeader.Length + packageFooter.Length + newAvatar.Length];
             Buffer.BlockCopy(packageHeader, 0, multipartFormatedChunkData, 0, packageHeader.Length);
             Buffer.BlockCopy(avatarBytes.ToArray(), 0, multipartFormatedChunkData, packageHeader.Length, avatarBytes.Length);
             Buffer.BlockCopy(packageFooter, 0, multipartFormatedChunkData, packageHeader.Length + avatarBytes.Length, packageFooter.Length);
@@ -334,6 +307,94 @@ namespace Dracoon.Sdk.SdkInternal {
 
             IRestRequest request = _client.Builder.DeleteUserProfileAttributes(attributeKey);
             _client.Executor.DoSyncApiCall<VoidResponse>(request, RequestType.DeleteUserProfileAttributes);
+        }
+
+        #endregion
+
+        #region Subscriptions
+
+        public ShareSubscriptionList GetDownloadShareSubscriptions(long? offset = null, long? limit = null) {
+            _client.Executor.CheckApiServerVersion();
+
+            #region Parameter Validation
+
+            offset.NullableMustNotNegative(nameof(offset));
+            limit.NullableMustPositive(nameof(limit));
+
+            #endregion
+
+            IRestRequest restRequest = _client.Builder.GetDownloadShareSubscriptions(offset, limit);
+            ApiShareSubscriptionList result = _client.Executor.DoSyncApiCall<ApiShareSubscriptionList>(restRequest, RequestType.GetDownloadShareSubscriptions);
+            return UserMapper.FromApiShareSubscriptionList(result);
+        }
+
+        public void RemoveDownloadShareSubscription(long shareId) {
+            _client.Executor.CheckApiServerVersion();
+
+            #region Parameter Validation
+
+            shareId.MustPositive(nameof(shareId));
+
+            #endregion
+
+            IRestRequest restRequest = _client.Builder.RemoveDownloadShareSubscription(shareId);
+            _client.Executor.DoSyncApiCall<VoidResponse>(restRequest, RequestType.DeleteDownloadShareSubscription);
+        }
+
+        public ShareSubscription AddDownloadShareSubscription(long shareId) {
+            _client.Executor.CheckApiServerVersion();
+
+            #region Parameter Validation
+
+            shareId.MustPositive(nameof(shareId));
+
+            #endregion
+
+            IRestRequest restRequest = _client.Builder.AddDownloadShareSubscription(shareId);
+            ApiShareSubscription result = _client.Executor.DoSyncApiCall<ApiShareSubscription>(restRequest, RequestType.PostDownloadShareSubscription);
+            return UserMapper.FromApiShareSubscription(result);
+        }
+
+        public ShareSubscriptionList GetUploadShareSubscriptions(long? offset = null, long? limit = null) {
+            _client.Executor.CheckApiServerVersion();
+
+            #region Parameter Validation
+
+            offset.NullableMustNotNegative(nameof(offset));
+            limit.NullableMustPositive(nameof(limit));
+
+            #endregion
+
+            IRestRequest restRequest = _client.Builder.GetUploadShareSubscriptions(offset, limit);
+            ApiShareSubscriptionList result = _client.Executor.DoSyncApiCall<ApiShareSubscriptionList>(restRequest, RequestType.GetUploadShareSubscriptions);
+            return UserMapper.FromApiShareSubscriptionList(result);
+        }
+
+        public void RemoveUploadShareSubscription(long shareId) {
+            _client.Executor.CheckApiServerVersion();
+
+            #region Parameter Validation
+
+            shareId.MustPositive(nameof(shareId));
+
+            #endregion
+
+            IRestRequest restRequest = _client.Builder.RemoveUploadShareSubscription(shareId);
+            _client.Executor.DoSyncApiCall<VoidResponse>(restRequest, RequestType.DeleteUploadShareSubscription);
+        }
+
+        public ShareSubscription AddUploadShareSubscription(long shareId) {
+            _client.Executor.CheckApiServerVersion();
+
+            #region Parameter Validation
+
+            shareId.MustPositive(nameof(shareId));
+
+            #endregion
+
+            IRestRequest restRequest = _client.Builder.AddUploadShareSubscription(shareId);
+            ApiShareSubscription result = _client.Executor.DoSyncApiCall<ApiShareSubscription>(restRequest, RequestType.PostUploadShareSubscription);
+            return UserMapper.FromApiShareSubscription(result);
         }
 
         #endregion
