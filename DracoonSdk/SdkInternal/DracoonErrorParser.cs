@@ -104,7 +104,7 @@ namespace Dracoon.Sdk.SdkInternal {
 
         internal static void ParseError(IRestResponse response, RequestType requestType, long elapsedMilliseconds) {
             DracoonApiCode resultCode = ParseApiErrorCodeFromResponse(response, requestType);
-            DracoonClient.Log.Error(LogTag, $"Query for '{requestType}' failed with parsed error '{resultCode.Text}' after {elapsedMilliseconds} ms (code {resultCode.Code}, HTTP status {((int)response.StatusCode)} {response.StatusCode}, response from {response.ResponseUri}){(resultCode.Code == DracoonApiCode.SERVER_MAINTENANCE.Code ? "" : $": {response.Content}")}");
+            DracoonClient.Log.Error(LogTag, $"Query for '{requestType}' failed with parsed error '{resultCode.Text}' after {elapsedMilliseconds} ms (code {resultCode.Code}, HTTP status {((int)response.StatusCode)} {response.StatusCode}, {(response.ResponseUri is null ? $"no response from {response.Request.Resource}" : $"response from {response.ResponseUri}")}){(resultCode.Code == DracoonApiCode.SERVER_MAINTENANCE.Code ? "" : $": {response.Content}")}");
 
             throw new DracoonApiException(resultCode);
         }
