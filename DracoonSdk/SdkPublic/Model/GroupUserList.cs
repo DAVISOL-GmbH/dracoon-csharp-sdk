@@ -1,4 +1,10 @@
 namespace Dracoon.Sdk.Model {
-    public class GroupUserList : RangeListBase<GroupUser> {
+    /// <summary>
+    ///     This model stores a list of users memberships in a group. The list may be a paginated response. Implements the <see cref="RangeListBase{T}"/> collection base class.
+    ///     <para>
+    ///         <see cref="RangeListBase{T}.Offset"/> and <see cref="RangeListBase{T}.Limit"/> can be used to get the start and length of the page.
+    ///     </para>
+    /// </summary>
+    public sealed class GroupUserList : RangeListBase<GroupUser> {
     }
 }

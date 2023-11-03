@@ -27,7 +27,7 @@ namespace Dracoon.Sdk.SdkInternal {
             limit.NullableMustPositive(nameof(limit));
             #endregion
 
-            IRestRequest restRequest = _client.Builder.GetAuditNodes(offset, limit, filter, sort);
+            RestRequest restRequest = _client.Builder.GetAuditNodes(offset, limit, filter, sort);
             ApiAuditNodeResponseList result = _client.Executor.DoSyncApiCall<ApiAuditNodeResponseList>(restRequest, RequestType.GetAuditNodes);
             return EventLogMapper.FromApiAuditNodeResponseList(result, offset ?? 0, limit ?? 500);
         }
@@ -41,7 +41,7 @@ namespace Dracoon.Sdk.SdkInternal {
             limit.NullableMustPositive(nameof(limit));
             #endregion
 
-            IRestRequest restRequest = _client.Builder.GetEvents(dateStart, dateEnd, status, operationId, userId, userClient, offset, limit, sort);
+            RestRequest restRequest = _client.Builder.GetEvents(dateStart, dateEnd, status, operationId, userId, userClient, offset, limit, sort);
             ApiLogEventList result = _client.Executor.DoSyncApiCall<ApiLogEventList>(restRequest, RequestType.GetEvents);
             return EventLogMapper.FromApiLogEventList(result);
         }
@@ -49,7 +49,7 @@ namespace Dracoon.Sdk.SdkInternal {
         public LogOperationList GetOperations(bool? isDeprecated = null) {
             _client.Executor.CheckApiServerVersion();
 
-            IRestRequest restRequest = _client.Builder.GetOperations(isDeprecated);
+            RestRequest restRequest = _client.Builder.GetOperations(isDeprecated);
             ApiLogOperationList result = _client.Executor.DoSyncApiCall<ApiLogOperationList>(restRequest, RequestType.GetOperations);
             return EventLogMapper.FromApiLogOperationList(result);
         }

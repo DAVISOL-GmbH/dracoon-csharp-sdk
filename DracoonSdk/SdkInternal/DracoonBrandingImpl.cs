@@ -19,7 +19,7 @@ namespace Dracoon.Sdk.SdkInternal {
         public CacheableBrandingResponse GetBranding() {
             _client.Executor.CheckApiServerVersion();
 
-            IRestRequest restRequest = _client.Builder.GetBranding();
+            RestRequest restRequest = _client.Builder.GetBranding();
             ApiCacheableBrandingResponse result = _client.Executor.DoSyncApiCall<ApiCacheableBrandingResponse>(restRequest, RequestType.GetBranding);
             return BrandingMapper.FromApiCacheableBrandingResponse(result);
         }
@@ -27,7 +27,7 @@ namespace Dracoon.Sdk.SdkInternal {
         public SoftwareVersionData GetVersion() {
             _client.Executor.CheckApiServerVersion();
 
-            IRestRequest restRequest = _client.Builder.GetBrandingServerVersion();
+            RestRequest restRequest = _client.Builder.GetBrandingServerVersion();
             ApiSoftwareVersionData result = _client.Executor.DoSyncApiCall<ApiSoftwareVersionData>(restRequest, RequestType.GetBrandingServerVersion);
             return BrandingMapper.FromApiSoftwareVersionData(result);
         }

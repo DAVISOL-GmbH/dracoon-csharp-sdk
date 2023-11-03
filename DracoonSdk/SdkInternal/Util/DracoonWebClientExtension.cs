@@ -23,7 +23,6 @@ namespace Dracoon.Sdk.SdkInternal.Util {
                     request.AddRange(_rangeFrom.Value, _rangeTo.Value);
                 }
 
-                request.ReadWriteTimeout = _config.ReadWriteTimeout;
                 request.Timeout = _config.ConnectionTimeout;
                 if (_config.WebProxy != null) {
                     request.Proxy = _config.WebProxy;

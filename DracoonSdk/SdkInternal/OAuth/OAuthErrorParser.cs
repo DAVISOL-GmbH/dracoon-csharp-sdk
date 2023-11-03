@@ -48,7 +48,7 @@ namespace Dracoon.Sdk.SdkInternal.OAuth {
             }
         }
 
-        internal static void ParseError(IRestResponse response, RequestType requestType) {
+        internal static void ParseError(RestResponse response, RequestType requestType) {
             OAuthError oauthError = GetOAuthError(response.Content);
             DracoonApiCode resultCode = Parse(response.StatusCode, oauthError, requestType);
             DracoonClient.Log.Debug(Logtag, $"Query for '{requestType}' failed with OAuth error {resultCode.Text}");

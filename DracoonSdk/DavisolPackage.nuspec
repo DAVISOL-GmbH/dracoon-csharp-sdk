@@ -42,7 +42,7 @@
     <dependencies>
       <dependency id="Dracoon.Crypto.Sdk.Net8" version="3.2.3684.1"/>
       <dependency id="Newtonsoft.Json" version="13.0.3"/>
-      <dependency id="RestSharp" version="106.13.0"/>
+      <dependency id="RestSharp" version="110.2.0"/>
       <dependency id="BouncyCastle.Cryptography" version="2.2.1"/>
     </dependencies>
   </metadata>
@@ -51,37 +51,31 @@
     <!-- .Net Standard 2.0 -->
     <file src="bin\Release\netstandard2.0\Dracoon.Sdk.dll" target="lib\netstandard2.0\Dracoon.Sdk.dll" />
     <file src="bin\Release\netstandard2.0\Dracoon.Sdk.xml" target="lib\netstandard2.0\Dracoon.Sdk.xml" />
-    <file src="bin\Release\netstandard2.0\Dracoon.Sdk.dll.config" target="lib\netstandard2.0\Dracoon.Sdk.dll.config" />
     <file src="bin\Release\netstandard2.0\Dracoon.Sdk.pdb" target="lib\netstandard2.0\Dracoon.Sdk.pdb" />
       
     <!-- .Net Standard 2.1 -->
     <file src="bin\Release\netstandard2.1\Dracoon.Sdk.dll" target="lib\netstandard2.1\Dracoon.Sdk.dll" />
     <file src="bin\Release\netstandard2.1\Dracoon.Sdk.xml" target="lib\netstandard2.1\Dracoon.Sdk.xml" />
-    <file src="bin\Release\netstandard2.1\Dracoon.Sdk.dll.config" target="lib\netstandard2.1\Dracoon.Sdk.dll.config" />
     <file src="bin\Release\netstandard2.1\Dracoon.Sdk.pdb" target="lib\netstandard2.1\Dracoon.Sdk.pdb" />
       
     <!-- .Net Framework 4.7.2 -->
     <file src="bin\Release\net472\Dracoon.Sdk.dll" target="lib\net472\Dracoon.Sdk.dll" />
     <file src="bin\Release\net472\Dracoon.Sdk.xml" target="lib\net472\Dracoon.Sdk.xml" />
-    <file src="bin\Release\net472\Dracoon.Sdk.dll.config" target="lib\net472\Dracoon.Sdk.dll.config" />
     <file src="bin\Release\net472\Dracoon.Sdk.pdb" target="lib\net472\Dracoon.Sdk.pdb" />
       
     <!-- .Net Framework 4.8.1 -->
     <file src="bin\Release\net481\Dracoon.Sdk.dll" target="lib\net481\Dracoon.Sdk.dll" />
     <file src="bin\Release\net481\Dracoon.Sdk.xml" target="lib\net481\Dracoon.Sdk.xml" />
-    <file src="bin\Release\net481\Dracoon.Sdk.dll.config" target="lib\net481\Dracoon.Sdk.dll.config" />
     <file src="bin\Release\net481\Dracoon.Sdk.pdb" target="lib\net481\Dracoon.Sdk.pdb" />
       
     <!-- .Net 6.0 -->
     <file src="bin\Release\net6.0\Dracoon.Sdk.dll" target="lib\net6.0\Dracoon.Sdk.dll" />
     <file src="bin\Release\net6.0\Dracoon.Sdk.xml" target="lib\net6.0\Dracoon.Sdk.xml" />
-    <file src="bin\Release\net6.0\Dracoon.Sdk.dll.config" target="lib\net6.0\Dracoon.Sdk.dll.config" />
     <file src="bin\Release\net6.0\Dracoon.Sdk.pdb" target="lib\net6.0\Dracoon.Sdk.pdb" />
       
     <!-- .Net 7.0 -->
     <file src="bin\Release\net7.0\Dracoon.Sdk.dll" target="lib\net7.0\Dracoon.Sdk.dll" />
     <file src="bin\Release\net7.0\Dracoon.Sdk.xml" target="lib\net7.0\Dracoon.Sdk.xml" />
-    <file src="bin\Release\net7.0\Dracoon.Sdk.dll.config" target="lib\net7.0\Dracoon.Sdk.dll.config" />
     <file src="bin\Release\net7.0\Dracoon.Sdk.pdb" target="lib\net7.0\Dracoon.Sdk.pdb" />
   </files>
 </package>

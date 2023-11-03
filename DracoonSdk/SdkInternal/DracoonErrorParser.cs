@@ -14,7 +14,7 @@ namespace Dracoon.Sdk.SdkInternal {
         internal static IInternalDracoonClientBase DracoonClient { get; set; }
 
         private static bool CheckResponseHasHeader(object response, string headerName, string headerValue) {
-            if (response is IRestResponse restResponse && restResponse.Headers != null) {
+            if (response is RestResponse restResponse && restResponse.Headers != null) {
                 foreach (Parameter current in restResponse.Headers) {
                     if (headerName.Equals(current.Name) && headerValue.Equals(current.Value)) {
                         return true;
@@ -33,7 +33,7 @@ namespace Dracoon.Sdk.SdkInternal {
         }
 
         public static string GetResponseHeaderValue(object response, string headerName) {
-            if (response is IRestResponse restResponse && restResponse.Headers != null) {
+            if (response is RestResponse restResponse && restResponse.Headers != null) {
                 foreach (Parameter current in restResponse.Headers) {
                     if (headerName.Equals(current.Name)) {
                         return current.Value.ToString();
@@ -90,7 +90,7 @@ namespace Dracoon.Sdk.SdkInternal {
             }
         }
 
-        private static DracoonApiCode ParseApiErrorCodeFromResponse(IRestResponse response, RequestType requestType) {
+        private static DracoonApiCode ParseApiErrorCodeFromResponse(RestResponse response, RequestType requestType) {
             var responseContent = response.Content;
             if (!string.IsNullOrEmpty(responseContent)) {
                 // Check if the API is in maintenance (usually every wednesday night)
@@ -102,7 +102,7 @@ namespace Dracoon.Sdk.SdkInternal {
             return Parse((int)response.StatusCode, response, apiError, requestType, DracoonClient.Log);
         }
 
-        internal static void ParseError(IRestResponse response, RequestType requestType, long elapsedMilliseconds) {
+        internal static void ParseError(RestResponse response, RequestType requestType, long elapsedMilliseconds) {
             DracoonApiCode resultCode = ParseApiErrorCodeFromResponse(response, requestType);
             DracoonClient.Log.Error(LogTag, $"Query for '{requestType}' failed with parsed error '{resultCode.Text}' after {elapsedMilliseconds} ms (code {resultCode.Code}, HTTP status {((int)response.StatusCode)} {response.StatusCode}, {(response.ResponseUri is null ? $"no response from {response.Request.Resource}" : $"response from {response.ResponseUri}")}){(resultCode.Code == DracoonApiCode.SERVER_MAINTENANCE.Code ? "" : $": {response.Content}")}");
 
