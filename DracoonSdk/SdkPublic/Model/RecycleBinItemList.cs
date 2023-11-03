@@ -6,6 +6,6 @@ namespace Dracoon.Sdk.Model {
     ///         <see cref="RangeListBase{T}.Offset" /> and <see cref="RangeListBase{T}.Limit"/> can be used to get the start and length of the page.
     ///     </para>
     /// </summary>
-    public class RecycleBinItemList : RangeListBase<RecycleBinItem> {
+    public sealed class RecycleBinItemList : RangeListBase<RecycleBinItem> {
     }
 }

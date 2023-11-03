@@ -1,4 +1,10 @@
 namespace Dracoon.Sdk.Model {
-    public class PendingAssignmentList : RangeListBase<PendingAssignmentData> {
+    /// <summary>
+    ///     This model stores a list of pending assignments to a data room which requires approval by the data room admin. The list may be a paginated response. Implements the <see cref="RangeListBase{T}"/> collection base class.
+    ///     <para>
+    ///         <see cref="RangeListBase{T}.Offset"/> and <see cref="RangeListBase{T}.Limit"/> can be used to get the start and length of the page.
+    ///     </para>
+    /// </summary>
+    public sealed class PendingAssignmentList : RangeListBase<PendingAssignmentData> {
     }
 }

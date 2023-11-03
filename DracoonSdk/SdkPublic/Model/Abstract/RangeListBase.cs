@@ -1,4 +1,8 @@
 namespace Dracoon.Sdk.Model {
+    /// <summary>
+    /// Implements the base class of paged collections of items.
+    /// </summary>
+    /// <typeparam name="T">The type of items in the collection.</typeparam>
     public abstract class RangeListBase<T> : SimpleListBase<T> {
 
         /// <summary>

@@ -3,7 +3,7 @@ using RestSharp;
 namespace Dracoon.Sdk.Model {
     public sealed class RequestInformation {
 
-        internal RequestInformation(RestClient client, RestRequest request, IRestResponse response) {
+        internal RequestInformation(RestClient client, RestRequest request, RestResponse response) {
             Client = client;
             Request = request;
             Response = response;
@@ -13,6 +13,6 @@ namespace Dracoon.Sdk.Model {
 
         public RestRequest Request { get; private set; }
 
-        public IRestResponse Response { get; private set; }
+        public RestResponse Response { get; private set; }
     }
 }
