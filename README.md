@@ -10,30 +10,25 @@ A library to access the DRACOON REST API.
 ## Fork Notice
 
 This package is forked by DAVISOL GmbH. This fork has three main focuses:
-- Make SDK platform independent by supporting .NET 5.0 (update to .NET 6.0 is planned for near future)
+- Make SDK platform independent by supporting .NET 8.0
 - Extend SDK to provide access to more REST API routes to cover espacially management and house keeping requirements
 - Keep internal dependencies up-to-date, allowing use of their recent enhancements as well as recent security and bug fixes
 
-### .NET 5.0 compliance
+### .NET Standard 2.0 compliance
 
-To assure multi-platform support, we had updated the package's projects to .NET 5.0. We've dropped support for legacy .NET versions (up to 4.x.y) as well as support for .NET Standard 2.x. Additionally, references to `System.Drawing.Common` were removed and image functionality (for avatars only) is now based on [SkiaSharp](https://github.com/mono/SkiaSharp).
+This package was ported by DAVISOL GmbH to .NET Standard 2.x with support up to .NET 7.0 whilst still supporting legacy .NET framework (.NET 4.7.2 and 4.8.1). Please note that we do not offer binary releases. For official releases from Dracoon please refer to the Download section below.
 
-A [.NET Standard 2.0 compliant version](https://github.com/DAVISOL-GmbH/dracoon-csharp-sdk/tree/netstandard) is also available. Please note, that we've stopped working on that branch. 
-
-Learn more about our decision to generally move away from System.Drawing.Common [here](https://docs.microsoft.com/en-us/dotnet/core/compatibility/core-libraries/6.0/system-drawing-common-windows-only).
+Support for .NET 8.0 coming soon (after official release, which is currently planned for 2023-11-14).
 
 ### Fork Dependent Requirements
 
-First of all, if you wan't to use this package, you *MUST* use .NET 5.0.
+As a minimum requirement, you have to use a .NET Standard 2.0 compliant .NET implementation. Refer to [Microsoft Docs](https://learn.microsoft.com/en-us/dotnet/standard/net-standard?tabs=net-standard-2-0#select-net-standard-version) for a list of compatible implementations of .NET, .NET Framework, .NET Core, Mono, Xamarin and UWP.
 
 Also, make sure you're referencing at least the following dependencies:
-1. Bouncy Castle (= 1.9.0): [nuget](https://www.nuget.org/packages/BouncyCastle/)
-2. Dracoon Crypto SDK (.NET 5.0 fork by DAVISOL)(= 2.1.0): [GitHub](https://github.com/DAVISOL-GmbH/dracoon-csharp-crypto-sdk)
-3. NewtonSoft.Json (= 13.0.1): [nuget](https://www.nuget.org/packages/Newtonsoft.Json/)
+1. Bouncy Castle (= 2.2.1): [nuget](https://www.nuget.org/packages/BouncyCastle/)
+2. Dracoon Crypto SDK (.NET 8.0 capable fork by DAVISOL)(= 3.2.0): [GitHub](https://github.com/DAVISOL-GmbH/dracoon-csharp-crypto-sdk)
+3. NewtonSoft.Json (= 13.0.3): [nuget](https://www.nuget.org/packages/Newtonsoft.Json/)
 4. RestSharp (= 106.11.5): [nuget](https://www.nuget.org/packages/RestSharp/)
-5. SkiaSharp (= 2.80.3): [nuget](https://www.nuget.org/packages/SkiaSharp/)
-
-The dependency to `System.Drawing.Common` does not exist any longer, as its functionality was fully replaced by SkiaSharp.
 
 ### Fork's License and Copyright
 
@@ -48,22 +43,26 @@ Copyright 2021 DAVISOL GmbH. All rights reserved.
 
 ## Migration from 2.x versions
 
-The 2.x branches and releases of this fork relies on SkiaSharp as a replacement for the Windows-only System.Drawing.Common library. Following the recent changes in the official SDK implementation, the user avatar routes are now working with an agnostic byte array. **All references to the SkiaSharp dependencies are removed with version 3.2.** Now the consumer of the avator routes is responsible to implement image processing based on raw image data.
+The 2.x branches and releases of this fork relied on SkiaSharp as a replacement for the Windows-only System.Drawing.Common library. Following the recent changes in the official SDK implementation, the user avatar routes are now working with an agnostic byte array. **All references to the SkiaSharp dependencies are removed with version 3.2**. Now the consumer of the avatar routes is responsible to implement image processing based on the raw image data.
+
+The following examples show how to read and update the avatar with the previously used [SkiaSharp library](https://www.nuget.org/packages/SkiaSharp/).
 
 ### Read avatar images with SkiaSharp (example)
 
+```
 // client is assumed to be a valid, authenticated instance of DracoonClient
 var avatarImageBytes = client.Account.GetAvatar();	// returns a byte[]
 SkiaSharp.SKData avatarImage = SkiaSharp.SKData.CreateCopy(avatarImageBytes);
+```
 
 ### Update avatar image with SkiaSharp (example)
 
-// client is assumed to be a valid, authenticated instance of DracoonClient
+```
 SkiaSharp.SKData avatarImage = [avatar image];
 ReadOnlySpan<byte> avatarBytes = avatarImage.AsSpan();
 // client is assumed to be a valid, authenticated instance of DracoonClient
 client.Account.UpdateAvatar(avatarBytes.ToArray());
-
+```
 
 ## Setup
 
