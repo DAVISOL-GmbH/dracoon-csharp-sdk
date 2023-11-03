@@ -10,10 +10,14 @@ namespace Dracoon.Sdk.Model {
             ModificationTimestamp = modificationTime;
         }
 
-        /// <include file = "ModelDoc.xml" path='docs/members[@name="node"]/CreationTimestamp/*'/>
+        /// <summary>
+        ///     The creation date of the physical file.
+        /// </summary>
         public DateTime? CreationTimestamp { get; internal set; }
 
-        /// <include file = "ModelDoc.xml" path='docs/members[@name="node"]/ModificationTimestamp/*'/>
+        /// <summary>
+        ///     The modification date of hte physical file. Note: This date is NOT changed on meta data changes.
+        /// </summary>
         public DateTime? ModificationTimestamp { get; internal set; }
     }
 }

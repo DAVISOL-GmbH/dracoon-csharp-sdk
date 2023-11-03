@@ -10,15 +10,42 @@ namespace Dracoon.Sdk.Model {
             Notes = notes;
         }
 
-        /// <include file="UserRequestsDoc.xml" path='docs/members[@name="updateFileRequest"]/Id/*'/>
+        /// <summary>
+        ///     The node id of the folder which should be updated.
+        /// </summary>
         public long Id { get; private set; }
 
-        /// <include file="UserRequestsDoc.xml" path='docs/members[@name="updateFileRequest"]/Name/*'/>
+        /// <summary>
+        ///     The new name of the folder.
+        ///     <para>
+        ///         Nullable
+        ///     </para>
+        /// </summary>
         public string Name { get; set; }
 
-        /// <include file="UserRequestsDoc.xml" path='docs/members[@name="updateFileRequest"]/Notes/*'/>
+        /// <summary>
+        ///     The new notes of the folder.
+        ///     <para>
+        ///         Nullable
+        ///     </para>
+        /// </summary>
         public string Notes { get; set; }
 
+        /// <summary>
+        ///     The external creation time of this node.
+        ///     <para>
+        ///         Nullable. If not set, the default is the current server time in UTC.
+        ///     </para>
+        /// </summary>
+        public DateTime? CreationTime { get; set; }
+
+        /// <summary>
+        ///     The content modification time of this node.
+        ///     <para>
+        ///         Nullable. If not set, the default is the current server time in UTC.
+        ///     </para>
+        /// </summary>
+        public DateTime? ModificationTime { get; set; }
 
     }
 }

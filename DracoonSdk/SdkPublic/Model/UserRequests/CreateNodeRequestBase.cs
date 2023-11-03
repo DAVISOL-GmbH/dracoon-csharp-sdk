@@ -9,10 +9,24 @@ namespace Dracoon.Sdk.Model {
             Notes = notes;
         }
 
-        /// <include file = "UserRequestsDoc.xml" path='docs/members[@name="createFolderRequest"]/Name/*'/>
+        /// <summary>
+        ///     The name of the new node.
+        /// </summary>
         public string Name { get; private set; }
 
-        /// <include file = "UserRequestsDoc.xml" path='docs/members[@name="createFolderRequest"]/Notes/*'/>
+        /// <summary>
+        ///     The notes for the new node.
+        /// </summary>
         public string Notes { get; set; }
+
+        /// <summary>
+        ///     The real creation time of the file.
+        /// </summary>
+        public DateTime? CreationTime { get; set; }
+
+        /// <summary>
+        ///     The last modification time of the file.
+        /// </summary>
+        public DateTime? ModificationTime { get; set; }
     }
 }
