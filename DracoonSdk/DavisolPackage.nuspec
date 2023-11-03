@@ -1,25 +1,49 @@
 <?xml version="1.0"?>
 <package >
   <metadata>
-    <id>Dracoon.Sdk.Net5</id>
+    <!-- The identifier that must be unique within the hosting gallery -->
+    <id>Dracoon.Sdk.Net8</id>
+
+    <!-- The package version number that is used when resolving dependencies -->
     <version>$version$</version>
-    <title>DRACOON SDK (.NET 5.0)</title>
+
+    <!-- Authors contain text that appears directly on the gallery -->
     <authors>DRACOON developers</authors>
+
+    <!-- Owners are typically nuget.org identities that allow gallery
+            users to easily find other packages by the same owners.  -->
     <owners>dracoon</owners>
+
+    <!-- License and project URLs provide links for the gallery -->
     <license type="expression">Apache-2.0</license>
+
     <projectUrl>https://github.com/DAVISOL-GmbH/dracoon-csharp-sdk</projectUrl>
+
+    <!-- The icon is used in Visual Studio's package manager UI -->
     <iconUrl>https://raw.githubusercontent.com/dracoon/dracoon-csharp-sdk/master/DracoonSdk/DracoonSdk_NugetImage.png</iconUrl>
+
+    <!-- If true, this value prompts the user to accept the license when
+            installing the package. -->
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <description>The DRACOON SDK for C# with enhancements by DAVISOL. This package references .NET 5.0 and can therefore be used on several platforms.</description>
+
+    <!-- The description can be used in package manager UI. Note that the
+            nuget.org gallery uses information you add in the portal. -->
+    <description>The DRACOON SDK for C# with enhancements by DAVISOL. This package references .NET 8.0 and can therefore be used on several platforms.</description>
+
+    <!-- Copyright information -->
     <copyright>Copyright ©2018 DRACOON GmbH, Copyright ©2021 DAVISOL GmbH</copyright>
+
+    <!-- Tags appear in the gallery and can be used for tag searches -->
     <tags>DRACOON rest api sdk net5 netcore netframework davisol</tags>
-    <releaseNotes>Enhanced fork of offical Dracoon C# Crypto SDK, ported to .NET 5.0. Official release notes can be found at https://github.com/dracoon/dracoon-csharp-sdk</releaseNotes>
+
+    <releaseNotes>Enhanced fork of offical Dracoon C# SDK, ported to .NET 8.0. Official release notes can be found at https://github.com/dracoon/dracoon-csharp-sdk</releaseNotes>
+      
+      <!-- Dependencies are automatically installed when the package is installed -->
     <dependencies>
-      <dependency id="Dracoon.Crypto.Sdk.Net5" version="2.1.1727.1"/>
-      <dependency id="Newtonsoft.Json" version="13.0.1"/>
+      <dependency id="Dracoon.Crypto.Sdk.Net8" version="3.2.3684.1"/>
+      <dependency id="Newtonsoft.Json" version="13.0.3"/>
       <dependency id="RestSharp" version="106.13.0"/>
-      <dependency id="Portable.BouncyCastle" version="1.9.0"/>
-      <dependency id="SkiaSharp" version="2.80.3"/>
+      <dependency id="BouncyCastle.Cryptography" version="2.2.1"/>
     </dependencies>
   </metadata>
   <files>
@@ -42,10 +66,22 @@
     <file src="bin\Release\net472\Dracoon.Sdk.dll.config" target="lib\net472\Dracoon.Sdk.dll.config" />
     <file src="bin\Release\net472\Dracoon.Sdk.pdb" target="lib\net472\Dracoon.Sdk.pdb" />
       
-    <!-- .Net 5.0 -->
-    <file src="bin\Release\net5.0\Dracoon.Sdk.dll" target="lib\net5.0\Dracoon.Sdk.dll" />
-    <file src="bin\Release\net5.0\Dracoon.Sdk.xml" target="lib\net5.0\Dracoon.Sdk.xml" />
-    <file src="bin\Release\net5.0\Dracoon.Sdk.dll.config" target="lib\net5.0\Dracoon.Sdk.dll.config" />
-    <file src="bin\Release\net5.0\Dracoon.Sdk.pdb" target="lib\net5.0\Dracoon.Sdk.pdb" />
+    <!-- .Net Framework 4.8.1 -->
+    <file src="bin\Release\net481\Dracoon.Sdk.dll" target="lib\net481\Dracoon.Sdk.dll" />
+    <file src="bin\Release\net481\Dracoon.Sdk.xml" target="lib\net481\Dracoon.Sdk.xml" />
+    <file src="bin\Release\net481\Dracoon.Sdk.dll.config" target="lib\net481\Dracoon.Sdk.dll.config" />
+    <file src="bin\Release\net481\Dracoon.Sdk.pdb" target="lib\net481\Dracoon.Sdk.pdb" />
+      
+    <!-- .Net 6.0 -->
+    <file src="bin\Release\net6.0\Dracoon.Sdk.dll" target="lib\net6.0\Dracoon.Sdk.dll" />
+    <file src="bin\Release\net6.0\Dracoon.Sdk.xml" target="lib\net6.0\Dracoon.Sdk.xml" />
+    <file src="bin\Release\net6.0\Dracoon.Sdk.dll.config" target="lib\net6.0\Dracoon.Sdk.dll.config" />
+    <file src="bin\Release\net6.0\Dracoon.Sdk.pdb" target="lib\net6.0\Dracoon.Sdk.pdb" />
+      
+    <!-- .Net 7.0 -->
+    <file src="bin\Release\net7.0\Dracoon.Sdk.dll" target="lib\net7.0\Dracoon.Sdk.dll" />
+    <file src="bin\Release\net7.0\Dracoon.Sdk.xml" target="lib\net7.0\Dracoon.Sdk.xml" />
+    <file src="bin\Release\net7.0\Dracoon.Sdk.dll.config" target="lib\net7.0\Dracoon.Sdk.dll.config" />
+    <file src="bin\Release\net7.0\Dracoon.Sdk.pdb" target="lib\net7.0\Dracoon.Sdk.pdb" />
   </files>
 </package>
