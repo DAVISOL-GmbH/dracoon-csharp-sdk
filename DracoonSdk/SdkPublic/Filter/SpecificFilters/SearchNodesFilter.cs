@@ -1,6 +1,6 @@
 namespace Dracoon.Sdk.Filter {
     /// <summary>
-    ///     This class provides filters for <see cref="Dracoon.Sdk.INodes.SearchNodes(string, long, long, long, SearchNodesFilter, Sort.SearchNodesSort)"/>.
+    ///     This class provides filters for <see cref="Dracoon.Sdk.INodes.SearchNodes(string, long, int, long, long, SearchNodesFilter, Sort.SearchNodesSort)"/>.
     /// </summary>
     public class SearchNodesFilter : DracoonFilter {
         /// <summary>
@@ -43,6 +43,12 @@ namespace Dracoon.Sdk.Filter {
         /// </summary>
         public static UpdatedByIdFilter UpdatedById => new UpdatedByIdFilter();
 
+        /// <summary>
+        ///     Gets a new filter for the UpdatedAt field of a node (<see cref="Dracoon.Sdk.Model.Node"/>).
+        ///     <para>
+        ///         See also <seealso cref="Dracoon.Sdk.Filter.UpdatedAtFilter"/>
+        ///     </para>
+        /// </summary>
         public static UpdatedAtFilter UpdatedAt => new UpdatedAtFilter();
 
         /// <summary>
@@ -61,6 +67,12 @@ namespace Dracoon.Sdk.Filter {
         /// </summary>
         public static CreatedByIdFilter CreatedById => new CreatedByIdFilter();
 
+        /// <summary>
+        ///     Gets a new filter for created at timestamp.
+        ///     <para>
+        ///         See also <seealso cref="Dracoon.Sdk.Filter.CreatedAtFilter"/>
+        ///     </para>
+        /// </summary>
         public static CreatedAtFilter CreatedAt => new CreatedAtFilter();
 
         /// <summary>
@@ -71,6 +83,12 @@ namespace Dracoon.Sdk.Filter {
         /// </summary>
         public static FileTypeFilter FileType => new FileTypeFilter();
 
+        /// <summary>
+        ///     Gets a new branch version filter.
+        ///     <para>
+        ///         See also <seealso cref="Dracoon.Sdk.Filter.BranchVersionFilter"/>
+        ///     </para>
+        /// </summary>
         public static BranchVersionFilter BranchVersion => new BranchVersionFilter();
 
 
@@ -138,11 +156,11 @@ namespace Dracoon.Sdk.Filter {
             FiltersList.Add(updatedByFilter);
         }
 
-        public void AddUpdatedAtFilter(DracoonFilterType<UpdatedAtFilter> updatedAtFilter) {
-            CheckFilter(updatedAtFilter, nameof(updatedAtFilter));
-            FiltersList.Add(updatedAtFilter);
-        }
-
+        /// <summary>
+        ///     Adds a updated at filter to the search nodes filter.
+        /// </summary>
+        /// <param name="updatedAtFilter">The defined updated at filter.</param>
+        /// <exception cref="System.ArgumentException"></exception>
         public void AddUpdatedAtFilter(DracoonFilterType<UpdatedAtFilter> updatedAtFilter) {
             CheckFilter(updatedAtFilter, nameof(updatedAtFilter));
             FiltersList.Add(updatedAtFilter);
@@ -168,11 +186,11 @@ namespace Dracoon.Sdk.Filter {
             FiltersList.Add(fileTypeFilter);
         }
 
-        public void AddBranchVersionFilter(DracoonFilterType<BranchVersionFilter> branchVersionFilter) {
-            CheckFilter(branchVersionFilter, nameof(branchVersionFilter));
-            FiltersList.Add(branchVersionFilter);
-        }
-
+        /// <summary>
+        ///     Adds a branch version (revision) filter to the search nodes filter.
+        /// </summary>
+        /// <param name="branchVersionFilter">The defined branch version filter.</param>
+        /// <exception cref="System.ArgumentException"></exception>
         public void AddBranchVersionFilter(DracoonFilterType<BranchVersionFilter> branchVersionFilter) {
             CheckFilter(branchVersionFilter, nameof(branchVersionFilter));
             FiltersList.Add(branchVersionFilter);
@@ -198,11 +216,11 @@ namespace Dracoon.Sdk.Filter {
             FiltersList.Add(createdByFilter);
         }
 
-        public void AddCreatedAtFilter(DracoonFilterType<CreatedAtFilter> createdAtFilter) {
-            CheckFilter(createdAtFilter, nameof(createdAtFilter));
-            FiltersList.Add(createdAtFilter);
-        }
-
+        /// <summary>
+        ///     Adds a created at filter to the search nodes filter.
+        /// </summary>
+        /// <param name="createdAtFilter">The defined created at filter.</param>
+        /// <exception cref="System.ArgumentException"></exception>
         public void AddCreatedAtFilter(DracoonFilterType<CreatedAtFilter> createdAtFilter) {
             CheckFilter(createdAtFilter, nameof(createdAtFilter));
             FiltersList.Add(createdAtFilter);

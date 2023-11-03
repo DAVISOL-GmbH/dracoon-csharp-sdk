@@ -183,13 +183,13 @@ namespace Dracoon.Sdk.SdkInternal {
 
         #region Avatar functions
 
-        public SkiaSharp.SKData GetAvatar() {
+        public byte[] GetAvatar() {
             ApiAvatarInfo apiAvatarInfo = GetApiAvatarInfoInternally();
 
             using (WebClient avatarClient = _client.Builder.ProvideAvatarDownloadWebClient()) {
                 byte[] avatarImageBytes =
                     _client.Executor.ExecuteWebClientDownload(avatarClient, new Uri(apiAvatarInfo.AvatarUri), RequestType.GetUserAvatar);
-                return SkiaSharp.SKData.CreateCopy(avatarImageBytes);
+                return avatarImageBytes;
             }
         }
 
@@ -214,11 +214,9 @@ namespace Dracoon.Sdk.SdkInternal {
             return UserMapper.FromApiAvatarInfo(defaultAvatarInfo);
         }
 
-        public AvatarInfo UpdateAvatar(SkiaSharp.SKData newAvatar) {
+        public AvatarInfo UpdateAvatar(byte[] newAvatar) {
             _client.Executor.CheckApiServerVersion();
             _client.Executor.MustNotNull(nameof(newAvatar));
-
-            ReadOnlySpan<byte> avatarBytes = newAvatar.AsSpan();
 
             #region Build multipart
 
@@ -228,8 +226,8 @@ namespace Dracoon.Sdk.SdkInternal {
             byte[] packageFooter = ApiConfig.ENCODING.GetBytes(string.Format("\r\n--" + formDataBoundary + "--"));
             byte[] multipartFormatedChunkData = new byte[packageHeader.Length + packageFooter.Length + newAvatar.Length];
             Buffer.BlockCopy(packageHeader, 0, multipartFormatedChunkData, 0, packageHeader.Length);
-            Buffer.BlockCopy(avatarBytes.ToArray(), 0, multipartFormatedChunkData, packageHeader.Length, avatarBytes.Length);
-            Buffer.BlockCopy(packageFooter, 0, multipartFormatedChunkData, packageHeader.Length + avatarBytes.Length, packageFooter.Length);
+            Buffer.BlockCopy(newAvatar, 0, multipartFormatedChunkData, packageHeader.Length, newAvatar.Length);
+            Buffer.BlockCopy(packageFooter, 0, multipartFormatedChunkData, packageHeader.Length + newAvatar.Length, packageFooter.Length);
 
             #endregion
 

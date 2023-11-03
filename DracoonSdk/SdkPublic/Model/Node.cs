@@ -100,12 +100,6 @@ namespace Dracoon.Sdk.Model {
         /// </summary>
         public UserInfo UpdatedBy { get; internal set; }
 
-        /// <include file = "ModelDoc.xml" path='docs/members[@name="node"]/CreationTimestamp/*'/>
-        public DateTime? CreationTimestamp { get; internal set; }
-
-        /// <include file = "ModelDoc.xml" path='docs/members[@name="node"]/ModificationTimestamp/*'/>
-        public DateTime? ModificationTimestamp { get; internal set; }
-
         /// <summary>
         ///     Is set to <c>true</c> if the parent permissions are also applied to this node.
         /// </summary>

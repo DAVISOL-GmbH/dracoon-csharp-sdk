@@ -78,19 +78,6 @@ namespace Dracoon.Sdk.SdkInternal.Mapper {
             return userAuthData;
         }
 
-        internal static UserGroup FromApiUserGroup(ApiUserGroup apiUserGroup) {
-            if (apiUserGroup == null) {
-                return null;
-            }
-
-            UserGroup userGroup = new UserGroup {
-                Id = apiUserGroup.Id,
-                IsMember = apiUserGroup.IsMember,
-                Name = apiUserGroup.Name
-            };
-            return userGroup;
-        }
-
         private static List<UserRole> ConvertApiUserRoles(ApiUserRoleList apiUserRoles) {
             List<UserRole> returnValue = new List<UserRole>();
             if (apiUserRoles == null) {
@@ -237,6 +224,10 @@ namespace Dracoon.Sdk.SdkInternal.Mapper {
         }
 
         private static UserGroup FromApiUserGroup(ApiUserGroup apiUserGroup) {
+            if (apiUserGroup is null) {
+                return null;
+            }
+
             UserGroup userGroup = new UserGroup() {
                 Id = apiUserGroup.Id,
                 IsMember = apiUserGroup.IsMember,
@@ -267,21 +258,6 @@ namespace Dracoon.Sdk.SdkInternal.Mapper {
             UserAttributes userAttributes = new UserAttributes();
             CommonMapper.FromApiSimpleList(apiUserAttributes, userAttributes, x => CommonMapper.FromApiKeyValuePair(x));
             return userAttributes;
-        }
-
-        private static UserAuthData FromApiUserAuthData(ApiUserAuthData apiUserAuthData) {
-            if (apiUserAuthData == null) {
-                return null;
-            }
-            UserAuthData userAuthData = new UserAuthData() {
-                Method = EnumConverter.ConvertValueToUserAuthMethodEnum(apiUserAuthData.Method),
-                Login = apiUserAuthData.Login,
-                Password = apiUserAuthData.Password,
-                MustChangePassword = apiUserAuthData.MustChangePassword,
-                ADConfigId = apiUserAuthData.AdConfigId,
-                OIDConfigId = apiUserAuthData.OidConfigId
-            };
-            return userAuthData;
         }
 
         internal static AttributesResponse FromApiAttributesResponse(ApiAttributesResponse apiAttributesResponse) {
@@ -330,18 +306,18 @@ namespace Dracoon.Sdk.SdkInternal.Mapper {
             return apiUserAttributes;
         }
 
-        private static ApiUserAuthData ToApiUserAuthData(UserAuthData userAuthData) {
+        private static ApiAuthData ToApiUserAuthData(UserAuthData userAuthData) {
             if (userAuthData == null) {
                 return null;
             }
 
-            ApiUserAuthData apiUserAuthData = new ApiUserAuthData() {
+            ApiAuthData apiUserAuthData = new ApiAuthData() {
                 Method = EnumConverter.ConvertUserAuthMethodEnumToValue(userAuthData.Method),
                 Login = userAuthData.Login,
                 Password = userAuthData.Password,
                 MustChangePassword = userAuthData.MustChangePassword,
-                AdConfigId = userAuthData.ADConfigId,
-                OidConfigId = userAuthData.OIDConfigId
+                ADConfigId = userAuthData.ADConfigId,
+                OIDConfigId = userAuthData.OIDConfigId
             };
             return apiUserAuthData;
         }
@@ -388,6 +364,27 @@ namespace Dracoon.Sdk.SdkInternal.Mapper {
                 default:
                     throw new DracoonCryptoException(new DracoonCryptoCode(DracoonCryptoCode.UNKNOWN_ALGORITHM_ERROR.Code, "Unknown user key pair algorithm: " + algorithm.GetStringValue() + "."));
             }
+        }
+
+        internal static ShareSubscription FromApiShareSubscription(ApiShareSubscription apiSubscription) {
+            ShareSubscription subscription = new ShareSubscription {
+                ShareId = apiSubscription.ShareId,
+                AuthParentRoomId = apiSubscription.AuthParentId
+            };
+            return subscription;
+        }
+
+        internal static ShareSubscriptionList FromApiShareSubscriptionList(ApiShareSubscriptionList apiSubscriptionList) {
+            ShareSubscriptionList subscriptionList = new ShareSubscriptionList {
+                Offset = apiSubscriptionList.Range.Offset,
+                Limit = apiSubscriptionList.Range.Limit,
+                Total = apiSubscriptionList.Range.Total,
+                Items = new List<ShareSubscription>()
+            };
+            foreach (ApiShareSubscription apiSubscription in apiSubscriptionList.Items) {
+                subscriptionList.Items.Add(FromApiShareSubscription(apiSubscription));
+            }
+            return subscriptionList;
         }
 
     }

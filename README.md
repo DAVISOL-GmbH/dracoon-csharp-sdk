@@ -46,6 +46,25 @@ The enhancements in this fork are done by DAVISOL GmbH. We also publish the full
 Copyright DRACOON GmbH. All rights reserved.\
 Copyright 2021 DAVISOL GmbH. All rights reserved.
 
+## Migration from 2.x versions
+
+The 2.x branches and releases of this fork relies on SkiaSharp as a replacement for the Windows-only System.Drawing.Common library. Following the recent changes in the official SDK implementation, the user avatar routes are now working with an agnostic byte array. **All references to the SkiaSharp dependencies are removed with version 3.2.** Now the consumer of the avator routes is responsible to implement image processing based on raw image data.
+
+### Read avatar images with SkiaSharp (example)
+
+// client is assumed to be a valid, authenticated instance of DracoonClient
+var avatarImageBytes = client.Account.GetAvatar();	// returns a byte[]
+SkiaSharp.SKData avatarImage = SkiaSharp.SKData.CreateCopy(avatarImageBytes);
+
+### Update avatar image with SkiaSharp (example)
+
+// client is assumed to be a valid, authenticated instance of DracoonClient
+SkiaSharp.SKData avatarImage = [avatar image];
+ReadOnlySpan<byte> avatarBytes = avatarImage.AsSpan();
+// client is assumed to be a valid, authenticated instance of DracoonClient
+client.Account.UpdateAvatar(avatarBytes.ToArray());
+
+
 ## Setup
 
 #### Minimum Requirements

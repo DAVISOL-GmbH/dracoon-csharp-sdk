@@ -63,8 +63,8 @@ namespace Dracoon.Sdk.SdkInternal.Mapper {
                 Classification = EnumConverter.ConvertClassificationEnumToValue(fileUploadRequest.Classification),
                 Notes = fileUploadRequest.Notes,
                 Expiration = apiExpiration,
-                CreationTimestamp = fileUploadRequest.CreationTime,
-                ModificationTimestamp = fileUploadRequest.ModificationTime
+                CreationTimestamp = fileUploadRequest.CreationTimestamp,
+                ModificationTimestamp = fileUploadRequest.ModificationTimestamp
             };
             return apiCreateFileUpload;
         }

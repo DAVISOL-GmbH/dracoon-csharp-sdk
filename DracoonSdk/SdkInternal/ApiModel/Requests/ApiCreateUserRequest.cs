@@ -39,7 +39,7 @@ namespace Dracoon.Sdk.SdkInternal.ApiModel.Requests {
             get; internal set;
         }
         [JsonProperty("authData", NullValueHandling = NullValueHandling.Ignore)]
-        public ApiUserAuthData AuthData {
+        public ApiAuthData AuthData {
             get; internal set;
         }
         [JsonProperty("isNonmemberViewer", NullValueHandling = NullValueHandling.Ignore)]

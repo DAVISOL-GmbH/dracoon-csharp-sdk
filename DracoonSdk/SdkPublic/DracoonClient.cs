@@ -11,24 +11,36 @@ namespace Dracoon.Sdk {
     ///             <description>Following handlers are available:</description>
     ///         </listheader>
     ///         <item>
-    ///             <term><see cref="Dracoon.Sdk.DracoonClient.Server"/>:</term>
-    ///             <description><see cref="Dracoon.Sdk.IServer"/></description>
+    ///             <term><see cref="Server"/>:</term>
+    ///             <description><see cref="IServer"/></description>
     ///         </item>
     ///         <item>
-    ///             <term><see cref="Dracoon.Sdk.DracoonClient.Account"/>:</term>
-    ///             <description><see cref="Dracoon.Sdk.IAccount"/></description>
+    ///             <term><see cref="Account"/>:</term>
+    ///             <description><see cref="IAccount"/></description>
     ///         </item>
     ///         <item>
-    ///             <term><see cref="Dracoon.Sdk.DracoonClient.Nodes"/>:</term>
-    ///             <description><see cref="Dracoon.Sdk.INodes"/></description>
+    ///             <term><see cref="Nodes"/>:</term>
+    ///             <description><see cref="INodes"/></description>
     ///         </item>
     ///         <item>
-    ///             <term><see cref= "Dracoon.Sdk.DracoonClient.Shares"/>:</term>
-    ///             <description><see cref="Dracoon.Sdk.IShares"/></description>
+    ///             <term><see cref= "Shares"/>:</term>
+    ///             <description><see cref="IShares"/></description>
     ///         </item>
     ///         <item>
-    ///             <term><see cref= "Dracoon.Sdk.DracoonClient.Users"/>:</term>
-    ///             <description><see cref="Dracoon.Sdk.IUsers"/></description>
+    ///             <term><see cref= "Users"/>:</term>
+    ///             <description><see cref="IUsers"/></description>
+    ///         </item>
+    ///         <item>
+    ///             <term><see cref= "Groups"/>:</term>
+    ///             <description><see cref="IGroups"/></description>
+    ///         </item>
+    ///         <item>
+    ///             <term><see cref= "Roles"/>:</term>
+    ///             <description><see cref="IRoles"/></description>
+    ///         </item>
+    ///         <item>
+    ///             <term><see cref= "EventLog"/>:</term>
+    ///             <description><see cref="IEventLog"/></description>
     ///         </item>
     ///     </list>
     /// </summary>
@@ -37,51 +49,36 @@ namespace Dracoon.Sdk {
         #region Class-Members
 
         /// <summary>
-        ///     The used target server URI.
-        /// </summary>
-        public Uri ServerUri { get; }
-
-        /// <summary>
-        ///     The current authorization data. See also <seealso cref="Dracoon.Sdk.DracoonAuth"/>
-        /// </summary>
-        public DracoonAuth Auth {
-            get => _oAuth.Auth;
-            set => _oAuth.Auth = value;
-        }
-
-        /// <summary>
         ///     The client's encryption password.
         /// </summary>
         public string EncryptionPassword { get; set; }
 
         #region Internal
 
-        private static DracoonHttpConfig _httpConfig;
+        //private static DracoonHttpConfig _httpConfig;
 
-        internal static DracoonHttpConfig HttpConfig {
-            get => _httpConfig ?? (_httpConfig = new DracoonHttpConfig());
-            set => _httpConfig = value;
-        }
+        //internal static DracoonHttpConfig HttpConfig {
+        //    get => _httpConfig ?? (_httpConfig = new DracoonHttpConfig());
+        //    set => _httpConfig = value;
+        //}
 
 
-        private static ILog _logger;
+        //private static ILog _logger;
 
-        internal static ILog Log {
-            get => _logger ?? (_logger = new EmptyLog());
-            set => _logger = value;
-        }
+        //internal static ILog Log {
+        //    get => _logger ?? (_logger = new EmptyLog());
+        //    set => _logger = value;
+        //}
 
-        private readonly IRequestBuilder _builder;
+        //private readonly IRequestBuilder _builder;
 
-        IRequestBuilder IInternalDracoonClient.Builder => _builder;
+        //IRequestBuilder IInternalDracoonClientBase.Builder => _builder;
 
-        private readonly IRequestExecutor _executor;
+        //private readonly IRequestExecutor _executor;
 
-        IRequestExecutor IInternalDracoonClient.Executor => _executor;
+        //IRequestExecutor IInternalDracoonClientBase.Executor => _executor;
 
-        private readonly IOAuth _oAuth;
-
-        IOAuth IInternalDracoonClient.OAuth => _oAuth;
+        //IOAuth IInternalDracoonClientBase.OAuth => _oAuth;
 
         #endregion
 
@@ -98,8 +95,6 @@ namespace Dracoon.Sdk {
 
         DracoonAccountImpl IInternalDracoonClient.AccountImpl => _account;
 
-        DracoonAccountImpl IInternalDracoonClient.AccountImpl => _account;
-
         DracoonNodesImpl IInternalDracoonClient.NodesImpl => _nodes;
 
         DracoonSharesImpl IInternalDracoonClient.SharesImpl => _shares;
@@ -108,36 +103,51 @@ namespace Dracoon.Sdk {
 
         DracoonUsersImpl IInternalDracoonClient.UsersImpl => _users;
 
-        /// <summary>
-        ///     Get Account handler. See also <seealso cref="Dracoon.Sdk.IAccount"/>
-        /// </summary>
-        public IAccount Account => _account;
-
-        /// <summary>
-        ///     Get Server handler. See also <seealso cref="Dracoon.Sdk.IServer"/>
-        /// </summary>
-        public IServer Server => _server;
-
-        /// <summary>
-        ///     Get Nodes handler. See also <seealso cref="Dracoon.Sdk.INodes"/>
-        /// </summary>
-        public INodes Nodes => _nodes;
-
-        /// <summary>
-        ///     Get Shares handler. See also <seealso cref="Dracoon.Sdk.IShares"/>
-        /// </summary>
-        public IShares Shares => _shares;
-
-        /// <summary>
-        ///     Get Users handler. See also <seealso cref="Dracoon.Sdk.IUsers"/>
-        /// </summary>
-        public IUsers Users => _users;
-
         DracoonGroupsImpl IInternalDracoonClient.GroupsImpl => _groups;
 
         DracoonRolesImpl IInternalDracoonClient.RolesImpl => _roles;
 
         DracoonEventLogImpl IInternalDracoonClient.EventLogImpl => _eventLog;
+
+        /// <summary>
+        ///     Get Account handler. See also <seealso cref="IAccount"/>
+        /// </summary>
+        public IAccount Account => _account;
+
+        /// <summary>
+        ///     Get Server handler. See also <seealso cref="IServer"/>
+        /// </summary>
+        public IServer Server => _server;
+
+        /// <summary>
+        ///     Get Nodes handler. See also <seealso cref="INodes"/>
+        /// </summary>
+        public INodes Nodes => _nodes;
+
+        /// <summary>
+        ///     Get Shares handler. See also <seealso cref="IShares"/>
+        /// </summary>
+        public IShares Shares => _shares;
+
+        /// <summary>
+        ///     Get Users handler. See also <seealso cref="IUsers"/>
+        /// </summary>
+        public IUsers Users => _users;
+
+        /// <summary>
+        ///     Get Groups handler. See also <seealso cref="IGroups"/>
+        /// </summary>
+        public IGroups Groups => _groups;
+
+        /// <summary>
+        ///     Get Roles handler. See also <seealso cref="IRoles"/>
+        /// </summary>
+        public IRoles Roles => _roles;
+
+        /// <summary>
+        ///     Get ÊventLog handler. See also <seealso cref="IEventLog"/>
+        /// </summary>
+        public IEventLog EventLog => _eventLog;
 
         #endregion
 
@@ -147,10 +157,10 @@ namespace Dracoon.Sdk {
         ///     Creates a new instance DRACOON client.
         /// </summary>
         /// <param name="serverUri">The used target server URI.</param>
-        /// <param name="auth">The current authorization data. See also <seealso cref="Dracoon.Sdk.DracoonAuth"/></param>
+        /// <param name="auth">The current authorization data. See also <seealso cref="DracoonAuth"/></param>
         /// <param name="encryptionPassword">The client's encryption password.</param>
-        /// <param name="logger">The logger which should be used. See also <seealso cref="Dracoon.Sdk.ILog"/></param>
-        /// <param name="httpConfig">The self defined http configuration (otherwise the defaults of the DracoonHttpConfig is used). See also <seealso cref="Dracoon.Sdk.DracoonHttpConfig"/></param>
+        /// <param name="logger">The logger which should be used. See also <seealso cref="ILog"/></param>
+        /// <param name="httpConfig">The self defined http configuration (otherwise the defaults of the DracoonHttpConfig is used). See also <seealso cref="DracoonHttpConfig"/></param>
         public DracoonClient(Uri serverUri, DracoonAuth auth = null, string encryptionPassword = null, ILog logger = null, DracoonHttpConfig httpConfig = null) {
             EncryptionPassword = encryptionPassword;
             InitInternal(serverUri, auth, logger, httpConfig);

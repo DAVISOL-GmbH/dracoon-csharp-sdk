@@ -36,7 +36,7 @@ namespace Dracoon.Sdk.UnitTest.Factory {
             SmsConfigEnabled = true,
             S3EnforceDirectUpload = false,
             IsDracoonCloud = true,
-            TenantUUID = "RANDOMUUID"
+            TenantUuid = "RANDOMUUID"
         };
 
         internal static List<FileKeyAlgorithmData> FileKeyAlgorithms => new List<FileKeyAlgorithmData> {
@@ -93,7 +93,7 @@ namespace Dracoon.Sdk.UnitTest.Factory {
             S3DefaultRegion = "DE",
             SmsConfigEnabled = true,
             IsDracoonCloud = true,
-            TenantUUID = "RANDOMUUID",
+            TenantUuid = "RANDOMUUID",
             S3EnforceDirectUpload = false
         };
 

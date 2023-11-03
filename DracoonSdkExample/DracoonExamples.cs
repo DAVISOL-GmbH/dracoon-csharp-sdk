@@ -124,8 +124,8 @@ namespace Dracoon.Sdk.Example {
         }
 
         private static void GetUserAvatar() {
-            // byte[] avatar = dc.Account.GetAvatar();
-            SkiaSharp.SKData imageData = dc.Account.GetAvatar();
+            byte[] avatar = dc.Account.GetAvatar();
+            SkiaSharp.SKData imageData = SkiaSharp.SKData.CreateCopy(avatar);
             var avatarCodec = SkiaSharp.SKCodec.Create(imageData);
             var avatarImage = SkiaSharp.SKBitmap.Decode(imageData);
             var targetFilePath = "C:\\temp\\avatar." + avatarCodec.EncodedFormat.ToString().ToLowerInvariant();
@@ -287,9 +287,7 @@ namespace Dracoon.Sdk.Example {
         private static void UploadFile() {
             string localFilePath = "C:\\temp\\test.txt";
             FileInfo fileInfo = new FileInfo(localFilePath);
-            FileUploadRequest request = new FileUploadRequest(1, "test.txt");
-            request.CreationTime = fileInfo.CreationTimeUtc;
-            request.ModificationTime = fileInfo.LastWriteTimeUtc;
+            FileUploadRequest request = new FileUploadRequest(1, "test.txt", creationTime: fileInfo.CreationTimeUtc, modificationTime: fileInfo.LastWriteTimeUtc);
 
             FileStream stream = File.Open(localFilePath, FileMode.Open);
             Node uploadedNode = dc.Nodes.UploadFile(Guid.NewGuid().ToString(), request, stream, callback: new ULCallback());

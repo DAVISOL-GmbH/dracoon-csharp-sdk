@@ -13,8 +13,6 @@ namespace Dracoon.Sdk.SdkInternal {
 
         internal static IInternalDracoonClientBase DracoonClient { get; set; }
 
-        internal static IInternalDracoonClientBase DracoonClient { get; set; }
-
         private static bool CheckResponseHasHeader(object response, string headerName, string headerValue) {
             if (response is IRestResponse restResponse && restResponse.Headers != null) {
                 foreach (Parameter current in restResponse.Headers) {
@@ -138,7 +136,7 @@ namespace Dracoon.Sdk.SdkInternal {
             throw new DracoonApiException(resultCode);
         }
 
-        private static DracoonApiCode Parse(int httpStatusCode, dynamic response, ApiErrorResponse apiError, RequestType requestType, ILog clientLog) {
+        private static DracoonApiCode Parse(int httpStatusCode, object response, ApiErrorResponse apiError, RequestType requestType, ILog clientLog) {
             int? apiErrorCode = null;
             if (apiError != null) {
                 clientLog?.Error(LogTag, $"Parsing API error: HTTP status {httpStatusCode}, error code {apiError.ErrorCode}, code {apiError.Code}, message '{apiError.Message}', debug info '${apiError.DebugInfo}'");
@@ -153,7 +151,7 @@ namespace Dracoon.Sdk.SdkInternal {
                     return ParseBadRequest(apiErrorCode, requestType);
                 case (int)HttpStatusCode.PaymentRequired:
                     return ParsePaymentRequired();
-                case (int)HttpStatusCode.TooManyRequests:
+                case 429: //  (int)HttpStatusCode.TooManyRequests: /* The TooManyRequest enum member is not available prior to .NET Core 2.1 - see: https://github.com/dotnet/runtime/issues/54321#issuecomment-863195308 */
                     return ParseTooManyRequests(response);
                 case (int)HttpStatusCode.Unauthorized:
                     return ParseUnauthorized(apiErrorCode);

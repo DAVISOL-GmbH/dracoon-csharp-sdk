@@ -5,23 +5,31 @@ using Dracoon.Sdk.SdkInternal.Validator;
 using System;
 
 namespace Dracoon.Sdk {
+    /// <summary>
+    /// Implements the base logic of a client connecting to a Dracoon-API (either the core or the branding API). Implemented by <see cref="DracoonClient"/> and <see cref="DracoonBrandingClient"/>.
+    /// </summary>
+    /// <seealso cref="DracoonClient"/>
+    /// <seealso cref="DracoonBrandingClient"/>
     public abstract class DracoonClientBase : IInternalDracoonClientBase {
 
-        /// <include file = "SdkPublicDoc.xml" path='docs/members[@name="dracoonClient"]/ServerUri/*'/>
+        /// <summary>
+        /// <see cref="IInternalDracoonClientBase.ServerUri"/>
+        /// </summary>
         public Uri ServerUri {
             get; private set;
         }
 
-        /// <include file = "SdkPublicDoc.xml" path='docs/members[@name="dracoonClient"]/Auth/*'/>
+        /// <summary>
+        ///     The current authorization data. See also <seealso cref="Dracoon.Sdk.DracoonAuth"/>
+        /// </summary>
         public DracoonAuth Auth {
-            get {
-                return _oauth.Auth;
-            }
-            set {
-                _oauth.Auth = value;
-            }
+            get => _oauth.Auth;
+            set => _oauth.Auth = value;
         }
 
+        /// <summary>
+        /// Get information about the last processed request (either successful or not)
+        /// </summary>
         public RequestInformation LastRequest { get; internal set; }
 
         #region Private Fields
@@ -51,6 +59,13 @@ namespace Dracoon.Sdk {
 
         #region init internal
 
+        /// <summary>
+        /// Initialize the client's base properties
+        /// </summary>
+        /// <param name="serverUri"><see cref="ServerUri"/></param>
+        /// <param name="auth"><see cref="Auth"/></param>
+        /// <param name="logger"></param>
+        /// <param name="httpConfig"></param>
         protected void InitInternal(Uri serverUri, DracoonAuth auth, ILog logger, DracoonHttpConfig httpConfig) {
             serverUri.MustBeValid(nameof(serverUri));
 

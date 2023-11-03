@@ -35,6 +35,6 @@ namespace Dracoon.Sdk.Model {
         /// <summary>
         ///     Current tenant UUID.
         /// </summary>
-        public string TenantUUID { get; internal set; }
+        public string TenantUuid{ get; internal set; }
     }
 }

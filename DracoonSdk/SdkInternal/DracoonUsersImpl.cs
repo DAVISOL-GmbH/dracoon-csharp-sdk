@@ -20,7 +20,7 @@ namespace Dracoon.Sdk.SdkInternal {
             _client = client;
         }
 
-        public SkiaSharp.SKData GetUserAvatar(long userId, string avatarUuid) {
+        public byte[] GetUserAvatar(long userId, string avatarUuid) {
             _client.Executor.CheckApiServerVersion();
 
             #region Parameter Validation
@@ -36,7 +36,7 @@ namespace Dracoon.Sdk.SdkInternal {
             using (WebClient avatarClient = _client.Builder.ProvideAvatarDownloadWebClient()) {
                 byte[] avatarImageBytes =
                     _client.Executor.ExecuteWebClientDownload(avatarClient, new Uri(apiAvatarInfo.AvatarUri), RequestType.GetResourcesAvatar);
-                return SkiaSharp.SKData.CreateCopy(avatarImageBytes);
+                return avatarImageBytes;
             }
         }
 

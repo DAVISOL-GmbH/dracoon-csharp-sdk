@@ -28,29 +28,17 @@ namespace Dracoon.Sdk.SdkInternal {
             GetPreviousVersion, PostRestoreNodeVersion, DeletePreviousVersions, PostGetS3Urls, GetS3Status, GetPasswordPolicies,
             GetAlgorithms, GetClassificationPolicies, GenerateVirusProtectionInfo, DeleteMaliciousFile, GetDownloadShareSubscriptions,
             GetUploadShareSubscriptions, PostUploadShareSubscription, PostDownloadShareSubscription, DeleteDownloadShareSubscription,
-            DeleteUploadShareSubscription
-            GetResourcesAvatar,
-            GetNodes, GetNode, PostFolder, PutFolder, PutFile, DeleteNodes,
-            GetRoomEvents, GetRoomGroups, GetRoomUsers, GetRoomPending, PostRoom, PutRoom, PutRoomConfig, PutRoomGroups, PutRoomUsers, DeleteRoomGroups, DeleteRoomUsers, PutEnableRoomEncryption,
-            PostDownloadToken, GetFileKey, PostUploadToken, PutCompleteUpload, PostUploadChunk,
-            GetDownloadChunk, PostCopyNodes, PostMoveNodes, GetSearchNodes, GetMissingFileKeys, PostMissingFileKeys,
-            PostCreateDownloadShare, DeleteDownloadShare, GetDownloadShares, PostCreateUploadShare, DeleteUploadShare,
-            GetUploadShares, PostFavorite, DeleteFavorite, GetAuthenticatedPing, PostOAuthToken, PostOAuthRefresh, GetGeneralSettings, GetInfrastructureSettings, GetDefaultsSettings,
-
+            DeleteUploadShareSubscription,            
+            GetRoomEvents, GetRoomGroups, GetRoomUsers, GetRoomPending, PutRoomConfig, PutRoomGroups, PutRoomUsers, DeleteRoomGroups, DeleteRoomUsers,
             GetServerGeneralConfig, PutServerGeneralConfig,
             GetSystemOAuthClientConfigs, GetSystemOAuthClientConfig, PutSystemOAuthClientConfig, PostSystemOAuthClientConfig, DeleteSystemOAuthClientConfig,
-
             GetAuthenticationSettings, GetAuthActiveDirectorySettings, GetAuthOpenIdIdpSettings, GetAuthRadiusSettings,
-            GetRecycleBin, DeleteRecycleBin, GetPreviousVersions, GetPreviousVersion, PostRestoreNodeVersion, DeletePreviousVersions,
             GetGroups, GetGroup, GetGroupLastAdminRooms, GetGroupRoles, GetGroupUsers, PostGroup, PostGroupUsers, PutGroup, DeleteGroup, DeleteGroupUsers,
             GetUsers, GetUser, GetUserLastAdminRooms, GetUserRoles, GetUserGroups, GetUserUserAttributes, PostUser, PostUserUserAttributes, PutUser, PutUserUserAttributes, DeleteUser, DeleteUserUserAttribute,
             GetRoles, GetRoleGroups, GetRoleUsers, PostRoleGroups, PostRoleUsers, DeleteRoleGroups, DeleteRoleUsers,
             GetAuditNodes, GetEvents, GetOperations,
-            PutCompleteS3Upload, PutUploadS3Chunk, PostGetS3Urls, GetS3Status, GetPasswordPolicies,
             GetBranding, GetBrandingServerVersion,
-
-            GetUserKeyPairs,
-            GetAlgorithms, GetClassificationPolicies
+            GetUserKeyPairs
         }
 
         private const string Logtag = nameof(DracoonRequestExecutor);
@@ -145,7 +133,6 @@ namespace Dracoon.Sdk.SdkInternal {
                             }
 
                             return ((IRequestExecutor)this).DoSyncApiCall<T>(request, requestType, sendTry + 1);
-                            return ((IRequestExecutor)this).DoSyncApiCall<T>(request, requestType, sendTry + 1);
                         }
 
                         throw;
@@ -153,7 +140,6 @@ namespace Dracoon.Sdk.SdkInternal {
                 }
             } catch (DracoonApiException dae) {
                 if (sendTry < 3 && CheckTooManyRequestsResult(dae, response)) {
-                    return ((IRequestExecutor)this).DoSyncApiCall<T>(request, requestType, sendTry + 1);
                     return ((IRequestExecutor)this).DoSyncApiCall<T>(request, requestType, sendTry + 1);
                 }
 
@@ -195,7 +181,6 @@ namespace Dracoon.Sdk.SdkInternal {
                                 _client.Log.Debug(Logtag, "Retry the request in " + sendTry * 1000 + " millis again.");
                                 Thread.Sleep(1000 * sendTry);
                                 return ((IRequestExecutor)this).ExecuteWebClientDownload(requestClient, target, type, asyncThread, sendTry + 1);
-                                return ((IRequestExecutor)this).ExecuteWebClientDownload(requestClient, target, type, asyncThread, sendTry + 1);
                             } else {
                                 if (asyncThread != null && asyncThread.ThreadState == ThreadState.Aborted) {
                                     throw new ThreadInterruptedException();
@@ -206,7 +191,6 @@ namespace Dracoon.Sdk.SdkInternal {
                         }
                     } catch (DracoonApiException dae) {
                         if (sendTry < 3 && CheckTooManyRequestsResult(dae, we.Response)) {
-                            return ((IRequestExecutor)this).ExecuteWebClientDownload(requestClient, target, type, asyncThread, sendTry + 1);
                             return ((IRequestExecutor)this).ExecuteWebClientDownload(requestClient, target, type, asyncThread, sendTry + 1);
                         }
 
@@ -263,7 +247,6 @@ namespace Dracoon.Sdk.SdkInternal {
                                 _client.Log.Debug(Logtag, "Retry the request in " + sendTry * 1000 + " millis again.");
                                 Thread.Sleep(1000 * sendTry);
                                 return ((IRequestExecutor)this).ExecuteWebClientChunkUpload(requestClient, target, data, type, asyncThread, sendTry + 1);
-                                return ((IRequestExecutor)this).ExecuteWebClientChunkUpload(requestClient, target, data, type, asyncThread, sendTry + 1);
                             } else {
                                 if (asyncThread != null && asyncThread.ThreadState == ThreadState.Aborted) {
                                     throw new ThreadInterruptedException();
@@ -274,7 +257,6 @@ namespace Dracoon.Sdk.SdkInternal {
                         }
                     } catch (DracoonApiException dae) {
                         if (sendTry < 3 && CheckTooManyRequestsResult(dae, we.Response)) {
-                            return ((IRequestExecutor)this).ExecuteWebClientChunkUpload(requestClient, target, data, type, asyncThread, sendTry + 1);
                             return ((IRequestExecutor)this).ExecuteWebClientChunkUpload(requestClient, target, data, type, asyncThread, sendTry + 1);
                         }
 

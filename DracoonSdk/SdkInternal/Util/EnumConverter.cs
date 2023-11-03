@@ -194,6 +194,7 @@ namespace Dracoon.Sdk.SdkInternal.Util {
                     return SubscriptionPlan.Premium;
                 case 2:
                     return SubscriptionPlan.Free;
+                case 0:
                 default:
                     return SubscriptionPlan.Standard;
             }
@@ -209,19 +210,6 @@ namespace Dracoon.Sdk.SdkInternal.Util {
                     return VirusProtectionVerdict.Clean;
                 default:
                     return VirusProtectionVerdict.NoScanning;
-            }
-        };
-
-        public static readonly Func<int, DracoonSubscriptionPlan> ConvertValueToSubscriptionPlanEnum = value => {
-            switch (value) {
-                case 0:
-                    return DracoonSubscriptionPlan.Standard;
-                case 1:
-                    return DracoonSubscriptionPlan.Premium;
-                case 2:
-                    return DracoonSubscriptionPlan.Free;
-                default:
-                    return DracoonSubscriptionPlan.Unknown;
             }
         };
 

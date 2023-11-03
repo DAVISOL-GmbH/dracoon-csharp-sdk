@@ -1,7 +1,5 @@
 ﻿using Dracoon.Crypto.Sdk;
 using Dracoon.Sdk.Model;
-using Dracoon.Crypto.Sdk;
-using Dracoon.Sdk.Model;
 using System.Collections.Generic;
 
 namespace Dracoon.Sdk {

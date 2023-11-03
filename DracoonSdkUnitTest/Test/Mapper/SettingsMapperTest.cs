@@ -63,7 +63,7 @@ namespace Dracoon.Sdk.UnitTest.Test.Mapper {
                 SmsConfigEnabled = expected.SmsConfigEnabled,
                 S3EnforceDirectUpload = expected.S3EnforceDirectUpload,
                 IsDracoonCloud = expected.IsDracoonCloud,
-                TenantUUID = expected.TenantUUID
+                TenantUuid = expected.TenantUuid
             };
 
             // ACT

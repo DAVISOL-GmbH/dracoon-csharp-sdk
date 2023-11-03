@@ -1,6 +1,12 @@
 using Newtonsoft.Json;
+using System;
 
 namespace Dracoon.Sdk.SdkInternal.ApiModel.Requests {
+
+    /// <summary>
+    /// Represents the base class for all requests that will create a new node (room, file or folder). Inherits from the <see cref="ApiTrackExternalModification"/> base class with external creation and modification timestamps.
+    /// </summary>
+    /// <seealso cref="ApiTrackExternalModification"/>
     internal abstract class ApiCreateNodeRequestBase : ApiTrackExternalModification {
 
         [JsonProperty("name", NullValueHandling = NullValueHandling.Ignore)]
@@ -11,11 +17,5 @@ namespace Dracoon.Sdk.SdkInternal.ApiModel.Requests {
 
         [JsonProperty("classification", NullValueHandling = NullValueHandling.Ignore)]
         public int? Classification { get; set; }
-
-        [JsonProperty("timestampCreation", NullValueHandling = NullValueHandling.Ignore)]
-        public DateTime? TimestampCreation { get; set; }
-
-        [JsonProperty("timestampModification", NullValueHandling = NullValueHandling.Ignore)]
-        public DateTime? TimestampModification { get; set; }
     }
 }

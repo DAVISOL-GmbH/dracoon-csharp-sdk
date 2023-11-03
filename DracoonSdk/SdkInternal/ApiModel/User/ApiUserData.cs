@@ -4,7 +4,7 @@ using Newtonsoft.Json;
 namespace Dracoon.Sdk.SdkInternal.ApiModel {
     internal class ApiUserData : ApiUserItem {
         [JsonProperty("authData", NullValueHandling = NullValueHandling.Ignore)]
-        public ApiUserAuthData AuthData {
+        public ApiAuthData AuthData {
             get; internal set;
         }
         [JsonProperty("authMethods", NullValueHandling = NullValueHandling.Ignore)]

@@ -20,6 +20,6 @@ namespace Dracoon.Sdk.SdkInternal.ApiModel {
         public bool IsDracoonCloud { get; set; }
 
         [JsonProperty("tenantUuid", DefaultValueHandling = DefaultValueHandling.Ignore)]
-        public string TenantUUID { get; set; }
+        public string TenantUuid{ get; set; }
     }
 }
