@@ -26,14 +26,14 @@ namespace Dracoon.Sdk.SdkInternal {
 
         public string GetVersion() {
             _client.Executor.CheckApiServerVersion();
-            IRestRequest request = _client.Builder.GetServerVersion();
+            RestRequest request = _client.Builder.GetServerVersion();
             ApiServerVersion result = _client.Executor.DoSyncApiCall<ApiServerVersion>(request, RequestType.GetServerVersion);
             return result.ServerVersion;
         }
 
         public DateTime? GetTime() {
             _client.Executor.CheckApiServerVersion();
-            IRestRequest request = _client.Builder.GetServerTime();
+            RestRequest request = _client.Builder.GetServerTime();
             ApiServerTime result = _client.Executor.DoSyncApiCall<ApiServerTime>(request, RequestType.GetServerTime);
             return result.Time;
         }
@@ -44,7 +44,7 @@ namespace Dracoon.Sdk.SdkInternal {
             accessKey.MustNotNullOrEmptyOrWhitespace(nameof(accessKey));
             #endregion
 
-            IRestRequest restRequest = _client.Builder.GetPublicDownloadShare(accessKey);
+            RestRequest restRequest = _client.Builder.GetPublicDownloadShare(accessKey);
             ApiPublicDownloadShare result = _client.Executor.DoSyncApiCall<ApiPublicDownloadShare>(restRequest, RequestType.GetPublicDownloadShare);
             return ServerMapper.FromApiPublicDownloadShare(result);
         }
@@ -55,28 +55,28 @@ namespace Dracoon.Sdk.SdkInternal {
             accessKey.MustNotNullOrEmptyOrWhitespace(nameof(accessKey));
             #endregion
 
-            IRestRequest restRequest = _client.Builder.GetPublicUploadShare(accessKey);
+            RestRequest restRequest = _client.Builder.GetPublicUploadShare(accessKey);
             ApiPublicUploadShare result = _client.Executor.DoSyncApiCall<ApiPublicUploadShare>(restRequest, RequestType.GetPublicUploadShare);
             return ServerMapper.FromApiPublicUploadShare(result);
         }
 
         public SystemInfo GetPublicSystemInfo() {
             _client.Executor.CheckApiServerVersion();
-            IRestRequest request = _client.Builder.GetPublicSystemInfo();
+            RestRequest request = _client.Builder.GetPublicSystemInfo();
             ApiSystemInfo result = _client.Executor.DoSyncApiCall<ApiSystemInfo>(request, RequestType.GetPublicSystemInfo);
             return ServerMapper.FromApiSystemInfo(result);
         }
 
         public ActiveDirectoryAuthInfo GetPublicSystemActiveDirectoryAuth() {
             _client.Executor.CheckApiServerVersion();
-            IRestRequest request = _client.Builder.GetPublicSystemActiveDirectoryAuth();
+            RestRequest request = _client.Builder.GetPublicSystemActiveDirectoryAuth();
             ApiActiveDirectoryAuthInfo result = _client.Executor.DoSyncApiCall<ApiActiveDirectoryAuthInfo>(request, RequestType.GetPublicSystemActiveDirectoryAuth);
             return ServerMapper.FromApiActiveDirectoryAuthInfo(result);
         }
 
         public OpenIdAuthInfo GetPublicSystemOpenIdAuth() {
             _client.Executor.CheckApiServerVersion();
-            IRestRequest request = _client.Builder.GetPublicSystemOpenIdAuth();
+            RestRequest request = _client.Builder.GetPublicSystemOpenIdAuth();
             ApiOpenIdAuthInfo result = _client.Executor.DoSyncApiCall<ApiOpenIdAuthInfo>(request, RequestType.GetPublicSystemOpenIdAuth);
             return ServerMapper.FromApiOpenIdAuthInfo(result);
         }

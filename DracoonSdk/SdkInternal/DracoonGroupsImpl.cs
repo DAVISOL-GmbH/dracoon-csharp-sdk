@@ -27,7 +27,7 @@ namespace Dracoon.Sdk.SdkInternal {
             limit.NullableMustPositive(nameof(limit));
             #endregion
 
-            IRestRequest restRequest = _client.Builder.GetGroups(offset, limit, filter, sort);
+            RestRequest restRequest = _client.Builder.GetGroups(offset, limit, filter, sort);
             ApiGroupList result = _client.Executor.DoSyncApiCall<ApiGroupList>(restRequest, RequestType.GetGroups);
             return GroupMapper.FromApiGroupList(result);
         }
@@ -38,7 +38,7 @@ namespace Dracoon.Sdk.SdkInternal {
             groupId.MustPositive(nameof(groupId));
             #endregion
 
-            IRestRequest restRequest = _client.Builder.GetGroup(groupId);
+            RestRequest restRequest = _client.Builder.GetGroup(groupId);
             ApiGroup result = _client.Executor.DoSyncApiCall<ApiGroup>(restRequest, RequestType.GetGroup);
             return GroupMapper.FromApiGroup(result);
         }
@@ -49,7 +49,7 @@ namespace Dracoon.Sdk.SdkInternal {
             groupId.MustPositive(nameof(groupId));
             #endregion
 
-            IRestRequest restRequest = _client.Builder.GetGroupLastAdminRooms(groupId);
+            RestRequest restRequest = _client.Builder.GetGroupLastAdminRooms(groupId);
             ApiNodeReferenceList result = _client.Executor.DoSyncApiCall<ApiNodeReferenceList>(restRequest, RequestType.GetGroupLastAdminRooms);
             return CommonMapper.FromApiNodeReferenceList(result, NodeType.Room);
         }
@@ -60,7 +60,7 @@ namespace Dracoon.Sdk.SdkInternal {
             groupId.MustPositive(nameof(groupId));
             #endregion
 
-            IRestRequest restRequest = _client.Builder.GetGroupRoles(groupId);
+            RestRequest restRequest = _client.Builder.GetGroupRoles(groupId);
             ApiRoleList result = _client.Executor.DoSyncApiCall<ApiRoleList>(restRequest, RequestType.GetGroupRoles);
             return CommonMapper.FromApiRoleList(result);
         }
@@ -71,7 +71,7 @@ namespace Dracoon.Sdk.SdkInternal {
             groupId.MustPositive(nameof(groupId));
             #endregion
 
-            IRestRequest restRequest = _client.Builder.GetGroupUsers(groupId, offset, limit, filter);
+            RestRequest restRequest = _client.Builder.GetGroupUsers(groupId, offset, limit, filter);
             ApiGroupUserList result = _client.Executor.DoSyncApiCall<ApiGroupUserList>(restRequest, RequestType.GetGroupUsers);
             return GroupMapper.FromApiGroupUserList(result);
         }
@@ -84,7 +84,7 @@ namespace Dracoon.Sdk.SdkInternal {
             #endregion
 
             ApiCreateGroupRequest apiCreateGroupRequest = GroupMapper.ToApiCreateGroupRequest(groupParams);
-            IRestRequest restRequest = _client.Builder.PostGroup(apiCreateGroupRequest);
+            RestRequest restRequest = _client.Builder.PostGroup(apiCreateGroupRequest);
             ApiGroup result = _client.Executor.DoSyncApiCall<ApiGroup>(restRequest, RequestType.PostGroup);
             return GroupMapper.FromApiGroup(result);
         }
@@ -97,7 +97,7 @@ namespace Dracoon.Sdk.SdkInternal {
             #endregion
 
             ApiChangeMembersRequest apiChangeGroupMembersRequest = CommonMapper.ToApiChangeMembersRequest(groupUserParams);
-            IRestRequest restRequest = _client.Builder.PostGroupUser(groupId, apiChangeGroupMembersRequest);
+            RestRequest restRequest = _client.Builder.PostGroupUser(groupId, apiChangeGroupMembersRequest);
             ApiGroup result = _client.Executor.DoSyncApiCall<ApiGroup>(restRequest, RequestType.PostGroupUsers);
             return GroupMapper.FromApiGroup(result);
         }
@@ -111,7 +111,7 @@ namespace Dracoon.Sdk.SdkInternal {
             #endregion
 
             ApiUpdateGroupRequest apiUpdateGroupRequest = GroupMapper.ToApiUpdateGroupRequest(groupParams);
-            IRestRequest restRequest = _client.Builder.PutGroup(groupId, apiUpdateGroupRequest);
+            RestRequest restRequest = _client.Builder.PutGroup(groupId, apiUpdateGroupRequest);
             ApiGroup result = _client.Executor.DoSyncApiCall<ApiGroup>(restRequest, RequestType.PutGroup);
             return GroupMapper.FromApiGroup(result);
         }
@@ -122,7 +122,7 @@ namespace Dracoon.Sdk.SdkInternal {
             groupId.MustPositive(nameof(groupId));
             #endregion
 
-            IRestRequest restRequest = _client.Builder.DeleteGroup(groupId);
+            RestRequest restRequest = _client.Builder.DeleteGroup(groupId);
             _client.Executor.DoSyncApiCall<VoidResponse>(restRequest, RequestType.DeleteGroup);
         }
 
@@ -134,7 +134,7 @@ namespace Dracoon.Sdk.SdkInternal {
             #endregion
 
             ApiChangeMembersRequest apiChangeGroupMembersRequest = CommonMapper.ToApiChangeMembersRequest(deleteUsersParams);
-            IRestRequest restRequest = _client.Builder.DeleteGroupUsers(groupId, apiChangeGroupMembersRequest);
+            RestRequest restRequest = _client.Builder.DeleteGroupUsers(groupId, apiChangeGroupMembersRequest);
             _client.Executor.DoSyncApiCall<VoidResponse>(restRequest, RequestType.DeleteGroupUsers);
         }
 

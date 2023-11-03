@@ -30,7 +30,7 @@ namespace Dracoon.Sdk.SdkInternal {
 
             #endregion
 
-            IRestRequest request = _client.Builder.GetUserAvatar(userId, avatarUuid);
+            RestRequest request = _client.Builder.GetUserAvatar(userId, avatarUuid);
             ApiAvatarInfo apiAvatarInfo = _client.Executor.DoSyncApiCall<ApiAvatarInfo>(request, RequestType.GetResourcesAvatar);
 
             using (WebClient avatarClient = _client.Builder.ProvideAvatarDownloadWebClient()) {
@@ -50,7 +50,7 @@ namespace Dracoon.Sdk.SdkInternal {
             limit.NullableMustPositive(nameof(limit));
             #endregion
 
-            IRestRequest restRequest = _client.Builder.GetUsers(includeAttributes, includeRoles, includeHasManageableRooms, offset, limit, filter, sort);
+            RestRequest restRequest = _client.Builder.GetUsers(includeAttributes, includeRoles, includeHasManageableRooms, offset, limit, filter, sort);
             ApiUserList result = _client.Executor.DoSyncApiCall<ApiUserList>(restRequest, RequestType.GetUsers);
             return UserMapper.FromApiUserList(result);
         }
@@ -61,7 +61,7 @@ namespace Dracoon.Sdk.SdkInternal {
             userId.MustPositive(nameof(userId));
             #endregion
 
-            IRestRequest restRequest = _client.Builder.GetUser(userId, effectiveRoles);
+            RestRequest restRequest = _client.Builder.GetUser(userId, effectiveRoles);
             ApiUserData result = _client.Executor.DoSyncApiCall<ApiUserData>(restRequest, RequestType.GetUser);
             return UserMapper.FromApiUserData(result);
         }
@@ -74,7 +74,7 @@ namespace Dracoon.Sdk.SdkInternal {
             limit.NullableMustPositive(nameof(limit));
             #endregion
 
-            IRestRequest restRequest = _client.Builder.GetUserGroups(userId, offset, limit, filter);
+            RestRequest restRequest = _client.Builder.GetUserGroups(userId, offset, limit, filter);
             ApiUserGroupList result = _client.Executor.DoSyncApiCall<ApiUserGroupList>(restRequest, RequestType.GetUserGroups);
             return UserMapper.FromApiUserGroupList(result);
         }
@@ -85,7 +85,7 @@ namespace Dracoon.Sdk.SdkInternal {
             userId.MustPositive(nameof(userId));
             #endregion
 
-            IRestRequest restRequest = _client.Builder.GetUserLastAdminRooms(userId);
+            RestRequest restRequest = _client.Builder.GetUserLastAdminRooms(userId);
             ApiLastAdminUserRoomList result = _client.Executor.DoSyncApiCall<ApiLastAdminUserRoomList>(restRequest, RequestType.GetUserLastAdminRooms);
             return UserMapper.FromApiLastAdminUserRoomList(result);
         }
@@ -96,7 +96,7 @@ namespace Dracoon.Sdk.SdkInternal {
             userId.MustPositive(nameof(userId));
             #endregion
 
-            IRestRequest restRequest = _client.Builder.GetUserRoles(userId);
+            RestRequest restRequest = _client.Builder.GetUserRoles(userId);
             ApiRoleList result = _client.Executor.DoSyncApiCall<ApiRoleList>(restRequest, RequestType.GetUserRoles);
             return CommonMapper.FromApiRoleList(result);
         }
@@ -109,7 +109,7 @@ namespace Dracoon.Sdk.SdkInternal {
             limit.NullableMustPositive(nameof(limit));
             #endregion
 
-            IRestRequest restRequest = _client.Builder.GetUserUserAttributes(userId, offset, limit, filter, sort);
+            RestRequest restRequest = _client.Builder.GetUserUserAttributes(userId, offset, limit, filter, sort);
             ApiAttributesResponse result = _client.Executor.DoSyncApiCall<ApiAttributesResponse>(restRequest, RequestType.GetUserUserAttributes);
             return UserMapper.FromApiAttributesResponse(result);
         }
@@ -124,7 +124,7 @@ namespace Dracoon.Sdk.SdkInternal {
             #endregion
 
             ApiCreateUserRequest apiCreateUserRequest = UserMapper.ToApiCreateUserRequest(userParams);
-            IRestRequest restRequest = _client.Builder.PostUser(apiCreateUserRequest);
+            RestRequest restRequest = _client.Builder.PostUser(apiCreateUserRequest);
             ApiUserData result = _client.Executor.DoSyncApiCall<ApiUserData>(restRequest, RequestType.PostUser);
             return UserMapper.FromApiUserData(result);
         }
@@ -137,7 +137,7 @@ namespace Dracoon.Sdk.SdkInternal {
             #endregion
 
             ApiUserAttributes apiUserAttributes = UserMapper.ToApiUserAttributes(userAttributeParams);
-            IRestRequest restRequest = _client.Builder.PostUserUserAttributes(userId, apiUserAttributes);
+            RestRequest restRequest = _client.Builder.PostUserUserAttributes(userId, apiUserAttributes);
             ApiUserData result = _client.Executor.DoSyncApiCall<ApiUserData>(restRequest, RequestType.PostUserUserAttributes);
             return UserMapper.FromApiUserData(result);
         }
@@ -153,7 +153,7 @@ namespace Dracoon.Sdk.SdkInternal {
             #endregion
 
             ApiUpdateUserRequest apiUpdateUserRequest = UserMapper.ToApiUpdateUserRequest(userParams);
-            IRestRequest restRequest = _client.Builder.PutUser(userId, apiUpdateUserRequest);
+            RestRequest restRequest = _client.Builder.PutUser(userId, apiUpdateUserRequest);
             ApiUserData result = _client.Executor.DoSyncApiCall<ApiUserData>(restRequest, RequestType.PutUser);
             return UserMapper.FromApiUserData(result);
         }
@@ -166,7 +166,7 @@ namespace Dracoon.Sdk.SdkInternal {
             #endregion
 
             ApiUserAttributes apiUserAttributes = UserMapper.ToApiUserAttributes(userAttributeParams);
-            IRestRequest restRequest = _client.Builder.PutUserUserAttributes(userId, apiUserAttributes);
+            RestRequest restRequest = _client.Builder.PutUserUserAttributes(userId, apiUserAttributes);
             ApiUserData result = _client.Executor.DoSyncApiCall<ApiUserData>(restRequest, RequestType.PutUserUserAttributes);
             return UserMapper.FromApiUserData(result);
         }
@@ -177,7 +177,7 @@ namespace Dracoon.Sdk.SdkInternal {
             userId.MustPositive(nameof(userId));
             #endregion
 
-            IRestRequest restRequest = _client.Builder.DeleteUser(userId);
+            RestRequest restRequest = _client.Builder.DeleteUser(userId);
             _client.Executor.DoSyncApiCall<VoidResponse>(restRequest, RequestType.DeleteUser);
         }
 
@@ -188,7 +188,7 @@ namespace Dracoon.Sdk.SdkInternal {
             userAttributeKey.MustNotNullOrEmptyOrWhitespace(nameof(userAttributeKey));
             #endregion
 
-            IRestRequest restRequest = _client.Builder.DeleteUserUserAttribute(userId, userAttributeKey);
+            RestRequest restRequest = _client.Builder.DeleteUserUserAttribute(userId, userAttributeKey);
             _client.Executor.DoSyncApiCall<VoidResponse>(restRequest, RequestType.DeleteUserUserAttribute);
         }
 

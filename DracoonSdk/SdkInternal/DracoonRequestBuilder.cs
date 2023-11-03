@@ -22,7 +22,7 @@ namespace Dracoon.Sdk.SdkInternal {
             _auth = auth;
         }
 
-        private void SetGeneralRestValues(IRestRequest request, bool requiresAuth, object optionalJsonBody = null) {
+        private void SetGeneralRestValues(RestRequest request, bool requiresAuth, object optionalJsonBody = null) {
             if (requiresAuth) {
                 request.AddHeader(ApiConfig.AuthorizationHeader, _auth.BuildAuthString());
             }
@@ -31,7 +31,6 @@ namespace Dracoon.Sdk.SdkInternal {
                 request.AddParameter("application/json", JsonConvert.SerializeObject(optionalJsonBody), ParameterType.RequestBody);
             }
 
-            request.ReadWriteTimeout = _client.HttpConfig.ReadWriteTimeout;
             request.Timeout = _client.HttpConfig.ConnectionTimeout;
         }
 
@@ -46,7 +45,7 @@ namespace Dracoon.Sdk.SdkInternal {
             return requestClient;
         }
 
-        private void AddFilters<T>(T filter, IRestRequest requestForFilterAdding) where T : DracoonFilter {
+        private void AddFilters<T>(T filter, RestRequest requestForFilterAdding) where T : DracoonFilter {
             if (filter == null) {
                 return;
             }
@@ -59,7 +58,7 @@ namespace Dracoon.Sdk.SdkInternal {
             requestForFilterAdding.AddQueryParameter("filter", filterString);
         }
 
-        private void AddSort<T>(T sort, IRestRequest requestForSortAdding) where T : DracoonSort {
+        private void AddSort<T>(T sort, RestRequest requestForSortAdding) where T : DracoonSort {
             if (sort == null) {
                 return;
             }
@@ -94,46 +93,46 @@ namespace Dracoon.Sdk.SdkInternal {
 
         #region GET
 
-        IRestRequest IRequestBuilder.GetServerVersion() {
-            RestRequest request = new RestRequest(ApiConfig.ApiGetServerVersion, Method.GET);
+        RestRequest IRequestBuilder.GetServerVersion() {
+            RestRequest request = new RestRequest(ApiConfig.ApiGetServerVersion, Method.Get);
             SetGeneralRestValues(request, false);
             return request;
         }
 
-        IRestRequest IRequestBuilder.GetServerTime() {
-            RestRequest request = new RestRequest(ApiConfig.ApiGetServerTime, Method.GET);
+        RestRequest IRequestBuilder.GetServerTime() {
+            RestRequest request = new RestRequest(ApiConfig.ApiGetServerTime, Method.Get);
             SetGeneralRestValues(request, false);
             return request;
         }
 
-        IRestRequest IRequestBuilder.GetPublicDownloadShare(string accessKey) {
-            RestRequest request = new RestRequest(ApiConfig.ApiGetPublicDownloadShare, Method.GET);
-            SetGeneralRestValues(request, false);
-            request.AddUrlSegment("accessKey", accessKey);
-            return request;
-        }
-
-        IRestRequest IRequestBuilder.GetPublicUploadShare(string accessKey) {
-            RestRequest request = new RestRequest(ApiConfig.ApiGetPublicUploadShare, Method.GET);
+        RestRequest IRequestBuilder.GetPublicDownloadShare(string accessKey) {
+            RestRequest request = new RestRequest(ApiConfig.ApiGetPublicDownloadShare, Method.Get);
             SetGeneralRestValues(request, false);
             request.AddUrlSegment("accessKey", accessKey);
             return request;
         }
 
-        IRestRequest IRequestBuilder.GetPublicSystemInfo() {
-            RestRequest request = new RestRequest(ApiConfig.ApiGetPublicSystemInfo, Method.GET);
+        RestRequest IRequestBuilder.GetPublicUploadShare(string accessKey) {
+            RestRequest request = new RestRequest(ApiConfig.ApiGetPublicUploadShare, Method.Get);
+            SetGeneralRestValues(request, false);
+            request.AddUrlSegment("accessKey", accessKey);
+            return request;
+        }
+
+        RestRequest IRequestBuilder.GetPublicSystemInfo() {
+            RestRequest request = new RestRequest(ApiConfig.ApiGetPublicSystemInfo, Method.Get);
             SetGeneralRestValues(request, false);
             return request;
         }
 
-        IRestRequest IRequestBuilder.GetPublicSystemActiveDirectoryAuth() {
-            RestRequest request = new RestRequest(ApiConfig.ApiGetPublicSystemAuthActiveDirectory, Method.GET);
+        RestRequest IRequestBuilder.GetPublicSystemActiveDirectoryAuth() {
+            RestRequest request = new RestRequest(ApiConfig.ApiGetPublicSystemAuthActiveDirectory, Method.Get);
             SetGeneralRestValues(request, false);
             return request;
         }
 
-        IRestRequest IRequestBuilder.GetPublicSystemOpenIdAuth() {
-            RestRequest request = new RestRequest(ApiConfig.ApiGetPublicSystemAuthOpenId, Method.GET);
+        RestRequest IRequestBuilder.GetPublicSystemOpenIdAuth() {
+            RestRequest request = new RestRequest(ApiConfig.ApiGetPublicSystemAuthOpenId, Method.Get);
             SetGeneralRestValues(request, false);
             return request;
         }
@@ -147,59 +146,59 @@ namespace Dracoon.Sdk.SdkInternal {
 
         #region GET
 
-        IRestRequest IRequestBuilder.GetUserAccount() {
-            RestRequest request = new RestRequest(ApiConfig.ApiGetUserAccount, Method.GET);
+        RestRequest IRequestBuilder.GetUserAccount() {
+            RestRequest request = new RestRequest(ApiConfig.ApiGetUserAccount, Method.Get);
             SetGeneralRestValues(request, true);
             return request;
         }
 
-        IRestRequest IRequestBuilder.GetCustomerAccount() {
-            RestRequest request = new RestRequest(ApiConfig.ApiGetCustomerAccount, Method.GET);
+        RestRequest IRequestBuilder.GetCustomerAccount() {
+            RestRequest request = new RestRequest(ApiConfig.ApiGetCustomerAccount, Method.Get);
             SetGeneralRestValues(request, true);
             return request;
         }
 
-        IRestRequest IRequestBuilder.GetUserKeyPair(string algorithm) {
-            RestRequest request = new RestRequest(ApiConfig.ApiGetUserKeyPair, Method.GET);
+        RestRequest IRequestBuilder.GetUserKeyPair(string algorithm) {
+            RestRequest request = new RestRequest(ApiConfig.ApiGetUserKeyPair, Method.Get);
             SetGeneralRestValues(request, true);
             request.AddQueryParameter("version", algorithm);
             return request;
         }
 
-        public IRestRequest GetUserKeyPairs() {
-            RestRequest request = new RestRequest(ApiConfig.ApiGetUserKeyPairs, Method.GET);
+        public RestRequest GetUserKeyPairs() {
+            RestRequest request = new RestRequest(ApiConfig.ApiGetUserKeyPairs, Method.Get);
             SetGeneralRestValues(request, true);
             return request;
         }
 
-        IRestRequest IRequestBuilder.GetAuthenticatedPing() {
-            RestRequest request = new RestRequest(ApiConfig.ApiGetAuthenticatedPing, Method.GET);
+        RestRequest IRequestBuilder.GetAuthenticatedPing() {
+            RestRequest request = new RestRequest(ApiConfig.ApiGetAuthenticatedPing, Method.Get);
             SetGeneralRestValues(request, true);
             request.AddHeader("Accept", "*/*");
             return request;
         }
 
-        IRestRequest IRequestBuilder.GetAvatar() {
-            RestRequest request = new RestRequest(ApiConfig.ApiGetAvatar, Method.GET);
+        RestRequest IRequestBuilder.GetAvatar() {
+            RestRequest request = new RestRequest(ApiConfig.ApiGetAvatar, Method.Get);
             SetGeneralRestValues(request, true);
             return request;
         }
 
-        IRestRequest IRequestBuilder.GetUserProfileAttributes() {
-            RestRequest request = new RestRequest(ApiConfig.ApiGetUserProfileAttributes, Method.GET);
+        RestRequest IRequestBuilder.GetUserProfileAttributes() {
+            RestRequest request = new RestRequest(ApiConfig.ApiGetUserProfileAttributes, Method.Get);
             SetGeneralRestValues(request, true);
             return request;
         }
 
-        IRestRequest IRequestBuilder.GetUserProfileAttribute(string attributeKey) {
-            RestRequest request = new RestRequest(ApiConfig.ApiGetUserProfileAttributes, Method.GET);
+        RestRequest IRequestBuilder.GetUserProfileAttribute(string attributeKey) {
+            RestRequest request = new RestRequest(ApiConfig.ApiGetUserProfileAttributes, Method.Get);
             SetGeneralRestValues(request, true);
             request.AddQueryParameter("filter", "key:eq:" + attributeKey);
             return request;
         }
 
-        public IRestRequest GetDownloadShareSubscriptions(long? offset, long? limit) {
-            RestRequest request = new RestRequest(ApiConfig.ApiGetDownloadShareSubscriptions, Method.GET);
+        public RestRequest GetDownloadShareSubscriptions(long? offset, long? limit) {
+            RestRequest request = new RestRequest(ApiConfig.ApiGetDownloadShareSubscriptions, Method.Get);
             SetGeneralRestValues(request, true);
             if (offset.HasValue) {
                 request.AddQueryParameter("offset", offset.ToString());
@@ -212,8 +211,8 @@ namespace Dracoon.Sdk.SdkInternal {
             return request;
         }
 
-        public IRestRequest GetUploadShareSubscriptions(long? offset, long? limit) {
-            RestRequest request = new RestRequest(ApiConfig.ApiGetUploadShareSubscriptions, Method.GET);
+        public RestRequest GetUploadShareSubscriptions(long? offset, long? limit) {
+            RestRequest request = new RestRequest(ApiConfig.ApiGetUploadShareSubscriptions, Method.Get);
             SetGeneralRestValues(request, true);
             if (offset.HasValue) {
                 request.AddQueryParameter("offset", offset.ToString());
@@ -230,21 +229,21 @@ namespace Dracoon.Sdk.SdkInternal {
 
         #region POST
 
-        IRestRequest IRequestBuilder.SetUserKeyPair(ApiUserKeyPair apiUserKeyPair) {
-            RestRequest request = new RestRequest(ApiConfig.ApiPostUserKeyPair, Method.POST);
+        RestRequest IRequestBuilder.SetUserKeyPair(ApiUserKeyPair apiUserKeyPair) {
+            RestRequest request = new RestRequest(ApiConfig.ApiPostUserKeyPair, Method.Post);
             SetGeneralRestValues(request, true, apiUserKeyPair);
             return request;
         }
 
-        public IRestRequest AddDownloadShareSubscription(long shareId) {
-            RestRequest request = new RestRequest(ApiConfig.ApiPostDownloadShareSubscription, Method.POST);
+        public RestRequest AddDownloadShareSubscription(long shareId) {
+            RestRequest request = new RestRequest(ApiConfig.ApiPostDownloadShareSubscription, Method.Post);
             SetGeneralRestValues(request, true);
             request.AddUrlSegment("shareId", shareId);
             return request;
         }
 
-        public IRestRequest AddUploadShareSubscription(long shareId) {
-            RestRequest request = new RestRequest(ApiConfig.ApiPostUploadShareSubscription, Method.POST);
+        public RestRequest AddUploadShareSubscription(long shareId) {
+            RestRequest request = new RestRequest(ApiConfig.ApiPostUploadShareSubscription, Method.Post);
             SetGeneralRestValues(request, true);
             request.AddUrlSegment("shareId", shareId);
             return request;
@@ -254,8 +253,8 @@ namespace Dracoon.Sdk.SdkInternal {
 
         #region PUT
 
-        IRestRequest IRequestBuilder.PutUserProfileAttributes(ApiAddOrUpdateAttributeRequest addOrUpdateParam) {
-            RestRequest request = new RestRequest(ApiConfig.ApiPutUserProfileAttributes, Method.PUT);
+        RestRequest IRequestBuilder.PutUserProfileAttributes(ApiAddOrUpdateAttributeRequest addOrUpdateParam) {
+            RestRequest request = new RestRequest(ApiConfig.ApiPutUserProfileAttributes, Method.Put);
             SetGeneralRestValues(request, true, addOrUpdateParam);
             return request;
         }
@@ -264,35 +263,35 @@ namespace Dracoon.Sdk.SdkInternal {
 
         #region DELETE
 
-        IRestRequest IRequestBuilder.DeleteUserKeyPair(string algorithm) {
-            RestRequest request = new RestRequest(ApiConfig.ApiDeleteUserKeyPair, Method.DELETE);
+        RestRequest IRequestBuilder.DeleteUserKeyPair(string algorithm) {
+            RestRequest request = new RestRequest(ApiConfig.ApiDeleteUserKeyPair, Method.Delete);
             SetGeneralRestValues(request, true);
             request.AddQueryParameter("version", algorithm);
             return request;
         }
 
-        IRestRequest IRequestBuilder.DeleteUserProfileAttributes(string attributeKey) {
-            RestRequest request = new RestRequest(ApiConfig.ApiDeleteUserProfileAttributes, Method.DELETE);
+        RestRequest IRequestBuilder.DeleteUserProfileAttributes(string attributeKey) {
+            RestRequest request = new RestRequest(ApiConfig.ApiDeleteUserProfileAttributes, Method.Delete);
             SetGeneralRestValues(request, true);
             request.AddUrlSegment("key", attributeKey);
             return request;
         }
 
-        IRestRequest IRequestBuilder.DeleteAvatar() {
-            RestRequest request = new RestRequest(ApiConfig.ApiDeleteAvatar, Method.DELETE);
+        RestRequest IRequestBuilder.DeleteAvatar() {
+            RestRequest request = new RestRequest(ApiConfig.ApiDeleteAvatar, Method.Delete);
             SetGeneralRestValues(request, true);
             return request;
         }
 
-        public IRestRequest RemoveDownloadShareSubscription(long shareId) {
-            RestRequest request = new RestRequest(ApiConfig.ApiDeleteDownloadShareSubscription, Method.DELETE);
+        public RestRequest RemoveDownloadShareSubscription(long shareId) {
+            RestRequest request = new RestRequest(ApiConfig.ApiDeleteDownloadShareSubscription, Method.Delete);
             SetGeneralRestValues(request, true);
             request.AddUrlSegment("shareId", shareId);
             return request;
         }
 
-        public IRestRequest RemoveUploadShareSubscription(long shareId) {
-            RestRequest request = new RestRequest(ApiConfig.ApiDeleteUploadShareSubscription, Method.DELETE);
+        public RestRequest RemoveUploadShareSubscription(long shareId) {
+            RestRequest request = new RestRequest(ApiConfig.ApiDeleteUploadShareSubscription, Method.Delete);
             SetGeneralRestValues(request, true);
             request.AddUrlSegment("shareId", shareId);
             return request;
@@ -322,8 +321,8 @@ namespace Dracoon.Sdk.SdkInternal {
 
         #region GET
 
-        IRestRequest IRequestBuilder.GetNodes(long parentNodeId, long? offset, long? limit, GetNodesFilter filter, GetNodesSort sort) {
-            RestRequest request = new RestRequest(ApiConfig.ApiGetChildNodes, Method.GET);
+        RestRequest IRequestBuilder.GetNodes(long parentNodeId, long? offset, long? limit, GetNodesFilter filter, GetNodesSort sort) {
+            RestRequest request = new RestRequest(ApiConfig.ApiGetChildNodes, Method.Get);
             SetGeneralRestValues(request, true);
             AddFilters(filter, request);
             AddSort(sort, request);
@@ -339,23 +338,23 @@ namespace Dracoon.Sdk.SdkInternal {
             return request;
         }
 
-        IRestRequest IRequestBuilder.GetNode(long nodeId) {
-            RestRequest request = new RestRequest(ApiConfig.ApiGetNode, Method.GET);
+        RestRequest IRequestBuilder.GetNode(long nodeId) {
+            RestRequest request = new RestRequest(ApiConfig.ApiGetNode, Method.Get);
             SetGeneralRestValues(request, true);
             request.AddUrlSegment("nodeId", nodeId);
             return request;
         }
 
-        IRestRequest IRequestBuilder.GetFileKey(long nodeId) {
-            RestRequest request = new RestRequest(ApiConfig.ApiGetFileKey, Method.GET);
+        RestRequest IRequestBuilder.GetFileKey(long nodeId) {
+            RestRequest request = new RestRequest(ApiConfig.ApiGetFileKey, Method.Get);
             SetGeneralRestValues(request, true);
             request.AddUrlSegment("fileId", nodeId);
             return request;
         }
 
-        IRestRequest IRequestBuilder.GetSearchNodes(long parentNodeId, string searchString, long offset, long limit, int depthLevel,
+        RestRequest IRequestBuilder.GetSearchNodes(long parentNodeId, string searchString, long offset, long limit, int depthLevel,
             SearchNodesFilter filter, SearchNodesSort sort) {
-            RestRequest request = new RestRequest(ApiConfig.ApiGetSearchNodes, Method.GET);
+            RestRequest request = new RestRequest(ApiConfig.ApiGetSearchNodes, Method.Get);
             SetGeneralRestValues(request, true);
             AddFilters(filter, request);
             AddSort(sort, request);
@@ -367,8 +366,8 @@ namespace Dracoon.Sdk.SdkInternal {
             return request;
         }
 
-        IRestRequest IRequestBuilder.GetMissingFileKeys(long? fileId, int limit, int offset) {
-            RestRequest request = new RestRequest(ApiConfig.ApiGetMissingFileKeys, Method.GET);
+        RestRequest IRequestBuilder.GetMissingFileKeys(long? fileId, int limit, int offset) {
+            RestRequest request = new RestRequest(ApiConfig.ApiGetMissingFileKeys, Method.Get);
             SetGeneralRestValues(request, true);
             if (fileId.HasValue) {
                 request.AddQueryParameter("fileId", fileId.ToString());
@@ -379,8 +378,8 @@ namespace Dracoon.Sdk.SdkInternal {
             return request;
         }
 
-        IRestRequest IRequestBuilder.GetRecycleBin(long parentRoomId, long? offset, long? limit) {
-            RestRequest request = new RestRequest(ApiConfig.ApiGetRecycleBin, Method.GET);
+        RestRequest IRequestBuilder.GetRecycleBin(long parentRoomId, long? offset, long? limit) {
+            RestRequest request = new RestRequest(ApiConfig.ApiGetRecycleBin, Method.Get);
             SetGeneralRestValues(request, true);
             request.AddUrlSegment("roomId", parentRoomId);
             if (offset.HasValue) {
@@ -394,8 +393,8 @@ namespace Dracoon.Sdk.SdkInternal {
             return request;
         }
 
-        IRestRequest IRequestBuilder.GetPreviousVersions(long nodeId, string type, string nodeName, long? offset, long? limit) {
-            RestRequest request = new RestRequest(ApiConfig.ApiGetPreviousVersions, Method.GET);
+        RestRequest IRequestBuilder.GetPreviousVersions(long nodeId, string type, string nodeName, long? offset, long? limit) {
+            RestRequest request = new RestRequest(ApiConfig.ApiGetPreviousVersions, Method.Get);
             SetGeneralRestValues(request, true);
             request.AddUrlSegment("nodeId", nodeId);
             request.AddQueryParameter("type", type);
@@ -411,22 +410,22 @@ namespace Dracoon.Sdk.SdkInternal {
             return request;
         }
 
-        IRestRequest IRequestBuilder.GetPreviousVersion(long previousNodeId) {
-            RestRequest request = new RestRequest(ApiConfig.ApiGetPreviousVersion, Method.GET);
+        RestRequest IRequestBuilder.GetPreviousVersion(long previousNodeId) {
+            RestRequest request = new RestRequest(ApiConfig.ApiGetPreviousVersion, Method.Get);
             SetGeneralRestValues(request, true);
             request.AddUrlSegment("previousNodeId", previousNodeId);
             return request;
         }
 
-        IRestRequest IRequestBuilder.GetS3Status(string uploadId) {
-            RestRequest request = new RestRequest(ApiConfig.ApiGetS3Status, Method.GET);
+        RestRequest IRequestBuilder.GetS3Status(string uploadId) {
+            RestRequest request = new RestRequest(ApiConfig.ApiGetS3Status, Method.Get);
             SetGeneralRestValues(request, true);
             request.AddUrlSegment("uploadId", uploadId);
             return request;
         }
 
-        IRestRequest IRequestBuilder.GetRoomEvents(long roomId, DateTime? dateStart, DateTime? dateEnd, EventStatus? status, int? type, long? userId, long? offset, long? limit, EventLogsSort sort) {
-            RestRequest request = new RestRequest(ApiConfig.ApiGetRoomEvents, Method.GET);
+        RestRequest IRequestBuilder.GetRoomEvents(long roomId, DateTime? dateStart, DateTime? dateEnd, EventStatus? status, int? type, long? userId, long? offset, long? limit, EventLogsSort sort) {
+            RestRequest request = new RestRequest(ApiConfig.ApiGetRoomEvents, Method.Get);
             SetGeneralRestValues(request, true);
             request.AddUrlSegment("roomId", roomId);
             AddSort(sort, request);
@@ -443,8 +442,8 @@ namespace Dracoon.Sdk.SdkInternal {
             return request;
         }
 
-        IRestRequest IRequestBuilder.GetRoomGroups(long roomId, long? offset, long? limit, GetRoomGroupsFilter filter) {
-            RestRequest request = new RestRequest(ApiConfig.ApiGetRoomGroups, Method.GET);
+        RestRequest IRequestBuilder.GetRoomGroups(long roomId, long? offset, long? limit, GetRoomGroupsFilter filter) {
+            RestRequest request = new RestRequest(ApiConfig.ApiGetRoomGroups, Method.Get);
             SetGeneralRestValues(request, true);
             request.AddUrlSegment("roomId", roomId);
             AddFilters(filter, request);
@@ -455,8 +454,8 @@ namespace Dracoon.Sdk.SdkInternal {
             return request;
         }
 
-        IRestRequest IRequestBuilder.GetRoomUsers(long roomId, long? offset, long? limit, GetRoomUsersFilter filter) {
-            RestRequest request = new RestRequest(ApiConfig.ApiGetRoomUsers, Method.GET);
+        RestRequest IRequestBuilder.GetRoomUsers(long roomId, long? offset, long? limit, GetRoomUsersFilter filter) {
+            RestRequest request = new RestRequest(ApiConfig.ApiGetRoomUsers, Method.Get);
             SetGeneralRestValues(request, true);
             request.AddUrlSegment("roomId", roomId);
             AddFilters(filter, request);
@@ -467,8 +466,8 @@ namespace Dracoon.Sdk.SdkInternal {
             return request;
         }
 
-        IRestRequest IRequestBuilder.GetRoomPending(long roomId, long? offset, long? limit, GetRoomPendingFilter filter, PendingAssignmentsSort sort) {
-            RestRequest request = new RestRequest(ApiConfig.ApiGetRoomPending, Method.GET);
+        RestRequest IRequestBuilder.GetRoomPending(long roomId, long? offset, long? limit, GetRoomPendingFilter filter, PendingAssignmentsSort sort) {
+            RestRequest request = new RestRequest(ApiConfig.ApiGetRoomPending, Method.Get);
             SetGeneralRestValues(request, true);
             request.AddUrlSegment("roomId", roomId);
             AddSort(sort, request);
@@ -484,73 +483,73 @@ namespace Dracoon.Sdk.SdkInternal {
 
         #region POST
 
-        IRestRequest IRequestBuilder.PostRoom(ApiCreateRoomRequest roomParams) {
-            RestRequest request = new RestRequest(ApiConfig.ApiPostRoom, Method.POST);
+        RestRequest IRequestBuilder.PostRoom(ApiCreateRoomRequest roomParams) {
+            RestRequest request = new RestRequest(ApiConfig.ApiPostRoom, Method.Post);
             SetGeneralRestValues(request, true, roomParams);
             return request;
         }
 
-        IRestRequest IRequestBuilder.PostFolder(ApiCreateFolderRequest folderParams) {
-            RestRequest request = new RestRequest(ApiConfig.ApiPostFolder, Method.POST);
+        RestRequest IRequestBuilder.PostFolder(ApiCreateFolderRequest folderParams) {
+            RestRequest request = new RestRequest(ApiConfig.ApiPostFolder, Method.Post);
             SetGeneralRestValues(request, true, folderParams);
             return request;
         }
 
-        IRestRequest IRequestBuilder.PostFileDownload(long fileId) {
-            RestRequest request = new RestRequest(ApiConfig.ApiPostCreateFileDownload, Method.POST);
+        RestRequest IRequestBuilder.PostFileDownload(long fileId) {
+            RestRequest request = new RestRequest(ApiConfig.ApiPostCreateFileDownload, Method.Post);
             SetGeneralRestValues(request, true);
             request.AddUrlSegment("fileId", fileId);
             return request;
         }
 
-        IRestRequest IRequestBuilder.PostCreateFileUpload(ApiCreateFileUpload uploadParams) {
-            RestRequest request = new RestRequest(ApiConfig.ApiPostCreateFileUpload, Method.POST);
+        RestRequest IRequestBuilder.PostCreateFileUpload(ApiCreateFileUpload uploadParams) {
+            RestRequest request = new RestRequest(ApiConfig.ApiPostCreateFileUpload, Method.Post);
             SetGeneralRestValues(request, true, uploadParams);
             return request;
         }
 
-        IRestRequest IRequestBuilder.PostGetS3Urls(string uploadId, ApiGetS3Urls s3UrlParams) {
-            RestRequest request = new RestRequest(ApiConfig.ApiPostGetS3Urls, Method.POST);
+        RestRequest IRequestBuilder.PostGetS3Urls(string uploadId, ApiGetS3Urls s3UrlParams) {
+            RestRequest request = new RestRequest(ApiConfig.ApiPostGetS3Urls, Method.Post);
             SetGeneralRestValues(request, true, s3UrlParams);
             request.AddUrlSegment("uploadId", uploadId);
             return request;
         }
 
-        IRestRequest IRequestBuilder.PostCopyNodes(long targetNodeId, ApiCopyNodesRequest copyParams) {
-            RestRequest request = new RestRequest(ApiConfig.ApiPostCopyNodes, Method.POST);
+        RestRequest IRequestBuilder.PostCopyNodes(long targetNodeId, ApiCopyNodesRequest copyParams) {
+            RestRequest request = new RestRequest(ApiConfig.ApiPostCopyNodes, Method.Post);
             SetGeneralRestValues(request, true, copyParams);
             request.AddUrlSegment("nodeId", targetNodeId);
             return request;
         }
 
-        IRestRequest IRequestBuilder.PostMoveNodes(long targetNodeId, ApiMoveNodesRequest moveParams) {
-            RestRequest request = new RestRequest(ApiConfig.ApiPostMoveNodes, Method.POST);
+        RestRequest IRequestBuilder.PostMoveNodes(long targetNodeId, ApiMoveNodesRequest moveParams) {
+            RestRequest request = new RestRequest(ApiConfig.ApiPostMoveNodes, Method.Post);
             SetGeneralRestValues(request, true, moveParams);
             request.AddUrlSegment("nodeId", targetNodeId);
             return request;
         }
 
-        IRestRequest IRequestBuilder.PostMissingFileKeys(ApiSetUserFileKeysRequest fileKeyParams) {
-            RestRequest request = new RestRequest(ApiConfig.ApiPostMissingFileKeys, Method.POST);
+        RestRequest IRequestBuilder.PostMissingFileKeys(ApiSetUserFileKeysRequest fileKeyParams) {
+            RestRequest request = new RestRequest(ApiConfig.ApiPostMissingFileKeys, Method.Post);
             SetGeneralRestValues(request, true, fileKeyParams);
             return request;
         }
 
-        IRestRequest IRequestBuilder.PostFavorite(long nodeId) {
-            RestRequest request = new RestRequest(ApiConfig.ApiPostFavorite, Method.POST);
+        RestRequest IRequestBuilder.PostFavorite(long nodeId) {
+            RestRequest request = new RestRequest(ApiConfig.ApiPostFavorite, Method.Post);
             SetGeneralRestValues(request, true);
             request.AddUrlSegment("nodeId", nodeId);
             return request;
         }
 
-        IRestRequest IRequestBuilder.PostRestoreNodeVersion(ApiRestorePreviousVersionsRequest restoreParams) {
-            RestRequest request = new RestRequest(ApiConfig.ApiPostRestoreNodeVersion, Method.POST);
+        RestRequest IRequestBuilder.PostRestoreNodeVersion(ApiRestorePreviousVersionsRequest restoreParams) {
+            RestRequest request = new RestRequest(ApiConfig.ApiPostRestoreNodeVersion, Method.Post);
             SetGeneralRestValues(request, true, restoreParams);
             return request;
         }
 
-        IRestRequest IRequestBuilder.GenerateVirusProtectionInfo(ApiGenerateVirusProtectionInfoRequest generateParams) {
-            RestRequest request = new RestRequest(ApiConfig.ApiGenerateVirusProtectionInfo, Method.POST);
+        RestRequest IRequestBuilder.GenerateVirusProtectionInfo(ApiGenerateVirusProtectionInfoRequest generateParams) {
+            RestRequest request = new RestRequest(ApiConfig.ApiGenerateVirusProtectionInfo, Method.Post);
             SetGeneralRestValues(request, true, generateParams);
             return request;
         }
@@ -559,63 +558,63 @@ namespace Dracoon.Sdk.SdkInternal {
 
         #region PUT
 
-        IRestRequest IRequestBuilder.PutRoom(long roomId, ApiUpdateRoomRequest roomParams) {
-            RestRequest request = new RestRequest(ApiConfig.ApiPutRoom, Method.PUT);
+        RestRequest IRequestBuilder.PutRoom(long roomId, ApiUpdateRoomRequest roomParams) {
+            RestRequest request = new RestRequest(ApiConfig.ApiPutRoom, Method.Put);
             SetGeneralRestValues(request, true, roomParams);
             request.AddUrlSegment("roomId", roomId);
             return request;
         }
 
-        IRestRequest IRequestBuilder.PutRoomConfig(long roomId, ApiConfigRoomRequest roomParams) {
-            RestRequest request = new RestRequest(ApiConfig.ApiPutRoomConfig, Method.PUT);
+        RestRequest IRequestBuilder.PutRoomConfig(long roomId, ApiConfigRoomRequest roomParams) {
+            RestRequest request = new RestRequest(ApiConfig.ApiPutRoomConfig, Method.Put);
             SetGeneralRestValues(request, true, roomParams);
             request.AddUrlSegment("roomId", roomId);
             return request;
         }
 
-        IRestRequest IRequestBuilder.PutRoomGroups(long roomId, ApiRoomGroupsAddBatchRequest roomGroupParams) {
-            RestRequest request = new RestRequest(ApiConfig.ApiPutRoomGroups, Method.PUT);
+        RestRequest IRequestBuilder.PutRoomGroups(long roomId, ApiRoomGroupsAddBatchRequest roomGroupParams) {
+            RestRequest request = new RestRequest(ApiConfig.ApiPutRoomGroups, Method.Put);
             SetGeneralRestValues(request, true, roomGroupParams);
             request.AddUrlSegment("roomId", roomId);
             return request;
         }
 
-        IRestRequest IRequestBuilder.PutRoomUsers(long roomId, ApiRoomUsersAddBatchRequest roomUserParams) {
-            RestRequest request = new RestRequest(ApiConfig.ApiPutRoomUsers, Method.PUT);
+        RestRequest IRequestBuilder.PutRoomUsers(long roomId, ApiRoomUsersAddBatchRequest roomUserParams) {
+            RestRequest request = new RestRequest(ApiConfig.ApiPutRoomUsers, Method.Put);
             SetGeneralRestValues(request, true, roomUserParams);
             request.AddUrlSegment("roomId", roomId);
             return request;
         }
 
-        IRestRequest IRequestBuilder.PutEnableRoomEncryption(long roomId, ApiEnableRoomEncryptionRequest encryptionParams) {
-            RestRequest request = new RestRequest(ApiConfig.ApiPutEnableRoomEncryption, Method.PUT);
+        RestRequest IRequestBuilder.PutEnableRoomEncryption(long roomId, ApiEnableRoomEncryptionRequest encryptionParams) {
+            RestRequest request = new RestRequest(ApiConfig.ApiPutEnableRoomEncryption, Method.Put);
             SetGeneralRestValues(request, true, encryptionParams);
             request.AddUrlSegment("roomId", roomId);
             return request;
         }
 
-        IRestRequest IRequestBuilder.PutFolder(long folderId, ApiUpdateFolderRequest folderParams) {
-            RestRequest request = new RestRequest(ApiConfig.ApiPutFolder, Method.PUT);
+        RestRequest IRequestBuilder.PutFolder(long folderId, ApiUpdateFolderRequest folderParams) {
+            RestRequest request = new RestRequest(ApiConfig.ApiPutFolder, Method.Put);
             SetGeneralRestValues(request, true, folderParams);
             request.AddUrlSegment("folderId", folderId);
             return request;
         }
 
-        IRestRequest IRequestBuilder.PutFile(long fileId, ApiUpdateFileRequest fileParams) {
-            RestRequest request = new RestRequest(ApiConfig.ApiPutFileUpdate, Method.PUT);
+        RestRequest IRequestBuilder.PutFile(long fileId, ApiUpdateFileRequest fileParams) {
+            RestRequest request = new RestRequest(ApiConfig.ApiPutFileUpdate, Method.Put);
             SetGeneralRestValues(request, true, fileParams);
             request.AddUrlSegment("fileId", fileId);
             return request;
         }
 
-        IRestRequest IRequestBuilder.PutCompleteFileUpload(string uploadPath, ApiCompleteFileUpload completeParams) {
-            RestRequest request = new RestRequest(uploadPath, Method.PUT);
+        RestRequest IRequestBuilder.PutCompleteFileUpload(string uploadPath, ApiCompleteFileUpload completeParams) {
+            RestRequest request = new RestRequest(uploadPath, Method.Put);
             SetGeneralRestValues(request, true, completeParams);
             return request;
         }
 
-        IRestRequest IRequestBuilder.PutCompleteS3FileUpload(string uploadId, ApiCompleteFileUpload completeParams) {
-            RestRequest request = new RestRequest(ApiConfig.ApiPutCompleteS3Upload, Method.PUT);
+        RestRequest IRequestBuilder.PutCompleteS3FileUpload(string uploadId, ApiCompleteFileUpload completeParams) {
+            RestRequest request = new RestRequest(ApiConfig.ApiPutCompleteS3Upload, Method.Put);
             SetGeneralRestValues(request, true, completeParams);
             request.AddUrlSegment("uploadId", uploadId);
             return request;
@@ -625,48 +624,48 @@ namespace Dracoon.Sdk.SdkInternal {
 
         #region DELETE
 
-        IRestRequest IRequestBuilder.DeleteNodes(ApiDeleteNodesRequest deleteParams) {
-            RestRequest request = new RestRequest(ApiConfig.ApiDeleteNodes, Method.DELETE);
+        RestRequest IRequestBuilder.DeleteNodes(ApiDeleteNodesRequest deleteParams) {
+            RestRequest request = new RestRequest(ApiConfig.ApiDeleteNodes, Method.Delete);
             SetGeneralRestValues(request, true, deleteParams);
             return request;
         }
 
-        IRestRequest IRequestBuilder.DeleteFavorite(long nodeId) {
-            RestRequest request = new RestRequest(ApiConfig.ApiDeleteFavorite, Method.DELETE);
+        RestRequest IRequestBuilder.DeleteFavorite(long nodeId) {
+            RestRequest request = new RestRequest(ApiConfig.ApiDeleteFavorite, Method.Delete);
             SetGeneralRestValues(request, true);
             request.AddUrlSegment("nodeId", nodeId);
             return request;
         }
 
-        IRestRequest IRequestBuilder.DeleteRecycleBin(long parentRoomId) {
-            RestRequest request = new RestRequest(ApiConfig.ApiDeleteRecycleBin, Method.DELETE);
+        RestRequest IRequestBuilder.DeleteRecycleBin(long parentRoomId) {
+            RestRequest request = new RestRequest(ApiConfig.ApiDeleteRecycleBin, Method.Delete);
             SetGeneralRestValues(request, true);
             request.AddUrlSegment("roomId", parentRoomId);
             return request;
         }
 
-        IRestRequest IRequestBuilder.DeletePreviousVersion(ApiDeletePreviousVersionsRequest deleteParams) {
-            RestRequest request = new RestRequest(ApiConfig.ApiDeletePreviousVersions, Method.DELETE);
+        RestRequest IRequestBuilder.DeletePreviousVersion(ApiDeletePreviousVersionsRequest deleteParams) {
+            RestRequest request = new RestRequest(ApiConfig.ApiDeletePreviousVersions, Method.Delete);
             SetGeneralRestValues(request, true, deleteParams);
             return request;
         }
 
-        public IRestRequest DeleteMaliciousFile(long fileId) {
-            RestRequest request = new RestRequest(ApiConfig.ApiDeleteMaliciousFile, Method.DELETE);
+        public RestRequest DeleteMaliciousFile(long fileId) {
+            RestRequest request = new RestRequest(ApiConfig.ApiDeleteMaliciousFile, Method.Delete);
             SetGeneralRestValues(request, true);
             request.AddUrlSegment("fileId", fileId);
             return request;
         }
 
-        IRestRequest IRequestBuilder.DeleteRoomGroups(long roomId, ApiRoomGroupsDeleteBatchRequest deleteParams) {
-            RestRequest request = new RestRequest(ApiConfig.ApiDeleteRoomGroups, Method.DELETE);
+        RestRequest IRequestBuilder.DeleteRoomGroups(long roomId, ApiRoomGroupsDeleteBatchRequest deleteParams) {
+            RestRequest request = new RestRequest(ApiConfig.ApiDeleteRoomGroups, Method.Delete);
             SetGeneralRestValues(request, true, deleteParams);
             request.AddUrlSegment("roomId", roomId);
             return request;
         }
 
-        IRestRequest IRequestBuilder.DeleteRoomUsers(long roomId, ApiRoomUsersDeleteBatchRequest deleteParams) {
-            RestRequest request = new RestRequest(ApiConfig.ApiDeleteRoomUsers, Method.DELETE);
+        RestRequest IRequestBuilder.DeleteRoomUsers(long roomId, ApiRoomUsersDeleteBatchRequest deleteParams) {
+            RestRequest request = new RestRequest(ApiConfig.ApiDeleteRoomUsers, Method.Delete);
             SetGeneralRestValues(request, true, deleteParams);
             request.AddUrlSegment("roomId", roomId);
             return request;
@@ -702,8 +701,8 @@ namespace Dracoon.Sdk.SdkInternal {
 
         #region GET
 
-        IRestRequest IRequestBuilder.GetDownloadShares(long? offset, long? limit, GetDownloadSharesFilter filter, SharesSort sort) {
-            RestRequest request = new RestRequest(ApiConfig.ApiGetDownloadShares, Method.GET);
+        RestRequest IRequestBuilder.GetDownloadShares(long? offset, long? limit, GetDownloadSharesFilter filter, SharesSort sort) {
+            RestRequest request = new RestRequest(ApiConfig.ApiGetDownloadShares, Method.Get);
             SetGeneralRestValues(request, true);
             AddFilters(filter, request);
             AddSort(sort, request);
@@ -718,8 +717,8 @@ namespace Dracoon.Sdk.SdkInternal {
             return request;
         }
 
-        IRestRequest IRequestBuilder.GetUploadShares(long? offset, long? limit, GetUploadSharesFilter filter, SharesSort sort) {
-            RestRequest request = new RestRequest(ApiConfig.ApiGetUploadShares, Method.GET);
+        RestRequest IRequestBuilder.GetUploadShares(long? offset, long? limit, GetUploadSharesFilter filter, SharesSort sort) {
+            RestRequest request = new RestRequest(ApiConfig.ApiGetUploadShares, Method.Get);
             SetGeneralRestValues(request, true);
             AddFilters(filter, request);
             AddSort(sort, request);
@@ -738,27 +737,27 @@ namespace Dracoon.Sdk.SdkInternal {
 
         #region POST
 
-        IRestRequest IRequestBuilder.PostCreateDownloadShare(ApiCreateDownloadShareRequest downloadShareParams) {
-            RestRequest request = new RestRequest(ApiConfig.ApiPostCreateDownloadShare, Method.POST);
+        RestRequest IRequestBuilder.PostCreateDownloadShare(ApiCreateDownloadShareRequest downloadShareParams) {
+            RestRequest request = new RestRequest(ApiConfig.ApiPostCreateDownloadShare, Method.Post);
             SetGeneralRestValues(request, true, downloadShareParams);
             return request;
         }
 
-        IRestRequest IRequestBuilder.PostCreateUploadShare(ApiCreateUploadShareRequest uploadShareParams) {
-            RestRequest request = new RestRequest(ApiConfig.ApiPostCreateUploadShare, Method.POST);
+        RestRequest IRequestBuilder.PostCreateUploadShare(ApiCreateUploadShareRequest uploadShareParams) {
+            RestRequest request = new RestRequest(ApiConfig.ApiPostCreateUploadShare, Method.Post);
             SetGeneralRestValues(request, true, uploadShareParams);
             return request;
         }
 
-        IRestRequest IRequestBuilder.PostMailDownloadShare(long shareId, ApiMailShareInfoRequest mailParams) {
-            RestRequest request = new RestRequest(ApiConfig.ApiPostMailDownloadShare, Method.POST);
+        RestRequest IRequestBuilder.PostMailDownloadShare(long shareId, ApiMailShareInfoRequest mailParams) {
+            RestRequest request = new RestRequest(ApiConfig.ApiPostMailDownloadShare, Method.Post);
             SetGeneralRestValues(request, true, mailParams);
             request.AddUrlSegment("shareId", shareId);
             return request;
         }
 
-        IRestRequest IRequestBuilder.PostMailUploadShare(long shareId, ApiMailShareInfoRequest mailParams) {
-            RestRequest request = new RestRequest(ApiConfig.ApiPostMailUploadShare, Method.POST);
+        RestRequest IRequestBuilder.PostMailUploadShare(long shareId, ApiMailShareInfoRequest mailParams) {
+            RestRequest request = new RestRequest(ApiConfig.ApiPostMailUploadShare, Method.Post);
             SetGeneralRestValues(request, true, mailParams);
             request.AddUrlSegment("shareId", shareId);
             return request;
@@ -768,15 +767,15 @@ namespace Dracoon.Sdk.SdkInternal {
 
         #region DELETE
 
-        IRestRequest IRequestBuilder.DeleteDownloadShare(long shareId) {
-            RestRequest request = new RestRequest(ApiConfig.ApiDeleteDownloadShare, Method.DELETE);
+        RestRequest IRequestBuilder.DeleteDownloadShare(long shareId) {
+            RestRequest request = new RestRequest(ApiConfig.ApiDeleteDownloadShare, Method.Delete);
             SetGeneralRestValues(request, true);
             request.AddUrlSegment("shareId", shareId);
             return request;
         }
 
-        IRestRequest IRequestBuilder.DeleteUploadShare(long shareId) {
-            RestRequest request = new RestRequest(ApiConfig.ApiDeleteUploadShare, Method.DELETE);
+        RestRequest IRequestBuilder.DeleteUploadShare(long shareId) {
+            RestRequest request = new RestRequest(ApiConfig.ApiDeleteUploadShare, Method.Delete);
             SetGeneralRestValues(request, true);
             request.AddUrlSegment("shareId", shareId);
             return request;
@@ -790,8 +789,8 @@ namespace Dracoon.Sdk.SdkInternal {
 
         #region POST
 
-        IRestRequest IRequestBuilder.PostOAuthToken(string clientId, string clientSecret, string grantType, string code) {
-            RestRequest request = new RestRequest(OAuthConfig.OAuthPostAuthToken, Method.POST);
+        RestRequest IRequestBuilder.PostOAuthToken(string clientId, string clientSecret, string grantType, string code) {
+            RestRequest request = new RestRequest(OAuthConfig.OAuthPostAuthToken, Method.Post);
             SetGeneralRestValues(request, false);
             request.AddHeader("Authorization", "Basic " + Convert.ToBase64String(ApiConfig.ENCODING.GetBytes(clientId + ":" + clientSecret)));
             request.AddParameter("grant_type", grantType, ParameterType.GetOrPost);
@@ -799,8 +798,8 @@ namespace Dracoon.Sdk.SdkInternal {
             return request;
         }
 
-        IRestRequest IRequestBuilder.PostOAuthRefresh(string clientId, string clientSecret, string grantType, string refreshToken) {
-            RestRequest request = new RestRequest(OAuthConfig.OAuthPostRefreshToken, Method.POST);
+        RestRequest IRequestBuilder.PostOAuthRefresh(string clientId, string clientSecret, string grantType, string refreshToken) {
+            RestRequest request = new RestRequest(OAuthConfig.OAuthPostRefreshToken, Method.Post);
             SetGeneralRestValues(request, false);
             request.AddHeader("Authorization", "Basic " + Convert.ToBase64String(ApiConfig.ENCODING.GetBytes(clientId + ":" + clientSecret)));
             request.AddParameter("grant_type", grantType, ParameterType.GetOrPost);
@@ -816,38 +815,38 @@ namespace Dracoon.Sdk.SdkInternal {
 
         #region GET
 
-        IRestRequest IRequestBuilder.GetGeneralSettings() {
-            RestRequest request = new RestRequest(ApiConfig.ApiGetGeneralConfig, Method.GET);
+        RestRequest IRequestBuilder.GetGeneralSettings() {
+            RestRequest request = new RestRequest(ApiConfig.ApiGetGeneralConfig, Method.Get);
             SetGeneralRestValues(request, true);
             return request;
         }
 
-        IRestRequest IRequestBuilder.GetInfrastructureSettings() {
-            RestRequest request = new RestRequest(ApiConfig.ApiGetInfrastructureConfig, Method.GET);
+        RestRequest IRequestBuilder.GetInfrastructureSettings() {
+            RestRequest request = new RestRequest(ApiConfig.ApiGetInfrastructureConfig, Method.Get);
             SetGeneralRestValues(request, true);
             return request;
         }
 
-        IRestRequest IRequestBuilder.GetDefaultsSettings() {
-            RestRequest request = new RestRequest(ApiConfig.ApiGetDefaultsConfig, Method.GET);
+        RestRequest IRequestBuilder.GetDefaultsSettings() {
+            RestRequest request = new RestRequest(ApiConfig.ApiGetDefaultsConfig, Method.Get);
             SetGeneralRestValues(request, true);
             return request;
         }
 
-        public IRestRequest GetPasswordPolicies() {
-            RestRequest request = new RestRequest(ApiConfig.ApiGetPasswordPolicies, Method.GET);
+        public RestRequest GetPasswordPolicies() {
+            RestRequest request = new RestRequest(ApiConfig.ApiGetPasswordPolicies, Method.Get);
             SetGeneralRestValues(request, true);
             return request;
         }
 
-        public IRestRequest GetAlgorithms() {
-            RestRequest request = new RestRequest(ApiConfig.ApiGetAlgorithms, Method.GET);
+        public RestRequest GetAlgorithms() {
+            RestRequest request = new RestRequest(ApiConfig.ApiGetAlgorithms, Method.Get);
             SetGeneralRestValues(request, true);
             return request;
         }
 
-        public IRestRequest GetClassificationPolicies() {
-            RestRequest request = new RestRequest(ApiConfig.ApiGetClassificationPolicies, Method.GET);
+        public RestRequest GetClassificationPolicies() {
+            RestRequest request = new RestRequest(ApiConfig.ApiGetClassificationPolicies, Method.Get);
             SetGeneralRestValues(request, true);
             return request;
         }
@@ -860,8 +859,8 @@ namespace Dracoon.Sdk.SdkInternal {
 
         #region GET
 
-        IRestRequest IRequestBuilder.GetUserAvatar(long userId, string avatarUuid) {
-            RestRequest request = new RestRequest(ApiConfig.ApiResourcesGetAvatar, Method.GET);
+        RestRequest IRequestBuilder.GetUserAvatar(long userId, string avatarUuid) {
+            RestRequest request = new RestRequest(ApiConfig.ApiResourcesGetAvatar, Method.Get);
             SetGeneralRestValues(request, false);
             request.AddUrlSegment("userId", userId);
             request.AddUrlSegment("uuid", avatarUuid);
@@ -876,14 +875,14 @@ namespace Dracoon.Sdk.SdkInternal {
 
         #region GET
 
-        IRestRequest IRequestBuilder.GetGeneralConfiguration() {
-            RestRequest request = new RestRequest(ApiConfig.ApiGetSystemSettingsGeneralConfig, Method.GET);
+        RestRequest IRequestBuilder.GetGeneralConfiguration() {
+            RestRequest request = new RestRequest(ApiConfig.ApiGetSystemSettingsGeneralConfig, Method.Get);
             SetGeneralRestValues(request, true);
             return request;
         }
 
-        IRestRequest IRequestBuilder.GetAuthenticationConfiguration() {
-            RestRequest request = new RestRequest(ApiConfig.ApiGetSystemSettingsAuthenticationConfig, Method.GET);
+        RestRequest IRequestBuilder.GetAuthenticationConfiguration() {
+            RestRequest request = new RestRequest(ApiConfig.ApiGetSystemSettingsAuthenticationConfig, Method.Get);
             SetGeneralRestValues(request, true);
             return request;
         }
@@ -898,34 +897,34 @@ namespace Dracoon.Sdk.SdkInternal {
 
         #region GET
 
-        IRestRequest IRequestBuilder.GetAuthActiveDirectoryConfigurations() {
-            RestRequest request = new RestRequest(ApiConfig.ApiGetAuthActiveDirectoryConfigurations, Method.GET);
+        RestRequest IRequestBuilder.GetAuthActiveDirectoryConfigurations() {
+            RestRequest request = new RestRequest(ApiConfig.ApiGetAuthActiveDirectoryConfigurations, Method.Get);
             SetGeneralRestValues(request, true);
             return request;
         }
 
-        IRestRequest IRequestBuilder.GetAuthOpenIdIdpConfigurations() {
-            RestRequest request = new RestRequest(ApiConfig.ApiGetAuthOpenIdIdpConfigurations, Method.GET);
+        RestRequest IRequestBuilder.GetAuthOpenIdIdpConfigurations() {
+            RestRequest request = new RestRequest(ApiConfig.ApiGetAuthOpenIdIdpConfigurations, Method.Get);
             SetGeneralRestValues(request, true);
             return request;
         }
 
-        IRestRequest IRequestBuilder.GetAuthRadiusConfiguration() {
-            RestRequest request = new RestRequest(ApiConfig.ApiGetAuthRadiusConfiguration, Method.GET);
+        RestRequest IRequestBuilder.GetAuthRadiusConfiguration() {
+            RestRequest request = new RestRequest(ApiConfig.ApiGetAuthRadiusConfiguration, Method.Get);
             SetGeneralRestValues(request, true);
             return request;
         }
 
 
-        IRestRequest IRequestBuilder.GetOAuthClientConfigurations(GetOAuthClientsFilter filter) {
-            RestRequest request = new RestRequest(ApiConfig.ApiGetAuthClientConfigurations, Method.GET);
+        RestRequest IRequestBuilder.GetOAuthClientConfigurations(GetOAuthClientsFilter filter) {
+            RestRequest request = new RestRequest(ApiConfig.ApiGetAuthClientConfigurations, Method.Get);
             SetGeneralRestValues(request, true);
             AddFilters(filter, request);
             return request;
         }
 
-        IRestRequest IRequestBuilder.GetOAuthClientConfiguration(string clientId) {
-            RestRequest request = new RestRequest(ApiConfig.ApiGetAuthClientConfigurationClientId, Method.GET);
+        RestRequest IRequestBuilder.GetOAuthClientConfiguration(string clientId) {
+            RestRequest request = new RestRequest(ApiConfig.ApiGetAuthClientConfigurationClientId, Method.Get);
             SetGeneralRestValues(request, true);
             request.AddUrlSegment("clientId", clientId);
             return request;
@@ -935,14 +934,14 @@ namespace Dracoon.Sdk.SdkInternal {
         #endregion
         #region POST
 
-        IRestRequest IRequestBuilder.UpdateGeneralConfiguration(ApiUpdateSystemGeneralConfigRequest updateRequest) {
-            RestRequest request = new RestRequest(ApiConfig.ApiPutAuthClientConfiguration, Method.PUT);
+        RestRequest IRequestBuilder.UpdateGeneralConfiguration(ApiUpdateSystemGeneralConfigRequest updateRequest) {
+            RestRequest request = new RestRequest(ApiConfig.ApiPutAuthClientConfiguration, Method.Put);
             SetGeneralRestValues(request, true, updateRequest);
             return request;
         }
 
-        IRestRequest IRequestBuilder.CreateOAuthClientConfiguration(ApiCreateOAuthClientRequest createRequest) {
-            RestRequest request = new RestRequest(ApiConfig.ApiPostAuthClientConfiguration, Method.POST);
+        RestRequest IRequestBuilder.CreateOAuthClientConfiguration(ApiCreateOAuthClientRequest createRequest) {
+            RestRequest request = new RestRequest(ApiConfig.ApiPostAuthClientConfiguration, Method.Post);
             SetGeneralRestValues(request, true, createRequest);
             return request;
         }
@@ -950,8 +949,8 @@ namespace Dracoon.Sdk.SdkInternal {
         #endregion
         #region PUT
 
-        IRestRequest IRequestBuilder.UpdateOAuthClientConfiguration(string clientId, ApiUpdateOAuthClientRequest updateRequest) {
-            RestRequest request = new RestRequest(ApiConfig.ApiPutAuthClientConfiguration, Method.PUT);
+        RestRequest IRequestBuilder.UpdateOAuthClientConfiguration(string clientId, ApiUpdateOAuthClientRequest updateRequest) {
+            RestRequest request = new RestRequest(ApiConfig.ApiPutAuthClientConfiguration, Method.Put);
             SetGeneralRestValues(request, true, updateRequest);
             request.AddUrlSegment("clientId", clientId);
             return request;
@@ -960,8 +959,8 @@ namespace Dracoon.Sdk.SdkInternal {
         #endregion
         #region DELETE
 
-        IRestRequest IRequestBuilder.DeleteOAuthClientConfiguration(string clientId) {
-            RestRequest request = new RestRequest(ApiConfig.ApiDeleteAuthClientConfiguration, Method.DELETE);
+        RestRequest IRequestBuilder.DeleteOAuthClientConfiguration(string clientId) {
+            RestRequest request = new RestRequest(ApiConfig.ApiDeleteAuthClientConfiguration, Method.Delete);
             SetGeneralRestValues(request, true);
             request.AddUrlSegment("clientId", clientId);
             return request;
@@ -975,8 +974,8 @@ namespace Dracoon.Sdk.SdkInternal {
 
         #region GET
 
-        IRestRequest IRequestBuilder.GetGroups(long? offset, long? limit, GetGroupsFilter filter, GroupsSort sort) {
-            RestRequest request = new RestRequest(ApiConfig.ApiGetGroups, Method.GET);
+        RestRequest IRequestBuilder.GetGroups(long? offset, long? limit, GetGroupsFilter filter, GroupsSort sort) {
+            RestRequest request = new RestRequest(ApiConfig.ApiGetGroups, Method.Get);
             SetGeneralRestValues(request, true);
             AddFilters(filter, request);
             AddSort(sort, request);
@@ -987,29 +986,29 @@ namespace Dracoon.Sdk.SdkInternal {
             return request;
         }
 
-        IRestRequest IRequestBuilder.GetGroup(long groupId) {
-            RestRequest request = new RestRequest(ApiConfig.ApiGetGroup, Method.GET);
+        RestRequest IRequestBuilder.GetGroup(long groupId) {
+            RestRequest request = new RestRequest(ApiConfig.ApiGetGroup, Method.Get);
             SetGeneralRestValues(request, true);
             request.AddUrlSegment("groupId", groupId.ToString());
             return request;
         }
 
-        IRestRequest IRequestBuilder.GetGroupLastAdminRooms(long groupId) {
-            RestRequest request = new RestRequest(ApiConfig.ApiGetGroupLastAdminRooms, Method.GET);
+        RestRequest IRequestBuilder.GetGroupLastAdminRooms(long groupId) {
+            RestRequest request = new RestRequest(ApiConfig.ApiGetGroupLastAdminRooms, Method.Get);
             SetGeneralRestValues(request, true);
             request.AddUrlSegment("groupId", groupId.ToString());
             return request;
         }
 
-        IRestRequest IRequestBuilder.GetGroupRoles(long groupId) {
-            RestRequest request = new RestRequest(ApiConfig.ApiGetGroupRoles, Method.GET);
+        RestRequest IRequestBuilder.GetGroupRoles(long groupId) {
+            RestRequest request = new RestRequest(ApiConfig.ApiGetGroupRoles, Method.Get);
             SetGeneralRestValues(request, true);
             request.AddUrlSegment("groupId", groupId.ToString());
             return request;
         }
 
-        IRestRequest IRequestBuilder.GetGroupUsers(long groupId, long? offset, long? limit, GetGroupUsersFilter filter) {
-            RestRequest request = new RestRequest(ApiConfig.ApiGetGroupUsers, Method.GET);
+        RestRequest IRequestBuilder.GetGroupUsers(long groupId, long? offset, long? limit, GetGroupUsersFilter filter) {
+            RestRequest request = new RestRequest(ApiConfig.ApiGetGroupUsers, Method.Get);
             SetGeneralRestValues(request, true);
             request.AddUrlSegment("groupId", groupId.ToString());
             AddFilters(filter, request);
@@ -1023,14 +1022,14 @@ namespace Dracoon.Sdk.SdkInternal {
         #endregion
         #region POST
 
-        IRestRequest IRequestBuilder.PostGroup(ApiCreateGroupRequest groupParams) {
-            RestRequest request = new RestRequest(ApiConfig.ApiPostGroup, Method.POST);
+        RestRequest IRequestBuilder.PostGroup(ApiCreateGroupRequest groupParams) {
+            RestRequest request = new RestRequest(ApiConfig.ApiPostGroup, Method.Post);
             SetGeneralRestValues(request, true, groupParams);
             return request;
         }
 
-        IRestRequest IRequestBuilder.PostGroupUser(long groupId, ApiChangeMembersRequest groupUsersParams) {
-            RestRequest request = new RestRequest(ApiConfig.ApiPostGroupUser, Method.POST);
+        RestRequest IRequestBuilder.PostGroupUser(long groupId, ApiChangeMembersRequest groupUsersParams) {
+            RestRequest request = new RestRequest(ApiConfig.ApiPostGroupUser, Method.Post);
             SetGeneralRestValues(request, true, groupUsersParams);
             request.AddUrlSegment("groupId", groupId.ToString());
             return request;
@@ -1039,8 +1038,8 @@ namespace Dracoon.Sdk.SdkInternal {
         #endregion
         #region PUT
 
-        IRestRequest IRequestBuilder.PutGroup(long groupId, ApiUpdateGroupRequest groupParams) {
-            RestRequest request = new RestRequest(ApiConfig.ApiPutGroup, Method.PUT);
+        RestRequest IRequestBuilder.PutGroup(long groupId, ApiUpdateGroupRequest groupParams) {
+            RestRequest request = new RestRequest(ApiConfig.ApiPutGroup, Method.Put);
             SetGeneralRestValues(request, true, groupParams);
             request.AddUrlSegment("groupId", groupId.ToString());
             return request;
@@ -1050,15 +1049,15 @@ namespace Dracoon.Sdk.SdkInternal {
         #region DELETE
 
 
-        IRestRequest IRequestBuilder.DeleteGroup(long groupId) {
-            RestRequest request = new RestRequest(ApiConfig.ApiDeleteGroup, Method.DELETE);
+        RestRequest IRequestBuilder.DeleteGroup(long groupId) {
+            RestRequest request = new RestRequest(ApiConfig.ApiDeleteGroup, Method.Delete);
             SetGeneralRestValues(request, true);
             request.AddUrlSegment("groupId", groupId.ToString());
             return request;
         }
 
-        IRestRequest IRequestBuilder.DeleteGroupUsers(long groupId, ApiChangeMembersRequest deleteUsersParams) {
-            RestRequest request = new RestRequest(ApiConfig.ApiDeleteGroupUsers, Method.DELETE);
+        RestRequest IRequestBuilder.DeleteGroupUsers(long groupId, ApiChangeMembersRequest deleteUsersParams) {
+            RestRequest request = new RestRequest(ApiConfig.ApiDeleteGroupUsers, Method.Delete);
             SetGeneralRestValues(request, true, deleteUsersParams);
             request.AddUrlSegment("groupId", groupId.ToString());
             return request;
@@ -1072,8 +1071,8 @@ namespace Dracoon.Sdk.SdkInternal {
 
         #region GET
 
-        IRestRequest IRequestBuilder.GetUsers(bool? includeAttributes, bool? includeRoles, bool? includeHasManageableRooms, long? offset, long? limit, GetUsersFilter filter, UsersSort sort) {
-            RestRequest request = new RestRequest(ApiConfig.ApiGetUsers, Method.GET);
+        RestRequest IRequestBuilder.GetUsers(bool? includeAttributes, bool? includeRoles, bool? includeHasManageableRooms, long? offset, long? limit, GetUsersFilter filter, UsersSort sort) {
+            RestRequest request = new RestRequest(ApiConfig.ApiGetUsers, Method.Get);
             SetGeneralRestValues(request, true);
             AddFilters(filter, request);
             AddSort(sort, request);
@@ -1089,16 +1088,16 @@ namespace Dracoon.Sdk.SdkInternal {
             return request;
         }
 
-        IRestRequest IRequestBuilder.GetUser(long userId, bool? effectiveRoles) {
-            RestRequest request = new RestRequest(ApiConfig.ApiGetUser, Method.GET);
+        RestRequest IRequestBuilder.GetUser(long userId, bool? effectiveRoles) {
+            RestRequest request = new RestRequest(ApiConfig.ApiGetUser, Method.Get);
             SetGeneralRestValues(request, true);
             AddFlag(request, "effective_roles", effectiveRoles);
             request.AddUrlSegment("userId", userId.ToString());
             return request;
         }
 
-        IRestRequest IRequestBuilder.GetUserGroups(long userId, long? offset, long? limit, GetUserGroupsFilter filter) {
-            RestRequest request = new RestRequest(ApiConfig.ApiGetUserGroups, Method.GET);
+        RestRequest IRequestBuilder.GetUserGroups(long userId, long? offset, long? limit, GetUserGroupsFilter filter) {
+            RestRequest request = new RestRequest(ApiConfig.ApiGetUserGroups, Method.Get);
             SetGeneralRestValues(request, true);
             request.AddUrlSegment("userId", userId.ToString());
             AddFilters(filter, request);
@@ -1109,22 +1108,22 @@ namespace Dracoon.Sdk.SdkInternal {
             return request;
         }
 
-        IRestRequest IRequestBuilder.GetUserLastAdminRooms(long userId) {
-            RestRequest request = new RestRequest(ApiConfig.ApiGetUserLastAdminRooms, Method.GET);
+        RestRequest IRequestBuilder.GetUserLastAdminRooms(long userId) {
+            RestRequest request = new RestRequest(ApiConfig.ApiGetUserLastAdminRooms, Method.Get);
             SetGeneralRestValues(request, true);
             request.AddUrlSegment("userId", userId.ToString());
             return request;
         }
 
-        IRestRequest IRequestBuilder.GetUserRoles(long userId) {
-            RestRequest request = new RestRequest(ApiConfig.ApiGetUserRoles, Method.GET);
+        RestRequest IRequestBuilder.GetUserRoles(long userId) {
+            RestRequest request = new RestRequest(ApiConfig.ApiGetUserRoles, Method.Get);
             SetGeneralRestValues(request, true);
             request.AddUrlSegment("userId", userId.ToString());
             return request;
         }
 
-        IRestRequest IRequestBuilder.GetUserUserAttributes(long userId, long? offset, long? limit, GetUserAttributesFilter filter, UserAttributesSort sort) {
-            RestRequest request = new RestRequest(ApiConfig.ApiGetUserUserAttributes, Method.GET);
+        RestRequest IRequestBuilder.GetUserUserAttributes(long userId, long? offset, long? limit, GetUserAttributesFilter filter, UserAttributesSort sort) {
+            RestRequest request = new RestRequest(ApiConfig.ApiGetUserUserAttributes, Method.Get);
             SetGeneralRestValues(request, true);
             request.AddUrlSegment("userId", userId.ToString());
             AddFilters(filter, request);
@@ -1138,14 +1137,14 @@ namespace Dracoon.Sdk.SdkInternal {
         #endregion
         #region POST
 
-        IRestRequest IRequestBuilder.PostUser(ApiCreateUserRequest userParams) {
-            RestRequest request = new RestRequest(ApiConfig.ApiPostUser, Method.POST);
+        RestRequest IRequestBuilder.PostUser(ApiCreateUserRequest userParams) {
+            RestRequest request = new RestRequest(ApiConfig.ApiPostUser, Method.Post);
             SetGeneralRestValues(request, true, userParams);
             return request;
         }
 
-        IRestRequest IRequestBuilder.PostUserUserAttributes(long userId, ApiUserAttributes userAttributeParams) {
-            RestRequest request = new RestRequest(ApiConfig.ApiPostUserAttributes, Method.POST);
+        RestRequest IRequestBuilder.PostUserUserAttributes(long userId, ApiUserAttributes userAttributeParams) {
+            RestRequest request = new RestRequest(ApiConfig.ApiPostUserAttributes, Method.Post);
             SetGeneralRestValues(request, true, userAttributeParams);
             request.AddUrlSegment("userId", userId.ToString());
             return request;
@@ -1154,15 +1153,15 @@ namespace Dracoon.Sdk.SdkInternal {
         #endregion
         #region PUT
 
-        IRestRequest IRequestBuilder.PutUser(long userId, ApiUpdateUserRequest userParams) {
-            RestRequest request = new RestRequest(ApiConfig.ApiPutUser, Method.PUT);
+        RestRequest IRequestBuilder.PutUser(long userId, ApiUpdateUserRequest userParams) {
+            RestRequest request = new RestRequest(ApiConfig.ApiPutUser, Method.Put);
             SetGeneralRestValues(request, true, userParams);
             request.AddUrlSegment("userId", userId.ToString());
             return request;
         }
 
-        IRestRequest IRequestBuilder.PutUserUserAttributes(long userId, ApiUserAttributes userAttributeParams) {
-            RestRequest request = new RestRequest(ApiConfig.ApiPutUserUserAttributes, Method.PUT);
+        RestRequest IRequestBuilder.PutUserUserAttributes(long userId, ApiUserAttributes userAttributeParams) {
+            RestRequest request = new RestRequest(ApiConfig.ApiPutUserUserAttributes, Method.Put);
             SetGeneralRestValues(request, true, userAttributeParams);
             request.AddUrlSegment("userId", userId.ToString());
             return request;
@@ -1171,15 +1170,15 @@ namespace Dracoon.Sdk.SdkInternal {
         #endregion
         #region DELETE
 
-        IRestRequest IRequestBuilder.DeleteUser(long userId) {
-            RestRequest request = new RestRequest(ApiConfig.ApiDeleteUser, Method.DELETE);
+        RestRequest IRequestBuilder.DeleteUser(long userId) {
+            RestRequest request = new RestRequest(ApiConfig.ApiDeleteUser, Method.Delete);
             SetGeneralRestValues(request, true);
             request.AddUrlSegment("userId", userId.ToString());
             return request;
         }
 
-        IRestRequest IRequestBuilder.DeleteUserUserAttribute(long userId, string userAttributeKey) {
-            RestRequest request = new RestRequest(ApiConfig.ApiDeleteUserUserAttribute, Method.DELETE);
+        RestRequest IRequestBuilder.DeleteUserUserAttribute(long userId, string userAttributeKey) {
+            RestRequest request = new RestRequest(ApiConfig.ApiDeleteUserUserAttribute, Method.Delete);
             request.AddUrlSegment("userId", userId.ToString());
             request.AddUrlSegment("key", userAttributeKey);
             return request;
@@ -1193,14 +1192,14 @@ namespace Dracoon.Sdk.SdkInternal {
 
         #region GET
 
-        IRestRequest IRequestBuilder.GetRoles() {
-            RestRequest request = new RestRequest(ApiConfig.ApiGetRoles, Method.GET);
+        RestRequest IRequestBuilder.GetRoles() {
+            RestRequest request = new RestRequest(ApiConfig.ApiGetRoles, Method.Get);
             SetGeneralRestValues(request, true);
             return request;
         }
 
-        IRestRequest IRequestBuilder.GetRoleGroups(long roleId, long? offset, long? limit, GetUserGroupsFilter filter) {
-            RestRequest request = new RestRequest(ApiConfig.ApiGetRoleGroups, Method.GET);
+        RestRequest IRequestBuilder.GetRoleGroups(long roleId, long? offset, long? limit, GetUserGroupsFilter filter) {
+            RestRequest request = new RestRequest(ApiConfig.ApiGetRoleGroups, Method.Get);
             SetGeneralRestValues(request, true);
             request.AddUrlSegment("roleId", roleId.ToString());
             AddFilters(filter, request);
@@ -1211,8 +1210,8 @@ namespace Dracoon.Sdk.SdkInternal {
             return request;
         }
 
-        IRestRequest IRequestBuilder.GetRoleUsers(long roleId, long? offset, long? limit, GetGroupUsersFilter filter) {
-            RestRequest request = new RestRequest(ApiConfig.ApiGetRoleUsers, Method.GET);
+        RestRequest IRequestBuilder.GetRoleUsers(long roleId, long? offset, long? limit, GetGroupUsersFilter filter) {
+            RestRequest request = new RestRequest(ApiConfig.ApiGetRoleUsers, Method.Get);
             SetGeneralRestValues(request, true);
             request.AddUrlSegment("roleId", roleId.ToString());
             AddFilters(filter, request);
@@ -1226,15 +1225,15 @@ namespace Dracoon.Sdk.SdkInternal {
         #endregion
         #region POST
 
-        IRestRequest IRequestBuilder.PostRoleGroups(long roleId, ApiChangeMembersRequest addGroupsParams) {
-            RestRequest request = new RestRequest(ApiConfig.ApiPostRoleGroups, Method.POST);
+        RestRequest IRequestBuilder.PostRoleGroups(long roleId, ApiChangeMembersRequest addGroupsParams) {
+            RestRequest request = new RestRequest(ApiConfig.ApiPostRoleGroups, Method.Post);
             SetGeneralRestValues(request, true, addGroupsParams);
             request.AddUrlSegment("roleId", roleId.ToString());
             return request;
         }
 
-        IRestRequest IRequestBuilder.PostRoleUsers(long roleId, ApiChangeMembersRequest addUsersParams) {
-            RestRequest request = new RestRequest(ApiConfig.ApiPostRoleUsers, Method.POST);
+        RestRequest IRequestBuilder.PostRoleUsers(long roleId, ApiChangeMembersRequest addUsersParams) {
+            RestRequest request = new RestRequest(ApiConfig.ApiPostRoleUsers, Method.Post);
             SetGeneralRestValues(request, true, addUsersParams);
             request.AddUrlSegment("roleId", roleId.ToString());
             return request;
@@ -1243,15 +1242,15 @@ namespace Dracoon.Sdk.SdkInternal {
         #endregion
         #region DELETE
 
-        IRestRequest IRequestBuilder.DeleteRoleGroups(long roleId, ApiChangeMembersRequest deleteGroupsParams) {
-            RestRequest request = new RestRequest(ApiConfig.ApiDeleteRoleGroups, Method.DELETE);
+        RestRequest IRequestBuilder.DeleteRoleGroups(long roleId, ApiChangeMembersRequest deleteGroupsParams) {
+            RestRequest request = new RestRequest(ApiConfig.ApiDeleteRoleGroups, Method.Delete);
             SetGeneralRestValues(request, true, deleteGroupsParams);
             request.AddUrlSegment("roleId", roleId.ToString());
             return request;
         }
 
-        IRestRequest IRequestBuilder.DeleteRoleUsers(long roleId, ApiChangeMembersRequest deleteUsersParams) {
-            RestRequest request = new RestRequest(ApiConfig.ApiDeleteRoleUsers, Method.DELETE);
+        RestRequest IRequestBuilder.DeleteRoleUsers(long roleId, ApiChangeMembersRequest deleteUsersParams) {
+            RestRequest request = new RestRequest(ApiConfig.ApiDeleteRoleUsers, Method.Delete);
             SetGeneralRestValues(request, true, deleteUsersParams);
             request.AddUrlSegment("roleId", roleId.ToString());
             return request;
@@ -1265,8 +1264,8 @@ namespace Dracoon.Sdk.SdkInternal {
 
         #region GET
 
-        IRestRequest IRequestBuilder.GetAuditNodes(long? offset, long? limit, GetAuditNodesFilter filter, AuditNodesSort sort) {
-            RestRequest request = new RestRequest(ApiConfig.ApiGetAuditNodes, Method.GET);
+        RestRequest IRequestBuilder.GetAuditNodes(long? offset, long? limit, GetAuditNodesFilter filter, AuditNodesSort sort) {
+            RestRequest request = new RestRequest(ApiConfig.ApiGetAuditNodes, Method.Get);
             SetGeneralRestValues(request, true);
             AddFilters(filter, request);
             AddSort(sort, request);
@@ -1277,8 +1276,8 @@ namespace Dracoon.Sdk.SdkInternal {
             return request;
         }
 
-        IRestRequest IRequestBuilder.GetEvents(DateTime? dateStart, DateTime? dateEnd, EventStatus? status, int? type, long? userId, string userClient, long? offset, long? limit, EventLogsSort sort) {
-            RestRequest request = new RestRequest(ApiConfig.ApiGetEvents, Method.GET);
+        RestRequest IRequestBuilder.GetEvents(DateTime? dateStart, DateTime? dateEnd, EventStatus? status, int? type, long? userId, string userClient, long? offset, long? limit, EventLogsSort sort) {
+            RestRequest request = new RestRequest(ApiConfig.ApiGetEvents, Method.Get);
             SetGeneralRestValues(request, true);
             AddSort(sort, request);
             AddDate(request, "date_start", dateStart);
@@ -1296,8 +1295,8 @@ namespace Dracoon.Sdk.SdkInternal {
             return request;
         }
 
-        IRestRequest IRequestBuilder.GetOperations(bool? isDeprecated) {
-            RestRequest request = new RestRequest(ApiConfig.ApiGetOperations, Method.GET);
+        RestRequest IRequestBuilder.GetOperations(bool? isDeprecated) {
+            RestRequest request = new RestRequest(ApiConfig.ApiGetOperations, Method.Get);
             SetGeneralRestValues(request, true);
             AddFlag(request, "is_deprecated", isDeprecated);
             return request;
@@ -1309,14 +1308,14 @@ namespace Dracoon.Sdk.SdkInternal {
 
         #region Branding-Endpoint (Branding API)
 
-        IRestRequest IRequestBuilder.GetBranding() {
-            RestRequest request = new RestRequest(ApiConfig.BrandingApiGetBranding, Method.GET);
+        RestRequest IRequestBuilder.GetBranding() {
+            RestRequest request = new RestRequest(ApiConfig.BrandingApiGetBranding, Method.Get);
             SetGeneralRestValues(request, true);
             return request;
         }
 
-        IRestRequest IRequestBuilder.GetBrandingServerVersion() {
-            RestRequest request = new RestRequest(ApiConfig.BrandingApiGetBrandingServerVersion, Method.GET);
+        RestRequest IRequestBuilder.GetBrandingServerVersion() {
+            RestRequest request = new RestRequest(ApiConfig.BrandingApiGetBrandingServerVersion, Method.Get);
             SetGeneralRestValues(request, true);
             return request;
         }

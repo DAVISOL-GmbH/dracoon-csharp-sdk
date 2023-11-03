@@ -86,7 +86,7 @@ namespace Dracoon.Sdk.SdkInternal {
 
         protected virtual void StartDownload() {
             NotifyStarted(ActionId);
-            IRestRequest downloadTokenRequest = Client.Builder.PostFileDownload(AssociatedNode.Id);
+            RestRequest downloadTokenRequest = Client.Builder.PostFileDownload(AssociatedNode.Id);
             ApiDownloadToken token = Client.Executor.DoSyncApiCall<ApiDownloadToken>(downloadTokenRequest, RequestType.PostDownloadToken);
             Download(new Uri(token.DownloadUrl));
             NotifyFinished(ActionId);

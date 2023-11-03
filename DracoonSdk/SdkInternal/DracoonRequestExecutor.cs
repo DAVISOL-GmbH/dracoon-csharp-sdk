@@ -96,16 +96,17 @@ namespace Dracoon.Sdk.SdkInternal {
             }
         }
 
-        T IRequestExecutor.DoSyncApiCall<T>(IRestRequest request, RequestType requestType, int sendTry) {
-            IRestClient client = new RestClient(_client.ServerUri) {
+        T IRequestExecutor.DoSyncApiCall<T>(RestRequest request, RequestType requestType, int sendTry) {
+            RestClientOptions clientOptions = new RestClientOptions(_client.ServerUri) {
                 UserAgent = _client.HttpConfig.UserAgent,
             };
             if (_client.HttpConfig.WebProxy != null) {
-                client.Proxy = _client.HttpConfig.WebProxy;
+                clientOptions.Proxy = _client.HttpConfig.WebProxy;
             }
+            RestClient client = new RestClient(clientOptions);
 
             var sw = System.Diagnostics.Stopwatch.StartNew();
-            IRestResponse response = client.Execute(request);
+            RestResponse response = client.Execute(request);
             sw.Stop();
             try {
                 if (response.ErrorException is WebException we) {
@@ -126,11 +127,12 @@ namespace Dracoon.Sdk.SdkInternal {
                             _client.Log.Debug(Logtag, "Retry the refresh of the access token in " + sendTry * 1000 + " millis again.");
                             Thread.Sleep(1000 * sendTry);
                             _auth.RefreshAccessToken();
-                            foreach (Parameter cur in request.Parameters) {
-                                if (cur.Name == ApiConfig.AuthorizationHeader) {
-                                    cur.Value = _auth.BuildAuthString();
-                                }
-                            }
+                            var authParameter = Parameter.CreateParameter(ApiConfig.AuthorizationHeader, _auth.BuildAuthString(), ParameterType.HttpHeader);
+                            //if (request.Parameters.Exists(authParameter)) {
+                            //    request.Parameters.RemoveParameter(authParameter);
+                            //}
+                            //request.Parameters.RemoveParameter(authParameter);
+                            request.Parameters.AddParameter(authParameter);
 
                             return ((IRequestExecutor)this).DoSyncApiCall<T>(request, requestType, sendTry + 1);
                         }

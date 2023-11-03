@@ -44,11 +44,12 @@ namespace Dracoon.Sdk {
         public bool RetryEnabled { get; set; }
 
         /// <summary>
-        ///     The HTTP read-write timeout in milliseconds.
+        ///     <b>No longer supported! Setting this value will have no effect.</b> The HTTP read-write timeout in milliseconds.
         ///     <para>
         ///         (Default: <c>15000</c>)
         ///     </para>
         /// </summary>
+        [Obsolete("No longer supported by the underlying RestSharp package. Setting this value will have no effect")]
         public int ReadWriteTimeout { get; set; }
 
         /// <summary>
@@ -84,15 +85,12 @@ namespace Dracoon.Sdk {
         ///     Constructs a HTTP configuration.
         /// </summary>
         /// <param name="retryEnabled"><see cref="RetryEnabled"/></param>
-        /// <param name="readWriteTimeout"><see cref="ReadWriteTimeout"/></param>
         /// <param name="connectionTimeout"><see cref="ConnectionTimeout"/></param>
         /// <param name="webProxy"><see cref="WebProxy"/></param>
         /// <param name="ownUserAgent"><see cref="UserAgent"/></param>
         /// <param name="chunkSize"><see cref="ChunkSize"/></param>
-        public DracoonHttpConfig(bool retryEnabled = false, int readWriteTimeout = 15000, int connectionTimeout = 15000, IWebProxy webProxy = null,
-            string ownUserAgent = null, int chunkSize = 2048) {
+        public DracoonHttpConfig(bool retryEnabled = false, int connectionTimeout = 15000, IWebProxy webProxy = null, string ownUserAgent = null, int chunkSize = 2048) {
             RetryEnabled = retryEnabled;
-            ReadWriteTimeout = readWriteTimeout;
             ConnectionTimeout = connectionTimeout;
             WebProxy = webProxy;
             UserAgent = ownUserAgent ?? BuildDefaultUserAgent();

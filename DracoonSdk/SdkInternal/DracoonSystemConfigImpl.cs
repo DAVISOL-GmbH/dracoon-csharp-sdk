@@ -20,7 +20,7 @@ namespace Dracoon.Sdk.SdkInternal {
 
         public ServerGeneralConfiguration GetGeneralConfiguration() {
             _client.Executor.CheckApiServerVersion();
-            IRestRequest request = _client.Builder.GetGeneralConfiguration();
+            RestRequest request = _client.Builder.GetGeneralConfiguration();
             ApiGeneralConfiguration apiGeneralConfig =
                 _client.Executor.DoSyncApiCall<ApiGeneralConfiguration>(request, RequestType.GetServerGeneralConfig);
             return SettingsMapper.FromApiGeneralConfiguration(apiGeneralConfig);
@@ -34,7 +34,7 @@ namespace Dracoon.Sdk.SdkInternal {
 
             ApiUpdateSystemGeneralConfigRequest apiUpdateSystemGeneralConfigRequest = SettingsMapper.ToApiUpdateSystemGeneralConfigRequest(updateRequest);
 
-            IRestRequest request = _client.Builder.UpdateGeneralConfiguration(apiUpdateSystemGeneralConfigRequest);
+            RestRequest request = _client.Builder.UpdateGeneralConfiguration(apiUpdateSystemGeneralConfigRequest);
             ApiGeneralConfiguration apiGeneralConfig =
                 _client.Executor.DoSyncApiCall<ApiGeneralConfiguration>(request, RequestType.PutServerGeneralConfig);
             return SettingsMapper.FromApiGeneralConfiguration(apiGeneralConfig);
@@ -44,14 +44,14 @@ namespace Dracoon.Sdk.SdkInternal {
 
         public ServerAuthenticationConfiguration GetAuthConfiguration() {
             _client.Executor.CheckApiServerVersion();
-            IRestRequest request = _client.Builder.GetAuthenticationConfiguration();
+            RestRequest request = _client.Builder.GetAuthenticationConfiguration();
             ApiAuthenticationConfiguration apiAuthenticationConfig = _client.Executor.DoSyncApiCall<ApiAuthenticationConfiguration>(request, RequestType.GetAuthenticationSettings);
             return SettingsMapper.FromApiAuthenticationConfiguration(apiAuthenticationConfig);
         }
 
         public ActiveDirectoryConfigList GetAuthActiveDirectoryConfigurations() {
             _client.Executor.CheckApiServerVersion();
-            IRestRequest request = _client.Builder.GetAuthActiveDirectoryConfigurations();
+            RestRequest request = _client.Builder.GetAuthActiveDirectoryConfigurations();
             ApiActiveDirectoryConfigList apiActiveDirectoryConfigList =
                 _client.Executor.DoSyncApiCall<ApiActiveDirectoryConfigList>(request, RequestType.GetAuthActiveDirectorySettings);
             return SettingsMapper.FromApiActiveDirectoryConfigList(apiActiveDirectoryConfigList);
@@ -59,7 +59,7 @@ namespace Dracoon.Sdk.SdkInternal {
 
         public OpenIdIdpConfigList GetAuthOpenIdIdpConfigurations() {
             _client.Executor.CheckApiServerVersion();
-            IRestRequest request = _client.Builder.GetAuthOpenIdIdpConfigurations();
+            RestRequest request = _client.Builder.GetAuthOpenIdIdpConfigurations();
             IEnumerable<ApiOpenIdIdpConfig> apiOpenIdIdpConfigs =
                 _client.Executor.DoSyncApiCall<List<ApiOpenIdIdpConfig>>(request, RequestType.GetAuthOpenIdIdpSettings);
             return SettingsMapper.FromApiOpenIdIpdConfigList(apiOpenIdIdpConfigs);
@@ -67,7 +67,7 @@ namespace Dracoon.Sdk.SdkInternal {
 
         public RadiusConfig GetAuthRadiusConfiguration() {
             _client.Executor.CheckApiServerVersion();
-            IRestRequest request = _client.Builder.GetAuthRadiusConfiguration();
+            RestRequest request = _client.Builder.GetAuthRadiusConfiguration();
             ApiRadiusConfig apiRadiusConfig =
                 _client.Executor.DoSyncApiCall<ApiRadiusConfig>(request, RequestType.GetAuthRadiusSettings);
             return SettingsMapper.FromApiRadiusConfiguration(apiRadiusConfig);
@@ -77,7 +77,7 @@ namespace Dracoon.Sdk.SdkInternal {
 
         public OAuthClientConfigList GetOAuthClientConfigurations(GetOAuthClientsFilter filter = null) {
             _client.Executor.CheckApiServerVersion();
-            IRestRequest request = _client.Builder.GetOAuthClientConfigurations(filter);
+            RestRequest request = _client.Builder.GetOAuthClientConfigurations(filter);
             List<ApiOAuthClientConfiguration> apiOAuthClientConfigList =
                 _client.Executor.DoSyncApiCall<List<ApiOAuthClientConfiguration>>(request, RequestType.GetSystemOAuthClientConfigs);
             return SettingsMapper.FromApiOAuthClientConfigList(apiOAuthClientConfigList);
@@ -88,7 +88,7 @@ namespace Dracoon.Sdk.SdkInternal {
             #region Parameter Validation
             clientId.MustNotNullOrEmptyOrWhitespace(nameof(clientId));
             #endregion
-            IRestRequest request = _client.Builder.GetOAuthClientConfiguration(clientId);
+            RestRequest request = _client.Builder.GetOAuthClientConfiguration(clientId);
             ApiOAuthClientConfiguration apiOAuthClientConfig =
                 _client.Executor.DoSyncApiCall<ApiOAuthClientConfiguration>(request, RequestType.GetSystemOAuthClientConfig);
             return SettingsMapper.FromApiOAuthClientConfiguration(apiOAuthClientConfig);
@@ -104,7 +104,7 @@ namespace Dracoon.Sdk.SdkInternal {
 
             ApiCreateOAuthClientRequest apiCreateOAuthClientRequest = SettingsMapper.ToApiCreateOAuthClientRequest(createRequest);
 
-            IRestRequest request = _client.Builder.CreateOAuthClientConfiguration(apiCreateOAuthClientRequest);
+            RestRequest request = _client.Builder.CreateOAuthClientConfiguration(apiCreateOAuthClientRequest);
             ApiOAuthClientConfiguration apiOAuthClientConfig =
                 _client.Executor.DoSyncApiCall<ApiOAuthClientConfiguration>(request, RequestType.PostSystemOAuthClientConfig);
             return SettingsMapper.FromApiOAuthClientConfiguration(apiOAuthClientConfig);
@@ -120,7 +120,7 @@ namespace Dracoon.Sdk.SdkInternal {
 
             ApiUpdateOAuthClientRequest apiUpdateOAuthClientRequest = SettingsMapper.ToApiUpdateOAuthClientRequest(updateRequest);
 
-            IRestRequest request = _client.Builder.UpdateOAuthClientConfiguration(clientId, apiUpdateOAuthClientRequest);
+            RestRequest request = _client.Builder.UpdateOAuthClientConfiguration(clientId, apiUpdateOAuthClientRequest);
             ApiOAuthClientConfiguration apiOAuthClientConfig =
                 _client.Executor.DoSyncApiCall<ApiOAuthClientConfiguration>(request, RequestType.PutSystemOAuthClientConfig);
             return SettingsMapper.FromApiOAuthClientConfiguration(apiOAuthClientConfig);
@@ -131,7 +131,7 @@ namespace Dracoon.Sdk.SdkInternal {
             #region Parameter Validation
             clientId.MustNotNullOrEmptyOrWhitespace(nameof(clientId));
             #endregion
-            IRestRequest request = _client.Builder.DeleteOAuthClientConfiguration(clientId);
+            RestRequest request = _client.Builder.DeleteOAuthClientConfiguration(clientId);
             _client.Executor.DoSyncApiCall<VoidResponse>(request, RequestType.DeleteSystemOAuthClientConfig);
         }
 
