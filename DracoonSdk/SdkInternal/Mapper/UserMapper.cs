@@ -271,7 +271,9 @@ namespace Dracoon.Sdk.SdkInternal.Mapper {
                 FirstName = createUserRequest.FirstName,
                 LastName = createUserRequest.LastName,
                 UserName = createUserRequest.UserName,
+#pragma warning disable CS0618 // Type or member is obsolete
                 Title = createUserRequest.Title,
+#pragma warning restore CS0618 // Type or member is obsolete
                 Phone = createUserRequest.Phone,
                 ExpireAt = CommonMapper.ToApiExpiration(createUserRequest.ExpireAt),
                 ReceiverLanguage = createUserRequest.ReceiverLanguage?.Name,
