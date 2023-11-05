@@ -1,28 +1,47 @@
 namespace Dracoon.Sdk.Model {
-    /// <include file = "ModelDoc.xml" path='docs/members[@name="serverGeneralSettings"]/ServerGeneralSettings/*'/>
+    /// <summary>
+    /// This model stores informations about the general configuration of the server
+    /// </summary>
     public class ServerGeneralConfiguration {
-        /// <include file = "ModelDoc.xml" path='docs/members[@name="serverGeneralSettings"]/SharePasswordSmsEnabled/*'/>
+
+        /// <summary>
+        /// Is <c>true</c> if share passwords can be send via SMS. Otherwise <c>false</c>.
+        /// </summary>
         public bool SharePasswordSmsEnabled { get; internal set; }
 
-        /// <include file = "ModelDoc.xml" path='docs/members[@name="serverGeneralSettings"]/CryptoEnabled/*'/>
+        /// <summary>
+        /// Is <c>true</c> if cliend-side cryptography is available for rooms. Otherwise <c>false</c>.
+        /// </summary>
         public bool CryptoEnabled { get; internal set; }
 
-        /// <include file = "ModelDoc.xml" path='docs/members[@name="serverGeneralSettings"]/EmailNotificationButtonEnabled/*'/>
+        /// <summary>
+        /// Is <c>true</c> if the email notification button is enabled. Otherwise <c>false</c>.
+        /// </summary>
         public bool EmailNotificationButtonEnabled { get; internal set; }
 
-        /// <include file = "ModelDoc.xml" path='docs/members[@name="serverGeneralSettings"]/EulaEnabled/*'/>
+        /// <summary>
+        /// Is <c>true</c> if each user has to confirm the EULA at first login. Otherwise <c>false</c>.
+        /// </summary>
         public bool EulaEnabled { get; internal set; }
 
-        /// <include file = "ModelDoc.xml" path='docs/members[@name="serverGeneralSettings"]/UseS3Storage/*'/>
+        /// <summary>
+        /// Is <c>true</c> if S3 is used as storage backend. Otherwise <c>false</c>.
+        /// </summary>
         public bool UseS3Storage { get; internal set; }
 
-        /// <include file = "ModelDoc.xml" path='docs/members[@name="serverGeneralSettings"]/S3TagsEnabled/*'/>
+        /// <summary>
+        /// Is <c>true</c> if S3 tags are enabled. Otherwise <c>false</c>.
+        /// </summary>
         public bool S3TagsEnabled { get; internal set; }
 
-        /// <include file = "ModelDoc.xml" path='docs/members[@name="serverGeneralSettings"]/HideLoginInputFields/*'/>
+        /// <summary> 
+        /// Is<c>true</c> if the input fields should be hidden. Otherwise<c>false</c>.
+        /// </summary>
         public bool HideLoginInputFields { get; internal set; }
 
-        /// <include file = "ModelDoc.xml" path='docs/members[@name="serverGeneralSettings"]/AuthTokenRestrictions/*'/>
+        /// <summary>
+        /// This model stores the restrictions for OAuth tokens.
+        /// </summary>
         public AuthTokenRestrictions AuthTokenRestrictions { get; internal set; }
     }
 }
