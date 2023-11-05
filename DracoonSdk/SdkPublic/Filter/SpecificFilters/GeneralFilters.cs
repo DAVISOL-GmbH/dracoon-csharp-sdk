@@ -81,7 +81,6 @@ namespace Dracoon.Sdk.Filter {
 
     public static class CommonFilterExtension {
 
-        /// <include file="SpecificFilterDoc.xml" path='docs/members[@name="general"]/EqualTo/*'/>
         public static FilterParam<TFilter, DracoonFilterType<TFilter>> EqualsId<TFilter>(this TFilter ef, long value) where TFilter : IdFilterBase<TFilter> {
             if (!ef.FilterOperators.HasFlag(FilterOperator.Equals))
                 throw new NotSupportedException("This filter operator is not supported in this scope!");
@@ -90,7 +89,6 @@ namespace Dracoon.Sdk.Filter {
             return new FilterParam<TFilter, DracoonFilterType<TFilter>>(ef, ef);
         }
 
-        /// <include file="SpecificFilterDoc.xml" path='docs/members[@name="general"]/EqualTo/*'/>
         public static FilterParam<TFilter, DracoonFilterType<TFilter>> EqualsFlag<TFilter>(this TFilter ef, bool value) where TFilter : BoolFilterBase<TFilter> {
             if (!ef.FilterOperators.HasFlag(FilterOperator.Equals))
                 throw new NotSupportedException("This filter operator is not supported in this scope!");
@@ -98,7 +96,6 @@ namespace Dracoon.Sdk.Filter {
             return new FilterParam<TFilter, DracoonFilterType<TFilter>>(ef, ef);
         }
 
-        /// <include file="SpecificFilterDoc.xml" path='docs/members[@name="general"]/EqualTo/*'/>
         public static FilterParam<TFilter, DracoonFilterType<TFilter>> EqualsFlag<TFilter>(this TFilter ef, bool? value) where TFilter : BoolFilterBase<TFilter> {
             if (!ef.FilterOperators.HasFlag(FilterOperator.Equals))
                 throw new NotSupportedException("This filter operator is not supported in this scope!");
@@ -115,7 +112,6 @@ namespace Dracoon.Sdk.Filter {
             return value.Value ? "true" : "false";
         }
 
-        /// <include file="SpecificFilterDoc.xml" path='docs/members[@name="general"]/EqualTo/*'/>
         public static FilterParam<TFilter, DracoonFilterType<TFilter>> EqualsText<TFilter>(this TFilter ef, string value) where TFilter : TextFilterBase<TFilter> {
             if (!ef.FilterOperators.HasFlag(FilterOperator.Contains))
                 throw new NotSupportedException("This filter operator is not supported in this scope!");
@@ -124,7 +120,6 @@ namespace Dracoon.Sdk.Filter {
             return new FilterParam<TFilter, DracoonFilterType<TFilter>>(ef, ef);
         }
 
-        /// <include file="SpecificFilterDoc.xml" path='docs/members[@name="general"]/Contains/*'/>
         public static FilterParam<TFilter, DracoonFilterType<TFilter>> ContainsText<TFilter>(this TFilter ef, string value) where TFilter : TextFilterBase<TFilter> {
             if (!ef.FilterOperators.HasFlag(FilterOperator.Contains))
                 throw new NotSupportedException("This filter operator is not supported in this scope!");
@@ -133,7 +128,6 @@ namespace Dracoon.Sdk.Filter {
             return new FilterParam<TFilter, DracoonFilterType<TFilter>>(ef, ef);
         }
 
-        /// <include file="SpecificFilterDoc.xml" path='docs/members[@name="general"]/Contains/*'/>
         public static FilterParam<TFilter, DracoonFilterType<TFilter>> StartsWithText<TFilter>(this TFilter ef, string value) where TFilter : TextFilterBase<TFilter> {
             if (!ef.FilterOperators.HasFlag(FilterOperator.StartsWith))
                 throw new NotSupportedException("This filter operator is not supported in this scope!");
@@ -503,13 +497,11 @@ namespace Dracoon.Sdk.Filter {
     }
 
     public static class BranchVersionFilterExtension {
-        /// <include file="SpecificFilterDoc.xml" path='docs/members[@name="general"]/GreaterThanOrEqual/*'/>
         public static FilterParam<BranchVersionFilter, DracoonFilterType<BranchVersionFilter>> GreaterThanOrEqual(this BranchVersionFilter ef,
             long value) {
             ef.AddOperatorAndValue((int)value, "ge", nameof(value));
             return new FilterParam<BranchVersionFilter, DracoonFilterType<BranchVersionFilter>>(ef, ef);
         }
-        /// <include file="SpecificFilterDoc.xml" path='docs/members[@name="general"]/LessThanOrEqual/*'/>
         public static FilterParam<BranchVersionFilter, DracoonFilterType<BranchVersionFilter>> LessThanOrEqual(this BranchVersionFilter ef,
             long value) {
             ef.AddOperatorAndValue((int)value, "le", nameof(value));
@@ -704,7 +696,6 @@ namespace Dracoon.Sdk.Filter {
 
     public static class UserFilterExtension {
 
-        /// <include file="SpecificFilterDoc.xml" path='docs/members[@name="general"]/Contains/*'/>
         public static FilterParam<UserFilter, DracoonFilterType<UserFilter>> Contains(this UserFilter ef, long value) {
             value.MustPositive(nameof(value));
             ef.AddOperatorAndValue(value, "cn", nameof(value));
@@ -724,7 +715,6 @@ namespace Dracoon.Sdk.Filter {
 
     public static class IsMemberFilterExtension {
 
-        /// <include file="SpecificFilterDoc.xml" path='docs/members[@name="general"]/EqualTo/*'/>
         public static FilterParam<IsMemberFilter, DracoonFilterType<IsMemberFilter>> EqualTo(this IsMemberFilter ef, bool? value) {
             ef.AddOperatorAndValue(value?.ToString(CultureInfo.InvariantCulture).ToLowerInvariant() ?? "any", "eq", nameof(value));
             return new FilterParam<IsMemberFilter, DracoonFilterType<IsMemberFilter>>(ef, ef);
@@ -743,14 +733,12 @@ namespace Dracoon.Sdk.Filter {
 
     public static class KeyFilterExtension {
 
-        /// <include file="SpecificFilterDoc.xml" path='docs/members[@name="general"]/EqualTo/*'/>
         public static FilterParam<KeyFilter, DracoonFilterType<KeyFilter>> EqualTo(this KeyFilter ef, string value) {
             value.MustNotNullOrEmptyOrWhitespace(nameof(value));
             ef.AddOperatorAndValue(value, "eq", nameof(value));
             return new FilterParam<KeyFilter, DracoonFilterType<KeyFilter>>(ef, ef);
         }
 
-        /// <include file="SpecificFilterDoc.xml" path='docs/members[@name="general"]/Contains/*'/>
         public static FilterParam<KeyFilter, DracoonFilterType<KeyFilter>> Contains(this KeyFilter ef, string value) {
             value.MustNotNullOrEmptyOrWhitespace(nameof(value));
             ef.AddOperatorAndValue(value, "cn", nameof(value));
@@ -776,14 +764,12 @@ namespace Dracoon.Sdk.Filter {
 
     public static class ValueFilterExtension {
 
-        /// <include file="SpecificFilterDoc.xml" path='docs/members[@name="general"]/EqualTo/*'/>
         public static FilterParam<ValueFilter, DracoonFilterType<ValueFilter>> EqualTo(this ValueFilter ef, string value) {
             value.MustNotNullOrEmptyOrWhitespace(nameof(value));
             ef.AddOperatorAndValue(value, "eq", nameof(value));
             return new FilterParam<ValueFilter, DracoonFilterType<ValueFilter>>(ef, ef);
         }
 
-        /// <include file="SpecificFilterDoc.xml" path='docs/members[@name="general"]/Contains/*'/>
         public static FilterParam<ValueFilter, DracoonFilterType<ValueFilter>> Contains(this ValueFilter ef, string value) {
             value.MustNotNullOrEmptyOrWhitespace(nameof(value));
             ef.AddOperatorAndValue(value, "cn", nameof(value));
@@ -809,14 +795,12 @@ namespace Dracoon.Sdk.Filter {
 
     public static class EmailFilterExtension {
 
-        /// <include file="SpecificFilterDoc.xml" path='docs/members[@name="general"]/Contains/*'/>
         public static FilterParam<EmailFilter, DracoonFilterType<EmailFilter>> Contains(this EmailFilter ef, string value) {
             value.MustNotNullOrEmptyOrWhitespace(nameof(value));
             ef.AddOperatorAndValue(value, "cn", nameof(value));
             return new FilterParam<EmailFilter, DracoonFilterType<EmailFilter>>(ef, ef);
         }
 
-        /// <include file="SpecificFilterDoc.xml" path='docs/members[@name="general"]/EqualsTo/*'/>
         public static FilterParam<EmailFilter, DracoonFilterType<EmailFilter>> EqualsTo(this EmailFilter ef, string value) {
             value.MustNotNullOrEmptyOrWhitespace(nameof(value));
             ef.AddOperatorAndValue(value, "eq", nameof(value));
@@ -836,14 +820,12 @@ namespace Dracoon.Sdk.Filter {
 
     public static class UserNameFilterExtension {
 
-        /// <include file="SpecificFilterDoc.xml" path='docs/members[@name="general"]/Contains/*'/>
         public static FilterParam<UserNameFilter, DracoonFilterType<UserNameFilter>> Contains(this UserNameFilter ef, string value) {
             value.MustNotNullOrEmptyOrWhitespace(nameof(value));
             ef.AddOperatorAndValue(value, "cn", nameof(value));
             return new FilterParam<UserNameFilter, DracoonFilterType<UserNameFilter>>(ef, ef);
         }
 
-        /// <include file="SpecificFilterDoc.xml" path='docs/members[@name="general"]/EqualsTo/*'/>
         public static FilterParam<UserNameFilter, DracoonFilterType<UserNameFilter>> EqualsTo(this UserNameFilter ef, string value) {
             value.MustNotNullOrEmptyOrWhitespace(nameof(value));
             ef.AddOperatorAndValue(value, "eq", nameof(value));
@@ -863,7 +845,6 @@ namespace Dracoon.Sdk.Filter {
 
     public static class LoginFilterExtension {
 
-        /// <include file="SpecificFilterDoc.xml" path='docs/members[@name="general"]/Contains/*'/>
         public static FilterParam<LoginFilter, DracoonFilterType<LoginFilter>> Contains(this LoginFilter ef, string value) {
             value.MustNotNullOrEmptyOrWhitespace(nameof(value));
             ef.AddOperatorAndValue(value, "cn", nameof(value));
@@ -883,7 +864,6 @@ namespace Dracoon.Sdk.Filter {
 
     public static class FirstNameFilterExtension {
 
-        /// <include file="SpecificFilterDoc.xml" path='docs/members[@name="general"]/Contains/*'/>
         public static FilterParam<FirstNameFilter, DracoonFilterType<FirstNameFilter>> Contains(this FirstNameFilter ef, string value) {
             value.MustNotNullOrEmptyOrWhitespace(nameof(value));
             ef.AddOperatorAndValue(value, "cn", nameof(value));
@@ -903,7 +883,6 @@ namespace Dracoon.Sdk.Filter {
 
     public static class LastNameFilterExtension {
 
-        /// <include file="SpecificFilterDoc.xml" path='docs/members[@name="general"]/Contains/*'/>
         public static FilterParam<LastNameFilter, DracoonFilterType<LastNameFilter>> Contains(this LastNameFilter ef, string value) {
             value.MustNotNullOrEmptyOrWhitespace(nameof(value));
             ef.AddOperatorAndValue(value, "cn", nameof(value));
@@ -923,7 +902,6 @@ namespace Dracoon.Sdk.Filter {
 
     public static class IsLockedFilterExtension {
 
-        /// <include file="SpecificFilterDoc.xml" path='docs/members[@name="general"]/EqualTo/*'/>
         public static FilterParam<IsLockedFilter, DracoonFilterType<IsLockedFilter>> EqualTo(this IsLockedFilter ef, bool value) {
             ef.AddOperatorAndValue(value, "eq", nameof(value));
             return new FilterParam<IsLockedFilter, DracoonFilterType<IsLockedFilter>>(ef, ef);
@@ -942,7 +920,6 @@ namespace Dracoon.Sdk.Filter {
 
     public static class EffectiveRolesFilterExtension {
 
-        /// <include file="SpecificFilterDoc.xml" path='docs/members[@name="general"]/EqualTo/*'/>
         public static FilterParam<EffectiveRolesFilter, DracoonFilterType<EffectiveRolesFilter>> EqualTo(this EffectiveRolesFilter ef, bool value) {
             ef.AddOperatorAndValue(value, "eq", nameof(value));
             return new FilterParam<EffectiveRolesFilter, DracoonFilterType<EffectiveRolesFilter>>(ef, ef);
@@ -987,7 +964,6 @@ namespace Dracoon.Sdk.Filter {
 
     public static class AssignmentStateFilterExtension {
 
-        /// <include file="SpecificFilterDoc.xml" path='docs/members[@name="general"]/EqualTo/*'/>
         public static FilterParam<AssignmentStateFilter, DracoonFilterType<AssignmentStateFilter>> EqualTo(this AssignmentStateFilter ef, PendingAssignmentState value) {
             string state = null;
             if (value == PendingAssignmentState.Waiting)
