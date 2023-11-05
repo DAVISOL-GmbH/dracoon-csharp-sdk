@@ -1,6 +1,6 @@
 ﻿namespace Dracoon.Sdk.Sort {
     /// <summary>
-    ///     This class provides sorts for <see cref="Dracoon.Sdk.INodes.SearchNodes(string, long, long, long, Filter.SearchNodesFilter, SearchNodesSort)"/>.
+    ///     This class provides sorts for <see cref="Dracoon.Sdk.INodes.SearchNodes(string, long, int, long, long, Filter.SearchNodesFilter, SearchNodesSort)"/>.
     /// </summary>
     public class SearchNodesSort : DracoonSort {
 
