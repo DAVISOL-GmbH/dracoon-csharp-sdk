@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.IO;
 using System.Net;
 using System.Reflection;
 using Dracoon.Sdk.SdkInternal;
@@ -16,6 +14,9 @@ namespace Dracoon.Sdk {
     ///         </listheader>
     ///         <item>
     ///             <description><see cref="RetryEnabled"/></description>
+    ///         </item>
+    ///         <item>
+    ///             <description><see cref="MaxRetriesPerRequest"/></description>
     ///         </item>
     ///         <item>
     ///             <description><see cref="ReadWriteTimeout"/></description>
@@ -36,12 +37,20 @@ namespace Dracoon.Sdk {
     /// </summary>
     public class DracoonHttpConfig : IDracoonHttpConfig {
         /// <summary>
-        ///     Enables/Disables auto retry on failed request (up to 3 tries).
+        ///     Enables/Disables auto retry on failed request (up to <see cref="MaxRetriesPerRequest"/> tries).
         ///     <para>
         ///         (Default: <c>false</c>)
         ///     </para>
         /// </summary>
         public bool RetryEnabled { get; set; }
+
+        /// <summary>
+        ///     The  maximum number of retries per request. Ignored if <see cref="RetryEnabled"/> is not <c>true</c>.
+        ///     <para>
+        ///         (Default: <c>3</c>)
+        ///     </para>
+        /// </summary>
+        public int MaxRetriesPerRequest { get; set; }
 
         /// <summary>
         ///     <b>No longer supported! Setting this value will have no effect.</b> The HTTP read-write timeout in milliseconds.
@@ -89,18 +98,21 @@ namespace Dracoon.Sdk {
         /// <param name="webProxy"><see cref="WebProxy"/></param>
         /// <param name="ownUserAgent"><see cref="UserAgent"/></param>
         /// <param name="chunkSize"><see cref="ChunkSize"/></param>
-        public DracoonHttpConfig(bool retryEnabled = false, int connectionTimeout = 15000, IWebProxy webProxy = null, string ownUserAgent = null, int chunkSize = 2048) {
+        /// <param name="maxRetriesPerRequest"><see cref="MaxRetriesPerRequest"/></param>
+        public DracoonHttpConfig(bool retryEnabled = false, int connectionTimeout = 15000, IWebProxy webProxy = null, string ownUserAgent = null, int chunkSize = 2048, int maxRetriesPerRequest = 3) {
             RetryEnabled = retryEnabled;
+            MaxRetriesPerRequest = maxRetriesPerRequest;
             ConnectionTimeout = connectionTimeout;
             WebProxy = webProxy;
             UserAgent = ownUserAgent ?? BuildDefaultUserAgent();
             ChunkSize = chunkSize * 1024;
+            if (MaxRetriesPerRequest <= 0)
+                RetryEnabled = false;
         }
 
         private static string BuildDefaultUserAgent() {
             AssemblyName assembly = typeof(DracoonHttpConfig).Assembly.GetName();
-            return "CSharp-SDK|" + assembly.Version.Major + "." + assembly.Version.Minor + "." + assembly.Version.Revision + "|" +
-                   Environment.OSVersion + "|-|-";
+            return "CSharp-SDK|" + assembly.Version.Major + "." + assembly.Version.Minor + "." + assembly.Version.Revision + "|" + Environment.OSVersion + "|-|-";
         }
     }
 }

@@ -123,8 +123,8 @@ namespace Dracoon.Sdk.SdkInternal {
                     try {
                         DracoonErrorParser.ParseError(response, requestType, sw.ElapsedMilliseconds);
                     } catch (DracoonApiException apiError) {
-                        if (apiError.ErrorCode.Code == DracoonApiCode.AUTH_UNAUTHORIZED.Code && sendTry < 3) {
-                            _client.Log.Debug(Logtag, "Retry the refresh of the access token in " + sendTry * 1000 + " millis again.");
+                        if (apiError.ErrorCode.Code == DracoonApiCode.AUTH_UNAUTHORIZED.Code && sendTry < 2) {
+                            _client.Log.Debug(Logtag, $"Retry the request after refreshing the access token{(sendTry <= 0 ? "" : $" in {sendTry} seconds")}.");
                             Thread.Sleep(1000 * sendTry);
                             _auth.RefreshAccessToken();
                             var authParameter = Parameter.CreateParameter(ApiConfig.AuthorizationHeader, _auth.BuildAuthString(), ParameterType.HttpHeader);
@@ -141,7 +141,7 @@ namespace Dracoon.Sdk.SdkInternal {
                     }
                 }
             } catch (DracoonApiException dae) {
-                if (sendTry < 3 && CheckTooManyRequestsResult(dae, response)) {
+                if (CanRetryRequest(sendTry, dae, response)) {
                     return ((IRequestExecutor)this).DoSyncApiCall<T>(request, requestType, sendTry + 1);
                 }
 
@@ -180,7 +180,7 @@ namespace Dracoon.Sdk.SdkInternal {
                             string message = "Server communication failed!";
                             _client.Log.Debug(Logtag, message);
                             if (_client.HttpConfig.RetryEnabled && sendTry < 3) {
-                                _client.Log.Debug(Logtag, "Retry the request in " + sendTry * 1000 + " millis again.");
+                                _client.Log.Debug(Logtag, $"Retry the file download request in {sendTry} seconds.");
                                 Thread.Sleep(1000 * sendTry);
                                 return ((IRequestExecutor)this).ExecuteWebClientDownload(requestClient, target, type, asyncThread, sendTry + 1);
                             } else {
@@ -192,7 +192,7 @@ namespace Dracoon.Sdk.SdkInternal {
                             }
                         }
                     } catch (DracoonApiException dae) {
-                        if (sendTry < 3 && CheckTooManyRequestsResult(dae, we.Response)) {
+                        if (CanRetryRequest(sendTry, dae, response)) {
                             return ((IRequestExecutor)this).ExecuteWebClientDownload(requestClient, target, type, asyncThread, sendTry + 1);
                         }
 
@@ -205,8 +205,7 @@ namespace Dracoon.Sdk.SdkInternal {
             return response;
         }
 
-        public byte[] ExecuteWebClientChunkUpload(WebClient requestClient, Uri target, byte[] data, RequestType type, Thread asyncThread = null,
-            int sendTry = 0) {
+        public byte[] ExecuteWebClientChunkUpload(WebClient requestClient, Uri target, byte[] data, RequestType type, Thread asyncThread = null, int sendTry = 0) {
             byte[] response = null;
             try {
                 string method = "POST";
@@ -245,8 +244,8 @@ namespace Dracoon.Sdk.SdkInternal {
                         } else {
                             string message = "Server communication failed!";
                             _client.Log.Debug(Logtag, message);
-                            if (_client.HttpConfig.RetryEnabled && sendTry < 3) {
-                                _client.Log.Debug(Logtag, "Retry the request in " + sendTry * 1000 + " millis again.");
+                            if (_client.HttpConfig.RetryEnabled && sendTry < _client.HttpConfig.MaxRetriesPerRequest) {
+                                _client.Log.Debug(Logtag, $"Retry the chunk upload request in {sendTry} seconds.");
                                 Thread.Sleep(1000 * sendTry);
                                 return ((IRequestExecutor)this).ExecuteWebClientChunkUpload(requestClient, target, data, type, asyncThread, sendTry + 1);
                             } else {
@@ -258,7 +257,7 @@ namespace Dracoon.Sdk.SdkInternal {
                             }
                         }
                     } catch (DracoonApiException dae) {
-                        if (sendTry < 3 && CheckTooManyRequestsResult(dae, we.Response)) {
+                        if (CanRetryRequest(sendTry, dae, response)) {
                             return ((IRequestExecutor)this).ExecuteWebClientChunkUpload(requestClient, target, data, type, asyncThread, sendTry + 1);
                         }
 
@@ -270,6 +269,7 @@ namespace Dracoon.Sdk.SdkInternal {
             return response;
         }
 
+        /** Replaced by the more generic CanRetryRequest, see below
         private bool CheckTooManyRequestsResult(DracoonApiException error, object response) {
             if (error.ErrorCode.Code == DracoonApiCode.SERVER_TOO_MANY_REQUESTS.Code) {
                 int retryAfter;
@@ -285,6 +285,70 @@ namespace Dracoon.Sdk.SdkInternal {
             }
 
             return false;
+        }
+        **/
+
+        private bool CanRetryRequest(int sendTry, DracoonApiException error, object response) {
+
+            int retryAfter = -1;
+            string retryReason = null;
+
+            if (error?.ErrorCode != null) {
+                if (error.ErrorCode.Code == DracoonApiCode.SERVER_TOO_MANY_REQUESTS.Code) {
+                    if (sendTry < Math.Max(3, _client.HttpConfig.MaxRetriesPerRequest)) {
+                        retryReason = "HTTP status code 429 Too Many Requests was given";
+                    }
+                }
+                else if (_client.HttpConfig.RetryEnabled && sendTry < _client.HttpConfig.MaxRetriesPerRequest) {
+                    if (error.ErrorCode.Code == DracoonApiCode.SERVER_UNAVAILABLE.Code) {
+                        retryReason = "The API is not available";
+                    }
+                    else if (error.ErrorCode.Code == DracoonApiCode.SERVER_BAD_GATEWAY.Code) {
+                        retryReason = "The API is not ready";
+
+                    } else if (error.ErrorCode.Code == DracoonApiCode.SERVER_GATEWAY_TIMEOUT.Code) {
+                        retryReason = "The API did not answer in time";
+                    }
+                    else if (error.ErrorCode.Code == DracoonApiCode.SERVER_MAINTENANCE.Code) {
+                        retryReason = "The API is in maintenance";
+                        // In maintenance mode, a retry is done after a minute
+                        retryAfter = 60_000;
+                    }
+                }
+            }
+
+            if (string.IsNullOrEmpty(retryReason)) {
+                return false;
+            }
+
+            // Check if the Retry-After header is present in the API's response
+            if (int.TryParse(DracoonErrorParser.GetResponseHeaderValue(response, "Retry-After"), out int retryAfterHeader)) {
+                // The Retry-After header represents the wait time in seconds, 1 second is used as a fallback for zero or negative header values
+                retryAfter = Math.Max(1, retryAfterHeader) * 1000;
+            }
+            else if (retryAfter <= 0) { 
+                // ...otherwise calculate the seconds to wait before retry from the current retry counter
+                retryAfter = CalculateDefaultRetryWaitTime(sendTry);
+            }
+
+            _client.Log.Debug(Logtag, $"{retryReason}. Retry the request in {retryReason} milliseconds (retry {sendTry + 1} of {_client.HttpConfig.MaxRetriesPerRequest}).");
+            Thread.Sleep(retryAfter);
+
+            return true;
+        }
+
+        private static int CalculateDefaultRetryWaitTime(int sendTry) {
+            if (sendTry <= 0) {
+                // first retry after 300 ms
+                return 300;
+            }
+            else if (sendTry == 1) {
+                // second retry after 500 ms
+                return 500;
+            }
+
+            // use Fibonacci for the third and any additional retry wait time (800ms, 1300ms, 2100ms, 3400ms, ...)
+            return CalculateDefaultRetryWaitTime(sendTry - 2) + CalculateDefaultRetryWaitTime(sendTry - 1);
         }
     }
 }
