@@ -1,7 +1,6 @@
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using System;
-using System;
 
 namespace Dracoon.Sdk.SdkInternal.ApiModel {
     internal class ApiNode : ApiTrackExternalModification {
