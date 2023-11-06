@@ -10,6 +10,7 @@ using static Dracoon.Sdk.SdkInternal.DracoonRequestExecutor;
 namespace Dracoon.Sdk.SdkInternal {
     internal static class DracoonErrorParser {
         private const string LogTag = nameof(DracoonErrorParser);
+        //private const int COR_E_IO = unchecked((int)0x80131620);
 
         internal static IInternalDracoonClientBase DracoonClient { get; set; }
 
@@ -90,12 +91,35 @@ namespace Dracoon.Sdk.SdkInternal {
             }
         }
 
-        private static DracoonApiCode ParseApiErrorCodeFromResponse(RestResponse response, RequestType requestType) {
-            var responseContent = response.Content;
+        private static DracoonApiCode ParseApiErrorCodeFromResponse(RestResponse response, RequestType requestType, ref string responseContent) {
+            //var responseContent = response.Content;
             if (!string.IsNullOrEmpty(responseContent)) {
                 // Check if the API is in maintenance (usually every wednesday night)
                 if (responseContent.IndexOf("<title>DRACOON Maintenance</title>", StringComparison.OrdinalIgnoreCase) > 0) {
                     return DracoonApiCode.SERVER_MAINTENANCE;
+                }
+            }
+            else if (response.StatusCode == 0) {
+                // no valid HTTP response received
+                if (response.ResponseStatus == ResponseStatus.TimedOut) {
+                    responseContent = "Response status signals timeout";
+                    return DracoonApiCode.SERVER_GATEWAY_TIMEOUT;
+                }
+                else if (response.ErrorException is System.Net.Http.HttpRequestException && /*response.ErrorException.HResult == COR_E_IO &&*/ response.ErrorException.InnerException is IOException) {
+                    // an IOException usually indicates an error reading the response stream, indicating an issue with the connection to the API
+                    responseContent = $"Response failed with I/O error, {response.ErrorException.Message} ({response.ErrorException.InnerException.Message})";
+                    return DracoonApiCode.SERVER_GATEWAY_TIMEOUT;
+                }
+                else if (response.ErrorException != null) {
+                    responseContent = $"Response failed with unhandled {response.ErrorException.GetType().FullName} ({response.ErrorException.Message})";
+                    var innerException = response.ErrorException.InnerException;
+                    while (innerException != null) {
+                        responseContent += $"inner {innerException.GetType().FullName} ({innerException.Message})";
+                        innerException = innerException.InnerException;
+                    }
+                }
+                else {
+                    responseContent = "Response failed without a detectable error";
                 }
             }
             ApiErrorResponse apiError = GetApiErrorResponse(responseContent, response.StatusCode);
@@ -103,8 +127,17 @@ namespace Dracoon.Sdk.SdkInternal {
         }
 
         internal static void ParseError(RestResponse response, RequestType requestType, long elapsedMilliseconds) {
-            DracoonApiCode resultCode = ParseApiErrorCodeFromResponse(response, requestType);
-            DracoonClient.Log.Error(LogTag, $"Query for '{requestType}' failed with parsed error '{resultCode.Text}' after {elapsedMilliseconds} ms (code {resultCode.Code}, HTTP status {((int)response.StatusCode)} {response.StatusCode}, {(response.ResponseUri is null ? $"no response from {response.Request.Resource}" : $"response from {response.ResponseUri}")}){(resultCode.Code == DracoonApiCode.SERVER_MAINTENANCE.Code ? "" : $": {response.Content}")}");
+            var responseContent = response.Content;
+            DracoonApiCode resultCode = ParseApiErrorCodeFromResponse(response, requestType, ref responseContent);
+#if DEBUG
+            // DEBUG ONLY - Why an unknown error is detected?
+            if (resultCode.Code == 5000) {
+                if (System.Diagnostics.Debugger.IsAttached) {
+                    System.Diagnostics.Debugger.Break();
+                }
+            }
+#endif
+            DracoonClient.Log.Error(LogTag, $"Query for '{requestType}' failed with parsed error '{resultCode.Text}' after {elapsedMilliseconds} ms (code {resultCode.Code}, HTTP status {response.StatusCode}, {(response.ResponseUri is null ? $"no response from {response.Request.Resource}" : $"response from {response.ResponseUri}")}){(resultCode.Code == DracoonApiCode.SERVER_MAINTENANCE.Code ? "" : $": {responseContent}")}");
 
             throw new DracoonApiException(resultCode);
         }
