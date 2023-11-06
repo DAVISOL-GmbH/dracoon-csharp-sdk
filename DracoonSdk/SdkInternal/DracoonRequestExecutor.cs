@@ -331,7 +331,7 @@ namespace Dracoon.Sdk.SdkInternal {
                 retryAfter = CalculateDefaultRetryWaitTime(sendTry);
             }
 
-            _client.Log.Debug(Logtag, $"{retryReason}. Retry the request in {retryReason} milliseconds (retry {sendTry + 1} of {_client.HttpConfig.MaxRetriesPerRequest}).");
+            _client.Log.Debug(Logtag, $"{retryReason}. Retry the request in {retryAfter} milliseconds (retry {sendTry + 1} of {_client.HttpConfig.MaxRetriesPerRequest}).");
             Thread.Sleep(retryAfter);
 
             return true;
