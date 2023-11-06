@@ -28,7 +28,7 @@ Also, make sure you're referencing at least the following dependencies:
 1. Bouncy Castle (= 2.2.1): [nuget](https://www.nuget.org/packages/BouncyCastle/)
 2. Dracoon Crypto SDK (.NET 8.0 capable fork by DAVISOL)(= 3.2.0): [GitHub](https://github.com/DAVISOL-GmbH/dracoon-csharp-crypto-sdk)
 3. NewtonSoft.Json (= 13.0.3): [nuget](https://www.nuget.org/packages/Newtonsoft.Json/)
-4. RestSharp (= 106.11.5): [nuget](https://www.nuget.org/packages/RestSharp/)
+4. RestSharp (= 110.2.0): [nuget](https://www.nuget.org/packages/RestSharp/)
 
 ### Fork's License and Copyright
 
