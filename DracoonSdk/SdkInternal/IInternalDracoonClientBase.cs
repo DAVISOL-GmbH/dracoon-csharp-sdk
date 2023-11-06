@@ -21,5 +21,7 @@ namespace Dracoon.Sdk.SdkInternal {
         IDracoonHttpConfig HttpConfig { get; }
         
         ILog Log { get; }
+
+        DracoonClientStatistics ClientStats { get; }
     }
 }

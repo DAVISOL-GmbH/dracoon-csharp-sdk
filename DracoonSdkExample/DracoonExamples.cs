@@ -29,22 +29,12 @@ namespace Dracoon.Sdk.Example {
             dc = new DracoonClient(SERVER_URI, dracoonAuth, ENCRYPTION_PASSWORD, new Logger(), config);
             //GetServerData();
 
-            //var maxInvokes = 1000;
-            //var currentInvoke = 0;
-            ////var operationFailed = false;
-            //while (currentInvoke < maxInvokes) {
-            //    currentInvoke++;
-            //    try {
-            //        if (System.Diagnostics.Debugger.IsAttached && currentInvoke % 10 == 0) {
-            //            System.Diagnostics.Debugger.Log(2, "INVOKE", $"Read page no. {currentInvoke}\r\n");
-            //        }                    
-            //        //ListRootNodes();
-            //        ListAuditLogEvents((currentInvoke - 1) * 10);
-            //    } catch (Exception) {
-            //        Console.WriteLine($"List audit log events failed at page no. {currentInvoke}");
-            //        break;
-            //    }
-            //}
+            // Print client statistics
+            if (Debugger.IsLogging()) {
+                var stats = dc.Statistics;
+                Debugger.Log(2, "CLIENTSTATS", $"Unique requests {stats.UniqueRequests} ({stats.UniqueRequestsSucceeded} succeeded, {stats.UniqueRequestsFailed} failed)\r\n");
+                Debugger.Log(2, "CLIENTSTATS", $"Total API requests {stats.EffectiveApiRequests}, all executed in {stats.TotalRequestExecutionTimeMs} ms\r\n");
+            }
         }
 
         #region DracoonClient.Server

@@ -47,6 +47,8 @@ namespace Dracoon.Sdk.SdkInternal {
         private bool _isServerVersionCompatible;
         private string[] _apiVersion;
 
+        private DracoonClientStatistics ClientStats => _client.ClientStats;
+
         internal DracoonRequestExecutor(IInternalDracoonClientBase client, IOAuth auth) {
             _auth = auth;
             _client = client;
@@ -105,9 +107,12 @@ namespace Dracoon.Sdk.SdkInternal {
             }
             RestClient client = new RestClient(clientOptions);
 
+            ClientStats.EffectiveApiRequests++;
             var sw = System.Diagnostics.Stopwatch.StartNew();
             RestResponse response = client.Execute(request);
             sw.Stop();
+            var timeTaken = sw.ElapsedMilliseconds;
+            ClientStats.TotalRequestExecutionTimeMs += timeTaken;
             try {
                 if (response.ErrorException is WebException we) {
                     // It's an HTTP exception
@@ -121,11 +126,13 @@ namespace Dracoon.Sdk.SdkInternal {
                     }
 
                     try {
-                        DracoonErrorParser.ParseError(response, requestType, sw.ElapsedMilliseconds);
+                        DracoonErrorParser.ParseError(response, requestType, timeTaken);
                     } catch (DracoonApiException apiError) {
                         if (apiError.ErrorCode.Code == DracoonApiCode.AUTH_UNAUTHORIZED.Code && sendTry < 2) {
                             _client.Log.Debug(Logtag, $"Retry the request after refreshing the access token{(sendTry <= 0 ? "" : $" in {sendTry} seconds")}.");
-                            Thread.Sleep(1000 * sendTry);
+                            var retryAfter = 1000 * sendTry;
+                            ClientStats.UpdateForRetry(sendTry, retryAfter);
+                            Thread.Sleep(retryAfter);
                             _auth.RefreshAccessToken();
                             var authParameter = Parameter.CreateParameter(ApiConfig.AuthorizationHeader, _auth.BuildAuthString(), ParameterType.HttpHeader);
                             //if (request.Parameters.Exists(authParameter)) {
@@ -134,6 +141,7 @@ namespace Dracoon.Sdk.SdkInternal {
                             //request.Parameters.RemoveParameter(authParameter);
                             request.Parameters.AddParameter(authParameter);
 
+                            ClientStats.UniqueRequestsFailed++;
                             return ((IRequestExecutor)this).DoSyncApiCall<T>(request, requestType, sendTry + 1);
                         }
 
@@ -141,13 +149,20 @@ namespace Dracoon.Sdk.SdkInternal {
                     }
                 }
             } catch (DracoonApiException dae) {
+                ClientStats.UpdateFromException(dae);
                 if (CanRetryRequest(sendTry, dae, response)) {
                     return ((IRequestExecutor)this).DoSyncApiCall<T>(request, requestType, sendTry + 1);
                 }
 
+                ClientStats.UniqueRequestsFailed++;
+                throw;
+            } catch (Exception) {
+                ClientStats.FailedUnknownReason++;
+                ClientStats.UniqueRequestsFailed++;
                 throw;
             }
 
+            ClientStats.UniqueRequestsSucceeded++;
             if (typeof(T) == typeof(VoidResponse)) {
                 return new VoidResponse() as T;
             }
@@ -158,18 +173,26 @@ namespace Dracoon.Sdk.SdkInternal {
         byte[] IRequestExecutor.ExecuteWebClientDownload(WebClient requestClient, Uri target, RequestType type, Thread asyncThread,
             int sendTry) {
             byte[] response = null;
+            ClientStats.EffectiveApiRequests++;
+            var sw = System.Diagnostics.Stopwatch.StartNew();
             try {
                 Task<byte[]> responseTask = requestClient.DownloadDataTaskAsync(target);
                 response = responseTask.Result;
+                sw.Stop();
             } catch (AggregateException ae) {
+                if (sw.IsRunning) {
+                    sw.Stop();
+                }
                 if (ae.InnerException is WebException we) {
                     if (we.Status == WebExceptionStatus.SecureChannelFailure) {
                         const string message = "Server SSL handshake failed!";
                         _client.Log.Error(Logtag, message, we);
+                        ClientStats.UniqueRequestsFailed++;
                         throw new DracoonNetInsecureException(message, we);
                     }
 
                     if (we.Status == WebExceptionStatus.RequestCanceled) {
+                        ClientStats.UniqueRequestsFailed++;
                         throw new ThreadInterruptedException();
                     }
 
@@ -179,9 +202,11 @@ namespace Dracoon.Sdk.SdkInternal {
                         } else {
                             string message = "Server communication failed!";
                             _client.Log.Debug(Logtag, message);
-                            if (_client.HttpConfig.RetryEnabled && sendTry < 3) {
+                            if (_client.HttpConfig.RetryEnabled && sendTry < _client.HttpConfig.MaxRetriesPerRequest) {
                                 _client.Log.Debug(Logtag, $"Retry the file download request in {sendTry} seconds.");
-                                Thread.Sleep(1000 * sendTry);
+                                var retryAfter = 1000 * sendTry;
+                                ClientStats.UpdateForRetry(sendTry, retryAfter);
+                                Thread.Sleep(retryAfter);
                                 return ((IRequestExecutor)this).ExecuteWebClientDownload(requestClient, target, type, asyncThread, sendTry + 1);
                             } else {
                                 if (asyncThread != null && asyncThread.ThreadState == ThreadState.Aborted) {
@@ -192,6 +217,7 @@ namespace Dracoon.Sdk.SdkInternal {
                             }
                         }
                     } catch (DracoonApiException dae) {
+                        ClientStats.UpdateFromException(dae);
                         if (CanRetryRequest(sendTry, dae, response)) {
                             return ((IRequestExecutor)this).ExecuteWebClientDownload(requestClient, target, type, asyncThread, sendTry + 1);
                         }
@@ -201,12 +227,22 @@ namespace Dracoon.Sdk.SdkInternal {
 
                 }
             }
+            finally {
+                if (sw.IsRunning) {
+                    sw.Stop();
+                }
+                var timeTaken = sw.ElapsedMilliseconds;
+                ClientStats.TotalRequestExecutionTimeMs += timeTaken;
+            }
 
+            ClientStats.UniqueRequestsSucceeded++;
             return response;
         }
 
         public byte[] ExecuteWebClientChunkUpload(WebClient requestClient, Uri target, byte[] data, RequestType type, Thread asyncThread = null, int sendTry = 0) {
             byte[] response = null;
+            ClientStats.EffectiveApiRequests++;
+            var sw = System.Diagnostics.Stopwatch.StartNew();
             try {
                 string method = "POST";
                 if (type == RequestType.PutUploadS3Chunk) {
@@ -226,7 +262,11 @@ namespace Dracoon.Sdk.SdkInternal {
                 } else {
                     response = responseTask.Result;
                 }
+                sw.Stop();
             } catch (AggregateException ae) {
+                if (sw.IsRunning) {
+                    sw.Stop();
+                }
                 if (ae.InnerException is WebException we) {
                     if (we.Status == WebExceptionStatus.SecureChannelFailure) {
                         string message = "Server SSL handshake failed!";
@@ -246,7 +286,9 @@ namespace Dracoon.Sdk.SdkInternal {
                             _client.Log.Debug(Logtag, message);
                             if (_client.HttpConfig.RetryEnabled && sendTry < _client.HttpConfig.MaxRetriesPerRequest) {
                                 _client.Log.Debug(Logtag, $"Retry the chunk upload request in {sendTry} seconds.");
-                                Thread.Sleep(1000 * sendTry);
+                                var retryAfter = 1000 * sendTry;
+                                ClientStats.UpdateForRetry(sendTry, retryAfter);
+                                Thread.Sleep(retryAfter);
                                 return ((IRequestExecutor)this).ExecuteWebClientChunkUpload(requestClient, target, data, type, asyncThread, sendTry + 1);
                             } else {
                                 if (asyncThread != null && asyncThread.ThreadState == ThreadState.Aborted) {
@@ -257,6 +299,7 @@ namespace Dracoon.Sdk.SdkInternal {
                             }
                         }
                     } catch (DracoonApiException dae) {
+                        ClientStats.UpdateFromException(dae);
                         if (CanRetryRequest(sendTry, dae, response)) {
                             return ((IRequestExecutor)this).ExecuteWebClientChunkUpload(requestClient, target, data, type, asyncThread, sendTry + 1);
                         }
@@ -264,8 +307,15 @@ namespace Dracoon.Sdk.SdkInternal {
                         throw;
                     }
                 }
+            } finally {
+                if (sw.IsRunning) {
+                    sw.Stop();
+                }
+                var timeTaken = sw.ElapsedMilliseconds;
+                ClientStats.TotalRequestExecutionTimeMs += timeTaken;
             }
 
+            ClientStats.UniqueRequestsSucceeded++;
             return response;
         }
 
@@ -332,6 +382,7 @@ namespace Dracoon.Sdk.SdkInternal {
             }
 
             _client.Log.Debug(Logtag, $"{retryReason}. Retry the request in {retryAfter} milliseconds (retry {sendTry + 1} of {_client.HttpConfig.MaxRetriesPerRequest}).");
+            ClientStats.UpdateForRetry(sendTry, retryAfter);
             Thread.Sleep(retryAfter);
 
             return true;

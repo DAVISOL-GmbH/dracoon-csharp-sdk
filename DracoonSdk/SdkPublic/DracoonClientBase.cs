@@ -2,6 +2,7 @@ using Dracoon.Sdk.Model;
 using Dracoon.Sdk.SdkInternal;
 using Dracoon.Sdk.SdkInternal.OAuth;
 using Dracoon.Sdk.SdkInternal.Validator;
+using Dracoon.Sdk.SdkPublic.SdkPublicInterfaces;
 using System;
 
 namespace Dracoon.Sdk {
@@ -39,6 +40,7 @@ namespace Dracoon.Sdk {
         private IRequestExecutor _requestExecutor;
         private IOAuth _oauth;
         private ILog _logger;
+        private DracoonClientStatistics _statistics;
 
         #endregion
 
@@ -54,8 +56,14 @@ namespace Dracoon.Sdk {
 
         IDracoonHttpConfig IInternalDracoonClientBase.HttpConfig => _httpConfig;
 
+        DracoonClientStatistics IInternalDracoonClientBase.ClientStats => _statistics;
+
         #endregion
 
+        /// <summary>
+        /// Access the request statistics for this client instance.
+        /// </summary>
+        public IDracoonClientStatistics Statistics => _statistics;
 
         #region init internal
 
@@ -69,6 +77,7 @@ namespace Dracoon.Sdk {
         protected void InitInternal(Uri serverUri, DracoonAuth auth, ILog logger, DracoonHttpConfig httpConfig) {
             serverUri.MustBeValid(nameof(serverUri));
 
+            _statistics = new DracoonClientStatistics();
             _logger = logger ?? new EmptyLog();
             ServerUri = serverUri;
             _httpConfig = httpConfig ?? new DracoonHttpConfig();
