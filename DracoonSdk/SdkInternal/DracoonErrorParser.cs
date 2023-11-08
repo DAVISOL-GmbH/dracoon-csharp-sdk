@@ -172,7 +172,7 @@ namespace Dracoon.Sdk.SdkInternal {
         private static DracoonApiCode Parse(int httpStatusCode, object response, ApiErrorResponse apiError, RequestType requestType, ILog clientLog) {
             int? apiErrorCode = null;
             if (apiError != null) {
-                clientLog?.Error(LogTag, $"Parsing API error: HTTP status {httpStatusCode}, error code {apiError.ErrorCode}, code {apiError.Code}, message '{apiError.Message}', debug info '${apiError.DebugInfo}'");
+                clientLog?.Error(LogTag, $"Parsing API error: HTTP status {httpStatusCode}, error code {apiError.ErrorCode}, code {apiError.Code}, message '{apiError.Message}', debug info '{apiError.DebugInfo}'");
                 apiErrorCode = apiError.ErrorCode;
             }
             else {
