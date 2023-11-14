@@ -1,5 +1,4 @@
 namespace Dracoon.Sdk.Model {
-#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
     public class PendingAssignmentData {
 
         public long RoomId { get; set; }
@@ -10,5 +9,4 @@ namespace Dracoon.Sdk.Model {
 
         public GroupInfo GroupInfo { get; set; }
     }
-#pragma warning restore CS1591 // Missing XML comment for publicly visible type or member
 }
