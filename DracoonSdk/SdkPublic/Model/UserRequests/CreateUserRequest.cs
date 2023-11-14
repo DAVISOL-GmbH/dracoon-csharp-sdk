@@ -107,7 +107,7 @@ namespace Dracoon.Sdk.Model {
         /// <remarks>Mutually exclusive to <see cref="SetOpenIDAuth(string, int)"/> and <see cref="SetActiveDirectoryAuth(string, int)"/>.</remarks>
         public void SetBasicAuth(string password, bool mustChangePassword = true) {
             AuthData.Method = UserAuthMethod.Basic;
-            AuthData.Login = UserName;
+            AuthData.Login = null;
             AuthData.Password = password;
             AuthData.MustChangePassword = mustChangePassword;
             AuthData.OIDConfigId = null;
