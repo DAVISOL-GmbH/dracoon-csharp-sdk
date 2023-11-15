@@ -378,7 +378,7 @@ namespace Dracoon.Sdk.SdkInternal {
             }
             else if (retryAfter <= 0) { 
                 // ...otherwise calculate the seconds to wait before retry from the current retry counter
-                retryAfter = CalculateDefaultRetryWaitTime(sendTry);
+                retryAfter = DracoonClientHelper.CalculateDefaultRetryWaitTime(sendTry);
             }
 
             _client.Log.Debug(Logtag, $"{retryReason}. Retry the request in {retryAfter} milliseconds (retry {sendTry + 1} of {_client.HttpConfig.MaxRetriesPerRequest}).");
@@ -386,20 +386,6 @@ namespace Dracoon.Sdk.SdkInternal {
             Thread.Sleep(retryAfter);
 
             return true;
-        }
-
-        private static int CalculateDefaultRetryWaitTime(int sendTry) {
-            if (sendTry <= 0) {
-                // first retry after 300 ms
-                return 300;
-            }
-            else if (sendTry == 1) {
-                // second retry after 500 ms
-                return 500;
-            }
-
-            // use Fibonacci for the third and any additional retry wait time (800ms, 1300ms, 2100ms, 3400ms, ...)
-            return CalculateDefaultRetryWaitTime(sendTry - 2) + CalculateDefaultRetryWaitTime(sendTry - 1);
         }
     }
 }

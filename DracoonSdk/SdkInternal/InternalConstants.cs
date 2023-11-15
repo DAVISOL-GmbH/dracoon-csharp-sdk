@@ -61,7 +61,21 @@
 
     internal static class InternalConstants {
 
+        /// <summary>
+        /// The default wait time in milliseconds after the first attempt of a single HTTP request failed
+        /// <para>
+        /// Constant value is <c>300</c>
+        /// </para>
+        /// </summary>
+        internal const int FirstClientRetryWaitTimeMs = 300;
 
+        /// <summary>
+        /// The default wait time in milliseconds after the second attempt of a single HTTP request failed
+        /// <para>
+        /// Constant value is <c>500</c>
+        /// </para>
+        /// </summary>
+        internal const int SecondClientRetryWaitTimeMs = 500;
 
     }
 }
