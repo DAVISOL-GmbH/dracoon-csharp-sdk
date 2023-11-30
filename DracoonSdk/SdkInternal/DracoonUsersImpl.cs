@@ -129,18 +129,19 @@ namespace Dracoon.Sdk.SdkInternal {
             return UserMapper.FromApiUserData(result);
         }
 
-        public UserData OverwriteUserAttributes(long userId, UserAttributes userAttributeParams) {
-            _client.Executor.CheckApiServerVersion();
-            #region Parameter Validation
-            userId.MustPositive(nameof(userId));
-            userAttributeParams.MustNotNull(nameof(userAttributeParams));
-            #endregion
+        // Deprecated since APIv4.28.0
+        //public UserData OverwriteUserAttributes(long userId, UserAttributes userAttributeParams) {
+        //    _client.Executor.CheckApiServerVersion();
+        //    #region Parameter Validation
+        //    userId.MustPositive(nameof(userId));
+        //    userAttributeParams.MustNotNull(nameof(userAttributeParams));
+        //    #endregion
 
-            ApiUserAttributes apiUserAttributes = UserMapper.ToApiUserAttributes(userAttributeParams);
-            RestRequest restRequest = _client.Builder.PostUserUserAttributes(userId, apiUserAttributes);
-            ApiUserData result = _client.Executor.DoSyncApiCall<ApiUserData>(restRequest, RequestType.PostUserUserAttributes);
-            return UserMapper.FromApiUserData(result);
-        }
+        //    ApiUserAttributes apiUserAttributes = UserMapper.ToApiUserAttributes(userAttributeParams);
+        //    RestRequest restRequest = _client.Builder.PostUserUserAttributes(userId, apiUserAttributes);
+        //    ApiUserData result = _client.Executor.DoSyncApiCall<ApiUserData>(restRequest, RequestType.PostUserUserAttributes);
+        //    return UserMapper.FromApiUserData(result);
+        //}
 
         public UserData UpdateUser(long userId, UpdateUserRequest userParams) {
             _client.Executor.CheckApiServerVersion();
@@ -158,7 +159,7 @@ namespace Dracoon.Sdk.SdkInternal {
             return UserMapper.FromApiUserData(result);
         }
 
-        public UserData UpdateUserAttributes(long userId, UserAttributes userAttributeParams) {
+        public void UpdateUserAttributes(long userId, UserAttributes userAttributeParams) {
             _client.Executor.CheckApiServerVersion();
             #region Parameter Validation
             userId.MustPositive(nameof(userId));
@@ -167,8 +168,7 @@ namespace Dracoon.Sdk.SdkInternal {
 
             ApiUserAttributes apiUserAttributes = UserMapper.ToApiUserAttributes(userAttributeParams);
             RestRequest restRequest = _client.Builder.PutUserUserAttributes(userId, apiUserAttributes);
-            ApiUserData result = _client.Executor.DoSyncApiCall<ApiUserData>(restRequest, RequestType.PutUserUserAttributes);
-            return UserMapper.FromApiUserData(result);
+            _client.Executor.DoSyncApiCall<ApiUserData>(restRequest, RequestType.PutUserUserAttributes);
         }
 
         public void DeleteUser(long userId) {

@@ -33,11 +33,12 @@ namespace Dracoon.Sdk {
 
         UserData CreateUser(CreateUserRequest groupParams);
 
-        UserData OverwriteUserAttributes(long userId, UserAttributes userAttributes);
+        // Deprecated since APIv4.28.0
+        //UserData OverwriteUserAttributes(long userId, UserAttributes userAttributes);
 
         UserData UpdateUser(long userId, UpdateUserRequest userParams);
 
-        UserData UpdateUserAttributes(long userId, UserAttributes userParams);
+        void UpdateUserAttributes(long userId, UserAttributes userParams);
 
         void DeleteUser(long userId);
 
