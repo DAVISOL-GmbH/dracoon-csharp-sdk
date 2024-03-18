@@ -74,7 +74,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Dracoon.Crypto.Sdk.Net8" Version="3.2.3684.1" />
+    <PackageReference Include="Dracoon.Crypto.Sdk.Net8" Version="3.2.3910.1" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="RestSharp" Version="110.2.0" />
   </ItemGroup>
