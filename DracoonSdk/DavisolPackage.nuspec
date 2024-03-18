@@ -77,5 +77,10 @@
     <file src="bin\Release\net7.0\Dracoon.Sdk.dll" target="lib\net7.0\Dracoon.Sdk.dll" />
     <file src="bin\Release\net7.0\Dracoon.Sdk.xml" target="lib\net7.0\Dracoon.Sdk.xml" />
     <file src="bin\Release\net7.0\Dracoon.Sdk.pdb" target="lib\net7.0\Dracoon.Sdk.pdb" />
+      
+    <!-- .Net 8.0 -->
+    <file src="bin\Release\net8.0\Dracoon.Sdk.dll" target="lib\net8.0\Dracoon.Sdk.dll" />
+    <file src="bin\Release\net8.0\Dracoon.Sdk.xml" target="lib\net8.0\Dracoon.Sdk.xml" />
+    <file src="bin\Release\net8.0\Dracoon.Sdk.pdb" target="lib\net8.0\Dracoon.Sdk.pdb" />
   </files>
 </package>
