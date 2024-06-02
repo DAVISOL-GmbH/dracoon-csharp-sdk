@@ -124,7 +124,7 @@ namespace Dracoon.Sdk.Model {
             AuthData.Method = UserAuthMethod.OpenID;
             AuthData.Login = openIdLogin;
             AuthData.Password = null;
-            AuthData.MustChangePassword = false;
+            AuthData.MustChangePassword = null;
             AuthData.OIDConfigId = openIDConfigId;
             AuthData.ADConfigId = null;
         }
@@ -139,7 +139,7 @@ namespace Dracoon.Sdk.Model {
             AuthData.Method = UserAuthMethod.ActiveDirectory;
             AuthData.Login = adLogin;
             AuthData.Password = null;
-            AuthData.MustChangePassword = false;
+            AuthData.MustChangePassword = null;
             AuthData.OIDConfigId = null;
             AuthData.ADConfigId = adConfigId;
         }

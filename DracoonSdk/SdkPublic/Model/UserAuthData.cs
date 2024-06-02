@@ -26,8 +26,11 @@ namespace Dracoon.Sdk.Model {
 
         /// <summary>
         ///     Indicates if the user have to change his password.
+        ///     <para>
+        ///         Nullable if <see cref="Method"/> is NOT <see cref="UserAuthMethod.Basic"/>
+        ///     </para>
         /// </summary>
-        public bool MustChangePassword { get; internal set; }
+        public bool? MustChangePassword { get; internal set; }
 
         /// <summary>
         ///     The id of the ad configuration.
