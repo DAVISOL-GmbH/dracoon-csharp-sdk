@@ -289,6 +289,8 @@ namespace Dracoon.Sdk.SdkInternal {
                     return DracoonApiCode.VALIDATION_FIELD_CANNOT_BE_EMPTY;
                 case -80001:
                     return DracoonApiCode.VALIDATION_FIELD_NOT_POSITIVE;
+                case -80002:
+                    return DracoonApiCode.VALIDATION_FIELD_NOT_NUMERIC;
                 case -80003:
                     return DracoonApiCode.VALIDATION_FIELD_NOT_ZERO_POSITIVE;
                 case -80005:

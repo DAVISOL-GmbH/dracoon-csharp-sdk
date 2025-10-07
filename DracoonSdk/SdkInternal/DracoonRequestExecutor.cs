@@ -29,7 +29,7 @@ namespace Dracoon.Sdk.SdkInternal {
             GetAlgorithms, GetClassificationPolicies, GenerateVirusProtectionInfo, DeleteMaliciousFile, GetDownloadShareSubscriptions,
             GetUploadShareSubscriptions, PostUploadShareSubscription, PostDownloadShareSubscription, DeleteDownloadShareSubscription,
             DeleteUploadShareSubscription, GetFileVersions,
-            GetRoomEvents, GetRoomGroups, GetRoomUsers, GetRoomPending, PutRoomConfig, PutRoomGroups, PutRoomUsers, DeleteRoomGroups, DeleteRoomUsers,
+            GetRoomEvents, GetRoomGroups, GetRoomUsers, GetRoomPending, PutRoomConfig, PutRoomGroups, PutRoomUsers, DeleteRoomGroups, DeleteRoomUsers, GetRoomPolicies, PutRoomPolicies,
             GetServerGeneralConfig, PutServerGeneralConfig,
             GetSystemOAuthClientConfigs, GetSystemOAuthClientConfig, PutSystemOAuthClientConfig, PostSystemOAuthClientConfig, DeleteSystemOAuthClientConfig,
             GetAuthenticationSettings, GetAuthActiveDirectorySettings, GetAuthOpenIdIdpSettings, GetAuthRadiusSettings,

@@ -240,10 +240,27 @@ namespace Dracoon.Sdk.Error {
         /// Api-Error-Codes or contexts: -80023
         /// </summary>
         public static readonly DracoonApiCode VALIDATION_INVALID_CHARACTERS_CONTAINED = new DracoonApiCode(3009, "Invalid characters contained.");
-        // CODES: -80005
+        
+        /// <summary>
+        /// Invalid boolean value.
+        /// 
+        /// Api-Error-Codes or contexts: -80005
+        /// </summary>
         public static readonly DracoonApiCode VALIDATION_FIELD_NOT_BOOLEAN = new DracoonApiCode(3010, "Invalid boolean value.");
-        // CODES: -80028
+        
+        /// <summary>
+        /// Due to existing dependency the input must be null.
+        /// 
+        /// Api-Error-Codes or contexts: -80028
+        /// </summary>
         public static readonly DracoonApiCode VALIDATION_FIELD_NOT_NULL = new DracoonApiCode(3011, "Due to existing dependency the input must be null.");
+
+        /// <summary>
+        /// Value is not a valid number.
+        ///
+        /// Api-Error-Codes or contexts: -80002
+        /// </summary>
+        public static readonly DracoonApiCode VALIDATION_FIELD_NOT_NUMERIC = new DracoonApiCode(3012, "Value is not a valid number.");
 
         #endregion
         #region NODES

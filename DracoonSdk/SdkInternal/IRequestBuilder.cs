@@ -102,6 +102,8 @@ namespace Dracoon.Sdk.SdkInternal {
 
         RestRequest GetRoomPending(long roomId, long? offset, long? limit, GetRoomPendingFilter filter, PendingAssignmentsSort sort);
 
+        RestRequest GetRoomPolicies(long roomId);
+
         RestRequest PostRoom(ApiCreateRoomRequest roomParams);
 
         RestRequest PostFolder(ApiCreateFolderRequest folderParams);
@@ -131,6 +133,8 @@ namespace Dracoon.Sdk.SdkInternal {
         RestRequest PutRoomUsers(long roomId, ApiRoomUsersAddBatchRequest roomUserParams);
 
         RestRequest PutEnableRoomEncryption(long roomId, ApiEnableRoomEncryptionRequest encryptionParams);
+
+        RestRequest PutRoomPolicies(long roomId, ApiRoomPoliciesRequest policyParams);
 
         RestRequest PutFolder(long folderId, ApiUpdateFolderRequest folderParams);
 

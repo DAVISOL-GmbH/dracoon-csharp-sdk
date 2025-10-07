@@ -509,6 +509,29 @@ namespace Dracoon.Sdk.SdkInternal {
             _client.Executor.DoSyncApiCall<VoidResponse>(restRequest, RequestType.DeleteRoomUsers);
         }
 
+        public RoomPolicies GetRoomPolicies(long roomId) {
+            _client.Executor.CheckApiServerVersion();
+            #region Parameter Validation
+            roomId.MustPositive(nameof(roomId));
+            #endregion
+
+            RestRequest restRequest = _client.Builder.GetRoomPolicies(roomId);
+            ApiRoomPolicies result = _client.Executor.DoSyncApiCall<ApiRoomPolicies>(restRequest, RequestType.GetRoomPolicies);
+            return NodeMapper.FromApiRoomPolicies(result);
+        }
+
+        public void UpdateRoomPolicies(long roomId, RoomPoliciesRequest request) {
+            _client.Executor.CheckApiServerVersion();
+            #region Parameter Validation
+            roomId.MustPositive(nameof(roomId));
+            request.MustNotNull(nameof(request));
+            #endregion
+
+            ApiRoomPoliciesRequest apiRoomPoliciesRequest = NodeMapper.ToApiRoomPoliciesRequest(request);
+            RestRequest restRequest = _client.Builder.PutRoomPolicies(roomId, apiRoomPoliciesRequest);
+            _client.Executor.DoSyncApiCall<VoidResponse>(restRequest, RequestType.PutRoomPolicies);
+        }
+
         #endregion
 
         #region Folder services

@@ -479,6 +479,13 @@ namespace Dracoon.Sdk.SdkInternal {
             return request;
         }
 
+        RestRequest IRequestBuilder.GetRoomPolicies(long roomId) {
+            RestRequest request = new RestRequest(ApiConfig.ApiGetRoomPolicies, Method.Get);
+            SetGeneralRestValues(request, true);
+            request.AddUrlSegment("roomId", roomId);
+            return request;
+        }
+
         RestRequest IRequestBuilder.GetFileVersions(long referenceId, long? offset, long? limit) {
             RestRequest request = new RestRequest(ApiConfig.ApiGetFileVersions, Method.Get);
             SetGeneralRestValues(request, true);
@@ -602,6 +609,13 @@ namespace Dracoon.Sdk.SdkInternal {
         RestRequest IRequestBuilder.PutEnableRoomEncryption(long roomId, ApiEnableRoomEncryptionRequest encryptionParams) {
             RestRequest request = new RestRequest(ApiConfig.ApiPutEnableRoomEncryption, Method.Put);
             SetGeneralRestValues(request, true, encryptionParams);
+            request.AddUrlSegment("roomId", roomId);
+            return request;
+        }
+
+        RestRequest IRequestBuilder.PutRoomPolicies(long roomId, ApiRoomPoliciesRequest policyParams) {
+            RestRequest request = new RestRequest(ApiConfig.ApiPutRoomPolicies, Method.Put);
+            SetGeneralRestValues(request, true, policyParams);
             request.AddUrlSegment("roomId", roomId);
             return request;
         }

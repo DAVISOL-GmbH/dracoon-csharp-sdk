@@ -1,5 +1,6 @@
 using Dracoon.Sdk.Model;
 using Dracoon.Sdk.SdkInternal.ApiModel;
+using Dracoon.Sdk.SdkInternal.ApiModel.Nodes;
 using Dracoon.Sdk.SdkInternal.ApiModel.Requests;
 using Dracoon.Sdk.SdkInternal.Util;
 using System.Collections.Generic;
@@ -391,6 +392,24 @@ namespace Dracoon.Sdk.SdkInternal.Mapper {
                 Ids = ids
             };
             return apiRoomUsersDeleteBatchRequest;
+        }
+
+        internal static RoomPolicies FromApiRoomPolicies(ApiRoomPolicies apiRoomPolicies) {
+            RoomPolicies roomPolicies = new RoomPolicies() {
+                DefaultExpirationPeriod = apiRoomPolicies.DefaultExpirationPeriod,
+                VirusProtectionEnabled = apiRoomPolicies.VirusProtectionEnabled
+            };
+            return roomPolicies;
+        }
+
+        internal static ApiRoomPoliciesRequest ToApiRoomPoliciesRequest(RoomPoliciesRequest request) {
+            if (request == null)
+                return null;
+            ApiRoomPoliciesRequest apiRoomPoliciesRequest = new ApiRoomPoliciesRequest() {
+                DefaultExpirationPeriod = request.DefaultExpirationPeriod,
+                VirusProtectionEnabled = request.VirusProtectionEnabled
+            };
+            return apiRoomPoliciesRequest;
         }
     }
 }

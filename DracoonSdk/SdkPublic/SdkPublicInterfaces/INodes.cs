@@ -134,6 +134,20 @@ namespace Dracoon.Sdk {
         Node EnableRoomEncryption(EnableRoomEncryptionRequest request);
 
         /// <summary>
+        /// Get the policies of a room (default expiration period and virus protection).
+        /// </summary>
+        /// <param name="roomId">The ID of the room.</param>
+        /// <returns>The policy values for the room.</returns>
+        RoomPolicies GetRoomPolicies(long roomId);
+
+        /// <summary>
+        /// Update the policies of a room (default expiration period and virus protection). Must be executed by a room administrator.
+        /// </summary>
+        /// <param name="roomId">The ID of the room.</param>
+        /// <param name="request">The policy values to be applied.</param>
+        void UpdateRoomPolicies(long roomId, RoomPoliciesRequest request);
+
+        /// <summary>
         ///     Creates a new folder.
         /// </summary>
         /// <param name="request">The request with the informations about the new folder. See also <seealso cref="Dracoon.Sdk.Model.CreateFolderRequest"/></param>

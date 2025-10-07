@@ -112,6 +112,7 @@ namespace Dracoon.Sdk.SdkInternal {
         internal const string ApiGetRoomGroups = ApiPrefix + "/nodes/rooms/{roomId}/groups";
         internal const string ApiGetRoomUsers = ApiPrefix + "/nodes/rooms/{roomId}/users";
         internal const string ApiGetRoomPending = ApiPrefix + "/nodes/rooms/{roomId}/pending";
+        internal const string ApiGetRoomPolicies = ApiPrefix + "/nodes/rooms/{roomId}/policies";
         internal const string ApiGetS3Status = ApiPrefix + "/nodes/files/uploads/{uploadId}";
 
         #endregion
@@ -141,6 +142,7 @@ namespace Dracoon.Sdk.SdkInternal {
         internal const string ApiPutFolder = ApiPrefix + "/nodes/folders/{folderId}";
         internal const string ApiPutFileUpdate = ApiPrefix + "/nodes/files/{fileId}";
         internal const string ApiPutEnableRoomEncryption = ApiPrefix + "/nodes/rooms/{roomId}/encrypt";
+        internal const string ApiPutRoomPolicies = ApiPrefix + "/nodes/rooms/{roomId}/policies";
         internal const string ApiPutCompleteS3Upload = ApiPrefix + "/nodes/files/uploads/{uploadId}/s3";
 
         #endregion
