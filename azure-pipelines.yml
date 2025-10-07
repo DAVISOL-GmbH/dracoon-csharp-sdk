@@ -1,13 +1,13 @@
 trigger:
   branches:
     include:
-    - v5.1_net8.0
-name: 5.1.$(BuildID)$(Rev:.r)-alpha
+    - v5.2_net8.0
+name: 5.2.$(BuildID)$(Rev:.r)-alpha
 resources:
   repositories:
   - repository: self
     type: git
-    ref: v5.1_net8.0
+    ref: v5.2_net8.0
 jobs:
 - job: Job_1
   displayName: DAVISOL agent job - Build and deploy dracoon-csharp-sdk
