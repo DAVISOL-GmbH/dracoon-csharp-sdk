@@ -41,7 +41,7 @@ namespace Dracoon.Sdk.UnitTest.XUnitComparer {
                 x.SmsConfigEnabled == y.SmsConfigEnabled &&
                 x.S3EnforceDirectUpload == y.S3EnforceDirectUpload &&
                 x.IsDracoonCloud == y.IsDracoonCloud &&
-                string.Equals(x.TenantUUID, y.TenantUUID);
+                string.Equals(x.TenantUuid, y.TenantUuid);
         }
 
         public int GetHashCode(ServerInfrastructureSettings obj) {

@@ -1,4 +1,4 @@
-﻿using Dracoon.Sdk.Model;
+using Dracoon.Sdk.Model;
 using Dracoon.Sdk.SdkInternal.ApiModel;
 using Dracoon.Sdk.SdkInternal.ApiModel.Requests;
 using Dracoon.Sdk.SdkInternal.Util;
@@ -7,7 +7,7 @@ namespace Dracoon.Sdk.SdkInternal.Mapper {
     internal static class RoomMapper {
         internal static ApiCreateRoomRequest ToApiCreateRoomRequest(CreateRoomRequest createRoomRequest) {
             ApiCreateRoomRequest apiCreateRoomRequest = new ApiCreateRoomRequest {
-                ParentId = createRoomRequest.ParentId,
+                ParentId = null,
                 Name = createRoomRequest.Name,
                 Quota = createRoomRequest.Quota,
                 Notes = createRoomRequest.Notes,
@@ -18,9 +18,11 @@ namespace Dracoon.Sdk.SdkInternal.Mapper {
                 NewGroupMemberAcceptance = EnumConverter.ConvertGroupMemberAcceptanceToValue(createRoomRequest.NewGroupMemberAcceptance),
                 Classification = EnumConverter.ConvertClassificationEnumToValue(createRoomRequest.Classification),
                 HasActivitiesLog = createRoomRequest.HasActivitiesLog,
-                TimestampCreation = createRoomRequest.CreationTime,
-                TimestampModification = createRoomRequest.ModificationTime
+                CreationTimestamp = createRoomRequest.CreationTimestamp,
+                ModificationTimestamp = createRoomRequest.ModificationTimestamp
             };
+            if (createRoomRequest.ParentId != 0)
+                apiCreateRoomRequest.ParentId = createRoomRequest.ParentId;
             return apiCreateRoomRequest;
         }
 
@@ -29,15 +31,28 @@ namespace Dracoon.Sdk.SdkInternal.Mapper {
                 Name = updateRoomRequest.Name,
                 Quota = updateRoomRequest.Quota,
                 Notes = updateRoomRequest.Notes,
-                TimestampCreation = updateRoomRequest.CreationTime,
-                TimestampModification = updateRoomRequest.ModificationTime
+                CreationTimestamp = updateRoomRequest.CreationTimestamp,
+                ModificationTimestamp = updateRoomRequest.ModificationTimestamp
             };
             return apiUpdateRoomRequest;
         }
 
-        internal static ApiEnableRoomEncryptionRequest ToApiEnableRoomEncryptionRequest(EnableRoomEncryptionRequest enableRoomEncryptionRequest,
-            ApiUserKeyPair dataRoomRescueKey) {
-            ApiEnableRoomEncryptionRequest apiEnableRoomEncryptionRequest = new ApiEnableRoomEncryptionRequest {
+        internal static ApiConfigRoomRequest ToApiConfigRoomRequest(ConfigRoomRequest configRoomRequest) {
+            ApiConfigRoomRequest apiConfigRoomRequest = new ApiConfigRoomRequest() {
+                RecycleBinRetentionPeriod = configRoomRequest.RecycleBinRetentionPeriod,
+                InheritPermissions = configRoomRequest.InheritPermissions,
+                TakeOverPermissions = configRoomRequest.TakeOverPermissions,
+                AdminIds = configRoomRequest.AdminIds,
+                AdminGroupIds = configRoomRequest.AdminGroupIds,
+                NewGroupMemberAcceptance = EnumConverter.ConvertGroupMemberAcceptanceToValue(configRoomRequest.NewGroupMemberAcceptance),
+                HasActivitiesLog = configRoomRequest.HasActivitiesLog,
+                Classification = EnumConverter.ConvertClassificationEnumToValue(configRoomRequest.Classification)
+            };
+            return apiConfigRoomRequest;
+        }
+
+        internal static ApiEnableRoomEncryptionRequest ToApiEnableRoomEncryptionRequest(EnableRoomEncryptionRequest enableRoomEncryptionRequest, ApiUserKeyPair dataRoomRescueKey) {
+            ApiEnableRoomEncryptionRequest apiEnableRoomEncryptionRequest = new ApiEnableRoomEncryptionRequest() {
                 IsEncryptionEnabled = enableRoomEncryptionRequest.IsEncryptionEnabled,
                 UseDataSpaceRescueKey = enableRoomEncryptionRequest.UseDataSpaceRescueKey,
                 DataRoomRescueKey = dataRoomRescueKey

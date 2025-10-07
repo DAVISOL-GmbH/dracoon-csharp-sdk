@@ -142,7 +142,7 @@ namespace Dracoon.Sdk.SdkInternal {
             return NodeMapper.FromApiNode(result);
         }
 
-        public NodeList SearchNodes(string searchString, long parentNodeId = 0, long offset = 0, long limit = 500, SearchNodesFilter filter = null,
+        public NodeList SearchNodes(string searchString, long parentNodeId = 0, int depthLevel = -1, long offset = 0, long limit = 500, SearchNodesFilter filter = null,
             SearchNodesSort sort = null) {
             _client.Executor.CheckApiServerVersion();
 
@@ -155,7 +155,7 @@ namespace Dracoon.Sdk.SdkInternal {
 
             #endregion
 
-            RestRequest restRequest = _client.Builder.GetSearchNodes(parentNodeId, searchString, offset, limit, filter: filter, sort: sort);
+            RestRequest restRequest = _client.Builder.GetSearchNodes(parentNodeId, searchString, offset, limit, depthLevel, filter: filter, sort: sort);
             ApiNodeList result = _client.Executor.DoSyncApiCall<ApiNodeList>(restRequest, RequestType.GetSearchNodes);
             return NodeMapper.FromApiNodeList(result);
         }
@@ -357,6 +357,20 @@ namespace Dracoon.Sdk.SdkInternal {
             return NodeMapper.FromApiNode(result);
         }
 
+        public Node UpdateRoomConfig(long roomId, ConfigRoomRequest request) {
+            _client.Executor.CheckApiServerVersion();
+            #region Parameter Validation
+            request.MustNotNull(nameof(request));
+            roomId.MustPositive(nameof(roomId));
+            request.RecycleBinRetentionPeriod.MustBetween(nameof(request.RecycleBinRetentionPeriod), 0, 9999);
+            #endregion
+
+            ApiConfigRoomRequest apiConfigRoomRequest = RoomMapper.ToApiConfigRoomRequest(request);
+            RestRequest restRequest = _client.Builder.PutRoomConfig(roomId, apiConfigRoomRequest);
+            ApiNode result = _client.Executor.DoSyncApiCall<ApiNode>(restRequest, RequestType.PutRoomConfig);
+            return NodeMapper.FromApiNode(result);
+        }
+
         public Node EnableRoomEncryption(EnableRoomEncryptionRequest request) {
             _client.Executor.CheckApiServerVersion();
 
@@ -381,7 +395,7 @@ namespace Dracoon.Sdk.SdkInternal {
                     UserKeyPair cryptoPair = Crypto.Sdk.Crypto.GenerateUserKeyPair(request.DataRoomRescueKeyPairAlgorithm.Value, request.DataRoomRescueKeyPassword);
                     apiDataRoomRescueKey = UserMapper.ToApiUserKeyPair(cryptoPair);
                 } catch (CryptoException ce) {
-                    DracoonClient.Log.Debug(Logtag, $"Generation of user key pair failed with '{ce.Message}'!");
+                    _client.Log.Debug(Logtag, $"Generation of user key pair failed with '{ce.Message}'!");
                     throw new DracoonCryptoException(CryptoErrorMapper.ParseCause(ce), ce);
                 }
             }
@@ -391,6 +405,108 @@ namespace Dracoon.Sdk.SdkInternal {
             RestRequest restRequest = _client.Builder.PutEnableRoomEncryption(request.Id, apiEnableRoomEncryptionRequest);
             ApiNode result = _client.Executor.DoSyncApiCall<ApiNode>(restRequest, RequestType.PutEnableRoomEncryption);
             return NodeMapper.FromApiNode(result);
+        }
+
+        public LogEventList GetRoomEvents(long roomId, DateTime? dateStart = null, DateTime? dateEnd = null, EventStatus? status = null, int? operationId = null, long? userId = null, long? offset = null, long? limit = null, EventLogsSort sort = null) {
+            _client.Executor.CheckApiServerVersion();
+            #region Parameter Validation
+            roomId.MustPositive(nameof(roomId));
+            userId.NullableMustPositive(nameof(userId));
+            operationId.NullableMustPositive(nameof(operationId));
+            offset.NullableMustNotNegative(nameof(offset));
+            limit.NullableMustPositive(nameof(limit));
+            #endregion
+
+            RestRequest restRequest = _client.Builder.GetRoomEvents(roomId, dateStart, dateEnd, status, operationId, userId, offset, limit, sort);
+            ApiLogEventList result = _client.Executor.DoSyncApiCall<ApiLogEventList>(restRequest, RequestType.GetRoomEvents);
+            return EventLogMapper.FromApiLogEventList(result);
+        }
+
+        public PendingAssignmentList GetRoomPending(long roomId, long? offset = null, long? limit = null, GetRoomPendingFilter filter = null, PendingAssignmentsSort sort = null) {
+            _client.Executor.CheckApiServerVersion();
+            #region Parameter Validation
+            roomId.MustPositive(nameof(roomId));
+            offset.NullableMustNotNegative(nameof(offset));
+            limit.NullableMustPositive(nameof(limit));
+            #endregion
+
+            RestRequest restRequest = _client.Builder.GetRoomPending(roomId, offset, limit, filter, sort);
+            ApiPendingAssignmentList result = _client.Executor.DoSyncApiCall<ApiPendingAssignmentList>(restRequest, RequestType.GetRoomPending);
+            return NodeMapper.FromApiPendingAssignmentList(result);
+        }
+
+        public RoomGroupList GetRoomGroups(long roomId, long? offset = null, long? limit = null, GetRoomGroupsFilter filter = null) {
+            _client.Executor.CheckApiServerVersion();
+            #region Parameter Validation
+            roomId.MustPositive(nameof(roomId));
+            offset.NullableMustNotNegative(nameof(offset));
+            limit.NullableMustPositive(nameof(limit));
+            #endregion
+
+            RestRequest restRequest = _client.Builder.GetRoomGroups(roomId, offset, limit, filter);
+            ApiRoomGroupList result = _client.Executor.DoSyncApiCall<ApiRoomGroupList>(restRequest, RequestType.GetRoomGroups);
+            return NodeMapper.FromApiRoomGroupList(result);
+        }
+
+        public void OverwriteRoomGroups(long roomId, RoomGroupsAddBatchRequest request) {
+            _client.Executor.CheckApiServerVersion();
+            #region Parameter Validation
+            roomId.MustPositive(nameof(roomId));
+            request.MustNotNull(nameof(request));
+            #endregion
+
+            ApiRoomGroupsAddBatchRequest apiRoomGroupsAddBatchRequest = NodeMapper.ToApiRoomGroupsAddBatchRequest(request);
+            RestRequest restRequest = _client.Builder.PutRoomGroups(roomId, apiRoomGroupsAddBatchRequest);
+            _client.Executor.DoSyncApiCall<VoidResponse>(restRequest, RequestType.PutRoomGroups);
+        }
+
+        public void DeleteRoomGroups(long roomId, IEnumerable<long> groupIds) {
+            _client.Executor.CheckApiServerVersion();
+            #region Parameter Validation
+            roomId.MustPositive(nameof(roomId));
+            groupIds.MustNotNull(nameof(groupIds));
+            #endregion
+
+            ApiRoomGroupsDeleteBatchRequest apiRoomGroupsDeleteBatchRequest = NodeMapper.ToApiRoomGroupsDeleteBatchRequest(groupIds);
+            RestRequest restRequest = _client.Builder.DeleteRoomGroups(roomId, apiRoomGroupsDeleteBatchRequest);
+            _client.Executor.DoSyncApiCall<VoidResponse>(restRequest, RequestType.DeleteRoomGroups);
+        }
+
+        public RoomUserList GetRoomUsers(long roomId, long? offset = null, long? limit = null, GetRoomUsersFilter filter = null) {
+            _client.Executor.CheckApiServerVersion();
+            #region Parameter Validation
+            roomId.MustPositive(nameof(roomId));
+            offset.NullableMustNotNegative(nameof(offset));
+            limit.NullableMustPositive(nameof(limit));
+            #endregion
+
+            RestRequest restRequest = _client.Builder.GetRoomUsers(roomId, offset, limit, filter);
+            ApiRoomUserList result = _client.Executor.DoSyncApiCall<ApiRoomUserList>(restRequest, RequestType.GetRoomUsers);
+            return NodeMapper.FromApiRoomUserList(result);
+        }
+
+        public void OverwriteRoomUsers(long roomId, RoomUsersAddBatchRequest request) {
+            _client.Executor.CheckApiServerVersion();
+            #region Parameter Validation
+            roomId.MustPositive(nameof(roomId));
+            request.MustNotNull(nameof(request));
+            #endregion
+
+            ApiRoomUsersAddBatchRequest apiRoomUsersAddBatchRequest = NodeMapper.ToApiRoomUsersAddBatchRequest(request);
+            RestRequest restRequest = _client.Builder.PutRoomUsers(roomId, apiRoomUsersAddBatchRequest);
+            _client.Executor.DoSyncApiCall<VoidResponse>(restRequest, RequestType.PutRoomUsers);
+        }
+
+        public void DeleteRoomUsers(long roomId, IEnumerable<long> userIds) {
+            _client.Executor.CheckApiServerVersion();
+            #region Parameter Validation
+            roomId.MustPositive(nameof(roomId));
+            userIds.EnumerableMustNotNullOrEmpty(nameof(userIds));
+            #endregion
+
+            ApiRoomUsersDeleteBatchRequest apiRoomUsersDeleteBatchRequest = NodeMapper.ToApiRoomUsersDeleteBatchRequest(userIds);
+            RestRequest restRequest = _client.Builder.DeleteRoomUsers(roomId, apiRoomUsersDeleteBatchRequest);
+            _client.Executor.DoSyncApiCall<VoidResponse>(restRequest, RequestType.DeleteRoomUsers);
         }
 
         #endregion
@@ -642,7 +758,7 @@ namespace Dracoon.Sdk.SdkInternal {
             } catch (CryptoException ce) {
                 string message = "Encryption file key for node " + (nodeId.HasValue ? nodeId.Value.ToString() : "NULL") + " failed with " +
                                  ce.Message;
-                DracoonClient.Log.Debug(Logtag, message);
+                _client.Log.Debug(Logtag, message);
                 throw new DracoonCryptoException(CryptoErrorMapper.ParseCause(ce));
             } finally {
                 Array.Clear(plainFileKey.Key, 0, plainFileKey.Key.Length);
@@ -655,7 +771,7 @@ namespace Dracoon.Sdk.SdkInternal {
             } catch (CryptoException ce) {
                 string message = "Decryption file key for node " + (nodeId.HasValue ? nodeId.Value.ToString() : "NULL") + " failed with " +
                                  ce.Message;
-                DracoonClient.Log.Debug(Logtag, message);
+                _client.Log.Debug(Logtag, message);
                 throw new DracoonCryptoException(CryptoErrorMapper.ParseCause(ce), ce);
             }
         }

@@ -1,18 +1,18 @@
-﻿using System;
+using System;
 using System.Net;
 
 namespace Dracoon.Sdk.SdkInternal.Util {
     internal class DracoonWebClientExtension : WebClient {
         private readonly long? _rangeFrom;
         private readonly long? _rangeTo;
-        private DracoonHttpConfig _config;
+        private IDracoonHttpConfig _config;
 
         public DracoonWebClientExtension(long? rangeFrom = null, long? rangeTo = null) {
             _rangeFrom = rangeFrom;
             _rangeTo = rangeTo;
         }
 
-        public void SetHttpConfigParams(DracoonHttpConfig httpConfig) {
+        public void SetHttpConfigParams(IDracoonHttpConfig httpConfig) {
             _config = httpConfig;
         }
 

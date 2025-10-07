@@ -1,4 +1,4 @@
-﻿
+
 using System;
 
 namespace Dracoon.Sdk.Error {
@@ -240,6 +240,10 @@ namespace Dracoon.Sdk.Error {
         /// Api-Error-Codes or contexts: -80023
         /// </summary>
         public static readonly DracoonApiCode VALIDATION_INVALID_CHARACTERS_CONTAINED = new DracoonApiCode(3009, "Invalid characters contained.");
+        // CODES: -80005
+        public static readonly DracoonApiCode VALIDATION_FIELD_NOT_BOOLEAN = new DracoonApiCode(3010, "Invalid boolean value.");
+        // CODES: -80028
+        public static readonly DracoonApiCode VALIDATION_FIELD_NOT_NULL = new DracoonApiCode(3011, "Due to existing dependency the input must be null.");
 
         #endregion
         #region NODES
@@ -454,7 +458,6 @@ namespace Dracoon.Sdk.Error {
         /// </summary>
         public static readonly DracoonApiCode VALIDATION_INVALID_ETAG = new DracoonApiCode(3129, "Invalid Etag(s).");
 
-
         /// <summary>
         /// Node is not a file.
         ///
@@ -462,7 +465,16 @@ namespace Dracoon.Sdk.Error {
         /// </summary>
         public static readonly DracoonApiCode VALIDATION_NODE_NOT_A_FILE = new DracoonApiCode(3130, "Node is not a file.");
 
+        /// <summary>
+        /// At least one non-expiring admin user / group required.
+        ///
+        /// Api-Error-Codes or contexts: -40006
+        /// </summary>
+        public static readonly DracoonApiCode VALIDATION_ROOM_REQUIRE_NONEXPIRING_ADMIN_USER_OR_GROUP = new DracoonApiCode(3139, "At least one non-expiring admin user / group required.");
+
         #endregion
+
+
         #region SHARES
 
         /// <summary>
@@ -515,6 +527,36 @@ namespace Dracoon.Sdk.Error {
         /// Api-Error-Codes or contexts: -70761
         /// </summary>
         public static readonly DracoonApiCode VALIDATION_USER_HAS_NO_FILE_KEY = new DracoonApiCode(3552, "User has no encryption file key.");
+        /// <summary>
+        /// User with provided Basic authentication login already exists.
+        /// 
+        /// Api-Error-Codes or contexts: 
+        /// </summary>
+        public static readonly DracoonApiCode VALIDATION_USER_BASIC_AUTH_NAME_IN_USE = new DracoonApiCode(3553, "User with provided Basic authentication login already exists.");
+        /// <summary>
+        /// User with provided Active Directory username already exists.
+        /// 
+        /// Api-Error-Codes or contexts: -70561
+        /// </summary>
+        public static readonly DracoonApiCode VALIDATION_USER_ACTIVE_DIRECTORY_AUTH_NAME_IN_USE = new DracoonApiCode(3554, "User with provided Active Directory username already exists.");
+        /// <summary>
+        /// User with provided RADIUS login already exists.
+        /// 
+        /// Api-Error-Codes or contexts: -70562
+        /// </summary>
+        public static readonly DracoonApiCode VALIDATION_USER_RADIUS_AUTH_NAME_IN_USE = new DracoonApiCode(3555, "User with provided RADIUS login already exists.");
+        /// <summary>
+        /// User with provided OpenID Connect username already exists.
+        /// 
+        /// Api-Error-Codes or contexts: -70563
+        /// </summary>
+        public static readonly DracoonApiCode VALIDATION_USER_OPENID_AUTH_NAME_IN_USE = new DracoonApiCode(3556, "User with provided OpenID Connect username already exists.");
+        /// <summary>
+        /// User with provided username already exists.
+        /// 
+        /// Api-Error-Codes or contexts: -70564
+        /// </summary>
+        public static readonly DracoonApiCode VALIDATION_USER_NAME_ALREADY_EXISTS = new DracoonApiCode(3557, "User with provided username already exists.");
 
         #endregion
         #region GROUPS
@@ -548,6 +590,20 @@ namespace Dracoon.Sdk.Error {
         /// Api-Error-Codes or contexts: -80009
         /// </summary>
         public static readonly DracoonApiCode VALIDATION_INVALID_EMAIL_ADDRESS = new DracoonApiCode(3801, "Invalid email address.");
+        // CODES: -90072
+        public static readonly DracoonApiCode RADIUS_CONFIG_NOT_FOUND = new DracoonApiCode(3802, "RADIUS configuration not found.");
+        // CODES: -10100
+        public static readonly DracoonApiCode VALIDATION_INVALID_AUTH_METHOD = new DracoonApiCode(3803, "Invalid authentication method.");
+        // CODES: -10102
+        public static readonly DracoonApiCode VALIDATION_MISSING_AUTH_METHOD = new DracoonApiCode(3804, "At least one authentication method must be enabled.");
+        // CODES: -70106
+        public static readonly DracoonApiCode VALIDATION_NOTSINGLE_AUTH_METHOD = new DracoonApiCode(3805, "Only one authentication method allowed.");
+        // CODES: -80038
+        public static readonly DracoonApiCode VALIDATION_INITAL_PASSWORD_DEACTIVATED_METHOD = new DracoonApiCode(3806, "Deactivation of initial password change is only allowed without notification.");
+        // CODES: -90002
+        public static readonly DracoonApiCode VALIDATION_NO_DISTINCT_AUTH_CONFIG = new DracoonApiCode(3807, "No distinct authentication configuration.");
+        // CODES: -90059
+        public static readonly DracoonApiCode VALIDATION_MISSING_AD_AUTH_CONFIG = new DracoonApiCode(3808, "No valid Active Directory configuration found.");
 
         #endregion
 
@@ -640,6 +696,39 @@ namespace Dracoon.Sdk.Error {
         /// Virus scan in progress.
         /// </summary>
         public static readonly DracoonApiCode SERVER_VIRUS_SCAN_IN_PROGRESS = new DracoonApiCode(5091, "Virus scan in progress.");
+
+        /// <summary>
+        /// The DRACOON API endpoint is currently not available.
+        /// </summary>
+        /// <remarks>
+        /// Added by DAVISOL GmbH to recognize API outages. Not part of the official SDK implementation.
+        /// </remarks>
+        public static readonly DracoonApiCode SERVER_UNAVAILABLE = new DracoonApiCode(5901, "The DRACOON API endpoint is currently not available.");
+
+        /// <summary>
+        /// The DRACOON API endpoint is available, but depending DRACOON systems are not.
+        /// </summary>
+        /// <remarks>
+        /// Added by DAVISOL GmbH to recognize API outages. Not part of the official SDK implementation.
+        /// According to DRACOON support, this error might occur right after the weekly maintenance at wednesday night.
+        /// </remarks>
+        public static readonly DracoonApiCode SERVER_BAD_GATEWAY = new DracoonApiCode(5902, "The DRACOON API endpoint is available, but depending DRACOON systems are not.");
+
+        /// <summary>
+        /// The DRACOON API endpoint might be available but did not respond in time.
+        /// </summary>
+        /// <remarks>
+        /// Added by DAVISOL GmbH to recognize API outages. Not part of the official SDK implementation.
+        /// </remarks>
+        public static readonly DracoonApiCode SERVER_GATEWAY_TIMEOUT = new DracoonApiCode(5903, "The DRACOON API endpoint might be available but did not respond in time.");
+
+        /// <summary>
+        /// The DRACOON API endpoint is currently in maintenance.
+        /// </summary>
+        /// <remarks>
+        /// Added by DAVISOL GmbH to recognize API outages. Not part of the official SDK implementation.
+        /// </remarks>
+        public static readonly DracoonApiCode SERVER_MAINTENANCE = new DracoonApiCode(5904, "The DRACOON API endpoint is currently in maintenance.");
 
         #endregion
 
@@ -761,6 +850,28 @@ namespace Dracoon.Sdk.Error {
         /// Api-Error-Codes or contexts: -41150
         /// </summary>
         public static readonly DracoonApiCode SERVER_MALICIOUS_FILE_NOT_FOUND = new DracoonApiCode(5116, "Malicious file not found.");
+
+        /// <summary>
+        /// OpenID Connect IDP configuration not found.
+        /// 
+        /// Api-Error-Codes or contexts: -90035
+        /// </summary>
+        public static readonly DracoonApiCode SERVER_OPENID_IDP_CONFIG_NOT_FOUND = new DracoonApiCode(5121, "OpenID Connect IDP configuration not found.");
+
+        /// <summary>
+        /// No valid OpenID Connect IDP configuration found.
+        /// 
+        /// Api-Error-Codes or contexts: -90059
+        /// </summary>
+        public static readonly DracoonApiCode SERVER_OPENID_IDP_CONFIG_INVALID = new DracoonApiCode(5122, "No valid OpenID Connect IDP configuration found.");
+
+        /// <summary>
+        /// Active Directory configuration not found.
+        /// 
+        /// Api-Error-Codes or contexts: -90050
+        /// </summary>
+        public static readonly DracoonApiCode SERVER_ACTIVE_DIRECTORY_CONFIG_NOT_FOUND = new DracoonApiCode(5123, "Active Directory configuration not found.");
+
         #endregion
 
         #region SHARES
@@ -833,6 +944,8 @@ namespace Dracoon.Sdk.Error {
         /// Api-Error-Codes or contexts: -70550
         /// </summary>
         public static readonly DracoonApiCode SERVER_ATTRIBUTE_NOT_FOUND = new DracoonApiCode(5554, "Attribute not found.");
+        // CODES: -70505
+        public static readonly DracoonApiCode SERVER_USER_QUOTA_REACHED = new DracoonApiCode(5555, "Maximum number of users reached.");
 
         #endregion
 

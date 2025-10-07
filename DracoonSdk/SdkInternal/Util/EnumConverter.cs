@@ -1,5 +1,7 @@
-﻿using Dracoon.Sdk.Model;
+using Dracoon.Sdk.Model;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Dracoon.Sdk.SdkInternal.Util {
     internal static class EnumConverter {
@@ -27,13 +29,14 @@ namespace Dracoon.Sdk.SdkInternal.Util {
 
         public static readonly Func<string, UserAuthMethod> ConvertValueToUserAuthMethodEnum = value => {
             switch (value) {
-                case "basic":
+                case InternalAuthMethodConstants.Sql:
+                case InternalAuthMethodConstants.Basic:
                     return UserAuthMethod.Basic;
-                case "active_directory":
+                case InternalAuthMethodConstants.ActiveDirectory:
                     return UserAuthMethod.ActiveDirectory;
-                case "radius":
+                case InternalAuthMethodConstants.Radius:
                     return UserAuthMethod.Radius;
-                case "openid":
+                case InternalAuthMethodConstants.OpenId:
                     return UserAuthMethod.OpenID;
                 default:
                     return UserAuthMethod.Unknown;
@@ -43,15 +46,15 @@ namespace Dracoon.Sdk.SdkInternal.Util {
         public static readonly Func<UserAuthMethod, string> ConvertUserAuthMethodEnumToValue = typeEnum => {
             switch (typeEnum) {
                 case UserAuthMethod.Basic:
-                    return "basic";
+                    return InternalAuthMethodConstants.Basic;
                 case UserAuthMethod.ActiveDirectory:
-                    return "active_directory";
+                    return InternalAuthMethodConstants.ActiveDirectory;
                 case UserAuthMethod.Radius:
-                    return "radius";
+                    return InternalAuthMethodConstants.Radius;
                 case UserAuthMethod.OpenID:
-                    return "openid";
+                    return InternalAuthMethodConstants.OpenId;
                 default:
-                    return "unknown";
+                    return InternalAuthMethodConstants.Unknown;
             }
         };
 
@@ -96,6 +99,16 @@ namespace Dracoon.Sdk.SdkInternal.Util {
             }
         }
 
+        public static GroupMemberAcceptance? ConvertValueToGroupMemberAcceptance(string value) {
+            if (string.IsNullOrEmpty(value))
+                return null;
+            if (value == "autoallow")
+                return GroupMemberAcceptance.AutoAllow;
+            if (value == "pending")
+                return GroupMemberAcceptance.Pending;
+            return null;
+        }
+
         public static string ConvertResolutionStrategyToValue(ResolutionStrategy strategy) {
             switch (strategy) {
                 case ResolutionStrategy.AutoRename:
@@ -104,6 +117,33 @@ namespace Dracoon.Sdk.SdkInternal.Util {
                     return "fail";
                 case ResolutionStrategy.Overwrite:
                     return "overwrite";
+                default:
+                    return null;
+            }
+        }
+
+        public static PendingAssignmentState? ConvertValueToPendingAssignmentState(string value) {
+            if (string.IsNullOrEmpty(value))
+                return null;
+            if (value == "ACCEPTED")
+                return PendingAssignmentState.Accepted;
+            if (value == "WAITING")
+                return PendingAssignmentState.Waiting;
+            if (value == "DENIED")
+                return PendingAssignmentState.Denied;
+            return null;
+        }
+
+        public static string ConvertUserTypeToValue(UserType userType) {
+            switch (userType) {
+                case UserType.Internal:
+                    return InternalUserTypeConstants.Internal;
+                case UserType.External:
+                    return InternalUserTypeConstants.External;
+                case UserType.System:
+                    return InternalUserTypeConstants.System;
+                case UserType.Deleted:
+                    return InternalUserTypeConstants.Deleted;
                 default:
                     return null;
             }
@@ -128,11 +168,11 @@ namespace Dracoon.Sdk.SdkInternal.Util {
 
         public static readonly Func<string, UserType> ConvertValueToUserTypeEnum = value => {
             switch (value) {
-                case "internal":
+                case InternalUserTypeConstants.Internal:
                     return UserType.Internal;
-                case "external":
+                case InternalUserTypeConstants.External:
                     return UserType.External;
-                case "deleted":
+                case InternalUserTypeConstants.Deleted:
                     return UserType.Deleted;
                 default:
                     return UserType.System;
@@ -154,6 +194,7 @@ namespace Dracoon.Sdk.SdkInternal.Util {
                     return SubscriptionPlan.Premium;
                 case 2:
                     return SubscriptionPlan.Free;
+                case 0:
                 default:
                     return SubscriptionPlan.Standard;
             }
@@ -170,6 +211,72 @@ namespace Dracoon.Sdk.SdkInternal.Util {
                 default:
                     return VirusProtectionVerdict.NoScanning;
             }
+        };
+
+        public static readonly Func<string, OAuthClientType> ConvertValueToOAuthClientTypeEnum = value => {
+            switch (value) {
+                case InternalOAuthClientTypeConstants.Confidential:
+                    return OAuthClientType.Confidential;
+                case InternalOAuthClientTypeConstants.Public:
+                    return OAuthClientType.Public;
+                default:
+                    return OAuthClientType.Unknown;
+            }
+        };
+
+        public static readonly Func<OAuthClientType?, string> ConvertOAuthClientTypeEnumToValue = value => {
+            switch (value) {
+                case OAuthClientType.Confidential:
+                    return InternalOAuthClientTypeConstants.Confidential;
+                case OAuthClientType.Public:
+                    return InternalOAuthClientTypeConstants.Public;
+                case OAuthClientType.Unknown:
+                default:
+                    return null;
+            }
+        };
+
+        public static readonly Func<IEnumerable<string>, AuthorizedGrantTypes> ConvertValueToAuthorizedGrantTypesEnum = value => {
+            var result = AuthorizedGrantTypes.None;
+            if (value != null && value.Any()) {
+                foreach (var item in value) {
+                    if (StringComparer.OrdinalIgnoreCase.Equals(item, InternalOAuthGrantTypeConstants.AuthorizationCode))
+                        result |= AuthorizedGrantTypes.AuthorizationCode;
+                    else if (StringComparer.OrdinalIgnoreCase.Equals(item, InternalOAuthGrantTypeConstants.Implicit))
+                        result |= AuthorizedGrantTypes.Implicit;
+                    else if (StringComparer.OrdinalIgnoreCase.Equals(item, InternalOAuthGrantTypeConstants.Password))
+                        result |= AuthorizedGrantTypes.Password;
+                    else if (StringComparer.OrdinalIgnoreCase.Equals(item, InternalOAuthGrantTypeConstants.ClientCredentials))
+                        result |= AuthorizedGrantTypes.ClientCredentials;
+                    else if (StringComparer.OrdinalIgnoreCase.Equals(item, InternalOAuthGrantTypeConstants.RefreshToken))
+                        result |= AuthorizedGrantTypes.RefreshToken;
+                }
+            }
+            return result;
+        };
+
+        public static readonly Func<AuthorizedGrantTypes?, IEnumerable<string>> ConvertAuthorizedGrantTypesEnumToValue = value => {
+            var result = new List<string>();
+            if ((value & AuthorizedGrantTypes.AuthorizationCode) == AuthorizedGrantTypes.AuthorizationCode) {
+                result.Add(InternalOAuthGrantTypeConstants.AuthorizationCode);
+            }
+            if ((value & AuthorizedGrantTypes.Implicit) == AuthorizedGrantTypes.Implicit) {
+                result.Add(InternalOAuthGrantTypeConstants.Implicit);
+            }
+            if ((value & AuthorizedGrantTypes.Password) == AuthorizedGrantTypes.Password) {
+                result.Add(InternalOAuthGrantTypeConstants.Password);
+            }
+            if ((value & AuthorizedGrantTypes.ClientCredentials) == AuthorizedGrantTypes.ClientCredentials) {
+                result.Add(InternalOAuthGrantTypeConstants.ClientCredentials);
+            }
+            if ((value & AuthorizedGrantTypes.RefreshToken) == AuthorizedGrantTypes.RefreshToken) {
+                result.Add(InternalOAuthGrantTypeConstants.RefreshToken);
+            }
+
+            if (result.Count == 0)
+                return null;
+
+            return result.ToArray();
         };
     }
 }

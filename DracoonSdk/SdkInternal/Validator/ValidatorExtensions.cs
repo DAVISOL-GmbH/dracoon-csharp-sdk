@@ -1,8 +1,8 @@
-﻿using Dracoon.Sdk.Error;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using Dracoon.Sdk.Error;
 
 namespace Dracoon.Sdk.SdkInternal.Validator {
     internal static class ValidatorExtensions {
@@ -14,21 +14,35 @@ namespace Dracoon.Sdk.SdkInternal.Validator {
             }
         }
 
+        internal static void MustHaveValue<T>(this T? param, string paramName) where T : struct {
+            if (!param.HasValue) {
+                throw new ArgumentNullException(paramName);
+            }
+        }
+
+        internal static void MustNotBeDefault<T>(this T param, string paramName) {
+            if (null == param || param.Equals(default(T))) {
+                throw new ArgumentException(paramName + " must not have a default value.");
+            }
+        }
+
+
         internal static void EnumerableMustNotNullOrEmpty<T>(this IEnumerable<T> param, string paramName) {
             param.MustNotNull(paramName);
-            if (param is ICollection<T> colParam && colParam.Count == 0) {
+            if (!param.Any()) {
                 throw new ArgumentException(paramName + " cannot be empty.");
             }
         }
 
         internal static bool CheckEnumerableNullOrEmpty<T>(this IEnumerable<T> param) {
-            switch (param) {
-                case null:
-                case ICollection<T> colParam when colParam.Count == 0:
-                    return true;
-                default:
-                    return false;
+            if (param == null) {
+                return true;
             }
+            if (!param.Any()) {
+                return true;
+            }
+
+            return false;
         }
 
         internal static void MustNotNullOrEmptyOrWhitespace(this string param, string paramName, bool nullAllowed = false) {
@@ -183,6 +197,18 @@ namespace Dracoon.Sdk.SdkInternal.Validator {
         internal static void NullableMustNotNegative(this int? param, string paramName) {
             if (param.HasValue && param.Value < 0) {
                 throw new ArgumentException(paramName + " cannot be negative.");
+            }
+        }
+
+        internal static void MustBetween(this long? param, string paramName, long lowerBound, long upperBound) {
+            if (param.HasValue && (param.Value < lowerBound || param.Value > upperBound)) {
+                throw new ArgumentException($"{paramName} must be in range [{lowerBound} ... {upperBound}].");
+            }
+        }
+
+        internal static void MustBetween(this int? param, string paramName, int lowerBound, int upperBound) {
+            if (param.HasValue && (param.Value < lowerBound || param.Value > upperBound)) {
+                throw new ArgumentException($"{paramName} must be in range [{lowerBound} ... {upperBound}].");
             }
         }
 

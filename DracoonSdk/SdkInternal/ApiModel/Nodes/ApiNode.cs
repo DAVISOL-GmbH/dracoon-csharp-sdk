@@ -1,9 +1,9 @@
-﻿using Newtonsoft.Json;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using System;
 
 namespace Dracoon.Sdk.SdkInternal.ApiModel {
-    internal class ApiNode {
+    internal class ApiNode : ApiTrackExternalModification {
         [JsonProperty("id", NullValueHandling = NullValueHandling.Ignore)]
         public long Id { get; set; }
 
@@ -57,12 +57,6 @@ namespace Dracoon.Sdk.SdkInternal.ApiModel {
 
         [JsonProperty("updatedBy", NullValueHandling = NullValueHandling.Ignore)]
         public ApiUserInfo UpdatedBy { get; set; }
-
-        [JsonProperty("timestampCreation", NullValueHandling = NullValueHandling.Ignore)]
-        public DateTime? CreationTimestamp { get; set; }
-
-        [JsonProperty("timestampModification", NullValueHandling = NullValueHandling.Ignore)]
-        public DateTime? ModificationTimestamp { get; set; }
 
         [JsonProperty("permissions", NullValueHandling = NullValueHandling.Ignore)]
         public ApiNodePermissions Permissions { get; set; }

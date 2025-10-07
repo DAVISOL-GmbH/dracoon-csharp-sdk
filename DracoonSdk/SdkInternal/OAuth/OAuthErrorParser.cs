@@ -1,4 +1,4 @@
-﻿using Dracoon.Sdk.Error;
+using Dracoon.Sdk.Error;
 using Newtonsoft.Json;
 using RestSharp;
 using System;
@@ -15,6 +15,8 @@ namespace Dracoon.Sdk.SdkInternal.OAuth {
         private const string ErrInvalidGrant = "invalid_grant";
         private const string ErrInvalidScope = "invalid_scope";
         private const string ErrAccessDenied = "access_denied";
+
+        internal static IInternalDracoonClientBase DracoonClient { get; set; }
 
         private static OAuthError GetOAuthError(string errorResponseBody) {
             try {
@@ -49,7 +51,7 @@ namespace Dracoon.Sdk.SdkInternal.OAuth {
         internal static void ParseError(RestResponse response, RequestType requestType) {
             OAuthError oauthError = GetOAuthError(response.Content);
             DracoonApiCode resultCode = Parse(response.StatusCode, oauthError, requestType);
-            DracoonClient.Log.Debug(Logtag, $"Query for '{requestType.ToString()}' failed with {resultCode.Text}");
+            DracoonClient.Log.Debug(Logtag, $"Query for '{requestType}' failed with OAuth error {resultCode.Text}");
 
             throw new DracoonApiException(resultCode);
         }

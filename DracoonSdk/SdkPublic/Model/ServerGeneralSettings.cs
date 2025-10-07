@@ -1,4 +1,4 @@
-﻿namespace Dracoon.Sdk.Model {
+namespace Dracoon.Sdk.Model {
     /// <summary>
     ///     This model stores informations about the general configuration of the server.
     /// </summary>

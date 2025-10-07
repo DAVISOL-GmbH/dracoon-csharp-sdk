@@ -26,6 +26,10 @@
         /// <summary>
         ///     The user has the permission to change the configuration of the log.
         /// </summary>
-        LogAuditor
+        LogAuditor,        
+        /// <summary>
+        ///     The user has the permission to view users and groups when having room manage permission.
+        /// </summary>
+        NonmemberViewer
     }
 }

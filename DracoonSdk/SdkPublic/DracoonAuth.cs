@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 
 namespace Dracoon.Sdk {
     /// <summary>
@@ -131,6 +131,12 @@ namespace Dracoon.Sdk {
         }
 
         private static void ValidateParameters(string name, string value, bool nullable = false) {
+            if (value == null) {
+                if (!nullable)
+                    throw new ArgumentNullException(name);
+                return;
+            }
+
             if (string.IsNullOrWhiteSpace(value)) {
                 if (value == null) {
                     if (!nullable) {

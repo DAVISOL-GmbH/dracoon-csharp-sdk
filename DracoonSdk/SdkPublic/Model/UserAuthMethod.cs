@@ -1,4 +1,4 @@
-﻿namespace Dracoon.Sdk.Model {
+namespace Dracoon.Sdk.Model {
     /// <summary>
     ///     The method which are available for authentication.
     /// </summary>

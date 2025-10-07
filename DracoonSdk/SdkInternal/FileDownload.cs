@@ -1,4 +1,4 @@
-﻿using Dracoon.Sdk.Error;
+using Dracoon.Sdk.Error;
 using Dracoon.Sdk.Model;
 using Dracoon.Sdk.SdkInternal.ApiModel;
 using RestSharp;
@@ -27,6 +27,7 @@ namespace Dracoon.Sdk.SdkInternal {
         protected Stopwatch ProgressReportTimer;
         protected bool IsInterrupted;
         protected long LastNotifiedProgressValue;
+        private WebClient _currentWebClient;
 
         public FileDownload(IInternalDracoonClient client, string actionId, Node nodeToDownload, Stream output) {
             Client = client;
@@ -55,6 +56,7 @@ namespace Dracoon.Sdk.SdkInternal {
             }
 
             RunningThread = new Thread(Child);
+
             RunningThread.Start();
         }
 
@@ -72,9 +74,15 @@ namespace Dracoon.Sdk.SdkInternal {
         }
 
         public void CancelDownload() {
-            if (RunningThread != null && RunningThread.IsAlive) {
+            var requestClient = _currentWebClient;
+            if (!IsInterrupted) {
                 IsInterrupted = true;
-                RunningThread.Abort();
+                try {
+                    requestClient?.CancelAsync();
+                } catch (Exception e) {
+                    // Fail silently
+                    Client.Log.Error(LogTag, "Failed to trigger cancellation in current web client.", e);
+                }
             }
         }
 
@@ -106,7 +114,7 @@ namespace Dracoon.Sdk.SdkInternal {
                 }
 
                 const string message = "Write to stream failed!";
-                DracoonClient.Log.Debug(LogTag, message);
+                Client.Log.Debug(LogTag, message);
                 throw new DracoonFileIOException(message, ioe);
             } finally {
                 ProgressReportTimer.Stop();
@@ -116,26 +124,35 @@ namespace Dracoon.Sdk.SdkInternal {
         protected byte[] DownloadChunk(Uri downloadUri, long downloadedByteCount, long totalSize) {
             byte[] chunkDownloadedResultBytes;
             long requestCount = totalSize - downloadedByteCount;
-            if (requestCount > DracoonClient.HttpConfig.ChunkSize) {
-                requestCount = DracoonClient.HttpConfig.ChunkSize;
+            if (requestCount > Client.HttpConfig.ChunkSize) {
+                requestCount = Client.HttpConfig.ChunkSize;
             }
 
-            using (WebClient requestClient = Client.Builder.ProvideChunkDownloadWebClient(downloadedByteCount, requestCount)) {
-                long currentDownloadedByteCount = downloadedByteCount;
-                requestClient.DownloadProgressChanged += (o, progessEvent) => {
-                    lock (LockObject) {
-                        if (ProgressReportTimer.ElapsedMilliseconds > ProgressUpdateInterval) {
-                            NotifyProgress(ActionId, currentDownloadedByteCount + progessEvent.BytesReceived, totalSize);
-                            LastNotifiedProgressValue = currentDownloadedByteCount + progessEvent.BytesReceived;
-                            ProgressReportTimer.Restart();
+            if (IsInterrupted) {
+                throw new ThreadInterruptedException();
+            }
+
+            try {
+                using (WebClient requestClient = Client.Builder.ProvideChunkDownloadWebClient(downloadedByteCount, requestCount)) {
+                    _currentWebClient = requestClient;
+                    long currentDownloadedByteCount = downloadedByteCount;
+                    requestClient.DownloadProgressChanged += (o, progessEvent) => {
+                        lock (LockObject) {
+                            if (ProgressReportTimer.ElapsedMilliseconds > ProgressUpdateInterval) {
+                                NotifyProgress(ActionId, currentDownloadedByteCount + progessEvent.BytesReceived, totalSize);
+                                LastNotifiedProgressValue = currentDownloadedByteCount + progessEvent.BytesReceived;
+                                ProgressReportTimer.Restart();
+                            }
                         }
-                    }
-                };
-                chunkDownloadedResultBytes =
-                    Client.Executor.ExecuteWebClientDownload(requestClient, downloadUri, RequestType.GetDownloadChunk, RunningThread);
-            }
+                    };
+                    chunkDownloadedResultBytes =
+                        Client.Executor.ExecuteWebClientDownload(requestClient, downloadUri, RequestType.GetDownloadChunk, RunningThread);
+                }
 
-            return chunkDownloadedResultBytes;
+                return chunkDownloadedResultBytes;
+            } finally {
+                _currentWebClient = null;
+            }
         }
 
         #region Callback helper functions

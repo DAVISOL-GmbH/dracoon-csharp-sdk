@@ -1,4 +1,6 @@
-﻿namespace Dracoon.Sdk.Model {
+using System.Globalization;
+
+namespace Dracoon.Sdk.Model {
     /// <summary>
     ///     This model stores informations about the server defaults.
     /// </summary>
@@ -7,7 +9,8 @@
         /// <summary>
         ///     The default language of the server.
         /// </summary>
-        public string LanguageDefault { get; internal set; }
+        public CultureInfo LanguageDefault { get; internal set; }
+        // public string LanguageDefault { get; internal set; }
 
         /// <summary>
         ///     The server side default for the expiration period of a new download share.

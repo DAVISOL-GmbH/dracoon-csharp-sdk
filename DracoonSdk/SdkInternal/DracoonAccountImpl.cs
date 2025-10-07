@@ -1,4 +1,4 @@
-﻿using Dracoon.Crypto.Sdk;
+using Dracoon.Crypto.Sdk;
 using Dracoon.Crypto.Sdk.Model;
 using Dracoon.Sdk.Error;
 using Dracoon.Sdk.Model;
@@ -76,7 +76,7 @@ namespace Dracoon.Sdk.SdkInternal {
             try {
                 return Crypto.Sdk.Crypto.GenerateUserKeyPair(algorithm, encryptionPassword);
             } catch (CryptoException ce) {
-                DracoonClient.Log.Debug(Logtag, "Generation of user key pair failed with " + ce.Message);
+                _client.Log.Debug(Logtag, "Generation of user key pair failed with " + ce.Message);
                 throw new DracoonCryptoException(CryptoErrorMapper.ParseCause(ce), ce);
             }
         }
@@ -87,7 +87,7 @@ namespace Dracoon.Sdk.SdkInternal {
                 CheckKeyPair(userKeyPair);
                 return userKeyPair;
             } catch (CryptoException ce) {
-                DracoonClient.Log.Debug(Logtag, $"Check of user key pair failed with '{ce.Message}'!");
+                _client.Log.Debug(Logtag, $"Check of user key pair failed with '{ce.Message}'!");
                 throw new DracoonCryptoException(CryptoErrorMapper.ParseCause(ce), ce);
             }
         }
@@ -216,6 +216,7 @@ namespace Dracoon.Sdk.SdkInternal {
 
         public AvatarInfo UpdateAvatar(byte[] newAvatar) {
             _client.Executor.CheckApiServerVersion();
+            _client.Executor.MustNotNull(nameof(newAvatar));
 
             #region Build multipart
 

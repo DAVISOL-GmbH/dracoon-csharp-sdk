@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 
 namespace Dracoon.Sdk.Model {
     /// <summary>
@@ -7,7 +7,7 @@ namespace Dracoon.Sdk.Model {
     ///         Node is generic term for all file system objects in DRACOON.Rooms, folders and files are nodes.
     ///     </para>
     /// </summary>
-    public class Node {
+    public class Node : TrackExternalModificationRequestBase {
 
         /// <summary>
         ///     The id of the node.
@@ -103,16 +103,6 @@ namespace Dracoon.Sdk.Model {
         ///     The user which updated the node. See also <seealso cref="UserInfo"/>
         /// </summary>
         public UserInfo UpdatedBy { get; internal set; }
-
-        /// <summary>
-        ///     The creation date of the physical file.
-        /// </summary>
-        public DateTime? CreationTime { get; internal set; }
-
-        /// <summary>
-        ///     The modification date of hte physical file. Note: This date is NOT changed on meta data changes.
-        /// </summary>
-        public DateTime? ModificationTime { get; internal set; }
 
         /// <summary>
         ///     Is set to <c>true</c> if the parent permissions are also applied to this node.

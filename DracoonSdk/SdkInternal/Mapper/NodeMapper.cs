@@ -1,4 +1,4 @@
-﻿using Dracoon.Sdk.Model;
+using Dracoon.Sdk.Model;
 using Dracoon.Sdk.SdkInternal.ApiModel;
 using Dracoon.Sdk.SdkInternal.ApiModel.Requests;
 using Dracoon.Sdk.SdkInternal.Util;
@@ -11,16 +11,16 @@ namespace Dracoon.Sdk.SdkInternal.Mapper {
                 return null;
             }
 
-            NodeList nodeList = new NodeList {
+            var items = new List<Node>();
+            foreach (ApiNode currentNode in apiNodeList.Items) {
+                items.Add(FromApiNode(currentNode));
+            }
+            NodeList nodeList = new NodeList() {
                 Offset = apiNodeList.Range.Offset,
                 Limit = apiNodeList.Range.Limit,
                 Total = apiNodeList.Range.Total,
-                Items = new List<Node>()
+                Items = items.ToArray(),
             };
-            foreach (ApiNode currentNode in apiNodeList.Items) {
-                nodeList.Items.Add(FromApiNode(currentNode));
-            }
-
             return nodeList;
         }
 
@@ -62,8 +62,8 @@ namespace Dracoon.Sdk.SdkInternal.Mapper {
                 CreatedBy = UserMapper.FromApiUserInfo(apiNode.CreatedBy),
                 UpdatedAt = apiNode.UpdatedAt,
                 UpdatedBy = UserMapper.FromApiUserInfo(apiNode.UpdatedBy),
-                CreationTime = apiNode.CreationTimestamp,
-                ModificationTime = apiNode.ModificationTimestamp,
+                CreationTimestamp = apiNode.CreationTimestamp,
+                ModificationTimestamp = apiNode.ModificationTimestamp,
                 HasInheritPermissions = apiNode.InheritPermissions,
                 Permissions = FromApiNodePermissions(apiNode.Permissions),
                 IsFavorite = apiNode.IsFavorite,
@@ -158,16 +158,16 @@ namespace Dracoon.Sdk.SdkInternal.Mapper {
                 return null;
             }
 
-            RecycleBinItemList nodeList = new RecycleBinItemList {
+            var items = new List<RecycleBinItem>();
+            foreach (ApiDeletedNodeSummary currentNode in apiNodeList.Items) {
+                items.Add(FromApiDeletedNodeSummary(currentNode));
+            }
+            RecycleBinItemList nodeList = new RecycleBinItemList() {
                 Offset = apiNodeList.Range.Offset,
                 Limit = apiNodeList.Range.Limit,
                 Total = apiNodeList.Range.Total,
-                Items = new List<RecycleBinItem>()
+                Items = items.ToArray()
             };
-            foreach (ApiDeletedNodeSummary currentNode in apiNodeList.Items) {
-                nodeList.Items.Add(FromApiDeletedNodeSummary(currentNode));
-            }
-
             return nodeList;
         }
 
@@ -196,16 +196,16 @@ namespace Dracoon.Sdk.SdkInternal.Mapper {
                 return null;
             }
 
-            PreviousVersionList nodeList = new PreviousVersionList {
+            var items = new List<PreviousVersion>();
+            foreach (ApiDeletedNodeVersion currentNode in apiNodeList.Items) {
+                items.Add(FromApiDeletedNodeVersion(currentNode));
+            }
+            PreviousVersionList nodeList = new PreviousVersionList() {
                 Offset = apiNodeList.Range.Offset,
                 Limit = apiNodeList.Range.Limit,
                 Total = apiNodeList.Range.Total,
-                Items = new List<PreviousVersion>()
+                Items = items.ToArray()
             };
-            foreach (ApiDeletedNodeVersion currentNode in apiNodeList.Items) {
-                nodeList.Items.Add(FromApiDeletedNodeVersion(currentNode));
-            }
-
             return nodeList;
         }
 
@@ -264,6 +264,133 @@ namespace Dracoon.Sdk.SdkInternal.Mapper {
                 Sha256 = apiInfo.Sha256
             };
             return info;
+        }
+
+
+
+
+
+
+
+
+
+        internal static ApiRoomGroupsAddBatchRequest ToApiRoomGroupsAddBatchRequest(RoomGroupsAddBatchRequest roomGroupsAddBatchRequest) {
+            ApiRoomGroupsAddBatchRequest apiRoomGroupsAddBatchRequest = new ApiRoomGroupsAddBatchRequest();
+            CommonMapper.ToApiSimpleList(roomGroupsAddBatchRequest, apiRoomGroupsAddBatchRequest, ToApiRoomGroupsAddBatchRequestItem);
+            return apiRoomGroupsAddBatchRequest;
+        }
+
+        private static ApiRoomGroupsAddBatchRequestItem ToApiRoomGroupsAddBatchRequestItem(RoomGroupsAddBatchRequestItem roomGroupsAddBatchRequestItem) {
+            ApiRoomGroupsAddBatchRequestItem apiRoomGroupsAddBatchRequestItem = new ApiRoomGroupsAddBatchRequestItem() {
+                Id = roomGroupsAddBatchRequestItem.Id,
+                Permissions = ToApiNodePermissions(roomGroupsAddBatchRequestItem.Permissions),
+                NewGroupMemberAcceptance = EnumConverter.ConvertGroupMemberAcceptanceToValue(roomGroupsAddBatchRequestItem.NewGroupMemberAcceptance)
+            };
+            return apiRoomGroupsAddBatchRequestItem;
+        }
+
+        private static ApiNodePermissions ToApiNodePermissions(NodePermissions nodePermissions) {
+            if (nodePermissions == null) {
+                return null;
+            }
+
+            ApiNodePermissions apiNodePermissions = new ApiNodePermissions() {
+                Manage = nodePermissions.Manage,
+                Read = nodePermissions.Read,
+                Create = nodePermissions.Create,
+                Change = nodePermissions.Change,
+                Delete = nodePermissions.Delete,
+                ManageDownloadShare = nodePermissions.ManageDownloadShare,
+                ManageUploadShare = nodePermissions.ManageUploadShare,
+                ReadRecycleBin = nodePermissions.CanReadRecycleBin,
+                RestoreRecycleBin = nodePermissions.CanRestoreRecycleBin,
+                DeleteRecycleBin = nodePermissions.CanDeleteRecycleBin
+            };
+            return apiNodePermissions;
+        }
+
+        internal static ApiRoomUsersAddBatchRequest ToApiRoomUsersAddBatchRequest(RoomUsersAddBatchRequest roomUsersAddBatchRequest) {
+            ApiRoomUsersAddBatchRequest apiRoomUsersAddBatchRequest = new ApiRoomUsersAddBatchRequest();
+            CommonMapper.ToApiSimpleList(roomUsersAddBatchRequest, apiRoomUsersAddBatchRequest, ToApiRoomUsersAddBatchRequestItem);
+            return apiRoomUsersAddBatchRequest;
+        }
+
+        private static ApiRoomUsersAddBatchRequestItem ToApiRoomUsersAddBatchRequestItem(RoomUsersAddBatchRequestItem roomUsersAddBatchRequestItem) {
+            ApiRoomUsersAddBatchRequestItem apiRoomUsersAddBatchRequestItem = new ApiRoomUsersAddBatchRequestItem() {
+                Id = roomUsersAddBatchRequestItem.Id,
+                Permissions = ToApiNodePermissions(roomUsersAddBatchRequestItem.Permissions)
+            };
+            return apiRoomUsersAddBatchRequestItem;
+        }
+
+        internal static RoomGroupList FromApiRoomGroupList(ApiRoomGroupList apiRoomGroupList) {
+            RoomGroupList roomGroupList = new RoomGroupList();
+            CommonMapper.FromApiRangeList(apiRoomGroupList, roomGroupList, FromApiRoomGroup);
+            return roomGroupList;
+        }
+
+        private static RoomGroup FromApiRoomGroup(ApiRoomGroup apiRoomGroup) {
+            GroupInfo groupInfo = new GroupInfo() {
+                Id = apiRoomGroup.Id,
+                Name = apiRoomGroup.Name,
+            };
+            RoomGroup roomGroup = new RoomGroup() {
+                GroupInfo = groupInfo,
+                IsGranted = apiRoomGroup.IsGranted,
+                Permissions = FromApiNodePermissions(apiRoomGroup.Permissions),
+                NewGroupMemberAcceptance = EnumConverter.ConvertValueToGroupMemberAcceptance(apiRoomGroup.NewGroupMemberAcceptance).Value
+            };
+            return roomGroup;
+        }
+
+        internal static RoomUserList FromApiRoomUserList(ApiRoomUserList apiRoomUserList) {
+            RoomUserList roomUserList = new RoomUserList();
+            CommonMapper.FromApiRangeList(apiRoomUserList, roomUserList, FromApiRoomUser);
+            return roomUserList;
+        }
+
+        private static RoomUser FromApiRoomUser(ApiRoomUser apiRoomUser) {
+            RoomUser roomUser = new RoomUser() {
+                UserInfo = UserMapper.FromApiUserInfo(apiRoomUser.UserInfo),
+                IsGranted = apiRoomUser.IsGranted,
+                Permissions = FromApiNodePermissions(apiRoomUser.Permissions),
+                PublicKeyContainer = UserMapper.FromApiUserPublicKey(apiRoomUser.PublicKeyContainer)
+            };
+            return roomUser;
+        }
+
+        internal static PendingAssignmentList FromApiPendingAssignmentList(ApiPendingAssignmentList apiPendingAssignmentList) {
+            PendingAssignmentList PendingAssignmentList = new PendingAssignmentList();
+            CommonMapper.FromApiRangeList(apiPendingAssignmentList, PendingAssignmentList, FromApiPendingAssignmentData);
+            return PendingAssignmentList;
+        }
+
+        private static PendingAssignmentData FromApiPendingAssignmentData(ApiPendingAssignmentData apiPendingAssignmentData) {
+            PendingAssignmentData pendingAssignmentData = new PendingAssignmentData() {
+                RoomId = apiPendingAssignmentData.RoomId,
+                State = EnumConverter.ConvertValueToPendingAssignmentState(apiPendingAssignmentData.State).Value,
+                UserInfo = UserMapper.FromApiUserInfo(apiPendingAssignmentData.UserInfo),
+                GroupInfo = GroupMapper.FromApiGroupInfo(apiPendingAssignmentData.GroupInfo)
+            };
+            return pendingAssignmentData;
+        }
+
+        internal static ApiRoomGroupsDeleteBatchRequest ToApiRoomGroupsDeleteBatchRequest(IEnumerable<long> ids) {
+            if (ids == null)
+                return null;
+            ApiRoomGroupsDeleteBatchRequest apiRoomGroupsDeleteBatchRequest = new ApiRoomGroupsDeleteBatchRequest() {
+                Ids = ids
+            };
+            return apiRoomGroupsDeleteBatchRequest;
+        }
+
+        internal static ApiRoomUsersDeleteBatchRequest ToApiRoomUsersDeleteBatchRequest(IEnumerable<long> ids) {
+            if (ids == null)
+                return null;
+            ApiRoomUsersDeleteBatchRequest apiRoomUsersDeleteBatchRequest = new ApiRoomUsersDeleteBatchRequest() {
+                Ids = ids
+            };
+            return apiRoomUsersDeleteBatchRequest;
         }
     }
 }

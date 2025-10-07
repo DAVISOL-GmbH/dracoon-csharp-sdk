@@ -1,0 +1,81 @@
+trigger:
+  branches:
+    include:
+    - v3.2_net8.0
+name: 3.2.$(BuildID)$(Rev:.r)-alpha
+resources:
+  repositories:
+  - repository: self
+    type: git
+    ref: v3.2_net8.0
+jobs:
+- job: Job_1
+  displayName: DAVISOL agent job - Build and deploy dracoon-csharp-sdk
+  pool:
+    name: DAVISOL Pipelines
+    demands:
+    - msbuild
+  steps:
+  - checkout: self
+  - task: DownloadSecureFile@1
+    name: snkFile
+    displayName: Download secure file
+    inputs:
+      secureFile: b8a2e8f1-b598-4cb4-be12-ac73524065d8
+      retryCount: 5
+  - task: NuGetToolInstaller@1
+    displayName: Use NuGet 6.7.0
+    inputs:
+      versionSpec: 6.7.0
+  - task: NuGetCommand@2
+    displayName: NuGet restore
+    inputs:
+      feedRestore: 3a11d72e-ad5c-4c0a-bff7-5237610444a0
+  - task: Assembly-Info-NetCore@2
+    displayName: Set Assembly Manifest Data
+    inputs:
+      InsertAttributes: true
+      GeneratePackageOnBuild: true
+      PackageId: Dracoon.Sdk.Net8
+      VersionNumber: $(Build.BuildNumber)
+      FileVersionNumber: $(Build.BuildNumber)
+      InformationalVersion: $(Build.BuildNumber)
+      PackageVersion: $(Build.BuildNumber)
+  - task: MSBuild@1
+    displayName: Build solution **/*.sln
+    inputs:
+      solution: '**/*.sln'
+      msbuildVersion: '17.0'
+      msbuildArchitecture: 'x64'
+      platform: 'Any CPU'
+      configuration: 'Release'
+      msbuildArguments: '/p:SignAssembly=true /p:AssemblyOriginatorKeyFile=$(snkFile.secureFilePath)'
+      clean: true
+  - task: CopyFiles@2
+    displayName: 'Copy Files to: $(Build.ArtifactStagingDirectory)\lib\net5.0'
+    inputs:
+      SourceFolder: DracoonSdk/bin/Release
+      Contents: '**/Dracoon.Sdk.*'
+      TargetFolder: $(Build.ArtifactStagingDirectory)\lib\net6.0
+      CleanTargetFolder: true
+      OverWrite: true
+      flattenFolders: true
+  - task: PublishBuildArtifacts@1
+    displayName: 'Publish Artifact: dracoon-sdk'
+    inputs:
+      ArtifactName: dracoon-sdk
+  - task: NuGetCommand@2
+    displayName: NuGet pack
+    inputs:
+      command: pack
+      searchPatternPack: DracoonSdk/DavisolPackage.nuspec
+      versioningScheme: byBuildNumber
+      includeSymbols: true
+      basePath: DracoonSdk
+  - task: NuGetCommand@2
+    displayName: NuGet push
+    inputs:
+      command: push
+      feedPublish: 3a11d72e-ad5c-4c0a-bff7-5237610444a0
+      allowPackageConflicts: true
+...

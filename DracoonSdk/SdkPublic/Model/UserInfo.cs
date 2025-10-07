@@ -1,4 +1,7 @@
-﻿namespace Dracoon.Sdk.Model {
+
+using System;
+
+namespace Dracoon.Sdk.Model {
     /// <summary>
     ///     This model stores informations about the user.
     /// </summary>

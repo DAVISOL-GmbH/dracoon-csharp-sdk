@@ -1,4 +1,4 @@
-﻿using Dracoon.Crypto.Sdk;
+using Dracoon.Crypto.Sdk;
 using Dracoon.Crypto.Sdk.Model;
 using Dracoon.Sdk.Error;
 using Dracoon.Sdk.Model;
@@ -31,7 +31,7 @@ namespace Dracoon.Sdk.SdkInternal {
             try {
                 apiFileUploadRequest.UseS3 = CheckUseS3();
             } catch (DracoonApiException apiException) {
-                DracoonClient.Log.Warn(LogTag, "S3 direct upload is not possible.", apiException);
+                Client.Log.Warn(LogTag, "S3 direct upload is not possible.", apiException);
             }
 
             RestRequest uploadTokenRequest = Client.Builder.PostCreateFileUpload(apiFileUploadRequest);
@@ -69,7 +69,7 @@ namespace Dracoon.Sdk.SdkInternal {
                 return Crypto.Sdk.Crypto.GenerateFileKey(CryptoHelper.DeterminePlainFileKeyVersion(_userPublicKey.Version));
             } catch (CryptoException ce) {
                 string message = "Creation of file key for upload " + ActionId + " failed!";
-                DracoonClient.Log.Debug(LogTag, message);
+                Client.Log.Debug(LogTag, message);
                 throw new DracoonCryptoException(CryptoErrorMapper.ParseCause(ce));
             }
         }
@@ -79,7 +79,7 @@ namespace Dracoon.Sdk.SdkInternal {
                 return Crypto.Sdk.Crypto.EncryptFileKey(plainFileKey, _userPublicKey);
             } catch (CryptoException ce) {
                 string message = "Encryption of file key for upload " + ActionId + " failed!";
-                DracoonClient.Log.Debug(LogTag, message);
+                Client.Log.Debug(LogTag, message);
                 throw new DracoonCryptoException(CryptoErrorMapper.ParseCause(ce));
             }
         }
@@ -97,19 +97,19 @@ namespace Dracoon.Sdk.SdkInternal {
         #region Normal upload
 
         private void EncryptedUpload(ref PlainFileKey plainFileKey) {
-            DracoonClient.Log.Debug(LogTag, "Uploading file [" + FileUploadRequest.Name + "] in encrypted proxied way.");
+            Client.Log.Debug(LogTag, "Uploading file [" + FileUploadRequest.Name + "] in encrypted proxied way.");
             FileEncryptionCipher cipher;
             try {
                 cipher = Crypto.Sdk.Crypto.CreateFileEncryptionCipher(plainFileKey);
             } catch (CryptoException ce) {
                 string message = "Creation of encryption engine for encrypted upload " + ActionId + " failed!";
-                DracoonClient.Log.Debug(LogTag, message);
+                Client.Log.Debug(LogTag, message);
                 throw new DracoonCryptoException(CryptoErrorMapper.ParseCause(ce));
             }
 
             try {
                 long uploadedByteCount = 0;
-                byte[] buffer = new byte[DracoonClient.HttpConfig.ChunkSize];
+                byte[] buffer = new byte[Client.HttpConfig.ChunkSize];
                 int bytesRead = 0;
                 while ((bytesRead = InputStream.Read(buffer, 0, buffer.Length)) > 0) {
                     EncryptedDataContainer encryptedContainer = EncryptChunk(cipher, bytesRead, buffer, false);
@@ -130,7 +130,7 @@ namespace Dracoon.Sdk.SdkInternal {
                 }
 
                 string message = "Read from stream failed!";
-                DracoonClient.Log.Debug(LogTag, message);
+                Client.Log.Debug(LogTag, message);
                 throw new DracoonFileIOException(message, ioe);
             } finally {
                 ProgressReportTimer?.Stop();
@@ -157,12 +157,12 @@ namespace Dracoon.Sdk.SdkInternal {
         #region S3 upload
 
         private List<ApiS3FileUploadPart> EncryptedS3Upload(ref PlainFileKey plainFileKey) {
-            DracoonClient.Log.Debug(LogTag, "Uploading file [" + FileUploadRequest.Name + "] via encrypted s3 direct upload.");
+            Client.Log.Debug(LogTag, "Uploading file [" + FileUploadRequest.Name + "] via encrypted s3 direct upload.");
             FileEncryptionCipher cipher;
             try {
                 cipher = Crypto.Sdk.Crypto.CreateFileEncryptionCipher(plainFileKey);
             } catch (CryptoException ce) {
-                DracoonClient.Log.Debug(LogTag, "Creation of encryption engine for encrypted upload " + ActionId + " failed!");
+                Client.Log.Debug(LogTag, "Creation of encryption engine for encrypted upload " + ActionId + " failed!");
                 throw new DracoonCryptoException(CryptoErrorMapper.ParseCause(ce));
             }
 
@@ -228,7 +228,7 @@ namespace Dracoon.Sdk.SdkInternal {
                 }
 
                 string message = "Read from stream failed!";
-                DracoonClient.Log.Debug(LogTag, message);
+                Client.Log.Debug(LogTag, message);
                 throw new DracoonFileIOException(message, ioe);
             } finally {
                 ProgressReportTimer?.Stop();

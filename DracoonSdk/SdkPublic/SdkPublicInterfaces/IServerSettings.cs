@@ -1,4 +1,4 @@
-﻿using Dracoon.Sdk.Model;
+using Dracoon.Sdk.Model;
 using System.Collections.Generic;
 
 namespace Dracoon.Sdk {
@@ -30,6 +30,9 @@ namespace Dracoon.Sdk {
         /// <exception cref="Dracoon.Sdk.Error.DracoonApiException"></exception>
         /// <exception cref="Dracoon.Sdk.Error.DracoonNetIOException"></exception>
         ServerDefaultSettings GetDefault();
+
+        ///// <include file = "SdkPublicInterfacesDoc.xml" path='docs/members[@name="iServerSettings"]/GetPasswordPolicies/*'/>
+        //PasswordPolicies GetPasswordPolicies();
 
         /// <summary>
         ///     Get a list of crypto algorithms for the user key pair which are supported by the server.

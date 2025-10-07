@@ -24,8 +24,8 @@ namespace Dracoon.Sdk.SdkInternal.Mapper {
                 Notes = updateFileRequest.Notes,
                 Classification = EnumConverter.ConvertClassificationEnumToValue(updateFileRequest.Classification),
                 Expiration = apiExpiration,
-                CreationTime = updateFileRequest.CreationTime,
-                ModificationTime = updateFileRequest.ModificationTime
+                CreationTimestamp = updateFileRequest.CreationTimestamp,
+                ModificationTimestamp = updateFileRequest.ModificationTimestamp
             };
             return apiUpdateFileRequest;
         }
@@ -65,8 +65,8 @@ namespace Dracoon.Sdk.SdkInternal.Mapper {
                 Classification = EnumConverter.ConvertClassificationEnumToValue(fileUploadRequest.Classification),
                 Notes = fileUploadRequest.Notes,
                 Expiration = apiExpiration,
-                CreationTime = fileUploadRequest.CreationTime,
-                ModificationTime = fileUploadRequest.ModificationTime
+                CreationTimestamp = fileUploadRequest.CreationTimestamp,
+                ModificationTimestamp = fileUploadRequest.ModificationTimestamp
             };
             return apiCreateFileUpload;
         }

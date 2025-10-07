@@ -1,10 +1,11 @@
-﻿using System;
+using System;
 using System.Text;
 
 namespace Dracoon.Sdk.SdkInternal {
     internal static class ApiConfig {
         internal const string MinimumApiVersion = "5.0.0";
         internal const string ApiPrefix = "api/v4";
+        internal const string BrandingApiPrefix = "branding/api/v1";
         internal const string AuthorizationHeader = "Authorization";
         // token template: mediaserver/image/{mediaToken}/{width}x{height}
         internal const string MediaTokenTemplate = "mediaserver/image/{0}/{1}x{2}";
@@ -32,10 +33,20 @@ namespace Dracoon.Sdk.SdkInternal {
 
         #region Public-Endpoint
 
+        internal const string ApiPublicPrefix = ApiPrefix + "/public";
+        internal const string ApiPublicSystemPrefix = ApiPublicPrefix + "/system";
+
         #region GET
 
-        internal const string ApiGetServerVersion = ApiPrefix + "/public/software/version";
-        internal const string ApiGetServerTime = ApiPrefix + "/public/time";
+        internal const string ApiGetServerVersion = ApiPublicPrefix + "/software/version";
+        internal const string ApiGetServerTime = ApiPublicPrefix + "/time";
+
+        internal const string ApiGetPublicDownloadShare = ApiPublicPrefix + "/shares/downloads/{accessKey}";
+        internal const string ApiGetPublicUploadShare = ApiPublicPrefix + "/shares/uploads/{accessKey}";
+
+        internal const string ApiGetPublicSystemInfo = ApiPublicSystemPrefix + "/info";
+        internal const string ApiGetPublicSystemAuthActiveDirectory = ApiPublicSystemPrefix + "/info/auth/ad";
+        internal const string ApiGetPublicSystemAuthOpenId = ApiPublicSystemPrefix + "/info/auth/openid";
 
         #endregion
 
@@ -96,7 +107,11 @@ namespace Dracoon.Sdk.SdkInternal {
         internal const string ApiGetMissingFileKeys = ApiPrefix + "/nodes/missingFileKeys";
         internal const string ApiGetRecycleBin = ApiPrefix + "/nodes/{roomId}/deleted_nodes";
         internal const string ApiGetPreviousVersions = ApiPrefix + "/nodes/{nodeId}/deleted_nodes/versions";
-        internal const string ApiGetPreviousVersion = ApiPrefix + "/nodes/deleted_nodes/{previousNodeId}";
+        internal const string ApiGetPreviousVersion = ApiPrefix + "/nodes/deleted_nodes/{previoudNodeId}";
+        internal const string ApiGetRoomEvents = ApiPrefix + "/nodes/rooms/{roomId}/events";
+        internal const string ApiGetRoomGroups = ApiPrefix + "/nodes/rooms/{roomId}/groups";
+        internal const string ApiGetRoomUsers = ApiPrefix + "/nodes/rooms/{roomId}/users";
+        internal const string ApiGetRoomPending = ApiPrefix + "/nodes/rooms/{roomId}/pending";
         internal const string ApiGetS3Status = ApiPrefix + "/nodes/files/uploads/{uploadId}";
 
         #endregion
@@ -120,6 +135,9 @@ namespace Dracoon.Sdk.SdkInternal {
         #region PUT
 
         internal const string ApiPutRoom = ApiPrefix + "/nodes/rooms/{roomId}";
+        internal const string ApiPutRoomConfig = ApiPrefix + "/nodes/rooms/{roomId}/config";
+        internal const string ApiPutRoomGroups = ApiPrefix + "/nodes/rooms/{roomId}/groups";
+        internal const string ApiPutRoomUsers = ApiPrefix + "/nodes/rooms/{roomId}/users";
         internal const string ApiPutFolder = ApiPrefix + "/nodes/folders/{folderId}";
         internal const string ApiPutFileUpdate = ApiPrefix + "/nodes/files/{fileId}";
         internal const string ApiPutEnableRoomEncryption = ApiPrefix + "/nodes/rooms/{roomId}/encrypt";
@@ -134,6 +152,8 @@ namespace Dracoon.Sdk.SdkInternal {
         internal const string ApiDeleteRecycleBin = ApiPrefix + "/nodes/{roomId}/deleted_nodes";
         internal const string ApiDeletePreviousVersions = ApiPrefix + "/nodes/deleted_nodes";
         internal const string ApiDeleteMaliciousFile = ApiPrefix + "/nodes/malicious_files/{fileId}";
+        internal const string ApiDeleteRoomGroups = ApiPrefix + "/nodes/rooms/{roomId}/groups";
+        internal const string ApiDeleteRoomUsers = ApiPrefix + "/nodes/rooms/{roomId}/users";
 
         #endregion
 
@@ -168,14 +188,81 @@ namespace Dracoon.Sdk.SdkInternal {
 
         #region Config-Endpoint
 
+        internal const string ApiConfigInfoPrefix = ApiPrefix + "/config/info";
+
         #region GET
 
-        internal const string ApiGetGeneralConfig = ApiPrefix + "/config/info/general";
-        internal const string ApiGetInfrastructureConfig = ApiPrefix + "/config/info/infrastructure";
-        internal const string ApiGetDefaultsConfig = ApiPrefix + "/config/info/defaults";
-        internal const string ApiGetPasswordPolicies = ApiPrefix + "/config/info/policies/passwords";
-        internal const string ApiGetAlgorithms = ApiPrefix + "/config/info/policies/algorithms";
-        internal const string ApiGetClassificationPolicies = ApiPrefix + "/config/info/policies/classifications";
+        internal const string ApiGetGeneralConfig = ApiConfigInfoPrefix + "/general";
+        internal const string ApiGetInfrastructureConfig = ApiConfigInfoPrefix + "/infrastructure";
+        internal const string ApiGetDefaultsConfig = ApiConfigInfoPrefix + "/defaults";
+        internal const string ApiGetPasswordPolicies = ApiConfigInfoPrefix + "/policies/passwords";
+        internal const string ApiGetAlgorithms = ApiConfigInfoPrefix + "/policies/algorithms";
+        internal const string ApiGetClassificationPolicies = ApiConfigInfoPrefix + "/policies/classifications";
+
+        #endregion
+
+        #endregion
+
+        #region Resources-Endpoint
+
+        #region GET
+
+        internal const string ApiResourcesGetAvatar = ApiPrefix + "/resources/users/{userId}/avatar/{uuid}";
+
+        #endregion
+
+        #endregion
+
+        #region System-Settings-Config-Endpoint
+
+        internal const string ApiSystemConfigPrefix = ApiPrefix + "/system/config";
+        internal const string ApiConfigSettingsPrefix = ApiSystemConfigPrefix + "/settings";
+        internal const string ApiPoliciesSettingsPrefix = ApiSystemConfigPrefix + "/policies";
+
+        #region GET
+
+        internal const string ApiGetSystemSettingsAuthenticationConfig = ApiConfigSettingsPrefix + "/auth";
+
+        internal const string ApiGetSystemSettingsGeneralConfig = ApiConfigSettingsPrefix + "/general";
+        internal const string ApiGetSystemSettingsInfrastructureConfig = ApiConfigSettingsPrefix + "/infrastructure";
+        internal const string ApiGetSystemSettingsDefaultsConfig = ApiConfigSettingsPrefix + "/defaults";
+        internal const string ApiGetSystemSettingsEventlogConfig = ApiConfigSettingsPrefix + "/eventlog";
+        internal const string ApiGetSystemSettingsAuthConfig = ApiConfigSettingsPrefix + "/auth";
+
+        internal const string ApiGetSystemSettingsClassificationPolicies = ApiPoliciesSettingsPrefix + "/classifications";
+        internal const string ApiGetSystemSettingsPasswordPolicies = ApiPoliciesSettingsPrefix + "/passwords";
+
+        #endregion
+
+        #endregion
+
+        #region System-Auth-Config-Endpoint
+
+        private const string ApiSystemAuthConfigPrefix = ApiSystemConfigPrefix + "/auth";
+        private const string ApiSystemOAuthConfigPrefix = ApiSystemConfigPrefix + "/oauth";
+
+        #region GET
+
+        internal const string ApiGetAuthActiveDirectoryConfigurations = ApiSystemAuthConfigPrefix + "/ads";
+        internal const string ApiGetAuthOpenIdIdpConfigurations = ApiSystemAuthConfigPrefix + "/openid/idps";
+        internal const string ApiGetAuthRadiusConfiguration = ApiSystemAuthConfigPrefix + "/radius";
+        internal const string ApiGetAuthClientConfigurations = ApiSystemOAuthConfigPrefix + "/clients";
+        internal const string ApiGetAuthClientConfigurationClientId = ApiGetAuthClientConfigurations + "/{clientId}";
+
+        #endregion
+        #region POST
+
+        internal const string ApiPostAuthClientConfiguration = ApiGetAuthClientConfigurations;
+
+        #endregion
+        #region PUT
+
+        internal const string ApiPutAuthClientConfiguration = ApiGetAuthClientConfigurationClientId;
+
+        #endregion
+        #region DELETE
+
+        internal const string ApiDeleteAuthClientConfiguration = ApiGetAuthClientConfigurationClientId;
 
         #endregion
 
@@ -188,18 +275,129 @@ namespace Dracoon.Sdk.SdkInternal {
         internal const string ApiPostFileUpload = ApiPrefix + "/uploads";
 
         #endregion
-
         #region PUT
 
         #endregion
 
         #endregion
 
-        #region Resources-Endpoint
+        #region Groups-Endpoint
+
+        private const string ApiGroupsPrefix = ApiPrefix + "/groups";
 
         #region GET
 
-        internal const string ApiResourcesGetAvatar = ApiPrefix + "/resources/users/{userId}/avatar/{uuid}";
+        internal const string ApiGetGroups = ApiGroupsPrefix;
+        internal const string ApiGetGroup = ApiGroupsPrefix + "/{groupId}";
+        internal const string ApiGetGroupLastAdminRooms = ApiGroupsPrefix + "/{groupId}/last_admin_rooms";
+        internal const string ApiGetGroupRoles = ApiGroupsPrefix + "/{groupId}/roles";
+        internal const string ApiGetGroupUsers = ApiGroupsPrefix + "/{groupId}/users";
+
+        #endregion
+        #region POST
+
+        internal const string ApiPostGroup = ApiGroupsPrefix;
+        internal const string ApiPostGroupUser = ApiGroupsPrefix + "/{groupId}/users";
+
+        #endregion
+
+        #region PUT
+
+        internal const string ApiPutGroup = ApiGroupsPrefix + "/{groupId}";
+
+        #endregion
+        #region DELETE
+
+        internal const string ApiDeleteGroup = ApiGroupsPrefix + "/{groupId}";
+        internal const string ApiDeleteGroupUsers = ApiGroupsPrefix + "/{groupId}/users";
+
+        #endregion
+
+        #endregion
+
+        #region Users-Endpoint
+
+        private const string ApiUsersPrefix = ApiPrefix + "/users";
+        private const string ApiUsersUserIdPrefix = ApiPrefix + "/users/{userId}";
+
+        #region GET
+
+        internal const string ApiGetUsers = ApiUsersPrefix;
+        internal const string ApiGetUser = ApiUsersUserIdPrefix;
+        internal const string ApiGetUserGroups = ApiUsersUserIdPrefix + "/groups";
+        internal const string ApiGetUserLastAdminRooms = ApiUsersUserIdPrefix + "/last_admin_rooms";
+        internal const string ApiGetUserRoles = ApiUsersUserIdPrefix + "/roles";
+        internal const string ApiGetUserUserAttributes = ApiUsersUserIdPrefix + "/userAttributes";
+
+        #endregion
+        #region POST
+
+        internal const string ApiPostUser = ApiUsersPrefix;
+        internal const string ApiPostUserAttributes = ApiUsersUserIdPrefix + "/userAttributes";
+
+        #endregion
+        #region PUT
+
+        internal const string ApiPutUser = ApiUsersUserIdPrefix;
+        internal const string ApiPutUserUserAttributes = ApiUsersUserIdPrefix + "/userAttributes";
+
+        #endregion
+        #region DELETE
+
+        internal const string ApiDeleteUser = ApiUsersUserIdPrefix;
+        internal const string ApiDeleteUserUserAttribute = ApiUsersUserIdPrefix + "/userAttributes/{key}";
+
+        #endregion
+
+        #endregion
+
+        #region EventLog-Endpoint
+
+        private const string ApiEventLogPrefix = ApiPrefix + "/eventlog";
+
+        #region GET
+
+        internal const string ApiGetAuditNodes = ApiEventLogPrefix + "/audits/nodes";
+        internal const string ApiGetEvents = ApiEventLogPrefix + "/events";
+        internal const string ApiGetOperations = ApiEventLogPrefix + "/operations";
+
+        #endregion
+
+        #endregion
+
+        #region Roles-Endpoint
+
+        private const string ApiRolesPrefix = ApiPrefix + "/roles";
+
+        #region GET
+
+        internal const string ApiGetRoles = ApiRolesPrefix;
+        internal const string ApiGetRoleGroups = ApiRolesPrefix + "/{roleId}/groups";
+        internal const string ApiGetRoleUsers = ApiRolesPrefix + "/{roleId}/users";
+
+        #endregion
+        #region POST
+
+        internal const string ApiPostRoleGroups = ApiRolesPrefix + "/{roleId}/groups";
+        internal const string ApiPostRoleUsers = ApiRolesPrefix + "/{roleId}/users";
+
+        #endregion
+        #region DELETE
+
+        internal const string ApiDeleteRoleGroups = ApiGroupsPrefix + "/{roleId}/groups";
+        internal const string ApiDeleteRoleUsers = ApiGroupsPrefix + "/{roleId}/users";
+
+        #endregion
+
+        #endregion
+
+        #region Branding-Endpoint (Branding API)
+
+        #region GET
+
+        internal const string BrandingApiGetBranding = BrandingApiPrefix + "/public/branding";
+
+        internal const string BrandingApiGetBrandingServerVersion = BrandingApiPrefix + "/public/software/version";
 
         #endregion
 

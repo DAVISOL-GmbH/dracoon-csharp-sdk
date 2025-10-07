@@ -3,6 +3,7 @@ using Dracoon.Crypto.Sdk.Model;
 using Dracoon.Sdk.Error;
 using Dracoon.Sdk.Model;
 using Dracoon.Sdk.SdkInternal.ApiModel;
+using Dracoon.Sdk.SdkInternal.ApiModel.Requests;
 using Dracoon.Sdk.SdkInternal.User;
 using Dracoon.Sdk.SdkInternal.Util;
 using System;
@@ -77,19 +78,6 @@ namespace Dracoon.Sdk.SdkInternal.Mapper {
             return userAuthData;
         }
 
-        internal static UserGroup FromApiUserGroup(ApiUserGroup apiUserGroup) {
-            if (apiUserGroup == null) {
-                return null;
-            }
-
-            UserGroup userGroup = new UserGroup {
-                Id = apiUserGroup.Id,
-                IsMember = apiUserGroup.IsMember,
-                Name = apiUserGroup.Name
-            };
-            return userGroup;
-        }
-
         private static List<UserRole> ConvertApiUserRoles(ApiUserRoleList apiUserRoles) {
             List<UserRole> returnValue = new List<UserRole>();
             if (apiUserRoles == null) {
@@ -98,12 +86,15 @@ namespace Dracoon.Sdk.SdkInternal.Mapper {
 
             foreach (ApiUserRole currentRole in apiUserRoles.Items) {
                 returnValue.Add((UserRole)Enum.ToObject(typeof(UserRole), currentRole.Id));
+                returnValue.Add((UserRole)Enum.ToObject(typeof(UserRole), currentRole.Id));
             }
 
             return returnValue;
         }
 
         internal static ApiUserKeyPair ToApiUserKeyPair(UserKeyPair userKeyPair) {
+            if (userKeyPair == null)
+                return null;
             ApiUserKeyPair apiUserKeyPair = new ApiUserKeyPair {
                 PublicKeyContainer = ToApiUserPublicKey(userKeyPair.UserPublicKey),
                 PrivateKeyContainer = ToApiUserPrivateKey(userKeyPair.UserPrivateKey)
@@ -112,6 +103,8 @@ namespace Dracoon.Sdk.SdkInternal.Mapper {
         }
 
         private static ApiUserPublicKey ToApiUserPublicKey(UserPublicKey userPublicKey) {
+            if (userPublicKey == null)
+                return null;
             ApiUserPublicKey apiUserPublicKey = new ApiUserPublicKey {
                 Version = ToApiUserKeyPairVersion(userPublicKey.Version),
                 PublicKey = userPublicKey.PublicKey
@@ -120,6 +113,8 @@ namespace Dracoon.Sdk.SdkInternal.Mapper {
         }
 
         private static ApiUserPrivateKey ToApiUserPrivateKey(UserPrivateKey userPrivateKey) {
+            if (userPrivateKey == null)
+                return null;
             ApiUserPrivateKey apiUserPrivateKey = new ApiUserPrivateKey {
                 Version = ToApiUserKeyPairVersion(userPrivateKey.Version),
                 PrivateKey = userPrivateKey.PrivateKey
@@ -128,15 +123,19 @@ namespace Dracoon.Sdk.SdkInternal.Mapper {
         }
 
         internal static UserKeyPair FromApiUserKeyPair(ApiUserKeyPair apiUserKeyPair) {
-            UserKeyPair userKeyPair = new UserKeyPair {
+            if (apiUserKeyPair == null)
+                return null;
+            UserKeyPair userKeyPair = new UserKeyPair() {
                 UserPublicKey = FromApiUserPublicKey(apiUserKeyPair.PublicKeyContainer),
                 UserPrivateKey = FromApiUserPrivateKey(apiUserKeyPair.PrivateKeyContainer)
             };
             return userKeyPair;
         }
 
-        private static UserPublicKey FromApiUserPublicKey(ApiUserPublicKey apiUserPublicKey) {
-            UserPublicKey userPublicKey = new UserPublicKey {
+        internal static UserPublicKey FromApiUserPublicKey(ApiUserPublicKey apiUserPublicKey) {
+            if (apiUserPublicKey == null)
+                return null;
+            UserPublicKey userPublicKey = new UserPublicKey() {
                 Version = FromApiUserKeyPairVersion(apiUserPublicKey.Version),
                 PublicKey = apiUserPublicKey.PublicKey
             };
@@ -144,7 +143,9 @@ namespace Dracoon.Sdk.SdkInternal.Mapper {
         }
 
         private static UserPrivateKey FromApiUserPrivateKey(ApiUserPrivateKey apiUserPrivateKey) {
-            UserPrivateKey userPrivateKey = new UserPrivateKey {
+            if (apiUserPrivateKey == null)
+                return null;
+            UserPrivateKey userPrivateKey = new UserPrivateKey() {
                 Version = FromApiUserKeyPairVersion(apiUserPrivateKey.Version),
                 PrivateKey = apiUserPrivateKey.PrivateKey
             };
@@ -153,11 +154,188 @@ namespace Dracoon.Sdk.SdkInternal.Mapper {
 
         internal static Dictionary<long, UserPublicKey> ConvertApiUserIdPublicKeys(List<ApiUserIdPublicKey> userIdPublicKeys) {
             Dictionary<long, UserPublicKey> userPublicKeys = new Dictionary<long, UserPublicKey>(userIdPublicKeys.Count);
-            foreach (ApiUserIdPublicKey currentPublicKey in userIdPublicKeys) {
-                userPublicKeys.Add(currentPublicKey.UserId, FromApiUserPublicKey(currentPublicKey.PublicKeyContainer));
+            if (userIdPublicKeys != null) {
+                foreach (ApiUserIdPublicKey currentPublicKey in userIdPublicKeys) {
+                    userPublicKeys.Add(currentPublicKey.UserId, FromApiUserPublicKey(currentPublicKey.PublicKeyContainer));
+                }
+            }
+            return userPublicKeys;
+        }
+
+
+
+        internal static UserList FromApiUserList(ApiUserList apiUserList) {
+            UserList userList = new UserList();
+            CommonMapper.FromApiRangeList(apiUserList, userList, FromApiUserItem);
+            return userList;
+        }
+
+        private static UserItem FromApiUserItem(ApiUserItem apiUserItem) {
+            UserItem userItem = new UserItem() {
+                Id = apiUserItem.Id,
+                UserName = apiUserItem.UserName,
+                FirstName = apiUserItem.FirstName,
+                LastName = apiUserItem.LastName,
+                IsLocked = apiUserItem.IsLocked,
+                HasManagableRooms = apiUserItem.HasManagableRooms,
+                AvatarUuid = apiUserItem.AvatarUuid,
+                CreatedAt = apiUserItem.CreatedAt,
+                LastLoginSuccessAt = apiUserItem.LastLoginSuccessAt,
+                ExpireAt = apiUserItem.ExpireAt,
+                IsEncryptionEnabled = apiUserItem.IsEncryptionEnabled,
+                Email = apiUserItem.Email,
+                Phone = apiUserItem.Phone,
+                HomeRoomId = apiUserItem.HomeRoomId,
+                UserRoles = CommonMapper.FromApiRoleList(apiUserItem.UserRoles),
+                UserAttributes = FromApiUserAttributes(apiUserItem.UserAttributes)
+            };
+            return userItem;
+        }
+
+        internal static UserData FromApiUserData(ApiUserData apiUserData) {
+            UserData userData = new UserData() {
+                Id = apiUserData.Id,
+                UserName = apiUserData.UserName,
+                FirstName = apiUserData.FirstName,
+                LastName = apiUserData.LastName,
+                IsLocked = apiUserData.IsLocked,
+                HasManagableRooms = apiUserData.HasManagableRooms,
+                AvatarUuid = apiUserData.AvatarUuid,
+                CreatedAt = apiUserData.CreatedAt,
+                LastLoginSuccessAt = apiUserData.LastLoginSuccessAt,
+                ExpireAt = apiUserData.ExpireAt,
+                IsEncryptionEnabled = apiUserData.IsEncryptionEnabled,
+                Email = apiUserData.Email,
+                Phone = apiUserData.Phone,
+                HomeRoomId = apiUserData.HomeRoomId,
+                UserRoles = CommonMapper.FromApiRoleList(apiUserData.UserRoles),
+                UserAttributes = FromApiUserAttributes(apiUserData.UserAttributes),
+
+                AuthData = FromApiUserAuthData(apiUserData.AuthData),
+                PublicKeyContainer = FromApiUserPublicKey(apiUserData.PublicKeyContainer)
+            };
+            return userData;
+        }
+
+        internal static UserGroupList FromApiUserGroupList(ApiUserGroupList apiUserGroupList) {
+            UserGroupList userGroupList = new UserGroupList();
+            CommonMapper.FromApiRangeList(apiUserGroupList, userGroupList, FromApiUserGroup);
+            return userGroupList;
+        }
+
+        private static UserGroup FromApiUserGroup(ApiUserGroup apiUserGroup) {
+            if (apiUserGroup is null) {
+                return null;
             }
 
-            return userPublicKeys;
+            UserGroup userGroup = new UserGroup() {
+                Id = apiUserGroup.Id,
+                IsMember = apiUserGroup.IsMember,
+                Name = apiUserGroup.Name
+            };
+            return userGroup;
+        }
+
+        internal static LastAdminUserRoomList FromApiLastAdminUserRoomList(ApiLastAdminUserRoomList apiLastAdminUserRoomList) {
+            LastAdminUserRoomList lastAdminUserRoomList = new LastAdminUserRoomList();
+            CommonMapper.FromApiSimpleList(apiLastAdminUserRoomList, lastAdminUserRoomList, FromApiLastAdminUserRoom);
+            return lastAdminUserRoomList;
+        }
+
+        private static LastAdminUserRoom FromApiLastAdminUserRoom(ApiLastAdminUserRoom apiLastAdminUserRoom) {
+            LastAdminUserRoom lastAdminUserRoom = new LastAdminUserRoom() {
+                Id = apiLastAdminUserRoom.Id,
+                Name = apiLastAdminUserRoom.Name,
+                ParentPath = apiLastAdminUserRoom.ParentPath,
+                LastAdminInGroup = apiLastAdminUserRoom.LastAdminInGroup,
+                ParentId = apiLastAdminUserRoom.ParentId,
+                LastAdminInGroupId = apiLastAdminUserRoom.LastAdminInGroupId
+            };
+            return lastAdminUserRoom;
+        }
+
+        internal static UserAttributes FromApiUserAttributes(ApiUserAttributes apiUserAttributes) {
+            UserAttributes userAttributes = new UserAttributes();
+            CommonMapper.FromApiSimpleList(apiUserAttributes, userAttributes, x => CommonMapper.FromApiKeyValuePair(x));
+            return userAttributes;
+        }
+
+        internal static AttributesResponse FromApiAttributesResponse(ApiAttributesResponse apiAttributesResponse) {
+            AttributesResponse attributesResponse = new AttributesResponse();
+            CommonMapper.FromApiRangeList(apiAttributesResponse, attributesResponse, x => CommonMapper.FromApiKeyValuePair(x));
+            return attributesResponse;
+        }
+
+        internal static ApiCreateUserRequest ToApiCreateUserRequest(CreateUserRequest createUserRequest) {
+            ApiCreateUserRequest apiCreateUserRequest = new ApiCreateUserRequest() {
+                FirstName = createUserRequest.FirstName,
+                LastName = createUserRequest.LastName,
+                UserName = createUserRequest.UserName,
+#pragma warning disable CS0618 // Type or member is obsolete
+                Title = createUserRequest.Title,
+#pragma warning restore CS0618 // Type or member is obsolete
+                Phone = createUserRequest.Phone,
+                ExpireAt = CommonMapper.ToApiExpiration(createUserRequest.ExpireAt),
+                ReceiverLanguage = createUserRequest.ReceiverLanguage?.Name,
+                Email = createUserRequest.Email,
+                NotifyUser = createUserRequest.NotifyUser,
+                AuthData = ToApiUserAuthData(createUserRequest.AuthData),
+                IsNonmemberViewer = createUserRequest.IsNonmemberViewer
+
+            };
+            return apiCreateUserRequest;
+        }
+
+        internal static ApiUpdateUserRequest ToApiUpdateUserRequest(UpdateUserRequest updateUserRequest) {
+            ApiUpdateUserRequest apiUpdateUserRequest = new ApiUpdateUserRequest() {
+                Title = updateUserRequest.Title,
+                FirstName = updateUserRequest.FirstName,
+                LastName = updateUserRequest.LastName,
+                UserName = updateUserRequest.UserName,
+                Email = updateUserRequest.Email,
+                IsLocked = updateUserRequest.IsLocked,
+                Phone = updateUserRequest.Phone,
+                ReceiverLanguage = updateUserRequest.ReceiverLanguage?.Name,
+                ExpireAt = CommonMapper.ToApiExpiration(updateUserRequest.ExpireAt),
+                AuthData = ToApiUserAuthDataUpdateRequest(updateUserRequest.AuthData)
+            };
+            return apiUpdateUserRequest;
+        }
+
+        internal static ApiUserAttributes ToApiUserAttributes(UserAttributes userAttributes) {
+            ApiUserAttributes apiUserAttributes = new ApiUserAttributes();
+            CommonMapper.ToApiSimpleList(userAttributes, apiUserAttributes, x => CommonMapper.ToApiKeyValuePair(x));
+            return apiUserAttributes;
+        }
+
+        private static ApiAuthData ToApiUserAuthData(UserAuthData userAuthData) {
+            if (userAuthData == null) {
+                return null;
+            }
+
+            ApiAuthData apiUserAuthData = new ApiAuthData() {
+                Method = EnumConverter.ConvertUserAuthMethodEnumToValue(userAuthData.Method),
+                Login = userAuthData.Login,
+                Password = userAuthData.Password,
+                MustChangePassword = userAuthData.MustChangePassword,
+                ADConfigId = userAuthData.ADConfigId,
+                OIDConfigId = userAuthData.OIDConfigId
+            };
+            return apiUserAuthData;
+        }
+
+        private static ApiUserAuthDataUpdateRequest ToApiUserAuthDataUpdateRequest(UserAuthDataUpdateRequest userAuthDataUpdateRequest) {
+            if (userAuthDataUpdateRequest == null) {
+                return null;
+            }
+
+            ApiUserAuthDataUpdateRequest apiUserAuthDataUpdateRequest = new ApiUserAuthDataUpdateRequest() {
+                Method = EnumConverter.ConvertUserAuthMethodEnumToValue(userAuthDataUpdateRequest.Method),
+                Login = userAuthDataUpdateRequest.Login,
+                AdConfigId = userAuthDataUpdateRequest.ADConfigId,
+                OidConfigId = userAuthDataUpdateRequest.OIDConfigId
+            };
+            return apiUserAuthDataUpdateRequest;
         }
 
         internal static AvatarInfo FromApiAvatarInfo(ApiAvatarInfo apiInfo) {
@@ -210,5 +388,6 @@ namespace Dracoon.Sdk.SdkInternal.Mapper {
             }
             return subscriptionList;
         }
+
     }
 }

@@ -1,4 +1,4 @@
-﻿using Dracoon.Sdk.Error;
+using Dracoon.Sdk.Error;
 using Dracoon.Sdk.SdkInternal.ApiModel;
 using Newtonsoft.Json;
 using RestSharp;
@@ -10,6 +10,9 @@ using static Dracoon.Sdk.SdkInternal.DracoonRequestExecutor;
 namespace Dracoon.Sdk.SdkInternal {
     internal static class DracoonErrorParser {
         private const string LogTag = nameof(DracoonErrorParser);
+        //private const int COR_E_IO = unchecked((int)0x80131620);
+
+        internal static IInternalDracoonClientBase DracoonClient { get; set; }
 
         private static bool CheckResponseHasHeader(object response, string headerName, string headerValue) {
             if (response is RestResponse restResponse && restResponse.Headers != null) {
@@ -46,15 +49,24 @@ namespace Dracoon.Sdk.SdkInternal {
             return null;
         }
 
-        private static ApiErrorResponse GetApiErrorResponse(string errorResponseBody) {
+        private static ApiErrorResponse GetApiErrorResponse(string errorResponseBody, HttpStatusCode? statusCode = null) {
+            if (string.IsNullOrEmpty(errorResponseBody)) {
+                DracoonClient.Log.Warn(LogTag, "Request failed but no body present in error response");
+                return null;
+            }
             try {
                 ApiErrorResponse apiError = JsonConvert.DeserializeObject<ApiErrorResponse>(errorResponseBody);
                 if (apiError != null) {
-                    DracoonClient.Log.Debug(LogTag, apiError.ToString());
+                    DracoonClient.Log.Error(LogTag, apiError.ToString());
                 }
 
                 return apiError;
-            } catch (Exception) {
+            } catch (Exception e) {
+                if (statusCode == HttpStatusCode.ServiceUnavailable) {
+                    DracoonClient.Log.Debug(LogTag, $"Request failed and error response is not a valid JSON object (parsing body failed with {e.GetType().FullName}: {e.Message}). The raw response is: {errorResponseBody}");
+                } else {
+                    DracoonClient.Log.Error(LogTag, $"Request failed and error response is not a valid JSON object (parsing body failed with {e.GetType().FullName}: {e.Message}). The raw response is: {errorResponseBody}");
+                }
                 return null;
             }
         }
@@ -73,15 +85,59 @@ namespace Dracoon.Sdk.SdkInternal {
                 using (StreamReader sr = new StreamReader(s)) {
                     return sr.ReadToEnd();
                 }
-            } catch (Exception) {
+            } catch (Exception e) {
+                DracoonClient.Log.Warn(LogTag, $"Failed to read error from response with {e.GetType().FullName}: {e.Message}");
                 return null;
             }
         }
 
-        internal static void ParseError(RestResponse response, RequestType requestType) {
-            ApiErrorResponse apiError = GetApiErrorResponse(response.Content);
-            DracoonApiCode resultCode = Parse((int)response.StatusCode, response, apiError, requestType);
-            DracoonClient.Log.Debug(LogTag, $"Query for '{requestType.ToString()}' failed with '{resultCode.Text}'");
+        private static DracoonApiCode ParseApiErrorCodeFromResponse(RestResponse response, RequestType requestType, ref string responseContent) {
+            //var responseContent = response.Content;
+            if (!string.IsNullOrEmpty(responseContent)) {
+                // Check if the API is in maintenance (usually every wednesday night)
+                if (responseContent.IndexOf("<title>DRACOON Maintenance</title>", StringComparison.OrdinalIgnoreCase) > 0) {
+                    return DracoonApiCode.SERVER_MAINTENANCE;
+                }
+            }
+            else if (response.StatusCode == 0) {
+                // no valid HTTP response received
+                if (response.ResponseStatus == ResponseStatus.TimedOut) {
+                    responseContent = "Response status signals timeout";
+                    return DracoonApiCode.SERVER_GATEWAY_TIMEOUT;
+                }
+                else if (response.ErrorException is System.Net.Http.HttpRequestException && /*response.ErrorException.HResult == COR_E_IO &&*/ response.ErrorException.InnerException is IOException) {
+                    // an IOException usually indicates an error reading the response stream, indicating an issue with the connection to the API
+                    responseContent = $"Response failed with I/O error, {response.ErrorException.Message} ({response.ErrorException.InnerException.Message})";
+                    return DracoonApiCode.SERVER_GATEWAY_TIMEOUT;
+                }
+                else if (response.ErrorException != null) {
+                    responseContent = $"Response failed with unhandled {response.ErrorException.GetType().FullName} ({response.ErrorException.Message})";
+                    var innerException = response.ErrorException.InnerException;
+                    while (innerException != null) {
+                        responseContent += $"inner {innerException.GetType().FullName} ({innerException.Message})";
+                        innerException = innerException.InnerException;
+                    }
+                }
+                else {
+                    responseContent = "Response failed without a detectable error";
+                }
+            }
+            ApiErrorResponse apiError = GetApiErrorResponse(responseContent, response.StatusCode);
+            return Parse((int)response.StatusCode, response, apiError, requestType, DracoonClient.Log);
+        }
+
+        internal static void ParseError(RestResponse response, RequestType requestType, long elapsedMilliseconds) {
+            var responseContent = response.Content;
+            DracoonApiCode resultCode = ParseApiErrorCodeFromResponse(response, requestType, ref responseContent);
+#if DEBUG
+            // DEBUG ONLY - Why an unknown error is detected?
+            if (resultCode.Code == 5000) {
+                if (System.Diagnostics.Debugger.IsAttached) {
+                    System.Diagnostics.Debugger.Break();
+                }
+            }
+#endif
+            DracoonClient.Log.Error(LogTag, $"Query for '{requestType}' failed with parsed error '{resultCode.Text}' after {elapsedMilliseconds} ms (code {resultCode.Code}, HTTP status {response.StatusCode}, {(response.ResponseUri is null ? $"no response from {response.Request.Resource}" : $"response from {response.ResponseUri}")}){(resultCode.Code == DracoonApiCode.SERVER_MAINTENANCE.Code ? "" : $": {responseContent}")}");
 
             throw new DracoonApiException(resultCode);
         }
@@ -90,15 +146,17 @@ namespace Dracoon.Sdk.SdkInternal {
             if (exception.Status == WebExceptionStatus.ProtocolError) {
                 ApiErrorResponse apiError = GetApiErrorResponse(ReadErrorResponseFromWebException(exception));
                 if (exception.Response is HttpWebResponse response) {
-                    DracoonApiCode resultCode = Parse((int)response.StatusCode, response, apiError, requestType);
-                    DracoonClient.Log.Debug(LogTag, $"Query for '{requestType.ToString()}' failed with '{resultCode.Text}'");
+                    DracoonApiCode resultCode = Parse((int)response.StatusCode, response, apiError, requestType, DracoonClient.Log);
+                    DracoonClient.Log.Debug(LogTag, $"Query for '{requestType}' failed with parsed protocol error '{resultCode.Text}'");
                     throw new DracoonApiException(resultCode);
                 }
 
+                DracoonClient.Log.Warn(LogTag, $"Query for '{requestType}' failed with unknown protocol error '{exception.Message}'");
                 throw new DracoonApiException(DracoonApiCode.SERVER_UNKNOWN_ERROR);
             }
 
-            throw new DracoonNetIOException("The request for '" + requestType.ToString() + "' failed with '" + exception.Message + "'", exception);
+            DracoonClient.Log.Warn(LogTag, $"Query for '{requestType}' failed with unknown error '{exception.Message}'");
+            throw new DracoonNetIOException($"The request for '{requestType}' failed with '{exception.Message}'", exception);
         }
 
         internal static void ParseError(ApiErrorResponse apiError, RequestType requestType) {
@@ -107,14 +165,18 @@ namespace Dracoon.Sdk.SdkInternal {
                 code = apiError.Code.Value;
             }
 
-            DracoonApiCode resultCode = Parse(code, null, apiError, requestType);
+            DracoonApiCode resultCode = Parse(code, null, apiError, requestType, DracoonClient?.Log);
             throw new DracoonApiException(resultCode);
         }
 
-        private static DracoonApiCode Parse(int httpStatusCode, object response, ApiErrorResponse apiError, RequestType requestType) {
+        private static DracoonApiCode Parse(int httpStatusCode, object response, ApiErrorResponse apiError, RequestType requestType, ILog clientLog) {
             int? apiErrorCode = null;
             if (apiError != null) {
+                clientLog?.Error(LogTag, $"Parsing API error: HTTP status {httpStatusCode}, error code {apiError.ErrorCode}, code {apiError.Code}, message '{apiError.Message}', debug info '{apiError.DebugInfo}'");
                 apiErrorCode = apiError.ErrorCode;
+            }
+            else {
+                clientLog?.Error(LogTag, $"Parsing non API error: HTTP status {httpStatusCode}");
             }
 
             switch (httpStatusCode) {
@@ -122,7 +184,7 @@ namespace Dracoon.Sdk.SdkInternal {
                     return ParseBadRequest(apiErrorCode, requestType);
                 case (int)HttpStatusCode.PaymentRequired:
                     return ParsePaymentRequired();
-                case 429: // too many requests
+                case 429: //  (int)HttpStatusCode.TooManyRequests: /* The TooManyRequest enum member is not available prior to .NET Core 2.1 - see: https://github.com/dotnet/runtime/issues/54321#issuecomment-863195308 */
                     return ParseTooManyRequests(response);
                 case (int)HttpStatusCode.Unauthorized:
                     return ParseUnauthorized(apiErrorCode);
@@ -136,13 +198,18 @@ namespace Dracoon.Sdk.SdkInternal {
                     return ParsePreconditionFailed(apiErrorCode);
                 case (int)HttpStatusCode.BadGateway:
                     return ParseBadGateway(apiErrorCode, requestType);
+                case (int)HttpStatusCode.ServiceUnavailable:
+                    // This is the usual response content when API is not available:
+                    //   upstream connect error or disconnect/reset before headers. reset reason: remote connection failure, transport failure reason: delayed connect error: 111
+                    return DracoonApiCode.SERVER_UNAVAILABLE;
                 case (int)HttpStatusCode.GatewayTimeout:
                     return ParseGatewayTimeout(apiErrorCode);
-                case 507: // insufficient storage
+                case 507:
                     return ParseInsufficientStorage(apiErrorCode);
                 case 901:
                     return ParseCustomError();
                 default:
+                    clientLog?.Error(LogTag, $"UNKNOWN ERROR: The HTTP status code {httpStatusCode} is not recognized, the error code is therefore set to the generic SERVER_UNKNOWN_ERROR (5000).'");
                     return DracoonApiCode.SERVER_UNKNOWN_ERROR;
             }
         }
@@ -151,6 +218,11 @@ namespace Dracoon.Sdk.SdkInternal {
             switch (apiErrorCode) {
                 case -10002:
                     return DracoonApiCode.VALIDATION_PASSWORT_NOT_SECURE;
+                case -10100:
+                    return DracoonApiCode.VALIDATION_INVALID_AUTH_METHOD;
+                case -10102:
+                    return DracoonApiCode.VALIDATION_MISSING_AUTH_METHOD;
+
                 case -40001 when requestType == RequestType.PostCopyNodes || requestType == RequestType.PostMoveNodes:
                     return DracoonApiCode.VALIDATION_SOURCE_ROOM_ENCRYPTED;
                 case -40001:
@@ -163,6 +235,8 @@ namespace Dracoon.Sdk.SdkInternal {
                     return DracoonApiCode.VALIDATION_ROOM_CANNOT_UNENCRYPTED_WITH_FILES;
                 case -40004:
                     return DracoonApiCode.VALIDATION_ROOM_STILL_HAS_RESCUE_KEY;
+                case -40006:
+                    return DracoonApiCode.VALIDATION_ROOM_REQUIRE_NONEXPIRING_ADMIN_USER_OR_GROUP;
                 case -40008:
                     return DracoonApiCode.VALIDATION_ROOM_CANNOT_ENCRYPTED_WITH_FILES;
                 case -40012:
@@ -208,12 +282,17 @@ namespace Dracoon.Sdk.SdkInternal {
                 case -70022:
                 case -70023:
                     return DracoonApiCode.VALIDATION_USER_KEY_PAIR_INVALID;
+                case -70106:
+                    return DracoonApiCode.VALIDATION_NOTSINGLE_AUTH_METHOD;
+
                 case -80000:
                     return DracoonApiCode.VALIDATION_FIELD_CANNOT_BE_EMPTY;
                 case -80001:
                     return DracoonApiCode.VALIDATION_FIELD_NOT_POSITIVE;
                 case -80003:
                     return DracoonApiCode.VALIDATION_FIELD_NOT_ZERO_POSITIVE;
+                case -80005:
+                    return DracoonApiCode.VALIDATION_FIELD_NOT_BOOLEAN;
                 case -80006:
                     return DracoonApiCode.VALIDATION_EXPIRATION_DATE_IN_PAST;
                 case -80007:
@@ -231,18 +310,27 @@ namespace Dracoon.Sdk.SdkInternal {
                     return DracoonApiCode.VALIDATION_INVALID_CHARACTERS_CONTAINED;
                 case -80024:
                     return DracoonApiCode.VALIDATION_INVALID_OFFSET_OR_LIMIT;
+                case -80028:
+                    return DracoonApiCode.VALIDATION_FIELD_NOT_NULL;
                 case -80030:
                     return DracoonApiCode.SERVER_SMS_IS_DISABLED;
                 case -80034:
                     return DracoonApiCode.VALIDATION_KEEPSHARELINKS_ONLY_WITH_OVERWRITE;
                 case -80035:
                     return DracoonApiCode.VALIDATION_FIELD_NOT_BETWEEN_0_10;
+                case -80038:
+                    return DracoonApiCode.VALIDATION_INITAL_PASSWORD_DEACTIVATED_METHOD;
                 case -80045:
                     return DracoonApiCode.VALIDATION_INVALID_ETAG;
                 case -80064:
                     return DracoonApiCode.VALIDATION_POLICY_VIOLATION;
+
+                case -90002:
+                    return DracoonApiCode.VALIDATION_NO_DISTINCT_AUTH_CONFIG;
                 case -90033:
                     return DracoonApiCode.SERVER_S3_IS_ENFORCED;
+                case -90059:
+                    return DracoonApiCode.VALIDATION_MISSING_AD_AUTH_CONFIG;
                 default:
                     return DracoonApiCode.VALIDATION_UNKNOWN_ERROR;
             }
@@ -290,6 +378,8 @@ namespace Dracoon.Sdk.SdkInternal {
                     return DracoonApiCode.SERVER_VIRUS_SCAN_IN_PROGRESS;
                 case -40765:
                     return DracoonApiCode.SERVER_MALICIOUS_FILE_DETECTED;
+                case -70505:
+                    return DracoonApiCode.SERVER_USER_QUOTA_REACHED;
                 default: {
                         switch (requestType) {
                             case RequestType.DeleteNodes:
@@ -369,6 +459,14 @@ namespace Dracoon.Sdk.SdkInternal {
                     return DracoonApiCode.SERVER_ATTRIBUTE_NOT_FOUND;
                 case -90034:
                     return DracoonApiCode.SERVER_S3_UPLOAD_ID_NOT_FOUND;
+                case -90035:
+                    return DracoonApiCode.SERVER_OPENID_IDP_CONFIG_NOT_FOUND;
+                case -90050:
+                    return DracoonApiCode.SERVER_ACTIVE_DIRECTORY_CONFIG_NOT_FOUND;
+                case -90059:
+                    return DracoonApiCode.SERVER_OPENID_IDP_CONFIG_INVALID;
+                case -90072:
+                    return DracoonApiCode.RADIUS_CONFIG_NOT_FOUND;
                 default:
                     return DracoonApiCode.SERVER_UNKNOWN_ERROR;
             }
@@ -384,6 +482,16 @@ namespace Dracoon.Sdk.SdkInternal {
                     return DracoonApiCode.VALIDATION_CANNOT_COPY_TO_CHILD;
                 case -70021:
                     return DracoonApiCode.SERVER_USER_KEY_PAIR_ALREADY_SET;
+                case -70560:
+                    return DracoonApiCode.VALIDATION_USER_BASIC_AUTH_NAME_IN_USE;
+                case -70561:
+                    return DracoonApiCode.VALIDATION_USER_ACTIVE_DIRECTORY_AUTH_NAME_IN_USE;
+                case -70562:
+                    return DracoonApiCode.VALIDATION_USER_RADIUS_AUTH_NAME_IN_USE;
+                case -70563:
+                    return DracoonApiCode.VALIDATION_USER_OPENID_AUTH_NAME_IN_USE;
+                case -70564:
+                    return DracoonApiCode.VALIDATION_USER_NAME_ALREADY_EXISTS;
                 default: {
                         switch (requestType) {
                             case RequestType.PostRoom:
@@ -395,6 +503,9 @@ namespace Dracoon.Sdk.SdkInternal {
                                 return DracoonApiCode.VALIDATION_ROOM_ALREADY_EXISTS;
                             case RequestType.PutFile:
                                 return DracoonApiCode.VALIDATION_FILE_ALREADY_EXISTS;
+                            case RequestType.PostUser:
+                                // 2022-02-04: Workaround as error code is currently not provided by the API (current v4.34.2, see: https://cloud.support.dracoon.com/hc/en-us/requests/26364)
+                                return DracoonApiCode.VALIDATION_USER_NAME_ALREADY_EXISTS;
                             default: {
                                     if (apiErrorCode == -40010) {
                                         return DracoonApiCode.VALIDATION_ROOM_FOLDER_CAN_NOT_BE_OVERWRITTEN;
@@ -435,7 +546,7 @@ namespace Dracoon.Sdk.SdkInternal {
                         case RequestType.PutCompleteS3Upload:
                             return DracoonApiCode.SERVER_S3_UPLOAD_COMPLETION_FAILED;
                         default:
-                            return DracoonApiCode.SERVER_UNKNOWN_ERROR;
+                            return DracoonApiCode.SERVER_BAD_GATEWAY;
                     }
             }
         }
@@ -445,7 +556,7 @@ namespace Dracoon.Sdk.SdkInternal {
                 case -90027:
                     return DracoonApiCode.SERVER_S3_CONNECTION_FAILED;
                 default:
-                    return DracoonApiCode.SERVER_UNKNOWN_ERROR;
+                    return DracoonApiCode.SERVER_GATEWAY_TIMEOUT;
             }
         }
 

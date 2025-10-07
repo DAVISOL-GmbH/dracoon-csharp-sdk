@@ -1,28 +1,77 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <TargetFrameworks>netstandard2.0;netstandard2.1;net6.0;net7.0;net8.0;net472;net481</TargetFrameworks>
     <Company>DRACOON GmbH</Company>
-    <PackageId>Dracoon.Sdk</PackageId>
+    <PackageId>Dracoon.Sdk.Net8</PackageId>
     <Title>Dracoon SDK</Title>
-    <Product>Dracoon Sdk for .NET Standard</Product>
-    <Copyright>Copyright ©2021 Dracoon GmbH</Copyright>
+    <Description>The DRACOON SDK for C#. Ported to .NET 8.0 and enhanced by DAVISOL GmbH.</Description>
+    <Product>Dracoon SDK for .NET Standard</Product>
+    <Copyright>Copyright ©2021 Dracoon GmbH, Copyright ©2021 DAVISOL GmbH</Copyright>
     <AssemblyName>Dracoon.Sdk</AssemblyName>
     <RootNamespace>Dracoon.Sdk</RootNamespace>
-    <PackageTags>dracoon, sdk, rest, api</PackageTags>
-    <Authors>DRACOON Developers</Authors>
+    <PackageTags>dracoon sdk rest api net48 net6 net8 netstandard2 davisol</PackageTags>
+    <Authors>DRACOON Developers, enhancements by DAVISOL GmbH</Authors>
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
     <PackageIcon>DracoonSdk_NugetImage.png</PackageIcon>
-    <PackageIconUrl />
-    <PackageProjectUrl>https://github.com/dracoon/dracoon-csharp-sdk</PackageProjectUrl>
+    <PackageProjectUrl>https://github.com/DAVISOL-GmbH/dracoon-csharp-sdk</PackageProjectUrl>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
-    <Version>5.2.0-SNAPSHOT</Version>
+    <PackageIconUrl>https://raw.githubusercontent.com/dracoon/dracoon-csharp-sdk/master/DracoonSdk/DracoonSdk_NugetImage.png</PackageIconUrl>
+    <RepositoryUrl>https://github.com/DAVISOL-GmbH/dracoon-csharp-sdk/tree/v5.2_net8.0</RepositoryUrl>
+    <Version>5.2.0-alpha</Version>
     <OutDir></OutDir>
-    <Description>The DRACOON SDK for .NET Standard.</Description>
-    <Copyright>Copyright ©2021 DRACOON GmbH</Copyright>
-    <PackageLicenseFile>LICENSE</PackageLicenseFile>
     <GenerateDocumentationFile>True</GenerateDocumentationFile>
     <RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
+    <SignAssembly>False</SignAssembly>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|netstandard2.0|AnyCPU'">
+    <NoWarn>1701;1702;1591</NoWarn>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|netstandard2.1|AnyCPU'">
+    <NoWarn>1701;1702;1591</NoWarn>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net6.0|AnyCPU'">
+    <NoWarn>1701;1702;1591</NoWarn>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net7.0|AnyCPU'">
+    <NoWarn>1701;1702;1591</NoWarn>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net472|AnyCPU'">
+    <NoWarn>1701;1702;1591</NoWarn>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net481|AnyCPU'">
+    <NoWarn>1701;1702;1591</NoWarn>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|netstandard2.0|AnyCPU'">
+    <NoWarn>1701;1702;1591</NoWarn>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|netstandard2.1|AnyCPU'">
+    <NoWarn>1701;1702;1591</NoWarn>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net6.0|AnyCPU'">
+    <NoWarn>1701;1702;1591</NoWarn>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net7.0|AnyCPU'">
+    <NoWarn>1701;1702;1591</NoWarn>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net472|AnyCPU'">
+    <NoWarn>1701;1702;1591</NoWarn>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net481|AnyCPU'">
+    <NoWarn>1701;1702;1591</NoWarn>
   </PropertyGroup>
 
   <ItemGroup>
@@ -32,7 +81,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Dracoon.Crypto.Sdk" Version="5.0.0" />
+    <PackageReference Include="Dracoon.Crypto.Sdk.Net8" Version="3.2.3910.1" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="RestSharp" Version="112.1.0" />
     <PackageReference Include="System.Text.Json" Version="8.0.5" />
@@ -45,7 +94,7 @@
     </None>
     <None Include="..\README.md">
       <Pack>True</Pack>
-      <PackagePath>\</PackagePath>
+      <PackagePath></PackagePath>
     </None>
     <None Include="DracoonSdk_NugetImage.png">
       <Pack>True</Pack>

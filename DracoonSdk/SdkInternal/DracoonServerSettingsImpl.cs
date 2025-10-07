@@ -1,9 +1,9 @@
 ﻿using Dracoon.Sdk.Model;
 using Dracoon.Sdk.SdkInternal.ApiModel;
-using Dracoon.Sdk.SdkInternal.ApiModel.Settings;
 using Dracoon.Sdk.SdkInternal.Mapper;
 using RestSharp;
 using System.Collections.Generic;
+using static Dracoon.Sdk.SdkInternal.DracoonRequestExecutor;
 
 namespace Dracoon.Sdk.SdkInternal {
     internal class DracoonServerSettingsImpl : IServerSettings {
@@ -18,7 +18,7 @@ namespace Dracoon.Sdk.SdkInternal {
             _client.Executor.CheckApiServerVersion();
             RestRequest request = _client.Builder.GetDefaultsSettings();
             ApiDefaultsSettings apiDefaultsSettings =
-                _client.Executor.DoSyncApiCall<ApiDefaultsSettings>(request, DracoonRequestExecutor.RequestType.GetDefaultsSettings);
+                _client.Executor.DoSyncApiCall<ApiDefaultsSettings>(request, RequestType.GetDefaultsSettings);
             return SettingsMapper.FromApiDefaultsSettings(apiDefaultsSettings);
         }
 
@@ -26,7 +26,7 @@ namespace Dracoon.Sdk.SdkInternal {
             _client.Executor.CheckApiServerVersion();
             RestRequest request = _client.Builder.GetGeneralSettings();
             ApiGeneralSettings apiGeneralSettings =
-                _client.Executor.DoSyncApiCall<ApiGeneralSettings>(request, DracoonRequestExecutor.RequestType.GetGeneralSettings);
+                _client.Executor.DoSyncApiCall<ApiGeneralSettings>(request, RequestType.GetGeneralSettings);
             return SettingsMapper.FromApiGeneralSettings(apiGeneralSettings);
         }
 
@@ -34,7 +34,7 @@ namespace Dracoon.Sdk.SdkInternal {
             _client.Executor.CheckApiServerVersion();
             RestRequest request = _client.Builder.GetInfrastructureSettings();
             ApiInfrastructureSettings apiInfrastructureSettings =
-                _client.Executor.DoSyncApiCall<ApiInfrastructureSettings>(request, DracoonRequestExecutor.RequestType.GetInfrastructureSettings);
+                _client.Executor.DoSyncApiCall<ApiInfrastructureSettings>(request, RequestType.GetInfrastructureSettings);
             return SettingsMapper.FromApiInfrastructureSettings(apiInfrastructureSettings);
         }
 

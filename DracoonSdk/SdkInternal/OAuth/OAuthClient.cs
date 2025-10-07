@@ -1,10 +1,10 @@
-﻿using RestSharp;
+using RestSharp;
 using static Dracoon.Sdk.SdkInternal.DracoonRequestExecutor;
 
 namespace Dracoon.Sdk.SdkInternal.OAuth {
     internal class OAuthClient : IOAuth {
 
-        private readonly IInternalDracoonClient _client;
+        private readonly IInternalDracoonClientBase _client;
         private DracoonAuth _auth;
 
         DracoonAuth IOAuth.Auth {
@@ -12,9 +12,10 @@ namespace Dracoon.Sdk.SdkInternal.OAuth {
             set => _auth = value;
         }
 
-        internal OAuthClient(IInternalDracoonClient client, DracoonAuth auth) {
+        internal OAuthClient(IInternalDracoonClientBase client, DracoonAuth auth) {
             _client = client;
             _auth = auth;
+            OAuthErrorParser.DracoonClient = client;
         }
 
         string IOAuth.BuildAuthString() {

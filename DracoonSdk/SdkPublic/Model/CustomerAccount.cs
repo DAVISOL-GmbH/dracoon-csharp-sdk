@@ -1,4 +1,4 @@
-﻿namespace Dracoon.Sdk.Model {
+namespace Dracoon.Sdk.Model {
     /// <summary>
     ///     This model stores information about the customer account.
     /// </summary>
@@ -38,5 +38,7 @@
         ///     If <c>true</c> the customer has encryption enabled, otherwise <c>false</c>.
         /// </summary>
         public bool HasEncryptionEnabled { get; internal set; }
+
+        public bool? IsProviderCustomer { get; internal set; }
     }
 }

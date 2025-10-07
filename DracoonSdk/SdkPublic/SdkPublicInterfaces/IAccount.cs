@@ -66,6 +66,7 @@ namespace Dracoon.Sdk {
         /// <exception cref="Dracoon.Sdk.Error.DracoonApiException"></exception>
         /// <exception cref="Dracoon.Sdk.Error.DracoonNetIOException"></exception>
         byte[] GetAvatar();
+        //SkiaSharp.SKData GetAvatar();
 
         /// <summary>
         ///     Get the informations about the current set avatar image of the current user.

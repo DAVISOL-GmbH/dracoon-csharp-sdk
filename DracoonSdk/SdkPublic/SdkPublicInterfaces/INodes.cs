@@ -1,4 +1,4 @@
-﻿using Dracoon.Sdk.Filter;
+using Dracoon.Sdk.Filter;
 using Dracoon.Sdk.Model;
 using Dracoon.Sdk.Sort;
 using System;
@@ -102,6 +102,25 @@ namespace Dracoon.Sdk {
         /// <exception cref="System.ArgumentException"></exception>
         /// <exception cref="System.ArgumentNullException"></exception>
         Node UpdateRoom(UpdateRoomRequest request);
+
+        Node UpdateRoomConfig(long roomId, ConfigRoomRequest request);
+
+        LogEventList GetRoomEvents(long roomId, DateTime? dateStart = null, DateTime? dateEnd = null, EventStatus? status = null, int? operationId = null, long? userId = null, long? offset = null, long? limit = null, EventLogsSort sort = null);
+
+        RoomGroupList GetRoomGroups(long roomId, long? offset = null, long? limit = null, GetRoomGroupsFilter filter = null);
+
+        void OverwriteRoomGroups(long roomId, RoomGroupsAddBatchRequest request);
+
+        void DeleteRoomGroups(long roomId, IEnumerable<long> groupIds);
+
+        RoomUserList GetRoomUsers(long roomId, long? offset = null, long? limit = null, GetRoomUsersFilter filter = null);
+
+        void OverwriteRoomUsers(long roomId, RoomUsersAddBatchRequest request);
+
+        void DeleteRoomUsers(long roomId, IEnumerable<long> userIds);
+
+        PendingAssignmentList GetRoomPending(long roomId, long? offset = null, long? limit = null, GetRoomPendingFilter filter = null, PendingAssignmentsSort sort = null);
+
 
         /// <summary>
         ///     Enables the encryption for a room.
@@ -232,6 +251,7 @@ namespace Dracoon.Sdk {
         /// </summary>
         /// <param name="searchString">The search string. (Search string must not null or empty)</param>
         /// <param name="parentNodeId">The ID of the parent node. (ID must be 0 or positive)</param>
+        /// <param name="depthLevel">The maximum hierarchy level to iterate the childrens or <c>-1</c> for no recursion limit (default).</param>
         /// <param name="offset">The range offset. (Zero-based index; must be 0 or positive if set)</param>
         /// <param name="limit">The range limit. (Number of returned records; must be positive if set)</param>
         /// <param name="filter">The filter for the request result. See also <seealso cref="Dracoon.Sdk.Filter.SearchNodesFilter"/></param>
@@ -241,8 +261,7 @@ namespace Dracoon.Sdk {
         /// <exception cref="Dracoon.Sdk.Error.DracoonNetIOException"></exception>
         /// <exception cref="System.ArgumentException"></exception>
         /// <exception cref="System.ArgumentNullException"></exception>
-        NodeList SearchNodes(string searchString, long parentNodeId = 0, long offset = 0, long limit = 500, SearchNodesFilter filter = null,
-            SearchNodesSort sort = null);
+        NodeList SearchNodes(string searchString, long parentNodeId = 0, int depthLevel = -1, long offset = 0, long limit = 500, SearchNodesFilter filter = null, SearchNodesSort sort = null);
 
         /// <summary>
         ///     Generates file keys for files with missing file keys.

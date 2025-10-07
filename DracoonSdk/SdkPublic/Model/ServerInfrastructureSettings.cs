@@ -1,4 +1,6 @@
-﻿
+
+using System;
+
 namespace Dracoon.Sdk.Model {
     /// <summary>
     ///     This model stores informations about the infrastructure configuration of the server.
@@ -33,6 +35,6 @@ namespace Dracoon.Sdk.Model {
         /// <summary>
         ///     Current tenant UUID.
         /// </summary>
-        public string TenantUUID { get; internal set; }
+        public Guid TenantUuid{ get; internal set; }
     }
 }

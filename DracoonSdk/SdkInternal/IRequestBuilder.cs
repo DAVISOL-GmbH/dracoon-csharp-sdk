@@ -1,8 +1,10 @@
-﻿using Dracoon.Sdk.Filter;
+using Dracoon.Sdk.Filter;
+using Dracoon.Sdk.Model;
 using Dracoon.Sdk.SdkInternal.ApiModel;
 using Dracoon.Sdk.SdkInternal.ApiModel.Requests;
 using Dracoon.Sdk.Sort;
 using RestSharp;
+using System;
 using System.Net;
 
 namespace Dracoon.Sdk.SdkInternal {
@@ -12,6 +14,16 @@ namespace Dracoon.Sdk.SdkInternal {
         RestRequest GetServerVersion();
 
         RestRequest GetServerTime();
+
+        RestRequest GetPublicDownloadShare(string accessKey);
+
+        RestRequest GetPublicUploadShare(string accessKey);
+
+        RestRequest GetPublicSystemInfo();
+
+        RestRequest GetPublicSystemActiveDirectoryAuth();
+
+        RestRequest GetPublicSystemOpenIdAuth();
 
         #endregion
 
@@ -82,6 +94,14 @@ namespace Dracoon.Sdk.SdkInternal {
 
         RestRequest GetS3Status(string uploadId);
 
+        RestRequest GetRoomEvents(long roomId, DateTime? dateStart, DateTime? dateEnd, EventStatus? status, int? type, long? userId, long? offset, long? limit, EventLogsSort sort);
+
+        RestRequest GetRoomGroups(long roomId, long? offset, long? limit, GetRoomGroupsFilter filter);
+
+        RestRequest GetRoomUsers(long roomId, long? offset, long? limit, GetRoomUsersFilter filter);
+
+        RestRequest GetRoomPending(long roomId, long? offset, long? limit, GetRoomPendingFilter filter, PendingAssignmentsSort sort);
+
         RestRequest PostRoom(ApiCreateRoomRequest roomParams);
 
         RestRequest PostFolder(ApiCreateFolderRequest folderParams);
@@ -104,6 +124,12 @@ namespace Dracoon.Sdk.SdkInternal {
 
         RestRequest PutRoom(long roomId, ApiUpdateRoomRequest roomParams);
 
+        RestRequest PutRoomConfig(long roomId, ApiConfigRoomRequest roomParams);
+
+        RestRequest PutRoomGroups(long roomId, ApiRoomGroupsAddBatchRequest roomGroupParams);
+
+        RestRequest PutRoomUsers(long roomId, ApiRoomUsersAddBatchRequest roomUserParams);
+
         RestRequest PutEnableRoomEncryption(long roomId, ApiEnableRoomEncryptionRequest encryptionParams);
 
         RestRequest PutFolder(long folderId, ApiUpdateFolderRequest folderParams);
@@ -121,6 +147,10 @@ namespace Dracoon.Sdk.SdkInternal {
         RestRequest DeleteRecycleBin(long parentRoomId);
 
         RestRequest DeletePreviousVersion(ApiDeletePreviousVersionsRequest deleteParams);
+
+        RestRequest DeleteRoomGroups(long roomId, ApiRoomGroupsDeleteBatchRequest deleteParams);
+
+        RestRequest DeleteRoomUsers(long roomId, ApiRoomUsersDeleteBatchRequest deleteParams);
 
         WebClient ProvideChunkDownloadWebClient(long offset, long count);
 
@@ -183,6 +213,120 @@ namespace Dracoon.Sdk.SdkInternal {
         #region Resources
 
         RestRequest GetUserAvatar(long userId, string avatarUuid);
+
+        #endregion
+
+        #region System Settings
+
+        RestRequest GetGeneralConfiguration();
+
+        RestRequest UpdateGeneralConfiguration(ApiUpdateSystemGeneralConfigRequest updateRequest);
+
+        RestRequest GetAuthenticationConfiguration();
+
+        RestRequest GetAuthActiveDirectoryConfigurations();
+
+        RestRequest GetAuthOpenIdIdpConfigurations();
+
+        RestRequest GetAuthRadiusConfiguration();
+
+        RestRequest GetOAuthClientConfigurations(GetOAuthClientsFilter filter);
+
+        RestRequest GetOAuthClientConfiguration(string clientId);
+
+        RestRequest CreateOAuthClientConfiguration(ApiCreateOAuthClientRequest createRequest);
+
+        RestRequest UpdateOAuthClientConfiguration(string clientId, ApiUpdateOAuthClientRequest updateRequest);
+
+        RestRequest DeleteOAuthClientConfiguration(string clientId);
+
+        #endregion
+
+        #region Groups
+
+        RestRequest GetGroups(long? offset, long? limit, GetGroupsFilter filter, GroupsSort sort);
+
+        RestRequest GetGroup(long groupId);
+
+        RestRequest GetGroupLastAdminRooms(long groupId);
+
+        RestRequest GetGroupRoles(long groupId);
+
+        RestRequest GetGroupUsers(long groupId, long? offset, long? limit, GetGroupUsersFilter filter);
+
+        RestRequest PostGroup(ApiCreateGroupRequest groupParams);
+
+        RestRequest PostGroupUser(long groupId, ApiChangeMembersRequest groupUsersParams);
+
+        RestRequest PutGroup(long groupId, ApiUpdateGroupRequest groupParams);
+
+        RestRequest DeleteGroup(long groupId);
+
+        RestRequest DeleteGroupUsers(long groupId, ApiChangeMembersRequest deleteUsersParams);
+
+        #endregion
+
+        #region Users
+
+        RestRequest GetUsers(bool? includeAttributes, bool? includeRoles, bool? includeHasManageableRooms, long? offset, long? limit, GetUsersFilter filter, UsersSort sort);
+
+        RestRequest GetUser(long userId, bool? effectiveRoles = null);
+
+        RestRequest GetUserGroups(long userId, long? offset, long? limit, GetUserGroupsFilter filter);
+
+        RestRequest GetUserLastAdminRooms(long userId);
+
+        RestRequest GetUserRoles(long userId);
+
+        RestRequest GetUserUserAttributes(long userId, long? offset, long? limit, GetUserAttributesFilter filter, UserAttributesSort sort);
+
+        RestRequest PostUser(ApiCreateUserRequest userParams);
+
+        RestRequest PostUserUserAttributes(long userId, ApiUserAttributes userAttributeParams);
+
+        RestRequest PutUser(long userId, ApiUpdateUserRequest userParams);
+
+        RestRequest PutUserUserAttributes(long userId, ApiUserAttributes userAttributeParams);
+
+        RestRequest DeleteUser(long userId);
+
+        RestRequest DeleteUserUserAttribute(long userId, string userAttributeKey);
+
+        #endregion
+
+        #region Roles
+
+        RestRequest GetRoles();
+
+        RestRequest GetRoleGroups(long roleId, long? offset, long? limit, GetUserGroupsFilter filter);
+
+        RestRequest GetRoleUsers(long roleId, long? offset, long? limit, GetGroupUsersFilter filter);
+
+        RestRequest PostRoleGroups(long roleId, ApiChangeMembersRequest addGroupsParams);
+
+        RestRequest PostRoleUsers(long roleId, ApiChangeMembersRequest addUsersParams);
+
+        RestRequest DeleteRoleGroups(long roleId, ApiChangeMembersRequest deleteGroupsParams);
+
+        RestRequest DeleteRoleUsers(long roleId, ApiChangeMembersRequest deleteUsersParams);
+
+        #endregion
+
+        #region Event Log
+
+        RestRequest GetAuditNodes(long? offset, long? limit, GetAuditNodesFilter filter, AuditNodesSort sort);
+
+        RestRequest GetEvents(DateTime? dateStart, DateTime? dateEnd, EventStatus? status, int? type, long? userId, string userClient, long? offset, long? limit, EventLogsSort sort);
+
+        RestRequest GetOperations(bool? isDeprecated);
+
+        #endregion
+
+        #region Branding (Branding API)
+
+        RestRequest GetBranding();
+
+        RestRequest GetBrandingServerVersion();
 
         #endregion
     }

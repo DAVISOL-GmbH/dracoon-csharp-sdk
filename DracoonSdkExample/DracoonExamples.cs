@@ -1,4 +1,4 @@
-﻿using Dracoon.Sdk.Error;
+using Dracoon.Sdk.Error;
 using Dracoon.Sdk.Filter;
 using Dracoon.Sdk.Model;
 using Dracoon.Sdk.Sort;
@@ -27,6 +27,14 @@ namespace Dracoon.Sdk.Example {
             wp.Credentials = CredentialCache.DefaultNetworkCredentials;
             DracoonHttpConfig config = new DracoonHttpConfig(retryEnabled: true, webProxy: wp);
             dc = new DracoonClient(SERVER_URI, dracoonAuth, ENCRYPTION_PASSWORD.ToCharArray(), new Logger(), config);
+            //GetServerData();
+
+            // Print client statistics
+            if (Debugger.IsLogging()) {
+                var stats = dc.Statistics;
+                Debugger.Log(2, "CLIENTSTATS", $"Unique requests {stats.UniqueRequests} ({stats.UniqueRequestsSucceeded} succeeded, {stats.UniqueRequestsFailed} failed)\r\n");
+                Debugger.Log(2, "CLIENTSTATS", $"Total API requests {stats.EffectiveApiRequests}, all executed in {stats.TotalRequestExecutionTimeMs} ms\r\n");
+            }
         }
 
         #region DracoonClient.Server
@@ -107,6 +115,18 @@ namespace Dracoon.Sdk.Example {
 
         private static void GetUserAvatar() {
             byte[] avatar = dc.Account.GetAvatar();
+            SkiaSharp.SKData imageData = SkiaSharp.SKData.CreateCopy(avatar);
+            var avatarCodec = SkiaSharp.SKCodec.Create(imageData);
+            var avatarImage = SkiaSharp.SKBitmap.Decode(imageData);
+            var targetFilePath = "C:\\temp\\avatar." + avatarCodec.EncodedFormat.ToString().ToLowerInvariant();
+            using (var fs = File.Open(targetFilePath, FileMode.Create)) {
+                avatarImage.Encode(fs, avatarCodec.EncodedFormat, 90);
+            }
+        }
+
+        private static void UpdateUserAvatar() {
+            //Image newAvatar = Image.FromFile("C:\\temp\\avatar.jpg");
+            //dc.Account.UpdateAvatar(newAvatar);
         }
 
         private static void GetUserProfileAttributes() {
@@ -149,7 +169,12 @@ namespace Dracoon.Sdk.Example {
         private static void GetAvatarImageOfNodeCreator() {
             long nodeId = 1;
             Node node = dc.Nodes.GetNode(nodeId);
-            byte[] avatar = dc.Users.GetUserAvatar(node.CreatedBy.Id, node.CreatedBy.AvatarUUID);
+
+            // byte[] avatar = dc.Users.GetUserAvatar(node.CreatedBy.Id, node.CreatedBy.AvatarUUID);
+
+            //Image avatar = dc.Users.GetUserAvatar(node.CreatedBy.Id.Value, node.CreatedBy.AvatarUUID);
+            //ImageCodecInfo info = ImageCodecInfo.GetImageDecoders().First(c => c.FormatID == avatar.RawFormat.Guid);
+            //avatar.Save("C:\\temp\\avatar." + info.FormatDescription);
         }
 
         private static void ListFilteredRootNodes() {
@@ -252,9 +277,7 @@ namespace Dracoon.Sdk.Example {
         private static void UploadFile() {
             string localFilePath = "C:\\temp\\test.txt";
             FileInfo fileInfo = new FileInfo(localFilePath);
-            FileUploadRequest request = new FileUploadRequest(1, "test.txt");
-            request.CreationTime = fileInfo.CreationTimeUtc;
-            request.ModificationTime = fileInfo.LastWriteTimeUtc;
+            FileUploadRequest request = new FileUploadRequest(1, "test.txt", creationTime: fileInfo.CreationTimeUtc, modificationTime: fileInfo.LastWriteTimeUtc);
 
             FileStream stream = File.Open(localFilePath, FileMode.Open);
             Node uploadedNode = dc.Nodes.UploadFile(Guid.NewGuid().ToString(), request, stream, callback: new ULCallback());
@@ -339,7 +362,7 @@ namespace Dracoon.Sdk.Example {
 
             // Restore the last version of the node "test.txt"
             RestorePreviousVersionsRequest request = new RestorePreviousVersionsRequest(new List<long>() {
-                versionList.Items[0].Id.Value
+                versionList.Items.First().Id.Value
             });
             dc.Nodes.RestorePreviousVersion(request);
         }
@@ -419,6 +442,18 @@ namespace Dracoon.Sdk.Example {
                 Console.WriteLine("ULCallback -> " + "Upload started: " + actionId);
             }
         }
+
+        #endregion
+
+        #region Audit Log
+
+        private static void ListAuditLogEvents(long offset = 0, long? limit = null) {
+            LogEventList events = dc.EventLog.GetEvents(offset: offset, limit: limit);
+            foreach (LogEvent current in events.Items) {
+                Console.WriteLine($"EventId: {current.Id}; Timestamp: {current.Time.ToString("o")}; Message: {current.Message}");
+            }
+        }
+
 
         #endregion
     }

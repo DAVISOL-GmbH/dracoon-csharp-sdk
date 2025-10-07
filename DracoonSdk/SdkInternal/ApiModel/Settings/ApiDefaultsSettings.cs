@@ -1,4 +1,4 @@
-﻿using Newtonsoft.Json;
+using Newtonsoft.Json;
 
 namespace Dracoon.Sdk.SdkInternal.ApiModel {
     internal class ApiDefaultsSettings {

@@ -1,4 +1,4 @@
-﻿using Dracoon.Crypto.Sdk;
+using Dracoon.Crypto.Sdk;
 using Dracoon.Crypto.Sdk.Model;
 using Dracoon.Sdk.Error;
 using Dracoon.Sdk.Model;
@@ -36,7 +36,7 @@ namespace Dracoon.Sdk.SdkInternal {
                 return Crypto.Sdk.Crypto.DecryptFileKey(encryptedFileKey, userPrivateKey, Client.EncryptionPassword);
             } catch (CryptoException ce) {
                 string message = "Decryption of file key for encrypted download " + ActionId + " failed!";
-                DracoonClient.Log.Debug(LogTag, message);
+                Client.Log.Debug(LogTag, message);
                 throw new DracoonCryptoException(CryptoErrorMapper.ParseCause(ce), ce);
             }
         }
@@ -47,7 +47,7 @@ namespace Dracoon.Sdk.SdkInternal {
                 cipher = Crypto.Sdk.Crypto.CreateFileDecryptionCipher(plainFileKey);
             } catch (CryptoException ce) {
                 string message = "Creation of decryption engine for encrypted download " + ActionId + " failed!";
-                DracoonClient.Log.Debug(LogTag, message);
+                Client.Log.Debug(LogTag, message);
                 throw new DracoonCryptoException(CryptoErrorMapper.ParseCause(ce), ce);
             }
 
@@ -72,7 +72,7 @@ namespace Dracoon.Sdk.SdkInternal {
                 }
             } catch (CryptoException ce) {
                 const string message = "Decryption of file failed while downloading!";
-                DracoonClient.Log.Debug(LogTag, message);
+                Client.Log.Debug(LogTag, message);
                 throw new DracoonFileIOException(message, ce);
             } catch (IOException ioe) {
                 if (IsInterrupted) {
@@ -80,7 +80,7 @@ namespace Dracoon.Sdk.SdkInternal {
                 }
 
                 const string message = "Write to stream failed!";
-                DracoonClient.Log.Debug(LogTag, message);
+                Client.Log.Debug(LogTag, message);
                 throw new DracoonFileIOException(message, ioe);
             } finally {
                 Array.Clear(plainFileKey.Key, 0, plainFileKey.Key.Length);

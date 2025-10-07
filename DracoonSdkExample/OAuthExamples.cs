@@ -1,4 +1,4 @@
-﻿using Dracoon.Sdk.Model;
+using Dracoon.Sdk.Model;
 using System;
 using System.Net;
 using System.Security.Cryptography;
