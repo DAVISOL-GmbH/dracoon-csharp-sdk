@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>netstandard2.0;netstandard2.1;net6.0;net7.0;net8.0;net472;net481</TargetFrameworks>
+    <TargetFrameworks>netstandard2.0;netstandard2.1;net8.0;net472;net481</TargetFrameworks>
     <Company>DRACOON GmbH</Company>
     <PackageId>Dracoon.Sdk.Net8</PackageId>
     <Title>Dracoon SDK</Title>
@@ -10,7 +10,7 @@
     <Copyright>Copyright ©2021 Dracoon GmbH, Copyright ©2021 DAVISOL GmbH</Copyright>
     <AssemblyName>Dracoon.Sdk</AssemblyName>
     <RootNamespace>Dracoon.Sdk</RootNamespace>
-    <PackageTags>dracoon sdk rest api net48 net6 net8 netstandard2 davisol</PackageTags>
+    <PackageTags>dracoon sdk rest api net48 net8 netstandard2 davisol</PackageTags>
     <Authors>DRACOON Developers, enhancements by DAVISOL GmbH</Authors>
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
     <PackageIcon>DracoonSdk_NugetImage.png</PackageIcon>
@@ -81,10 +81,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Dracoon.Crypto.Sdk.Net8" Version="3.2.3910.1" />
-    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+    <PackageReference Include="Dracoon.Crypto.Sdk.Net8" Version="5.1.5041.1" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
     <PackageReference Include="RestSharp" Version="112.1.0" />
-    <PackageReference Include="System.Text.Json" Version="8.0.5" />
+    <PackageReference Include="System.Text.Json" Version="9.0.9" />
   </ItemGroup>
 
   <ItemGroup>

@@ -40,10 +40,10 @@
       
       <!-- Dependencies are automatically installed when the package is installed -->
     <dependencies>
-      <dependency id="Dracoon.Crypto.Sdk.Net8" version="3.2.3684.1"/>
-      <dependency id="Newtonsoft.Json" version="13.0.3"/>
-      <dependency id="RestSharp" version="110.2.0"/>
-      <dependency id="BouncyCastle.Cryptography" version="2.2.1"/>
+      <dependency id="Dracoon.Crypto.Sdk.Net8" version="5.1.5041.1"/>
+      <dependency id="Newtonsoft.Json" version="13.0.4"/>
+      <dependency id="RestSharp" version="112.1.0"/>
+      <dependency id="BouncyCastle.Cryptography" version="2.6.2"/>
     </dependencies>
   </metadata>
   <files>
@@ -67,16 +67,6 @@
     <file src="bin\Release\net481\Dracoon.Sdk.dll" target="lib\net481\Dracoon.Sdk.dll" />
     <file src="bin\Release\net481\Dracoon.Sdk.xml" target="lib\net481\Dracoon.Sdk.xml" />
     <file src="bin\Release\net481\Dracoon.Sdk.pdb" target="lib\net481\Dracoon.Sdk.pdb" />
-      
-    <!-- .Net 6.0 -->
-    <file src="bin\Release\net6.0\Dracoon.Sdk.dll" target="lib\net6.0\Dracoon.Sdk.dll" />
-    <file src="bin\Release\net6.0\Dracoon.Sdk.xml" target="lib\net6.0\Dracoon.Sdk.xml" />
-    <file src="bin\Release\net6.0\Dracoon.Sdk.pdb" target="lib\net6.0\Dracoon.Sdk.pdb" />
-      
-    <!-- .Net 7.0 -->
-    <file src="bin\Release\net7.0\Dracoon.Sdk.dll" target="lib\net7.0\Dracoon.Sdk.dll" />
-    <file src="bin\Release\net7.0\Dracoon.Sdk.xml" target="lib\net7.0\Dracoon.Sdk.xml" />
-    <file src="bin\Release\net7.0\Dracoon.Sdk.pdb" target="lib\net7.0\Dracoon.Sdk.pdb" />
       
     <!-- .Net 8.0 -->
     <file src="bin\Release\net8.0\Dracoon.Sdk.dll" target="lib\net8.0\Dracoon.Sdk.dll" />

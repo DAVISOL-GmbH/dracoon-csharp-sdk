@@ -7,7 +7,7 @@ namespace Dracoon.Sdk.SdkInternal {
 
         int MaxRetriesPerRequest { get; set; }
 
-        int ConnectionTimeout { get; set; }
+        int Timeout { get; set; }
 
         IWebProxy WebProxy { get; set; }
 

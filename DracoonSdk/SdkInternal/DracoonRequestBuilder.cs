@@ -31,7 +31,7 @@ namespace Dracoon.Sdk.SdkInternal {
                 request.AddParameter("application/json", JsonConvert.SerializeObject(optionalJsonBody), ParameterType.RequestBody);
             }
 
-            request.Timeout = _client.HttpConfig.Timeout;
+            request.Timeout = TimeSpan.FromMilliseconds(_client.HttpConfig.Timeout);
         }
 
         private void SetGeneralWebClientValues(DracoonWebClientExtension requestClient) {

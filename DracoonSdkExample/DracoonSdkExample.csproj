@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net6.0-windows</TargetFramework>
+    <TargetFramework>net8.0-windows</TargetFramework>
     <OutputType>WinExe</OutputType>
     <TargetFramework>net8.0</TargetFramework>
     <StartupObject>Dracoon.Sdk.Example.DracoonExamples</StartupObject>
@@ -11,8 +11,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Dracoon.Crypto.Sdk.Net8" Version="3.2.3910.1" />
-    <PackageReference Include="SkiaSharp" Version="2.88.6" />
+    <PackageReference Include="Dracoon.Crypto.Sdk.Net8" Version="5.1.5041.1" />
+    <PackageReference Include="SkiaSharp" Version="3.119.1" />
   </ItemGroup>
 
   <ItemGroup>
