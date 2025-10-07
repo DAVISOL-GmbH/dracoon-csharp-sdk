@@ -83,6 +83,7 @@ namespace Dracoon.Sdk.SdkInternal {
                 Client.Log.Debug(LogTag, message);
                 throw new DracoonFileIOException(message, ioe);
             } finally {
+                Array.Clear(plainFileKey.Key, 0, plainFileKey.Key.Length);
                 ProgressReportTimer.Stop();
             }
         }

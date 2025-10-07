@@ -26,7 +26,7 @@ namespace Dracoon.Sdk.Example {
             IWebProxy wp = WebRequest.GetSystemWebProxy();
             wp.Credentials = CredentialCache.DefaultNetworkCredentials;
             DracoonHttpConfig config = new DracoonHttpConfig(retryEnabled: true, webProxy: wp);
-            dc = new DracoonClient(SERVER_URI, dracoonAuth, ENCRYPTION_PASSWORD, new Logger(), config);
+            dc = new DracoonClient(SERVER_URI, dracoonAuth, ENCRYPTION_PASSWORD.ToCharArray(), new Logger(), config);
             //GetServerData();
 
             // Print client statistics
@@ -284,7 +284,7 @@ namespace Dracoon.Sdk.Example {
         }
 
         private static void DownloadEncryptedFile() {
-            dc.EncryptionPassword = ENCRYPTION_PASSWORD;
+            dc.EncryptionPassword = ENCRYPTION_PASSWORD.ToCharArray();
             Node node = dc.Nodes.GetNode(1);
             FileStream stream = File.Create("C:\\temp\\" + node.Name);
             dc.Nodes.DownloadFile(Guid.NewGuid().ToString(), node.Id, stream, new DLCallback());
@@ -319,7 +319,7 @@ namespace Dracoon.Sdk.Example {
         #region DracoonClient.Shares
 
         public static void CreateDownloadShare() {
-            CreateDownloadShareRequest req = new CreateDownloadShareRequest(1, password: "Passw0rd!");
+            CreateDownloadShareRequest req = new CreateDownloadShareRequest(1, password: "Passw0rd!".ToCharArray());
 
             DownloadShare dl = dc.Shares.CreateDownloadShare(req);
         }

@@ -69,7 +69,7 @@ client.Account.UpdateAvatar(avatarBytes.ToArray());
 #### Minimum Requirements
 
 .NET Standard 2.0
-API version: 4.44.0
+API version: 5.0.0
 
 #### Download
 
@@ -78,18 +78,12 @@ In nuget, you can find the DRACOON SDK [here](https://www.nuget.org/packages/Dra
 
 If you are using NuGet with package management "Packages.config", then edit your project's "packages.config" and add this to the packages section:
 ```xml
-<package id="Dracoon.Sdk.Net8" version="3.2.0" />
+<package id="Dracoon.Sdk.Net8" version="5.2.0" />
 ```
 If you are using Visual Studio 2017 (or higher) and you are using NuGet with package management "PackageReference" then edit your .csproj file and add this to the package dependency group:
 ```xml
-<PackageReference Include="Dracoon.Sdk.Net8" Version="3.2.0" />
+<PackageReference Include="Dracoon.Sdk.Net8" Version="5.2.0" />
 ```
-
-Note that you also need to include the following dependencies:
-1. Bouncy Castle Provider (v2.2.1): https://www.nuget.org/packages/BouncyCastle.Cryptography
-2. Dracoon Crypto SDK (v3.1.0): https://www.nuget.org/packages/Dracoon.Crypto.Sdk/
-3. NewtonSoft.Json (v13.0.3): https://www.nuget.org/packages/Newtonsoft.Json/
-4. RestSharp (v106.15.0): https://www.nuget.org/packages/RestSharp/
 
 ## Example
 
@@ -116,7 +110,7 @@ The easiest way to view these is through Visual Studio's built in "Object Browse
 
 ## Contribution
 
-If you would like to contribute code, fork the repository and send a pull request. We don't use the GitHub Flow, so please create a feature branch of the develop branch and make your changes there.
+If you would like to contribute code, fork the repository and send a pull request. We don't use the GitHub Flow, so please create a feature branch of the main branch and make your changes there.
 
 ## Copyright and License
 

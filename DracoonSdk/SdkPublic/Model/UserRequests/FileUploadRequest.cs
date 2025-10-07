@@ -21,6 +21,16 @@ namespace Dracoon.Sdk.Model {
         public DateTime? ExpirationDate { get; set; }
 
         /// <summary>
+        ///     Indicates if this upload should be handled as a high priority virus scan.
+        /// </summary>
+        public bool IsPrioritisedVirusScan { get; set; }
+
+        /// <summary>
+        ///     Indicates if share links, which are created in the past on this file, should be usable after the file upload or not.
+        /// </summary>
+        public bool KeepShareLinks { get; set; }
+
+        /// <summary>
         ///     Constructs a new file upload request.
         /// </summary>
         /// <param name="parentId"><see cref="ParentId"/></param>
@@ -31,13 +41,17 @@ namespace Dracoon.Sdk.Model {
         /// <param name="expirationDate"><see cref="ExpirationDate"/></param>
         /// <param name="creationTime"><see cref="TrackExternalModificationRequestBase.CreationTimestamp"/></param>
         /// <param name="modificationTime"><see cref="TrackExternalModificationRequestBase.ModificationTimestamp"/></param>
+        /// <param name="isPrioritisedVirusScan"><see cref="IsPrioritisedVirusScan"/></param>
+        /// <param name="keepShareLinks"><see cref="KeepShareLinks"/></param>
         public FileUploadRequest(long parentId, string name, Classification? classification = null,
             ResolutionStrategy resolutionStrategy = ResolutionStrategy.AutoRename, string notes = null, DateTime? expirationDate = null,
-            DateTime? creationTime = null, DateTime? modificationTime = null)
+            DateTime? creationTime = null, DateTime? modificationTime = null, bool isPrioritisedVirusScan = false, bool keepShareLinks = false)
             : base(name, notes, classification, creationTime, modificationTime) {
             ParentId = parentId;
             ResolutionStrategy = resolutionStrategy;
             ExpirationDate = expirationDate;
+            IsPrioritisedVirusScan = isPrioritisedVirusScan;
+            KeepShareLinks = keepShareLinks;
         }
     }
 }

@@ -28,7 +28,7 @@ namespace Dracoon.Sdk.SdkInternal {
             GetPreviousVersion, PostRestoreNodeVersion, DeletePreviousVersions, PostGetS3Urls, GetS3Status, GetPasswordPolicies,
             GetAlgorithms, GetClassificationPolicies, GenerateVirusProtectionInfo, DeleteMaliciousFile, GetDownloadShareSubscriptions,
             GetUploadShareSubscriptions, PostUploadShareSubscription, PostDownloadShareSubscription, DeleteDownloadShareSubscription,
-            DeleteUploadShareSubscription,            
+            DeleteUploadShareSubscription, GetFileVersions,
             GetRoomEvents, GetRoomGroups, GetRoomUsers, GetRoomPending, PutRoomConfig, PutRoomGroups, PutRoomUsers, DeleteRoomGroups, DeleteRoomUsers,
             GetServerGeneralConfig, PutServerGeneralConfig,
             GetSystemOAuthClientConfigs, GetSystemOAuthClientConfig, PutSystemOAuthClientConfig, PostSystemOAuthClientConfig, DeleteSystemOAuthClientConfig,
@@ -101,6 +101,7 @@ namespace Dracoon.Sdk.SdkInternal {
         T IRequestExecutor.DoSyncApiCall<T>(RestRequest request, RequestType requestType, int sendTry) {
             RestClientOptions clientOptions = new RestClientOptions(_client.ServerUri) {
                 UserAgent = _client.HttpConfig.UserAgent,
+                Timeout = TimeSpan.FromMilliseconds(_client.HttpConfig.Timeout)
             };
             if (_client.HttpConfig.WebProxy != null) {
                 clientOptions.Proxy = _client.HttpConfig.WebProxy;
@@ -134,12 +135,10 @@ namespace Dracoon.Sdk.SdkInternal {
                             ClientStats.UpdateForRetry(sendTry, retryAfter);
                             Thread.Sleep(retryAfter);
                             _auth.RefreshAccessToken();
-                            var authParameter = Parameter.CreateParameter(ApiConfig.AuthorizationHeader, _auth.BuildAuthString(), ParameterType.HttpHeader);
-                            //if (request.Parameters.Exists(authParameter)) {
-                            //    request.Parameters.RemoveParameter(authParameter);
-                            //}
-                            //request.Parameters.RemoveParameter(authParameter);
-                            request.Parameters.AddParameter(authParameter);
+                            // Update the auth header with new tokens if it was an auth required test
+                            if (request.Parameters.TryFind(ApiConfig.AuthorizationHeader) != null) {
+                                request.AddOrUpdateHeader(ApiConfig.AuthorizationHeader, _auth.BuildAuthString());
+                            }
 
                             ClientStats.UniqueRequestsFailed++;
                             return ((IRequestExecutor)this).DoSyncApiCall<T>(request, requestType, sendTry + 1);
@@ -328,7 +327,7 @@ namespace Dracoon.Sdk.SdkInternal {
                 }
 
                 int waitingTime = retryAfter * 1000 + new Random().Next(0, 500);
-                _client.Log.Debug(Logtag, $"Http status code 429 was given. Retry the request in { waitingTime } millis again.");
+                _client.Log.Debug(Logtag, $"Http status code 429 was given. Retry the request in {waitingTime} millis again.");
                 Thread.Sleep(waitingTime);
 
                 return true;

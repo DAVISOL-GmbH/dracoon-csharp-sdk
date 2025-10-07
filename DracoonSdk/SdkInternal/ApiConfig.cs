@@ -3,7 +3,7 @@ using System.Text;
 
 namespace Dracoon.Sdk.SdkInternal {
     internal static class ApiConfig {
-        internal const string MinimumApiVersion = "4.44.0";
+        internal const string MinimumApiVersion = "5.0.0";
         internal const string ApiPrefix = "api/v4";
         internal const string BrandingApiPrefix = "branding/api/v1";
         internal const string AuthorizationHeader = "Authorization";
@@ -102,6 +102,7 @@ namespace Dracoon.Sdk.SdkInternal {
         internal const string ApiGetChildNodes = ApiPrefix + "/nodes";
         internal const string ApiGetNode = ApiPrefix + "/nodes/{nodeId}";
         internal const string ApiGetFileKey = ApiPrefix + "/nodes/files/{fileId}/user_file_key";
+        internal const string ApiGetFileVersions = ApiPrefix + "/nodes/files/versions/{reference_id}";
         internal const string ApiGetSearchNodes = ApiPrefix + "/nodes/search";
         internal const string ApiGetMissingFileKeys = ApiPrefix + "/nodes/missingFileKeys";
         internal const string ApiGetRecycleBin = ApiPrefix + "/nodes/{roomId}/deleted_nodes";

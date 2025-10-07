@@ -4,6 +4,7 @@ using Dracoon.Sdk.Error;
 using Dracoon.Sdk.Filter;
 using Dracoon.Sdk.Model;
 using Dracoon.Sdk.SdkInternal.ApiModel;
+using Dracoon.Sdk.SdkInternal.ApiModel.Nodes;
 using Dracoon.Sdk.SdkInternal.ApiModel.Requests;
 using Dracoon.Sdk.SdkInternal.Mapper;
 using Dracoon.Sdk.SdkInternal.Util;
@@ -309,9 +310,15 @@ namespace Dracoon.Sdk.SdkInternal {
             request.Name.MustNotNullOrEmptyOrWhitespace(nameof(request.Name));
             request.Quota.NullableMustNotNegative(nameof(request.Quota));
             request.RecycleBinRetentionPeriod.NullableMustNotNegative(nameof(request.RecycleBinRetentionPeriod));
-            if (request.AdminUserIds.CheckEnumerableNullOrEmpty() && request.AdminGroupIds.CheckEnumerableNullOrEmpty()) {
+
+            if (!request.ParentId.HasValue && request.HasInheritPermissions.HasValue && request.HasInheritPermissions.Value) {
+                // it is not allowed if its a top level room and the requests sets inheritance to true
+                throw new ArgumentException(nameof(request.HasInheritPermissions), "Inheritance cannot be activated for top level rooms.");
+            }
+
+            if (request.HasInheritPermissions.HasValue && !request.HasInheritPermissions.Value && request.AdminUserIds.CheckEnumerableNullOrEmpty() && request.AdminGroupIds.CheckEnumerableNullOrEmpty()) {
                 throw new ArgumentNullException(nameof(request.AdminUserIds) + " | " + nameof(request.AdminGroupIds),
-                    "Room must have an admin user or admin group.");
+                    "If inheritance is disabled than the room must have an admin user or admin group.");
             }
 
             if (request.AdminUserIds != null) {
@@ -753,6 +760,8 @@ namespace Dracoon.Sdk.SdkInternal {
                                  ce.Message;
                 _client.Log.Debug(Logtag, message);
                 throw new DracoonCryptoException(CryptoErrorMapper.ParseCause(ce));
+            } finally {
+                Array.Clear(plainFileKey.Key, 0, plainFileKey.Key.Length);
             }
         }
 
@@ -807,6 +816,22 @@ namespace Dracoon.Sdk.SdkInternal {
 
             RestRequest restRequest = _client.Builder.DeleteMaliciousFile(fileId);
             _client.Executor.DoSyncApiCall<VoidResponse>(restRequest, RequestType.DeleteMaliciousFile);
+        }
+
+        public FileVersionList GetFileVersions(long referenceId, long? offset = null, long? limit = null) {
+            _client.Executor.CheckApiServerVersion();
+
+            #region Parameter Validation
+
+            referenceId.MustPositive(nameof(referenceId));
+            offset.NullableMustNotNegative(nameof(offset));
+            limit.NullableMustPositive(nameof(limit));
+
+            #endregion
+
+            RestRequest restRequest = _client.Builder.GetFileVersions(referenceId, offset, limit);
+            ApiFileVersionList result = _client.Executor.DoSyncApiCall<ApiFileVersionList>(restRequest, RequestType.GetFileVersions);
+            return FileMapper.FromApiFileVersionList(result);
         }
 
         #region IFileDownloadCallback / IFileUploadCallback implementation

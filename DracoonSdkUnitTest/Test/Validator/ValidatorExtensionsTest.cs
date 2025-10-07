@@ -159,6 +159,74 @@ namespace Dracoon.Sdk.UnitTest.Test.Validator {
 
         #endregion
 
+        #region MustNotNullOrEmpty
+
+        [Fact]
+        public void MustNotNullOrEmpty_NotNull_NotEmpty() {
+            // ARRANGE
+            char[] param = "Test".ToCharArray();
+
+            // ACT
+            param.MustNotNullOrEmptyOrWhitespace(nameof(MustNotNullOrEmpty_NotNull_NotEmpty));
+
+            // ASSERT
+            // No exception should be thrown
+        }
+
+        [Fact]
+        public void MustNotNullOrEmpty_NotNull_Empty() {
+            // ARRANGE
+            char[] param = new char[0];
+
+            // ACT - ASSERT
+            Assert.Throws<ArgumentException>(() =>
+                param.MustNotNullOrEmptyOrWhitespace(nameof(MustNotNullOrEmpty_NotNull_Empty)));
+        }
+
+
+        [Fact]
+        public void MustNotNullOrEmpty_NotNull_Whitespace() {
+            // ARRANGE
+            char[] param = "     ".ToCharArray();
+
+            // ACT - ASSERT
+            Assert.Throws<ArgumentException>(() =>
+                param.MustNotNullOrEmptyOrWhitespace(nameof(MustNotNullOrEmptyOrWhitespace_AllowedNull_Null_Empty_Whitespace), false));
+        }
+
+        [Fact]
+        public void MustNotNullOrEmpty_Null() {
+            // ARRANGE
+            char[] param = null;
+
+            // ACT - ASSERT
+            Assert.Throws<ArgumentNullException>(() => param.MustNotNullOrEmptyOrWhitespace(nameof(MustNotNullOrEmpty_Null)));
+        }
+
+        [Fact]
+        public void MustNotNullOrEmpty_AllowedNull_Null() {
+            // ARRANGE
+            char[] param = null;
+
+            // ACT
+            param.MustNotNullOrEmptyOrWhitespace(nameof(MustNotNullOrEmpty_AllowedNull_Null), true);
+
+            // ASSERT
+            // No exception should be thrown
+        }
+
+        [Fact]
+        public void MustNotNullOrEmpty_AllowedNull_Null_Empty() {
+            // ARRANGE
+            char[] param = new char[0];
+
+            // ACT - ASSERT
+            Assert.Throws<ArgumentException>(() =>
+                param.MustNotNullOrEmptyOrWhitespace(nameof(MustNotNullOrEmpty_AllowedNull_Null_Empty), true));
+        }
+
+        #endregion
+
         #region MustValidNodePath
 
         [Theory]

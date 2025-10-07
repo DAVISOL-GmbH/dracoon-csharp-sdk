@@ -31,7 +31,7 @@ namespace Dracoon.Sdk.SdkInternal {
                 request.AddParameter("application/json", JsonConvert.SerializeObject(optionalJsonBody), ParameterType.RequestBody);
             }
 
-            request.Timeout = _client.HttpConfig.ConnectionTimeout;
+            request.Timeout = _client.HttpConfig.Timeout;
         }
 
         private void SetGeneralWebClientValues(DracoonWebClientExtension requestClient) {
@@ -476,6 +476,19 @@ namespace Dracoon.Sdk.SdkInternal {
                 request.AddQueryParameter("offset", offset.ToString());
             if (limit.HasValue)
                 request.AddQueryParameter("limit", limit.ToString());
+            return request;
+        }
+
+        RestRequest IRequestBuilder.GetFileVersions(long referenceId, long? offset, long? limit) {
+            RestRequest request = new RestRequest(ApiConfig.ApiGetFileVersions, Method.Get);
+            SetGeneralRestValues(request, true);
+            request.AddUrlSegment("reference_id", referenceId.ToString());
+            if (offset.HasValue) {
+                request.AddQueryParameter("offset", offset.ToString());
+            }
+            if (limit.HasValue) {
+                request.AddQueryParameter("limit", limit.ToString());
+            }
             return request;
         }
 

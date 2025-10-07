@@ -68,6 +68,29 @@ namespace Dracoon.Sdk.SdkInternal.Validator {
             }
         }
 
+        internal static void MustNotNullOrEmptyOrWhitespace(this char[] param, string paramName, bool nullAllowed = false) {
+            if (!nullAllowed) {
+                param.MustNotNull(paramName);
+            } else if (param == null) {
+                return;
+            }
+
+            if (param.Length == 0) {
+                throw new ArgumentException(paramName + " cannot be empty.");
+            }
+
+            int whitespaces = 0;
+            foreach (char current in param) {
+                if (char.IsWhiteSpace(current)) {
+                    whitespaces++;
+                }
+            }
+
+            if (param.Length == whitespaces) {
+                throw new ArgumentException(paramName + " cannot be whitespace.");
+            }
+        }
+
         internal static void MustValidNodePath(this string param, string paramName) {
             param.MustNotNullOrEmptyOrWhitespace(paramName);
             if (param == "/") {

@@ -19,10 +19,7 @@ namespace Dracoon.Sdk {
     ///             <description><see cref="MaxRetriesPerRequest"/></description>
     ///         </item>
     ///         <item>
-    ///             <description><see cref="ReadWriteTimeout"/></description>
-    ///         </item>
-    ///         <item>
-    ///             <description><see cref="ConnectionTimeout"/></description>
+    ///             <description><see cref="Timeout"/></description>
     ///         </item>
     ///         <item>
     ///             <description><see cref="WebProxy"/></description>
@@ -53,21 +50,12 @@ namespace Dracoon.Sdk {
         public int MaxRetriesPerRequest { get; set; }
 
         /// <summary>
-        ///     <b>No longer supported! Setting this value will have no effect.</b> The HTTP read-write timeout in milliseconds.
+        ///     The HTTP timeout in milliseconds.
         ///     <para>
         ///         (Default: <c>15000</c>)
         ///     </para>
         /// </summary>
-        [Obsolete("No longer supported by the underlying RestSharp package. Setting this value will have no effect")]
-        public int ReadWriteTimeout { get; set; }
-
-        /// <summary>
-        ///     The HTTP connection timeout in milliseconds.
-        ///     <para>
-        ///         (Default: <c>15000</c>)
-        ///     </para>
-        /// </summary>
-        public int ConnectionTimeout { get; set; }
+        public int Timeout { get; set; }
 
         /// <summary>
         ///     The HTTP proxy settings.
@@ -94,15 +82,14 @@ namespace Dracoon.Sdk {
         ///     Constructs a HTTP configuration.
         /// </summary>
         /// <param name="retryEnabled"><see cref="RetryEnabled"/></param>
-        /// <param name="connectionTimeout"><see cref="ConnectionTimeout"/></param>
+        /// <param name="timeout"><see cref="Timeout"/></param>
         /// <param name="webProxy"><see cref="WebProxy"/></param>
         /// <param name="ownUserAgent"><see cref="UserAgent"/></param>
         /// <param name="chunkSize"><see cref="ChunkSize"/></param>
         /// <param name="maxRetriesPerRequest"><see cref="MaxRetriesPerRequest"/></param>
-        public DracoonHttpConfig(bool retryEnabled = false, int connectionTimeout = 15000, IWebProxy webProxy = null, string ownUserAgent = null, int chunkSize = 2048, int maxRetriesPerRequest = 3) {
+        public DracoonHttpConfig(bool retryEnabled = false, int timeout = 15000, IWebProxy webProxy = null, string ownUserAgent = null, int chunkSize = 2048, int maxRetriesPerRequest = 3) {
             RetryEnabled = retryEnabled;
-            MaxRetriesPerRequest = maxRetriesPerRequest;
-            ConnectionTimeout = connectionTimeout;
+            Timeout = timeout;
             WebProxy = webProxy;
             UserAgent = ownUserAgent ?? BuildDefaultUserAgent();
             ChunkSize = chunkSize * 1024;

@@ -171,7 +171,7 @@ namespace Dracoon.Sdk.UnitTest.Factory {
             ShowCreatorName = true,
             ShowCreatorUserName = false,
             MaxAllowedDownloads = 5,
-            Password = "Pass1234!",
+            Password = "Pass1234!".ToCharArray(),
             ReceiverLanguage = "de",
             TextMessageRecipients = new List<string> { "092834574" }
         };

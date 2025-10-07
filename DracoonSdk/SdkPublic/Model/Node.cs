@@ -1,4 +1,3 @@
-using Org.BouncyCastle.Asn1.X509;
 using System;
 
 namespace Dracoon.Sdk.Model {
@@ -14,6 +13,11 @@ namespace Dracoon.Sdk.Model {
         ///     The id of the node.
         /// </summary>
         public long Id { get; internal set; }
+
+        /// <summary>
+        ///     This id is identical across all versions of a file and is therefore only set on files-nodes.
+        /// </summary>
+        public long? ReferenceId { get; internal set; }
 
         /// <summary>
         ///     The type of the node. See also <seealso cref="NodeType"/>

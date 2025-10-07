@@ -1,6 +1,6 @@
 namespace Dracoon.Sdk.SdkInternal {
     internal interface IInternalDracoonClient : IInternalDracoonClientBase {
-        string EncryptionPassword { get; set; }
+        char[] EncryptionPassword { get; set; }
 
         DracoonAccountImpl AccountImpl { get; }
         DracoonNodesImpl NodesImpl { get; }

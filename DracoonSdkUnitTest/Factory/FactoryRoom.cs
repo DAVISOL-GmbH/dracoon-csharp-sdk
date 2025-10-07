@@ -69,7 +69,7 @@ namespace Dracoon.Sdk.UnitTest.Factory {
 
         internal static EnableRoomEncryptionRequest EnableRoomEncryptionRequest => new EnableRoomEncryptionRequest(1254, true) {
             UseDataSpaceRescueKey = false,
-            DataRoomRescueKeyPassword = "Pass1234!",
+            DataRoomRescueKeyPassword = "Pass1234!".ToCharArray(),
             DataRoomRescueKeyPairAlgorithm = Crypto.Sdk.UserKeyPairAlgorithm.RSA2048
         };
     }

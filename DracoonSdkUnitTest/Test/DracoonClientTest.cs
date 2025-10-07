@@ -1,6 +1,7 @@
 ﻿using Dracoon.Sdk.SdkInternal;
 using Dracoon.Sdk.SdkInternal.Validator;
 using System;
+using System.Linq;
 using Telerik.JustMock;
 using Xunit;
 
@@ -11,7 +12,7 @@ namespace Dracoon.Sdk.UnitTest.Test {
             // ARRANGE
             Uri expectedUri = new Uri("https://dracoon.team");
             DracoonAuth expectedAuth = new DracoonAuth("token");
-            string expectedEncryptionPassword = "encPw1";
+            char[] expectedEncryptionPassword = "encPw1".ToCharArray();
             EmptyLog expectedLog = new EmptyLog();
             DracoonHttpConfig expectedConfig = new DracoonHttpConfig(true);
             Mock.Arrange(() => Arg.IsAny<Uri>().MustBeValid(Arg.AnyString)).DoNothing().Occurs(1);
@@ -25,7 +26,7 @@ namespace Dracoon.Sdk.UnitTest.Test {
             Assert.Null(dc.Auth);
             dc.Auth = expectedAuth;
             Assert.Equal(expectedAuth, dc.Auth);
-            Assert.Equal(expectedEncryptionPassword, dc.EncryptionPassword);
+            Enumerable.SequenceEqual(expectedEncryptionPassword, dc.EncryptionPassword);
             Assert.Equal(expectedConfig, DracoonClient.HttpConfig);
             Assert.Equal(expectedLog, DracoonClient.Log);
             Assert.NotNull(dc.Nodes);

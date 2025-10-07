@@ -2,6 +2,7 @@
 using Dracoon.Sdk.SdkInternal;
 using Dracoon.Sdk.UnitTest.Factory;
 using RestSharp;
+using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using System.Text;
@@ -43,9 +44,9 @@ namespace Dracoon.Sdk.UnitTest.Test {
         }
 
         [Fact]
-        internal void TestSingleCodeWithIRestResponse() {
+        internal void TestSingleCodeWithRestResponse() {
             // ARRANGE
-            IRestResponse response = FactoryRestSharp.RestResponse;
+            RestResponse response = FactoryRestSharp.RestResponse;
 
             try {
                 // ACT
@@ -204,7 +205,7 @@ namespace Dracoon.Sdk.UnitTest.Test {
         [InlineData(RequestType.GetAuthenticatedPing, -41050, new string[] { }, new string[] { }, 5104)]
         [InlineData(RequestType.GetAuthenticatedPing, -41051, new string[] { }, new string[] { }, 5105)]
         [InlineData(RequestType.GetAuthenticatedPing, -41100, new string[] { }, new string[] { }, 5111)]
-        [InlineData(RequestType.GetAuthenticatedPing, -41150, new string[] { }, new string[] { }, 5115)]
+        [InlineData(RequestType.GetAuthenticatedPing, -41150, new string[] { }, new string[] { }, 5116)]
         [InlineData(RequestType.GetAuthenticatedPing, -60000, new string[] { }, new string[] { }, 5200)]
         [InlineData(RequestType.GetAuthenticatedPing, -60500, new string[] { }, new string[] { }, 5201)]
         [InlineData(RequestType.GetAuthenticatedPing, -70020, new string[] { }, new string[] { }, 5550)]
@@ -320,11 +321,31 @@ namespace Dracoon.Sdk.UnitTest.Test {
         }
 
         [Theory]
+        [InlineData(RequestType.PutCompleteS3Upload, 0, new string[] { }, new string[] { }, 5114)]
         [InlineData(RequestType.GetAuthenticatedPing, -90090, new string[] { }, new string[] { }, 5801)]
         [InlineData(RequestType.GetAuthenticatedPing, 0, new string[] { }, new string[] { }, 5000)]
         internal void TestBadGatewayCodes(RequestType type, int apiCode, string[] headerNames, string[] headerValues, int expectedSdkErrorCode) {
             // ARRANGE
             HttpWebResponse r = CreateMockedHttpWebResponse(502, GenerateJsonError(502, apiCode), headerNames, headerValues);
+            WebException we = new WebException("Some message!", null, WebExceptionStatus.ProtocolError, r);
+
+            try {
+                // ACT
+                DracoonErrorParser.ParseError(we, type);
+            } catch (DracoonApiException dae) {
+                // ASSERT
+                Assert.Equal(expectedSdkErrorCode, dae.ErrorCode.Code);
+            } finally {
+                r.Close();
+            }
+        }
+
+        [Theory]
+        [InlineData(RequestType.GetAuthenticatedPing, -90027, new string[] { }, new string[] { }, 5115)]
+        [InlineData(RequestType.GetAuthenticatedPing, 0, new string[] { }, new string[] { }, 5000)]
+        internal void TestGatewayTimeoutCodes(RequestType type, int apiCode, string[] headerNames, string[] headerValues, int expectedSdkErrorCode) {
+            // ARRANGE
+            HttpWebResponse r = CreateMockedHttpWebResponse(504, GenerateJsonError(502, apiCode), headerNames, headerValues);
             WebException we = new WebException("Some message!", null, WebExceptionStatus.ProtocolError, r);
 
             try {
@@ -379,11 +400,11 @@ namespace Dracoon.Sdk.UnitTest.Test {
         }
 
         [Fact]
-        internal void TestCustomErrorCodesIRestRequest() {
+        internal void TestCustomErrorCodesRestRequest() {
             // ARRANGE
-            IRestResponse response = FactoryRestSharp.RestResponse;
-            response.Headers.Add(new Parameter("testHeader", "1234", ParameterType.HttpHeader));
-            response.Headers.Add(new Parameter("X-Forbidden", "403", ParameterType.HttpHeader));
+            RestResponse response = FactoryRestSharp.RestResponse;
+            IReadOnlyCollection<HeaderParameter> list = new List<HeaderParameter> { new HeaderParameter("testHeader", "1234"), new HeaderParameter("X-Forbidden", "403") };
+            response.Headers = list;
 
             try {
                 // ACT

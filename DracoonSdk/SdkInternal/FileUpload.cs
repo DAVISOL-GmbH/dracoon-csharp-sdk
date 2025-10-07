@@ -16,12 +16,14 @@ using static Dracoon.Sdk.SdkInternal.DracoonRequestExecutor;
 
 namespace Dracoon.Sdk.SdkInternal {
     internal class FileUpload {
+        private readonly object LockObject = new object();
+        private readonly int MAX_S3_POLLING_INTERVAL = 4000; // 4 sec
+
         protected string LogTag = nameof(FileUpload);
 
         protected readonly long PROGRESS_UPDATE_INTERVAL = 500;
         protected readonly int S3_MINIMUM_CHUNKSIZE = 5 * 1024 * 1024; // 5 MB minimum chunksize for s3 upload
         protected readonly int S3_URL_BATCH = 5;
-        private readonly int MAX_S3_POLLING_INTERVAL = 4000; // 4 sec
 
         protected List<IFileUploadCallback> Callbacks = new List<IFileUploadCallback>();
         protected IInternalDracoonClient Client;
@@ -106,6 +108,7 @@ namespace Dracoon.Sdk.SdkInternal {
                 List<ApiS3FileUploadPart> s3Parts = UploadS3();
                 ApiCompleteFileUpload apiCompleteFileUpload = FileMapper.ToApiCompleteFileUpload(FileUploadRequest);
                 apiCompleteFileUpload.Parts = s3Parts;
+                apiCompleteFileUpload.IsPrioritisedVirusScan = FileUploadRequest.IsPrioritisedVirusScan;
                 RestRequest completeFileUploadRequest = Client.Builder.PutCompleteS3FileUpload(UploadToken.UploadId, apiCompleteFileUpload);
                 Client.Executor.DoSyncApiCall<VoidResponse>(completeFileUploadRequest, RequestType.PutCompleteS3Upload);
                 publicResultNode = NodeMapper.FromApiNode(S3Finished());
@@ -191,7 +194,7 @@ namespace Dracoon.Sdk.SdkInternal {
                     _currentWebClient = requestClient;
                     long currentUploadedByteCount = uploadedByteCount;
                     requestClient.UploadProgressChanged += (sender, e) => {
-                        lock (ProgressReportTimer) {
+                        lock (LockObject) {
                             long increaseWithoutHeader = e.BytesSent - headerLength;
                             if (ProgressReportTimer.ElapsedMilliseconds > PROGRESS_UPDATE_INTERVAL && increaseWithoutHeader > 0) {
                                 LastNotifiedProgressValue = currentUploadedByteCount + increaseWithoutHeader;
@@ -310,7 +313,7 @@ namespace Dracoon.Sdk.SdkInternal {
                     uploadedByteCount += chunk.Length;
                 }
 
-                if(S3Parts.Count == 0) { // if it was an empty file we have to put an empty part to s3 so that we put the empty file info to our api
+                if (S3Parts.Count == 0) { // if it was an empty file we have to put an empty part to s3 so that we put the empty file info to our api
                     Client.Log.Debug(LogTag, "The file [" + FileUploadRequest.Name + "] was an empty file. Therefore an empty part is uploaded to s3 now.");
                     S3Urls = RequestS3Urls(S3Parts.Count + 1, 1, 0);
                     string partETag = UploadS3ChunkWebClient(S3Urls.Dequeue(), new byte[0], 0);
@@ -342,7 +345,7 @@ namespace Dracoon.Sdk.SdkInternal {
         protected string UploadS3ChunkWebClient(Uri uploadUrl, byte[] chunk, long uploadedByteCount) {
             using (WebClient requestClient = Client.Builder.ProvideS3ChunkUploadWebClient()) {
                 requestClient.UploadProgressChanged += (sender, e) => {
-                    lock (ProgressReportTimer) {
+                    lock (LockObject) {
                         if (ProgressReportTimer.ElapsedMilliseconds > PROGRESS_UPDATE_INTERVAL) {
                             LastNotifiedProgressValue = e.BytesSent + uploadedByteCount;
                             NotifyProgress(ActionId, LastNotifiedProgressValue, OptionalFileSize);

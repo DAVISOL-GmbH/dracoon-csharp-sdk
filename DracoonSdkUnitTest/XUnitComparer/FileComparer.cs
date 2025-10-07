@@ -3,6 +3,7 @@ using Dracoon.Sdk.Model;
 using Dracoon.Sdk.SdkInternal.ApiModel;
 using Dracoon.Sdk.SdkInternal.ApiModel.Requests;
 using System.Collections.Generic;
+using System.Linq;
 using Xunit;
 
 namespace Dracoon.Sdk.UnitTest.XUnitComparer {
@@ -83,7 +84,7 @@ namespace Dracoon.Sdk.UnitTest.XUnitComparer {
                 return false;
             }
             return string.Equals(x.Iv, y.Iv) &&
-                   string.Equals(x.Key, y.Key) &&
+                   Enumerable.SequenceEqual(x.Key, y.Key) &&
                    string.Equals(x.Tag, y.Tag) &&
                    string.Equals(x.Version, y.Version);
         }
@@ -133,7 +134,8 @@ namespace Dracoon.Sdk.UnitTest.XUnitComparer {
             }
             Assert.Equal(x.FileKey, y.FileKey, new ApiFileKeyComparer());
             return string.Equals(x.FileName, y.FileName) &&
-                string.Equals(x.ResolutionStrategy, y.ResolutionStrategy);
+                string.Equals(x.ResolutionStrategy, y.ResolutionStrategy) &&
+                x.KeepShareLinks == y.KeepShareLinks;
         }
 
         public int GetHashCode(ApiCompleteFileUpload obj) {
@@ -156,6 +158,45 @@ namespace Dracoon.Sdk.UnitTest.XUnitComparer {
         }
 
         public int GetHashCode(FileVirusProtectionInfo obj) {
+            throw new System.NotImplementedException();
+        }
+    }
+
+    internal class FileVersionComparer : IEqualityComparer<FileVersion> {
+        public bool Equals(FileVersion x, FileVersion y) {
+            if (x == null && y == null) {
+                return true;
+            }
+            if ((x == null && y != null) || (x != null && y == null)) {
+                return false;
+            }
+            return x.Id == y.Id &&
+                x.ReferenceId == y.ReferenceId &&
+                x.ParentId == y.ParentId &&
+                x.Name == y.Name &&
+                x.IsDeleted == y.IsDeleted;
+        }
+
+        public int GetHashCode(FileVersion obj) {
+            throw new System.NotImplementedException();
+        }
+    }
+
+    internal class FileVersionListComparer : IEqualityComparer<FileVersionList> {
+        public bool Equals(FileVersionList x, FileVersionList y) {
+            if (x == null && y == null) {
+                return true;
+            }
+            if ((x == null && y != null) || (x != null && y == null)) {
+                return false;
+            }
+            return x.Offset == y.Offset &&
+                x.Limit == y.Limit &&
+                x.Total == y.Total &&
+                CompareHelper.ListIsEqual(x.Items, y.Items);
+        }
+
+        public int GetHashCode(FileVersionList obj) {
             throw new System.NotImplementedException();
         }
     }

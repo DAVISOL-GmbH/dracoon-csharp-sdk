@@ -51,7 +51,7 @@ namespace Dracoon.Sdk {
         /// <summary>
         ///     The client's encryption password.
         /// </summary>
-        public string EncryptionPassword { get; set; }
+        public char[] EncryptionPassword { get; set; }
 
         #region Internal
 
@@ -145,7 +145,7 @@ namespace Dracoon.Sdk {
         public IRoles Roles => _roles;
 
         /// <summary>
-        ///     Get ÊventLog handler. See also <seealso cref="IEventLog"/>
+        ///     Get ï¿½ventLog handler. See also <seealso cref="IEventLog"/>
         /// </summary>
         public IEventLog EventLog => _eventLog;
 
@@ -161,7 +161,7 @@ namespace Dracoon.Sdk {
         /// <param name="encryptionPassword">The client's encryption password.</param>
         /// <param name="logger">The logger which should be used. See also <seealso cref="ILog"/></param>
         /// <param name="httpConfig">The self defined http configuration (otherwise the defaults of the DracoonHttpConfig is used). See also <seealso cref="DracoonHttpConfig"/></param>
-        public DracoonClient(Uri serverUri, DracoonAuth auth = null, string encryptionPassword = null, ILog logger = null, DracoonHttpConfig httpConfig = null) {
+        public DracoonClient(Uri serverUri, DracoonAuth auth = null, char[] encryptionPassword = null, ILog logger = null, DracoonHttpConfig httpConfig = null) {
             EncryptionPassword = encryptionPassword;
             InitInternal(serverUri, auth, logger, httpConfig);
 

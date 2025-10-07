@@ -86,9 +86,9 @@ namespace Dracoon.Sdk.SdkInternal {
 
         RestRequest GetMissingFileKeys(long? fileId, int limit = 10, int offset = 0);
 
-        RestRequest GetRecycleBin(long parentRoomId, long? offset, long? limit);
+        RestRequest GetRecycleBin(long parentRoomId, long? offset = null, long? limit = null);
 
-        RestRequest GetPreviousVersions(long nodeId, string type, string nodeName, long? offset, long? limit);
+        RestRequest GetPreviousVersions(long nodeId, string type, string nodeName, long? offset = null, long? limit = null);
 
         RestRequest GetPreviousVersion(long previousNodeId);
 
@@ -162,13 +162,15 @@ namespace Dracoon.Sdk.SdkInternal {
 
         RestRequest DeleteMaliciousFile(long fileId);
 
+        RestRequest GetFileVersions(long referenceId, long? offset = null, long? limit = null);
+
         #endregion
 
         #region Share
 
-        RestRequest GetDownloadShares(long? offset, long? limit, GetDownloadSharesFilter filter, SharesSort sort);
+        RestRequest GetDownloadShares(long? offset, long? limit, GetDownloadSharesFilter filter = null, SharesSort sort = null);
 
-        RestRequest GetUploadShares(long? offset, long? limit, GetUploadSharesFilter filter, SharesSort sort);
+        RestRequest GetUploadShares(long? offset, long? limit, GetUploadSharesFilter filter = null, SharesSort sort = null);
 
         RestRequest PostCreateDownloadShare(ApiCreateDownloadShareRequest downloadShareParams);
 

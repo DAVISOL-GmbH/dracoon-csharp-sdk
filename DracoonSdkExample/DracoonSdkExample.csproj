@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>net6.0-windows</TargetFramework>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>net6.0</TargetFramework>
+    <TargetFramework>net8.0</TargetFramework>
     <StartupObject>Dracoon.Sdk.Example.DracoonExamples</StartupObject>
     <ApplicationIcon />
     <AssemblyName>DracoonSdkExample</AssemblyName>

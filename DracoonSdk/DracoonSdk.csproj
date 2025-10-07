@@ -17,10 +17,11 @@
     <PackageProjectUrl>https://github.com/DAVISOL-GmbH/dracoon-csharp-sdk</PackageProjectUrl>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
     <PackageIconUrl>https://raw.githubusercontent.com/dracoon/dracoon-csharp-sdk/master/DracoonSdk/DracoonSdk_NugetImage.png</PackageIconUrl>
-    <RepositoryUrl>https://github.com/DAVISOL-GmbH/dracoon-csharp-sdk/tree/v3.2_net8.0</RepositoryUrl>
-    <Version>3.2.0-SNAPSHOT</Version>
+    <RepositoryUrl>https://github.com/DAVISOL-GmbH/dracoon-csharp-sdk/tree/v5.2_net8.0</RepositoryUrl>
+    <Version>5.2.0-alpha</Version>
     <OutDir></OutDir>
     <GenerateDocumentationFile>True</GenerateDocumentationFile>
+    <RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
     <SignAssembly>False</SignAssembly>
     <PackageReadmeFile>README.md</PackageReadmeFile>
   </PropertyGroup>
@@ -74,9 +75,16 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
+      <_Parameter1>Dracoon.Sdk.UnitTest</_Parameter1>
+    </AssemblyAttribute>
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Dracoon.Crypto.Sdk.Net8" Version="3.2.3910.1" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
-    <PackageReference Include="RestSharp" Version="110.2.0" />
+    <PackageReference Include="RestSharp" Version="112.1.0" />
+    <PackageReference Include="System.Text.Json" Version="8.0.5" />
   </ItemGroup>
 
   <ItemGroup>

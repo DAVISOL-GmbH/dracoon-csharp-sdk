@@ -18,9 +18,9 @@ namespace Dracoon.Sdk.Model {
         public string Name { get; set; }
 
         /// <summary>
-        ///     The password of the new download share which is either used for protection the share or for using an encrypted share.
+        ///     The password of the new download share which is either used for protecting the share or for using an encrypted share.
         /// </summary>
-        public string Password { get; set; }
+        public char[] Password { get; set; }
 
         /// <summary>
         ///     The expiration date of the new share.
@@ -76,8 +76,8 @@ namespace Dracoon.Sdk.Model {
         /// <param name="maxAllowedDownloads"><see cref="MaxAllowedDownloads"/></param>
         /// <param name="receiverLanguage"><see cref="ReceiverLanguage"/></param>
         /// <param name="textMessageRecipients"><see cref="TextMessageRecipients"/></param>
-        public CreateDownloadShareRequest(long nodeId, bool showCreatorName = false, bool showCreatorUserName = false, 
-            string name = null, string password = null, DateTime? expiration = null, string notes = null,
+        public CreateDownloadShareRequest(long nodeId, bool showCreatorName = false, bool showCreatorUserName = false,
+            string name = null, char[] password = null, DateTime? expiration = null, string notes = null,
             string internalNotes = null, int? maxAllowedDownloads = null, string receiverLanguage = null, List<string> textMessageRecipients = null) {
             NodeId = nodeId;
             Name = name;
