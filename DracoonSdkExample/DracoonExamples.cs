@@ -16,6 +16,7 @@ namespace Dracoon.Sdk.Example {
         private static readonly string ACCESS_TOKEN = "ACCESS_TOKEN";
         private static readonly string ENCRYPTION_PASSWORD = "ENCRYPTION_PASSWORD";
 
+        private static readonly Logger log = new Logger();
         private static DracoonClient dc;
 
         [STAThread]
@@ -26,14 +27,14 @@ namespace Dracoon.Sdk.Example {
             IWebProxy wp = WebRequest.GetSystemWebProxy();
             wp.Credentials = CredentialCache.DefaultNetworkCredentials;
             DracoonHttpConfig config = new DracoonHttpConfig(retryEnabled: true, webProxy: wp);
-            dc = new DracoonClient(SERVER_URI, dracoonAuth, ENCRYPTION_PASSWORD.ToCharArray(), new Logger(), config);
+            dc = new DracoonClient(SERVER_URI, dracoonAuth, ENCRYPTION_PASSWORD.ToCharArray(), log, config);
             //GetServerData();
 
             // Print client statistics
             if (Debugger.IsLogging()) {
                 var stats = dc.Statistics;
-                Debugger.Log(2, "CLIENTSTATS", $"Unique requests {stats.UniqueRequests} ({stats.UniqueRequestsSucceeded} succeeded, {stats.UniqueRequestsFailed} failed)\r\n");
-                Debugger.Log(2, "CLIENTSTATS", $"Total API requests {stats.EffectiveApiRequests}, all executed in {stats.TotalRequestExecutionTimeMs} ms\r\n");
+                log.WriteStatistics($"Unique requests {stats.UniqueRequests} ({stats.UniqueRequestsSucceeded} succeeded, {stats.UniqueRequestsFailed} failed)");
+                log.WriteStatistics($"Total API requests {stats.EffectiveApiRequests}, all executed in {stats.TotalRequestExecutionTimeMs} ms");
             }
         }
 
@@ -41,18 +42,18 @@ namespace Dracoon.Sdk.Example {
 
         private static void GetServerData() {
             string serverVersion = dc.Server.GetVersion();
-            Console.WriteLine("Server version: " + serverVersion);
+            WriteLine("Server version: " + serverVersion);
 
             DateTime? serverTime = dc.Server.GetTime();
             if (serverTime.HasValue) {
-                Console.WriteLine("Server time: " + serverTime.Value.ToLocalTime());
+                WriteLine("Server time: " + serverTime.Value.ToLocalTime());
             }
         }
 
         private static void GetServerSettings() {
             ServerGeneralSettings generalSettings = dc.Server.ServerSettings.GetGeneral();
-            Console.WriteLine("Crypto is enabled: " + generalSettings.CryptoEnabled);
-            Console.WriteLine("Share password via SMS is enabled: " + generalSettings.SharePasswordSmsEnabled);
+            WriteLine("Crypto is enabled: " + generalSettings.CryptoEnabled);
+            WriteLine("Share password via SMS is enabled: " + generalSettings.SharePasswordSmsEnabled);
 
             ServerInfrastructureSettings infrastructureSettings = dc.Server.ServerSettings.GetInfrastructure();
             //...
@@ -61,14 +62,14 @@ namespace Dracoon.Sdk.Example {
         private static void GetPasswordPolicies() {
             PasswordEncryptionPolicies encryptionPolicy = dc.Server.ServerPolicies.GetEncryptionPasswordPolicies();
             PasswordSharePolicies sharePolicy = dc.Server.ServerPolicies.GetSharesPasswordPolicies();
-            Console.WriteLine("Minimum share password length is: " + sharePolicy.MinimumPasswordLength);
-            Console.WriteLine("Minimum encryption password length is: " + encryptionPolicy.MinimumPasswordLength);
+            WriteLine("Minimum share password length is: " + sharePolicy.MinimumPasswordLength);
+            WriteLine("Minimum encryption password length is: " + encryptionPolicy.MinimumPasswordLength);
         }
 
         private static void GetAvailableUserKeyPairAlgorithms() {
             List<UserKeyPairAlgorithmData> availableUserKeyPairAlgorithms = dc.Server.ServerSettings.GetAvailableUserKeyPairAlgorithms();
             foreach (UserKeyPairAlgorithmData current in availableUserKeyPairAlgorithms) {
-                Console.WriteLine("Available User key pair algorithm: " + current.Algorithm + " with its state: " + current.State);
+                WriteLine("Available User key pair algorithm: " + current.Algorithm + " with its state: " + current.State);
             }
         }
 
@@ -79,23 +80,23 @@ namespace Dracoon.Sdk.Example {
         private static void CheckAuth() {
             try {
                 dc.Account.ValidateTokenValidity();
-                Console.WriteLine("Tokens are still valid.");
+                WriteLine("Tokens are still valid.");
             } catch (DracoonApiException apiError) {
                 if (apiError.ErrorCode.IsAuthError()) {
-                    Console.WriteLine("Tokens are not valid anymore.");
+                    WriteLine("Tokens are not valid anymore.");
                 }
             }
         }
 
         private static void GetUserAccount() {
             UserAccount userAccount = dc.Account.GetUserAccount();
-            Console.WriteLine("UserId: " + userAccount.Id + "; FirstName: " + userAccount.FirstName + "; LastName: " + userAccount.LastName +
+            WriteLine("UserId: " + userAccount.Id + "; FirstName: " + userAccount.FirstName + "; LastName: " + userAccount.LastName +
                               "; E-mail: " + userAccount.Email);
         }
 
         private static void GetCustomerAccount() {
             CustomerAccount customerAccount = dc.Account.GetCustomerAccount();
-            Console.WriteLine("CustomerId: " + customerAccount.Id + "; Name: " + customerAccount.Name + "; Accounts: " +
+            WriteLine("CustomerId: " + customerAccount.Id + "; Name: " + customerAccount.Name + "; Accounts: " +
                               customerAccount.AccountsUsed + "/" + customerAccount.AccountsLimit + "; Space: " + customerAccount.SpaceUsed + "/" +
                               customerAccount.SpaceLimit);
         }
@@ -106,7 +107,7 @@ namespace Dracoon.Sdk.Example {
 
         private static void CheckUserKeyPair() {
             bool encryptionPasswordIsValid = dc.Account.CheckUserKeyPairPassword(Crypto.Sdk.UserKeyPairAlgorithm.RSA2048);
-            Console.WriteLine("Encryption password is valid: " + encryptionPasswordIsValid);
+            WriteLine("Encryption password is valid: " + encryptionPasswordIsValid);
         }
 
         private static void DeleteUserKeyPair() {
@@ -132,13 +133,13 @@ namespace Dracoon.Sdk.Example {
         private static void GetUserProfileAttributes() {
             AttributeList attributes = dc.Account.GetUserProfileAttributeList();
             foreach (Attribute current in attributes.Items) {
-                Console.WriteLine("Attribute key: " + current.Key + "; Attribute value: " + current.Value);
+                WriteLine("Attribute key: " + current.Key + "; Attribute value: " + current.Value);
             }
         }
 
         private static void GetUserProfileAttribute() {
             Attribute attribute = dc.Account.GetUserProfileAttribute("anyKey");
-            Console.WriteLine("Single attribute key: " + attribute.Key + "; Single attribute value: " + attribute.Value);
+            WriteLine("Single attribute key: " + attribute.Key + "; Single attribute value: " + attribute.Value);
         }
 
         private static void AddUserProfileAttribute() {
@@ -162,7 +163,7 @@ namespace Dracoon.Sdk.Example {
         private static void ListRootNodes() {
             NodeList rootNodes = dc.Nodes.GetNodes();
             foreach (Node current in rootNodes.Items) {
-                Console.WriteLine("NodeId: " + current.Id + "; NodeName: " + current.Name);
+                WriteLine("NodeId: " + current.Id + "; NodeName: " + current.Name);
             }
         }
 
@@ -184,7 +185,7 @@ namespace Dracoon.Sdk.Example {
 
             NodeList rootNodes = dc.Nodes.GetNodes(filter: getNodesFilter);
             foreach (Node current in rootNodes.Items) {
-                Console.WriteLine("NodeId: " + current.Id + "; NodeName: " + current.Name);
+                WriteLine("NodeId: " + current.Id + "; NodeName: " + current.Name);
             }
         }
 
@@ -195,19 +196,19 @@ namespace Dracoon.Sdk.Example {
 
             CreateRoomRequest request = new CreateRoomRequest("TestRoom", adminUserIds: roomAdminIds, notes: "It's a test room creation.");
             Node createdRoomNode = dc.Nodes.CreateRoom(request);
-            Console.WriteLine("Created room id: " + createdRoomNode.Id + "; Name: " + createdRoomNode.Name);
+            WriteLine("Created room id: " + createdRoomNode.Id + "; Name: " + createdRoomNode.Name);
         }
 
         private static void UpdateRoom() {
             UpdateRoomRequest request = new UpdateRoomRequest(1, name: "RenamedTestRoom", notes: "Renamed the test room");
             Node updatedRoomNode = dc.Nodes.UpdateRoom(request);
-            Console.WriteLine("Updated room id: " + updatedRoomNode.Id + "; Name: " + updatedRoomNode.Name);
+            WriteLine("Updated room id: " + updatedRoomNode.Id + "; Name: " + updatedRoomNode.Name);
         }
 
         private static void CreateFolder() {
             CreateFolderRequest request = new CreateFolderRequest(1, "TestFolder", "It's a test folder creation.");
             Node createdFolderNode = dc.Nodes.CreateFolder(request);
-            Console.WriteLine("Created folder id: " + createdFolderNode.Id + "; Name: " + createdFolderNode.Name);
+            WriteLine("Created folder id: " + createdFolderNode.Id + "; Name: " + createdFolderNode.Name);
         }
 
         private static void DeleteNodes() {
@@ -229,7 +230,7 @@ namespace Dracoon.Sdk.Example {
 
             CopyNodesRequest request = new CopyNodesRequest(1, nodeWhichWereCopied);
             Node resultingParentNode = dc.Nodes.CopyNodes(request);
-            Console.WriteLine("New parent node id: " + resultingParentNode.Id + "; parent node childes: " + resultingParentNode.CountChildren);
+            WriteLine("New parent node id: " + resultingParentNode.Id + "; parent node childes: " + resultingParentNode.CountChildren);
         }
 
         private static void MoveNodes() {
@@ -241,14 +242,14 @@ namespace Dracoon.Sdk.Example {
 
             MoveNodesRequest request = new MoveNodesRequest(1, nodesWhichWereMoved);
             Node resultingParentNode = dc.Nodes.MoveNodes(request);
-            Console.WriteLine("New parent node id: " + resultingParentNode.Id + "; parent node childes: " + resultingParentNode.CountChildren);
+            WriteLine("New parent node id: " + resultingParentNode.Id + "; parent node childes: " + resultingParentNode.CountChildren);
         }
 
         private static void SearchNodes() {
             NodeList searchedNodes = dc.Nodes.SearchNodes("Test", 0);
 
             foreach (Node current in searchedNodes.Items) {
-                Console.WriteLine("SearchedNodeId: " + current.Id + "; NodeName: " + current.Name);
+                WriteLine("SearchedNodeId: " + current.Id + "; NodeName: " + current.Name);
             }
         }
 
@@ -259,7 +260,7 @@ namespace Dracoon.Sdk.Example {
             NodeList searchedNodes = dc.Nodes.SearchNodes("Test", 0, filter: searchFilter, sort: SearchNodesSort.Size.Ascending());
 
             foreach (Node current in searchedNodes.Items) {
-                Console.WriteLine("SearchedNodeId: " + current.Id + "; NodeName: " + current.Name + "; Size: " + current.Size);
+                WriteLine("SearchedNodeId: " + current.Id + "; NodeName: " + current.Name + "; Size: " + current.Size);
             }
         }
 
@@ -270,7 +271,7 @@ namespace Dracoon.Sdk.Example {
             NodeList favoriteNodes = dc.Nodes.SearchNodes("*", 0, filter: favoriteFilter);
 
             foreach (Node current in favoriteNodes.Items) {
-                Console.WriteLine("SearchedNodeId: " + current.Id + "; NodeName: " + current.Name + "; isFavorite: " + current.IsFavorite);
+                WriteLine("SearchedNodeId: " + current.Id + "; NodeName: " + current.Name + "; isFavorite: " + current.IsFavorite);
             }
         }
 
@@ -310,7 +311,7 @@ namespace Dracoon.Sdk.Example {
             List<FileVirusProtectionInfo> infoList = dc.Nodes.GenerateVirusProtectionInfo(requestFileIds);
 
             foreach (FileVirusProtectionInfo current in infoList) {
-                Console.WriteLine("FileId: " + current.NodeId + "; Verdict: " + current.Verdict);
+                WriteLine("FileId: " + current.NodeId + "; Verdict: " + current.Verdict);
             }
         }
 
@@ -350,13 +351,13 @@ namespace Dracoon.Sdk.Example {
         private static void GetFileVersions() {
             RecycleBinItemList binItems = dc.Nodes.GetRecycleBinItems(1);
             foreach (RecycleBinItem current in binItems.Items) {
-                Console.WriteLine("NodeName: " + current.Name + "; Versions: " + current.VersionsCount + "; LastDeletedNodeId: " +
+                WriteLine("NodeName: " + current.Name + "; Versions: " + current.VersionsCount + "; LastDeletedNodeId: " +
                                   current.LastDeletedNodeId + "; ParentPath: " + current.ParentPath);
             }
 
             PreviousVersionList versionList = dc.Nodes.GetPreviousVersions(1, NodeType.File, "test.txt");
             foreach (PreviousVersion current in versionList.Items) {
-                Console.WriteLine("NodeName: " + current.Name + "; Id: " + current.Id + "; ParentPath: " + current.ParentPath + "; DeletedAt: " +
+                WriteLine("NodeName: " + current.Name + "; Id: " + current.Id + "; ParentPath: " + current.ParentPath + "; DeletedAt: " +
                                   current.DeletedAt.ToString());
             }
 
@@ -376,34 +377,34 @@ namespace Dracoon.Sdk.Example {
 
             public void OnCanceled(string actionId) {
                 requestTimings.Remove(actionId);
-                Console.WriteLine("DLCallback -> " + "Download canceled: " + actionId);
+                WriteLine("DLCallback -> " + "Download canceled: " + actionId);
             }
 
             public void OnFailed(string actionId, DracoonException occuredError) {
                 requestTimings.Remove(actionId);
-                Console.WriteLine("DLCallback -> " + "Download failed: " + actionId + " with: " + occuredError.Message);
+                WriteLine("DLCallback -> " + "Download failed: " + actionId + " with: " + occuredError.Message);
             }
 
             public void OnFinished(string actionId) {
                 Stopwatch watch;
                 if (requestTimings.TryGetValue(actionId, out watch)) {
                     watch.Stop();
-                    Console.WriteLine("DLCallback -> " + "Download finished: " + actionId + " (" + watch.Elapsed.ToString() + ")");
+                    WriteLine("DLCallback -> " + "Download finished: " + actionId + " (" + watch.Elapsed.ToString() + ")");
                     requestTimings.Remove(actionId);
                 } else {
-                    Console.WriteLine("DLCallback -> " + "Download finished: " + actionId);
+                    WriteLine("DLCallback -> " + "Download finished: " + actionId);
                 }
             }
 
             public void OnRunning(string actionId, long bytesDownloaded, long bytesTotal) {
-                Console.WriteLine("DLCallback -> " + "Download progress for: " + actionId + " --> " + bytesDownloaded + "/" + bytesTotal);
+                WriteLine("DLCallback -> " + "Download progress for: " + actionId + " --> " + bytesDownloaded + "/" + bytesTotal);
             }
 
             public void OnStarted(string actionId) {
                 Stopwatch newWatch = new Stopwatch();
                 requestTimings.Add(actionId, newWatch);
                 newWatch.Start();
-                Console.WriteLine("DLCallback -> " + "Download started: " + actionId);
+                WriteLine("DLCallback -> " + "Download started: " + actionId);
             }
         }
 
@@ -412,34 +413,34 @@ namespace Dracoon.Sdk.Example {
 
             public void OnCanceled(string actionId) {
                 requestTimings.Remove(actionId);
-                Console.WriteLine("ULCallback -> " + "Upload canceled: " + actionId);
+                WriteLine("ULCallback -> " + "Upload canceled: " + actionId);
             }
 
             public void OnFailed(string actionId, DracoonException occuredError) {
                 requestTimings.Remove(actionId);
-                Console.WriteLine("ULCallback -> " + "Upload failed: " + actionId + " with: " + occuredError.Message);
+                WriteLine("ULCallback -> " + "Upload failed: " + actionId + " with: " + occuredError.Message);
             }
 
             public void OnFinished(string actionId, Node resultNode) {
                 if (requestTimings.TryGetValue(actionId, out Stopwatch watch)) {
                     watch.Stop();
-                    Console.WriteLine("ULCallback -> " + "Upload finished: " + actionId + " | New node id is " + resultNode.Id + " and name " +
+                    WriteLine("ULCallback -> " + "Upload finished: " + actionId + " | New node id is " + resultNode.Id + " and name " +
                                       resultNode.Name + " (" + watch.Elapsed.ToString() + ")");
                     requestTimings.Remove(actionId);
                 } else {
-                    Console.WriteLine("ULCallback -> " + "Upload finished: " + actionId);
+                    WriteLine("ULCallback -> " + "Upload finished: " + actionId);
                 }
             }
 
             public void OnRunning(string actionId, long bytesUploaded, long bytesTotal) {
-                Console.WriteLine("ULCallback -> " + "Upload progress for: " + actionId + " --> " + bytesUploaded + "/" + bytesTotal);
+                WriteLine("ULCallback -> " + "Upload progress for: " + actionId + " --> " + bytesUploaded + "/" + bytesTotal);
             }
 
             public void OnStarted(string actionId) {
                 Stopwatch newWatch = new Stopwatch();
                 requestTimings.Add(actionId, newWatch);
                 newWatch.Start();
-                Console.WriteLine("ULCallback -> " + "Upload started: " + actionId);
+                WriteLine("ULCallback -> " + "Upload started: " + actionId);
             }
         }
 
@@ -450,11 +451,23 @@ namespace Dracoon.Sdk.Example {
         private static void ListAuditLogEvents(long offset = 0, long? limit = null) {
             LogEventList events = dc.EventLog.GetEvents(offset: offset, limit: limit);
             foreach (LogEvent current in events.Items) {
-                Console.WriteLine($"EventId: {current.Id}; Timestamp: {current.Time.ToString("o")}; Message: {current.Message}");
+                WriteLine($"EventId: {current.Id}; Timestamp: {current.Time.ToString("o")}; Message: {current.Message}");
             }
         }
 
 
         #endregion
+
+        private static void ExecuteAction(string actionName, Action action) {
+            try {
+                action();
+            } catch (Exception ex) {
+                WriteLine($"{ex.GetType()} catched while executing action \"{actionName}\": {ex.Message}");
+            }
+        }
+
+        private static void WriteLine(string message) {
+            log.WriteLine(message);
+        }
     }
 }
