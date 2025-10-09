@@ -527,6 +527,12 @@ namespace Dracoon.Sdk.SdkInternal {
             request.MustNotNull(nameof(request));
             #endregion
 
+            if (request.DefaultExpirationPeriod is null && request.VirusProtectionEnabled is null) {
+                // Request object contains no properties to be updated, therefore skip PUT request
+                _client.Log.Info(Logtag, $"Skip attempt to update policies of room with ID {roomId} because request object does not contain properties with non-null values");
+                return;
+            }
+
             ApiRoomPoliciesRequest apiRoomPoliciesRequest = NodeMapper.ToApiRoomPoliciesRequest(request);
             RestRequest restRequest = _client.Builder.PutRoomPolicies(roomId, apiRoomPoliciesRequest);
             _client.Executor.DoSyncApiCall<VoidResponse>(restRequest, RequestType.PutRoomPolicies);

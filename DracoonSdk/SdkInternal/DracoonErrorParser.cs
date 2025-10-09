@@ -183,7 +183,7 @@ namespace Dracoon.Sdk.SdkInternal {
                 case (int)HttpStatusCode.BadRequest:
                     return ParseBadRequest(apiErrorCode, requestType);
                 case (int)HttpStatusCode.PaymentRequired:
-                    return ParsePaymentRequired();
+                    return ParsePaymentRequired(apiErrorCode, requestType);
                 case 429: //  (int)HttpStatusCode.TooManyRequests: /* The TooManyRequest enum member is not available prior to .NET Core 2.1 - see: https://github.com/dotnet/runtime/issues/54321#issuecomment-863195308 */
                     return ParseTooManyRequests(response);
                 case (int)HttpStatusCode.Unauthorized:
@@ -338,8 +338,15 @@ namespace Dracoon.Sdk.SdkInternal {
             }
         }
 
-        private static DracoonApiCode ParsePaymentRequired() {
-            return DracoonApiCode.PRECONDITION_PAYMENT_REQUIRED;
+        private static DracoonApiCode ParsePaymentRequired(int? apiErrorCode, RequestType requestType) {
+            switch (apiErrorCode) {
+                case -89000:
+                    if (requestType == RequestType.PutRoomPolicies)
+                        return DracoonApiCode.PRECONDITION_PAYMENT_REQUIRED_FEATURE_UNAVAILABLE;
+                    return DracoonApiCode.PRECONDITION_PAYMENT_REQUIRED;
+                default:
+                    return DracoonApiCode.PRECONDITION_PAYMENT_REQUIRED;
+            }
         }
 
         private static DracoonApiCode ParseTooManyRequests(object response) {

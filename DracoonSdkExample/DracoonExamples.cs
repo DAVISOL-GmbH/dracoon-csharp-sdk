@@ -315,6 +315,19 @@ namespace Dracoon.Sdk.Example {
             }
         }
 
+        private static void GetRoomPolicies(long roomId) {
+            Node node = dc.Nodes.GetNode(roomId);
+            RoomPolicies policies = dc.Nodes.GetRoomPolicies(roomId);
+
+            WriteLine($"{node?.Type} {node.Name} ({roomId}) policies; Default expiration period: {policies?.DefaultExpirationPeriod} seconds, virus protection enabled: {policies?.VirusProtectionEnabled}");
+        }
+
+        private static void UpdateRoomPolicies(long roomId, int? defaultExpirationPeriod, bool? virusProtectionEnabled) {
+            Node node = dc.Nodes.GetNode(roomId);
+            RoomPoliciesRequest updateRequest = new RoomPoliciesRequest(defaultExpirationPeriod, virusProtectionEnabled);
+            dc.Nodes.UpdateRoomPolicies(roomId, updateRequest);
+        }
+
         #endregion
 
         #region DracoonClient.Shares

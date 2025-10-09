@@ -163,9 +163,16 @@ namespace Dracoon.Sdk.Error {
         /// <summary>
         /// You are not allowed to call this method because further payment is required.
         ///
-        /// Api-Error-Codes or contexts:
+        /// Api-Error-Codes or contexts: -89000
         /// </summary>
         public static readonly DracoonApiCode PRECONDITION_PAYMENT_REQUIRED = new DracoonApiCode(2105, "You are not allowed to call this method because further payment is required.");
+
+        /// <summary>
+        /// This feature is not available in this product package.
+        ///
+        /// Api-Error-Codes or contexts: -89000
+        /// </summary>
+        public static readonly DracoonApiCode PRECONDITION_PAYMENT_REQUIRED_FEATURE_UNAVAILABLE = new DracoonApiCode(2195, "This feature is not available in this product package.");
 
         #endregion
 
