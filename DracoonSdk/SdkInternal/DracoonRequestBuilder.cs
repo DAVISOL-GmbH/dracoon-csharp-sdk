@@ -1149,6 +1149,13 @@ namespace Dracoon.Sdk.SdkInternal {
             return request;
         }
 
+        RestRequest IRequestBuilder.GetUserRooms(long userId) {
+            RestRequest request = new RestRequest(ApiConfig.ApiGetUserRooms, Method.Get);
+            SetGeneralRestValues(request, true);
+            request.AddUrlSegment("userId", userId.ToString());
+            return request;
+        }
+
         RestRequest IRequestBuilder.GetUserUserAttributes(long userId, long? offset, long? limit, GetUserAttributesFilter filter, UserAttributesSort sort) {
             RestRequest request = new RestRequest(ApiConfig.ApiGetUserUserAttributes, Method.Get);
             SetGeneralRestValues(request, true);

@@ -282,6 +282,8 @@ namespace Dracoon.Sdk.SdkInternal {
 
         RestRequest GetUserRoles(long userId);
 
+        RestRequest GetUserRooms(long userId);
+
         RestRequest GetUserUserAttributes(long userId, long? offset, long? limit, GetUserAttributesFilter filter, UserAttributesSort sort);
 
         RestRequest PostUser(ApiCreateUserRequest userParams);

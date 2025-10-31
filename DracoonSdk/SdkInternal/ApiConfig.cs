@@ -329,6 +329,7 @@ namespace Dracoon.Sdk.SdkInternal {
         internal const string ApiGetUserGroups = ApiUsersUserIdPrefix + "/groups";
         internal const string ApiGetUserLastAdminRooms = ApiUsersUserIdPrefix + "/last_admin_rooms";
         internal const string ApiGetUserRoles = ApiUsersUserIdPrefix + "/roles";
+        internal const string ApiGetUserRooms = ApiUsersUserIdPrefix + "/rooms";
         internal const string ApiGetUserUserAttributes = ApiUsersUserIdPrefix + "/userAttributes";
 
         #endregion

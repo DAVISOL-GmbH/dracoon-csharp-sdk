@@ -34,7 +34,7 @@ namespace Dracoon.Sdk.SdkInternal {
             GetSystemOAuthClientConfigs, GetSystemOAuthClientConfig, PutSystemOAuthClientConfig, PostSystemOAuthClientConfig, DeleteSystemOAuthClientConfig,
             GetAuthenticationSettings, GetAuthActiveDirectorySettings, GetAuthOpenIdIdpSettings, GetAuthRadiusSettings,
             GetGroups, GetGroup, GetGroupLastAdminRooms, GetGroupRoles, GetGroupUsers, PostGroup, PostGroupUsers, PutGroup, DeleteGroup, DeleteGroupUsers,
-            GetUsers, GetUser, GetUserLastAdminRooms, GetUserRoles, GetUserGroups, GetUserUserAttributes, PostUser, PostUserUserAttributes, PutUser, PutUserUserAttributes, DeleteUser, DeleteUserUserAttribute,
+            GetUsers, GetUser, GetUserLastAdminRooms, GetUserRoles, GetUserRooms, GetUserGroups, GetUserUserAttributes, PostUser, PostUserUserAttributes, PutUser, PutUserUserAttributes, DeleteUser, DeleteUserUserAttribute,
             GetRoles, GetRoleGroups, GetRoleUsers, PostRoleGroups, PostRoleUsers, DeleteRoleGroups, DeleteRoleUsers,
             GetAuditNodes, GetEvents, GetOperations,
             GetBranding, GetBrandingServerVersion,

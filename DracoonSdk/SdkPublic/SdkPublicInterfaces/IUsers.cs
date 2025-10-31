@@ -1,6 +1,7 @@
 using Dracoon.Sdk.Filter;
 using Dracoon.Sdk.Model;
 using Dracoon.Sdk.Sort;
+using System;
 
 namespace Dracoon.Sdk {
     /// <summary>
@@ -28,6 +29,14 @@ namespace Dracoon.Sdk {
         LastAdminUserRoomList GetUserLastAdminRooms(long userId);
 
         RoleList GetUserRoles(long userId);
+
+        /// <summary>
+        /// Retrieves a list of rooms granted to the user.
+        /// </summary>
+        /// <param name="userId">The ID of the user for which the granted rooms should be returned.</param>
+        /// <returns>List of rooms granted to the requested user.</returns>
+        [Obsolete("Deprecated")]
+        UserRoomTreeDataList GetUserRooms(long userId);
 
         AttributesResponse GetUserAttributes(long userId, long? offset = null, long? limit = null, GetUserAttributesFilter filter = null, UserAttributesSort sort = null);
 

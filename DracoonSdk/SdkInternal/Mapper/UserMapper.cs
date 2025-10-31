@@ -8,6 +8,7 @@ using Dracoon.Sdk.SdkInternal.User;
 using Dracoon.Sdk.SdkInternal.Util;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Dracoon.Sdk.SdkInternal.Mapper {
     internal static class UserMapper {
@@ -252,6 +253,43 @@ namespace Dracoon.Sdk.SdkInternal.Mapper {
                 LastAdminInGroupId = apiLastAdminUserRoom.LastAdminInGroupId
             };
             return lastAdminUserRoom;
+        }
+
+        internal static UserRoomTreeDataList FromApiUserRoomTreeDataList(ApiUserRoomTreeDataList apiUserRooms) {
+            UserRoomTreeDataList userRooms = new UserRoomTreeDataList();
+            CommonMapper.FromApiRangeList(apiUserRooms, userRooms, x => FromApiUserRoomData(x));
+            return userRooms;
+        }
+
+        private static UserRoomData FromApiUserRoomData(ApiUserRoomData apiUserRoomData) {
+            if (apiUserRoomData == null) {
+                return null;
+            }
+
+            UserRoomData userRoomData = new UserRoomData() {
+                Id = apiUserRoomData.Id,
+                Type = EnumConverter.ConvertValueToNodeTypeEnum(apiUserRoomData.Type),
+                IsGranted = apiUserRoomData.IsGranted,
+                Name = apiUserRoomData.Name,
+                IsEncrypted = apiUserRoomData.IsEncrypted,
+                ParentId = apiUserRoomData.ParentId,
+                Size = apiUserRoomData.Size,
+                Permissions = NodeMapper.FromApiNodePermissions(apiUserRoomData.Permissions),
+                CreatedAt = apiUserRoomData.CreatedAt,
+                CreatedBy = FromApiUserInfo(apiUserRoomData.CreatedBy),
+                UpdatedAt = apiUserRoomData.UpdatedAt,
+                UpdatedBy = FromApiUserInfo(apiUserRoomData.UpdatedBy),
+                Quota = apiUserRoomData.Quota,
+                CountDownloadShares = apiUserRoomData.CountDownloadShares,
+                CountUploadShares = apiUserRoomData.CountUploadShares,
+                IsFavorite = apiUserRoomData.IsFavorite,
+            };
+
+            if (apiUserRoomData.Children?.Any() == true) {
+                userRoomData.Children = apiUserRoomData.Children.Select(x => FromApiUserRoomData(x)).ToArray();
+            }
+
+            return userRoomData;
         }
 
         internal static UserAttributes FromApiUserAttributes(ApiUserAttributes apiUserAttributes) {

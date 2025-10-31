@@ -101,6 +101,17 @@ namespace Dracoon.Sdk.SdkInternal {
             return CommonMapper.FromApiRoleList(result);
         }
 
+        public UserRoomTreeDataList GetUserRooms(long userId) {
+            _client.Executor.CheckApiServerVersion();
+            #region Parameter Validation
+            userId.MustPositive(nameof(userId));
+            #endregion
+
+            RestRequest restRequest = _client.Builder.GetUserRooms(userId);
+            ApiUserRoomTreeDataList result = _client.Executor.DoSyncApiCall<ApiUserRoomTreeDataList>(restRequest, RequestType.GetUserRooms);
+            return UserMapper.FromApiUserRoomTreeDataList(result);
+        }
+
         public AttributesResponse GetUserAttributes(long userId, long? offset = null, long? limit = null, GetUserAttributesFilter filter = null, UserAttributesSort sort = null) {
             _client.Executor.CheckApiServerVersion();
             #region Parameter Validation

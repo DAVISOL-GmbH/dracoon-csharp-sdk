@@ -359,6 +359,35 @@ namespace Dracoon.Sdk.Example {
 
         #endregion
 
+        #region DracoonClient.Users
+
+        private static void GetUserRooms(long userId) {
+#pragma warning disable CS0618 // Type or member is obsolete
+            UserRoomTreeDataList userRooms = dc.Users.GetUserRooms(userId);
+#pragma warning restore CS0618 // Type or member is obsolete
+
+            var grantedRooms = new List<UserRoomData>();
+            CollectUserGrantedRooms(userRooms.Items, grantedRooms);
+
+            WriteLine($"User with ID {userId} has {grantedRooms.Count} granted rooms");
+        }
+
+        private static void CollectUserGrantedRooms(IEnumerable<UserRoomData> rooms, List<UserRoomData> targetList) {
+            if (rooms?.Any() != true) {
+                return;
+            }
+            foreach (var room in rooms) {
+                if (room.IsGranted) {
+                    targetList.Add(room);
+                }
+                if (room.Children?.Any() == true) {
+                    CollectUserGrantedRooms(room.Children, targetList);
+                }
+            }
+        }
+
+        #endregion
+
         #region RecycleBin / Versioning
 
         private static void GetFileVersions() {
