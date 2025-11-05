@@ -9,10 +9,99 @@ namespace Dracoon.Sdk.Model {
     /// </summary>
     public class Node : TrackExternalModificationRequestBase {
 
+        #region INodeBase implementation
+
         /// <summary>
         ///     The id of the node.
+        ///     <para>Implements <see cref="INodeBase.Id"/></para>
         /// </summary>
         public long Id { get; internal set; }
+
+        /// <summary>
+        ///     The type of the node. See also <seealso cref="NodeType"/>
+        ///     <para>Implements <see cref="INodeBase.Type"/></para>
+        /// </summary>
+        public NodeType Type { get; internal set; }
+
+        /// <summary>
+        ///     The name of the node.
+        ///     <para>Implements <see cref="INodeBase.Name"/></para>
+        /// </summary>
+        public string Name { get; internal set; }
+
+        /// <summary>
+        ///     The parent id of the node.
+        ///     <para>Implements <see cref="INodeBase.ParentId"/></para>
+        /// </summary>
+        public long? ParentId { get; internal set; }
+
+        /// <summary>
+        ///     Is set to <c>true</c> if the user have ever set this node as favorite.
+        ///     <para>Implements <see cref="INodeBase.IsFavorite"/></para>
+        /// </summary>
+        public bool? IsFavorite { get; internal set; }
+
+        /// <summary>
+        ///     Indicates of this node is encrypted.
+        ///     <para>Implements <see cref="INodeBase.IsEncrypted"/></para>
+        /// </summary>
+        public bool? IsEncrypted { get; internal set; }
+
+        /// <summary>
+        ///     The byte size of the node. If the node is a <see cref="NodeType.Room"/> or <see cref="NodeType.Folder"/> the total byte size of the underlying files.
+        ///     <para>Implements <see cref="INodeBase.Size"/></para>
+        /// </summary>
+        public long? Size { get; internal set; }
+
+        /// <summary>
+        ///     The quota in bytes. (Only if it is a <see cref="NodeType.Room"/>).
+        ///     <para>Implements <see cref="INodeBase.Quota"/></para>
+        /// </summary>
+        public long? Quota { get; internal set; }
+
+        /// <summary>
+        ///     The creation date of the node.
+        ///     <para>Implements <see cref="INodeBase.CreatedAt"/></para>
+        /// </summary>
+        public DateTime? CreatedAt { get; internal set; }
+
+        /// <summary>
+        ///     The user which created the node. See also <seealso cref="UserInfo"/>
+        ///     <para>Implements <see cref="INodeBase.CreatedBy"/></para>
+        /// </summary>
+        public UserInfo CreatedBy { get; internal set; }
+
+        /// <summary>
+        ///     The update date of the node. Note: This date is also updated on meta data changes like node name or others.
+        ///     <para>Implements <see cref="INodeBase.UpdatedAt"/></para>
+        /// </summary>
+        public DateTime? UpdatedAt { get; internal set; }
+
+        /// <summary>
+        ///     The user which updated the node. See also <seealso cref="UserInfo"/>
+        ///     <para>Implements <see cref="INodeBase.UpdatedBy"/></para>
+        /// </summary>
+        public UserInfo UpdatedBy { get; internal set; }
+
+        /// <summary>
+        ///     The permissions for the node. See also <seealso cref="NodePermissions"/>
+        ///     <para>Implements <see cref="INodeBase.Permissions"/></para>
+        /// </summary>
+        public NodePermissions Permissions { get; internal set; }
+
+        /// <summary>
+        ///     The number of download shares which referencing this node.
+        ///     <para>Implements <see cref="INodeBase.CountDownloadShares"/></para>
+        /// </summary>
+        public int? CountDownloadShares { get; internal set; }
+
+        /// <summary>
+        ///     The number of upload shares which referencing this node.
+        ///     <para>Implements <see cref="INodeBase.CountUploadShares"/></para>
+        /// </summary>
+        public int? CountUploadShares { get; internal set; }
+
+        #endregion
 
         /// <summary>
         ///     This id is identical across all versions of a file and is therefore only set on files-nodes.
@@ -20,24 +109,9 @@ namespace Dracoon.Sdk.Model {
         public long? ReferenceId { get; internal set; }
 
         /// <summary>
-        ///     The type of the node. See also <seealso cref="NodeType"/>
-        /// </summary>
-        public NodeType Type { get; internal set; }
-
-        /// <summary>
-        ///     The parent id of the node.
-        /// </summary>
-        public long? ParentId { get; internal set; }
-
-        /// <summary>
         ///     The path of the parent node.
         /// </summary>
         public string ParentPath { get; internal set; }
-
-        /// <summary>
-        ///     The name of the node.
-        /// </summary>
-        public string Name { get; internal set; }
 
         /// <summary>
         ///     The file extension of the node. (Only if it is a <see cref="NodeType.File"/>).
@@ -53,16 +127,6 @@ namespace Dracoon.Sdk.Model {
         ///     The media token to request a thumbnail from the media server. (Only if it is a <see cref="NodeType.File"/>).
         /// </summary>
         public string MediaToken { get; internal set; }
-
-        /// <summary>
-        ///     The byte size of the node. If the node is a <see cref="NodeType.Room"/> or <see cref="NodeType.Folder"/> the total byte size of the underlying files.
-        /// </summary>
-        public long? Size { get; internal set; }
-
-        /// <summary>
-        ///     The quota in bytes. (Only if it is a <see cref="NodeType.Room"/>).
-        /// </summary>
-        public long? Quota { get; internal set; }
 
         /// <summary>
         ///     The classification of the node. See also <seealso cref="Model.Classification"/>
@@ -85,44 +149,9 @@ namespace Dracoon.Sdk.Model {
         public DateTime? ExpireAt { get; internal set; }
 
         /// <summary>
-        ///     The creation date of the node.
-        /// </summary>
-        public DateTime? CreatedAt { get; internal set; }
-
-        /// <summary>
-        ///     The user which created the node. See also <seealso cref="UserInfo"/>
-        /// </summary>
-        public UserInfo CreatedBy { get; internal set; }
-
-        /// <summary>
-        ///     The update date of the node. Note: This date is also updated on meta data changes like node name or others.
-        /// </summary>
-        public DateTime? UpdatedAt { get; internal set; }
-
-        /// <summary>
-        ///     The user which updated the node. See also <seealso cref="UserInfo"/>
-        /// </summary>
-        public UserInfo UpdatedBy { get; internal set; }
-
-        /// <summary>
         ///     Is set to <c>true</c> if the parent permissions are also applied to this node.
         /// </summary>
         public bool? HasInheritPermissions { get; internal set; }
-
-        /// <summary>
-        ///     The permissions for the node. See also <seealso cref="NodePermissions"/>
-        /// </summary>
-        public NodePermissions Permissions { get; internal set; }
-
-        /// <summary>
-        ///     Is set to <c>true</c> if you have ever set this node as favorite.
-        /// </summary>
-        public bool? IsFavorite { get; internal set; }
-
-        /// <summary>
-        ///     Indicates of this node is encrypted.
-        /// </summary>
-        public bool? IsEncrypted { get; internal set; }
 
         /// <summary>
         ///     The number of underlying nodes (no matter what node type they are).
@@ -158,16 +187,6 @@ namespace Dracoon.Sdk.Model {
         ///     The retention period for deleted nodes.
         /// </summary>
         public int? RecycleBinRetentionPeriod { get; internal set; }
-
-        /// <summary>
-        ///     The number of download shares which referencing this node.
-        /// </summary>
-        public int? CountDownloadShares { get; internal set; }
-
-        /// <summary>
-        ///     The number of upload shares which referencing this node.
-        /// </summary>
-        public int? CountUploadShares { get; internal set; }
 
         /// <summary>
         ///     The Version of last change in this node or any underlying node.
