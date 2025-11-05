@@ -6,8 +6,9 @@ namespace Dracoon.Sdk.Model {
     ///     <para>
     ///         Node is generic term for all file system objects in DRACOON.Rooms, folders and files are nodes.
     ///     </para>
+    ///     <seealso cref="INodeBase">Implements the INodeBase interface.</seealso>
     /// </summary>
-    public class Node : TrackExternalModificationRequestBase {
+    public class Node : TrackExternalModificationRequestBase, INodeBase {
 
         #region INodeBase implementation
 
