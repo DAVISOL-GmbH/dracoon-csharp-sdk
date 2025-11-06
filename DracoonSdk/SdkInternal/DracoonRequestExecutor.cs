@@ -341,12 +341,13 @@ namespace Dracoon.Sdk.SdkInternal {
 
             int retryAfter = -1;
             string retryReason = null;
+            bool causedByRateLimit = false;
 
             if (error?.ErrorCode != null) {
                 if (error.ErrorCode.Code == DracoonApiCode.SERVER_TOO_MANY_REQUESTS.Code) {
                     if (sendTry < Math.Max(3, _client.HttpConfig.MaxRetriesPerRequest)) {
                         retryReason = "HTTP status code 429 Too Many Requests was given";
-                        retryAfter = InternalConstants.TooManyRequestsWaitTime;
+                        causedByRateLimit = true;
                     }
                 }
                 else if (_client.HttpConfig.RetryEnabled && sendTry < _client.HttpConfig.MaxRetriesPerRequest) {
@@ -362,7 +363,7 @@ namespace Dracoon.Sdk.SdkInternal {
                     else if (error.ErrorCode.Code == DracoonApiCode.SERVER_MAINTENANCE.Code) {
                         retryReason = "The API is in maintenance";
                         // In maintenance mode, a retry is done after a minute
-                        retryAfter = 60_000;
+                        retryAfter = InternalConstants.ApiMaintenanceWaitTime;
                     }
                 }
             }
@@ -378,7 +379,7 @@ namespace Dracoon.Sdk.SdkInternal {
             }
             else if (retryAfter <= 0) { 
                 // ...otherwise calculate the seconds to wait before retry from the current retry counter
-                retryAfter = DracoonClientHelper.CalculateDefaultRetryWaitTime(sendTry);
+                retryAfter = DracoonClientHelper.CalculateDefaultRetryWaitTime(sendTry, causedByRateLimit);
             }
 
             _client.Log.Debug(Logtag, $"{retryReason}. Retry the request in {retryAfter} milliseconds (retry {sendTry + 1} of {_client.HttpConfig.MaxRetriesPerRequest}).");

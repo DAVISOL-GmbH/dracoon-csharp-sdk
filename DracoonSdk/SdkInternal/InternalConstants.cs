@@ -78,12 +78,27 @@
         internal const int SecondClientRetryWaitTimeMs = 500;
 
         /// <summary>
-        /// The default wait time in milliseconds when the rate limit is reached (HTTP status code 429). Will be used when the <c>Retry-After</c> HTTP header is not present in the response of the failed request.
+        /// The default wait time in milliseconds for the first retry when the rate limit is reached (HTTP status code 429). Will be used when the <c>Retry-After</c> HTTP header is not present in the response of the failed request.
         /// <para>
-        /// Constant value is <c>1.000</c>
+        /// Constant value is <c>800</c>
         /// </para>
         /// </summary>
-        internal const int TooManyRequestsWaitTime = 1_000;
+        internal const int FirstTooManyRequestsWaitTime = 800;
 
+        /// <summary>
+        /// The default wait time in milliseconds for the second retry when the rate limit is reached (HTTP status code 429). Will be used when the <c>Retry-After</c> HTTP header is not present in the response of the failed request.
+        /// <para>
+        /// Constant value is <c>400</c>
+        /// </para>
+        /// </summary>
+        internal const int SecondTooManyRequestsWaitTime = 400;
+
+        /// <summary>
+        /// The wait time in milliseconds when the API is in maintenance.
+        /// <para>
+        /// Constant value is <c>60.000</c>
+        /// </para>
+        /// </summary>
+        internal const int ApiMaintenanceWaitTime = 60_000;
     }
 }
