@@ -346,6 +346,7 @@ namespace Dracoon.Sdk.SdkInternal {
                 if (error.ErrorCode.Code == DracoonApiCode.SERVER_TOO_MANY_REQUESTS.Code) {
                     if (sendTry < Math.Max(3, _client.HttpConfig.MaxRetriesPerRequest)) {
                         retryReason = "HTTP status code 429 Too Many Requests was given";
+                        retryAfter = InternalConstants.TooManyRequestsWaitTime;
                     }
                 }
                 else if (_client.HttpConfig.RetryEnabled && sendTry < _client.HttpConfig.MaxRetriesPerRequest) {
