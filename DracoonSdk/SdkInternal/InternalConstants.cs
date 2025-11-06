@@ -88,10 +88,10 @@
         /// <summary>
         /// The default wait time in milliseconds for the second retry when the rate limit is reached (HTTP status code 429). Will be used when the <c>Retry-After</c> HTTP header is not present in the response of the failed request.
         /// <para>
-        /// Constant value is <c>400</c>
+        /// Constant value is <c>300</c>
         /// </para>
         /// </summary>
-        internal const int SecondTooManyRequestsWaitTime = 400;
+        internal const int SecondTooManyRequestsWaitTime = 300;
 
         /// <summary>
         /// The wait time in milliseconds when the API is in maintenance.

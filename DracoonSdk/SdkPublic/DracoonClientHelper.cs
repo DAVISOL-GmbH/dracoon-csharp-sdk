@@ -37,7 +37,7 @@ namespace Dracoon.Sdk {
                     // first retry after 800 ms
                     return InternalConstants.FirstTooManyRequestsWaitTime;
                 } else if (indexOfRetry == 1) {
-                    // second retry after 400 ms
+                    // second retry after 300 ms
                     return InternalConstants.SecondTooManyRequestsWaitTime;
                 }
             } else {
@@ -50,8 +50,8 @@ namespace Dracoon.Sdk {
                 }
             }
 
-            // use Fibonacci for the third and any additional retry wait time: 800ms, 1300ms, 2100ms, 3400ms, ... - resp. 800ms, 1200ms 2000ms, 3300ms, ... when caused by rate limit
-            return CalculateDefaultRetryWaitTime(indexOfRetry - 2) + CalculateDefaultRetryWaitTime(indexOfRetry - 1);
+            // use Fibonacci for the third and any additional retry wait time: 800ms, 1300ms, 2100ms, 3400ms, ... - resp. 1100ms, 1400ms 2500ms, 3900ms, ... when caused by rate limit
+            return CalculateDefaultRetryWaitTime(indexOfRetry - 2, causedByRateLimit) + CalculateDefaultRetryWaitTime(indexOfRetry - 1, causedByRateLimit);
         }
 
 
