@@ -726,24 +726,22 @@ namespace Dracoon.Sdk.SdkInternal {
                 ApiMissingFileKeys missingFileKeys =
                     _client.Executor.DoSyncApiCall<ApiMissingFileKeys>(currentBatchRequest, RequestType.GetMissingFileKeys);
                 HandlePendingMissingFileKeys(missingFileKeys, userKeyPairs);
-                currentBatchOffset += missingFileKeys.Items.Count;
-                if (missingFileKeys.Items.Count < batchLimit) {
+                var missingCount = missingFileKeys.Items.Count();
+                currentBatchOffset += missingCount;
+                if (missingCount < batchLimit) {
                     break;
                 }
             }
         }
 
         private void HandlePendingMissingFileKeys(ApiMissingFileKeys missingFileKeys, List<UserKeyPair> userKeyPairs) {
-            if (missingFileKeys == null || missingFileKeys.Items.Count == 0) {
+            if (missingFileKeys == null || !missingFileKeys.Items.Any()) {
                 return;
             }
 
             Dictionary<long, UserPublicKey> userPublicKeys = UserMapper.ConvertApiUserIdPublicKeys(missingFileKeys.UserPublicKey);
             Dictionary<long, PlainFileKey> plainFileKeys = GeneratePlainFileKeyMap(missingFileKeys.FileKeys, userKeyPairs);
-            ApiSetUserFileKeysRequest setUserFileKeysRequest = new ApiSetUserFileKeysRequest {
-                Items = new List<ApiSetUserFileKey>(missingFileKeys.UserPublicKey.Count)
-            };
-
+            var requestItems = new List<ApiSetUserFileKey>(missingFileKeys.UserPublicKey.Count);
             foreach (ApiUserIdFileId currentMissingFileKey in missingFileKeys.Items) {
                 UserPublicKey currentUsersPublicKey = userPublicKeys[currentMissingFileKey.UserId];
                 PlainFileKey currentPlainFileKey = plainFileKeys[currentMissingFileKey.FileId];
@@ -755,8 +753,12 @@ namespace Dracoon.Sdk.SdkInternal {
                     UserId = currentMissingFileKey.UserId,
                     FileKey = FileMapper.ToApiFileKey(currentEncryptedFileKey)
                 };
-                setUserFileKeysRequest.Items.Add(newRequestEntry);
+                requestItems.Add(newRequestEntry);
             }
+
+            ApiSetUserFileKeysRequest setUserFileKeysRequest = new ApiSetUserFileKeysRequest {
+                Items = requestItems
+            };
 
             RestRequest restRequest = _client.Builder.PostMissingFileKeys(setUserFileKeysRequest);
             _client.Executor.DoSyncApiCall<VoidResponse>(restRequest, RequestType.PostMissingFileKeys);

@@ -11,17 +11,8 @@ namespace Dracoon.Sdk.SdkInternal.Mapper {
             if (apiNodeList == null) {
                 return null;
             }
-
-            var items = new List<Node>();
-            foreach (ApiNode currentNode in apiNodeList.Items) {
-                items.Add(FromApiNode(currentNode));
-            }
-            NodeList nodeList = new NodeList() {
-                Offset = apiNodeList.Range.Offset,
-                Limit = apiNodeList.Range.Limit,
-                Total = apiNodeList.Range.Total,
-                Items = items.ToArray(),
-            };
+            NodeList nodeList = new NodeList();
+            CommonMapper.FromApiRangeList(apiNodeList, nodeList, FromApiNode);
             return nodeList;
         }
 
@@ -159,16 +150,8 @@ namespace Dracoon.Sdk.SdkInternal.Mapper {
                 return null;
             }
 
-            var items = new List<RecycleBinItem>();
-            foreach (ApiDeletedNodeSummary currentNode in apiNodeList.Items) {
-                items.Add(FromApiDeletedNodeSummary(currentNode));
-            }
-            RecycleBinItemList nodeList = new RecycleBinItemList() {
-                Offset = apiNodeList.Range.Offset,
-                Limit = apiNodeList.Range.Limit,
-                Total = apiNodeList.Range.Total,
-                Items = items.ToArray()
-            };
+            RecycleBinItemList nodeList = new RecycleBinItemList();
+            CommonMapper.FromApiRangeList(apiNodeList, nodeList, FromApiDeletedNodeSummary);
             return nodeList;
         }
 
@@ -197,16 +180,8 @@ namespace Dracoon.Sdk.SdkInternal.Mapper {
                 return null;
             }
 
-            var items = new List<PreviousVersion>();
-            foreach (ApiDeletedNodeVersion currentNode in apiNodeList.Items) {
-                items.Add(FromApiDeletedNodeVersion(currentNode));
-            }
-            PreviousVersionList nodeList = new PreviousVersionList() {
-                Offset = apiNodeList.Range.Offset,
-                Limit = apiNodeList.Range.Limit,
-                Total = apiNodeList.Range.Total,
-                Items = items.ToArray()
-            };
+            PreviousVersionList nodeList = new PreviousVersionList();
+            CommonMapper.FromApiRangeList(apiNodeList, nodeList, FromApiDeletedNodeVersion);
             return nodeList;
         }
 

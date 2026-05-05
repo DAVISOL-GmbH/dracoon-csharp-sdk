@@ -414,15 +414,8 @@ namespace Dracoon.Sdk.SdkInternal.Mapper {
         }
 
         internal static ShareSubscriptionList FromApiShareSubscriptionList(ApiShareSubscriptionList apiSubscriptionList) {
-            ShareSubscriptionList subscriptionList = new ShareSubscriptionList {
-                Offset = apiSubscriptionList.Range.Offset,
-                Limit = apiSubscriptionList.Range.Limit,
-                Total = apiSubscriptionList.Range.Total,
-                Items = new List<ShareSubscription>()
-            };
-            foreach (ApiShareSubscription apiSubscription in apiSubscriptionList.Items) {
-                subscriptionList.Items.Add(FromApiShareSubscription(apiSubscription));
-            }
+            ShareSubscriptionList subscriptionList = new ShareSubscriptionList();
+            CommonMapper.FromApiRangeList(apiSubscriptionList, subscriptionList, FromApiShareSubscription);
             return subscriptionList;
         }
 

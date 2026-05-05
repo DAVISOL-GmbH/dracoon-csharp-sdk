@@ -11,15 +11,8 @@ namespace Dracoon.Sdk.SdkInternal.Mapper {
                 return null;
             }
 
-            AttributeList attributeList = new AttributeList() {
-                Offset = apiAttributeList.Range.Offset,
-                Limit = apiAttributeList.Range.Limit,
-                Total = apiAttributeList.Range.Total,
-                Items = new List<Attribute>()
-            };
-            foreach (ApiAttribute currentAttribute in apiAttributeList.Items) {
-                attributeList.Items.Add(FromApiAttribute(currentAttribute));
-            }
+            AttributeList attributeList = new AttributeList();
+            CommonMapper.FromApiRangeList(apiAttributeList, attributeList, FromApiAttribute);
 
             return attributeList;
         }
@@ -41,13 +34,8 @@ namespace Dracoon.Sdk.SdkInternal.Mapper {
                 return null;
             }
 
-            ApiAddOrUpdateAttributeRequest apiRequest = new ApiAddOrUpdateAttributeRequest() {
-                Items = new List<ApiAttribute>()
-            };
-
-            foreach (Attribute currentAttribute in attributes) {
-                apiRequest.Items.Add(ToApiAttribute(currentAttribute));
-            }
+            ApiAddOrUpdateAttributeRequest apiRequest = new ApiAddOrUpdateAttributeRequest();
+            CommonMapper.ToApiSimpleList(attributes, apiRequest, ToApiAttribute);
 
             return apiRequest;
         }

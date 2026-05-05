@@ -268,7 +268,7 @@ namespace Dracoon.Sdk.SdkInternal {
                 throw new DracoonApiException(DracoonApiCode.SERVER_ATTRIBUTE_NOT_FOUND);
             }
 
-            return AttributeMapper.FromApiAttributeList(apiAttributeList).Items[0];
+            return AttributeMapper.FromApiAttributeList(apiAttributeList)?.Items?.FirstOrDefault();
         }
 
         public void AddOrUpdateUserProfileAttributes(List<Attribute> attributes) {

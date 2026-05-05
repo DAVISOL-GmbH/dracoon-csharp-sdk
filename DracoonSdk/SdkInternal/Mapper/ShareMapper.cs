@@ -59,15 +59,8 @@ namespace Dracoon.Sdk.SdkInternal.Mapper {
         }
 
         internal static DownloadShareList FromApiDownloadShareList(ApiDownloadShareList apiDownloadShareList) {
-            DownloadShareList shareList = new DownloadShareList {
-                Offset = apiDownloadShareList.Range.Offset,
-                Limit = apiDownloadShareList.Range.Limit,
-                Total = apiDownloadShareList.Range.Total,
-                Items = new List<DownloadShare>()
-            };
-            foreach (ApiDownloadShare currentShare in apiDownloadShareList.Items) {
-                shareList.Items.Add(FromApiDownloadShare(currentShare));
-            }
+            DownloadShareList shareList = new DownloadShareList();
+            CommonMapper.FromApiRangeList(apiDownloadShareList, shareList, FromApiDownloadShare);
 
             return shareList;
         }
@@ -132,15 +125,8 @@ namespace Dracoon.Sdk.SdkInternal.Mapper {
         }
 
         internal static UploadShareList FromApiUploadShareList(ApiUploadShareList apiUploadShareList) {
-            UploadShareList shareList = new UploadShareList {
-                Offset = apiUploadShareList.Range.Offset,
-                Limit = apiUploadShareList.Range.Limit,
-                Total = apiUploadShareList.Range.Total,
-                Items = new List<UploadShare>()
-            };
-            foreach (ApiUploadShare currentShare in apiUploadShareList.Items) {
-                shareList.Items.Add(FromApiUploadShare(currentShare));
-            }
+            UploadShareList shareList = new UploadShareList();
+            CommonMapper.FromApiRangeList(apiUploadShareList, shareList, FromApiUploadShare);
 
             return shareList;
         }

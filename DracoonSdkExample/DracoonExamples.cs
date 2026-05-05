@@ -12,8 +12,8 @@ using Attribute = Dracoon.Sdk.Model.Attribute;
 
 namespace Dracoon.Sdk.Example {
     public static class DracoonExamples {
-        private static readonly Uri SERVER_URI = new Uri("https://dracoon.team");
-        private static readonly string ACCESS_TOKEN = "ACCESS_TOKEN";
+        private static readonly Uri SERVER_URI = new Uri("https://files.davisol.com");
+        private static readonly string ACCESS_TOKEN = "9akcMhp4ACoqXF51nSiHf1ZlY1jKusWn";
         private static readonly string ENCRYPTION_PASSWORD = "ENCRYPTION_PASSWORD";
 
         private static readonly Logger log = new Logger();
@@ -23,12 +23,36 @@ namespace Dracoon.Sdk.Example {
         private static void Main() {
             ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
 
+            var retryWaitTimes = new[] {
+                DracoonClientHelper.CalculateDefaultRetryWaitTime(0, true),
+                DracoonClientHelper.CalculateDefaultRetryWaitTime(1, true),
+                DracoonClientHelper.CalculateDefaultRetryWaitTime(2, true),
+                DracoonClientHelper.CalculateDefaultRetryWaitTime(3, true),
+                DracoonClientHelper.CalculateDefaultRetryWaitTime(4, true),
+                DracoonClientHelper.CalculateDefaultRetryWaitTime(5, true),
+                DracoonClientHelper.CalculateDefaultRetryWaitTime(6, true),
+                DracoonClientHelper.CalculateDefaultRetryWaitTime(7, true),
+                DracoonClientHelper.CalculateDefaultRetryWaitTime(8, true)
+            };
+
             DracoonAuth dracoonAuth = new DracoonAuth(ACCESS_TOKEN);
+            //DracoonAuth dracoonAuth = new DracoonAuth("d43e7d60-9bfe-400c-b90e-b3ac2e236c1c", "JHN0j2jM7p3knVh84uNUMCLoMTNfei1X", "ACCESS_TOKEN", "REFRESH_TOKEN");
             IWebProxy wp = WebRequest.GetSystemWebProxy();
             wp.Credentials = CredentialCache.DefaultNetworkCredentials;
             DracoonHttpConfig config = new DracoonHttpConfig(retryEnabled: true, webProxy: wp);
             dc = new DracoonClient(SERVER_URI, dracoonAuth, ENCRYPTION_PASSWORD.ToCharArray(), log, config);
             //GetServerData();
+
+            //var testRoomId = 20L;
+            //ExecuteAction(nameof(GetRoomPolicies), () => GetRoomPolicies(testRoomId));
+            //ExecuteAction(nameof(UpdateRoomPolicies), () => UpdateRoomPolicies(testRoomId, null, null));
+            //ExecuteAction(nameof(UpdateRoomPolicies), () => UpdateRoomPolicies(testRoomId, 222222, false));
+            //ExecuteAction(nameof(UpdateRoomPolicies), () => UpdateRoomPolicies(testRoomId, 333333, null));
+            //ExecuteAction(nameof(UpdateRoomPolicies), () => UpdateRoomPolicies(testRoomId, null, true));
+            //ExecuteAction(nameof(GetRoomPolicies), () => GetRoomPolicies(testRoomId));
+
+            var testUserId = 331L;
+            ExecuteAction(nameof(GetUserRooms), () => GetUserRooms(testUserId));
 
             // Print client statistics
             if (Debugger.IsLogging()) {

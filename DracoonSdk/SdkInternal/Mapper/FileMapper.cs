@@ -121,16 +121,8 @@ namespace Dracoon.Sdk.SdkInternal.Mapper {
                 return null;
             }
 
-            FileVersionList fileVersionList = new FileVersionList {
-                Offset = apiFileVersionList.Range.Offset,
-                Limit = apiFileVersionList.Range.Limit,
-                Total = apiFileVersionList.Range.Total,
-                Items = new List<FileVersion>()
-            };
-            foreach (ApiFileVersion currentFileVersion in apiFileVersionList.Items) {
-                fileVersionList.Items.Add(FromApiFileVersion(currentFileVersion));
-            }
-
+            FileVersionList fileVersionList = new FileVersionList();
+            CommonMapper.FromApiRangeList(apiFileVersionList, fileVersionList, FromApiFileVersion);
             return fileVersionList;
         }
 

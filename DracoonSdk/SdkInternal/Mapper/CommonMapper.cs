@@ -14,14 +14,8 @@ namespace Dracoon.Sdk.SdkInternal.Mapper {
                 return null;
             }
 
-            NodeReferenceList nodeReferenceList = new NodeReferenceList() {
-                Items = new List<NodeReference>()
-            };
-            if (apiNodeReferenceList.Items != null) {
-                foreach (ApiNodeReference apiNodeReference in apiNodeReferenceList.Items) {
-                    nodeReferenceList.Items.Add(FromApiNodeReference(apiNodeReference, nodeType));
-                }
-            }
+            NodeReferenceList nodeReferenceList = new NodeReferenceList();
+            FromApiSimpleList(apiNodeReferenceList, nodeReferenceList, n => FromApiNodeReference(n, nodeType));
             return nodeReferenceList;
         }
 
@@ -45,14 +39,8 @@ namespace Dracoon.Sdk.SdkInternal.Mapper {
                 return null;
             }
 
-            RoleList roleList = new RoleList() {
-                Items = new List<Role>()
-            };
-            if (apiRoleList.Items != null) {
-                foreach (ApiRole apiRole in apiRoleList.Items) {
-                    roleList.Items.Add(FromApiRole(apiRole));
-                }
-            }
+            RoleList roleList = new RoleList();
+            FromApiSimpleList(apiRoleList, roleList, FromApiRole);
             return roleList;
         }
 
@@ -128,12 +116,16 @@ namespace Dracoon.Sdk.SdkInternal.Mapper {
         }
 
         internal static ApiSimpleListBase<TApi> ToApiSimpleList<T, TApi>(SimpleListBase<T> simpleList, ApiSimpleListBase<TApi> newList, Func<T, TApi> convertFunc) {
+            return ToApiSimpleList(simpleList?.Items, newList, convertFunc);
+        }
+
+        internal static ApiSimpleListBase<TApi> ToApiSimpleList<T, TApi>(IEnumerable<T> simpleList, ApiSimpleListBase<TApi> newList, Func<T, TApi> convertFunc) {
             if (simpleList == null) {
                 return newList;
             }
 
             List<TApi> items = new List<TApi>();
-            foreach (T currentItem in simpleList.Items) {
+            foreach (T currentItem in simpleList) {
                 items.Add(convertFunc(currentItem));
             }
             newList.Items = items.ToArray();
