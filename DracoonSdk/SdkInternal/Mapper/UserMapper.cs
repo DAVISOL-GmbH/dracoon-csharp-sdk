@@ -87,7 +87,6 @@ namespace Dracoon.Sdk.SdkInternal.Mapper {
 
             foreach (ApiUserRole currentRole in apiUserRoles.Items) {
                 returnValue.Add((UserRole)Enum.ToObject(typeof(UserRole), currentRole.Id));
-                returnValue.Add((UserRole)Enum.ToObject(typeof(UserRole), currentRole.Id));
             }
 
             return returnValue;
