@@ -4,11 +4,6 @@ using Dracoon.Sdk.SdkInternal.ApiModel;
 namespace Dracoon.Sdk.SdkInternal.Mapper {
     internal static class RoleMapper {
 
-        internal static RoleList FromApiRoleList(ApiRoleList apiRoleList) {
-            return CommonMapper.FromApiRoleList(apiRoleList);
-        }
-
-
         internal static RoleUserList FromApiRoleUserList(ApiRoleUserList apiRoleUserList) {
             RoleUserList roleUserList = new RoleUserList();
             CommonMapper.FromApiRangeList(apiRoleUserList, roleUserList, FromApiRoleUser);
