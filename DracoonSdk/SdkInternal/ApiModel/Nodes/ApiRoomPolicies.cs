@@ -9,7 +9,9 @@ namespace Dracoon.Sdk.SdkInternal.ApiModel {
         public int DefaultExpirationPeriod {
             get; internal set;
         }
-        [JsonProperty("virusProtectionEnabled", NullValueHandling = NullValueHandling.Ignore)]
+        // Only in the GET /api/v4/nodes/rooms/{roomId}/policies route, the virusProtectionEnabled property is named isVirusProtectionEnabled in the API response
+        // See also: https://files.davisol.com/api/swagger-ui/index.html#/nodes/requestRoomPolicies
+        [JsonProperty("isVirusProtectionEnabled", NullValueHandling = NullValueHandling.Ignore)]
         public bool VirusProtectionEnabled {
             get; internal set;
         }
